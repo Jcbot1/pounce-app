@@ -6412,7 +6412,7 @@ function App() {
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Sidebar border — starts below header height so it looks like one piece */}
-          <div style={{ position: "fixed", top: sidebarCollapsed ? "48px" : "185px", bottom: 0, width: "1px", background: T.border,
+          <div style={{ position: "fixed", top: "48px", bottom: 0, width: "1px", background: T.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
             transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
