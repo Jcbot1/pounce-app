@@ -475,8 +475,20 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
 
 // ── MascotMonoIcon — logosmall.svg ───────────────────────────────────────────
 function MascotMonoIcon({ width = 40, height = 40, color }) {
+  const c = color || T.accent;
   return (
-    <img src="./logosmall.svg" width={width} height={height} style={{ display: "block", objectFit: "contain" }} alt="" />
+    <div style={{
+      width, height, flexShrink: 0,
+      backgroundColor: c,
+      WebkitMaskImage: "url(./logosmall.svg)",
+      WebkitMaskSize: "contain",
+      WebkitMaskRepeat: "no-repeat",
+      WebkitMaskPosition: "center",
+      maskImage: "url(./logosmall.svg)",
+      maskSize: "contain",
+      maskRepeat: "no-repeat",
+      maskPosition: "center",
+    }} />
   );
 }
 /*DELETEME
