@@ -562,7 +562,7 @@ function PounceLogo({ height = 28, theme, stacked = false }) {
   const gradId = "cngrad" + height;
   const iconSize = stacked ? height * 2.5 : height * 1.1;
   return (
-    <div style={{ display: "flex", flexDirection: stacked ? "column" : "row", alignItems: "center", gap: stacked ? "0.5rem" : "0.4rem" }}>
+    <div style={{ display: "flex", flexDirection: stacked ? "column" : "row", alignItems: "center", gap: stacked ? "0.15rem" : "0.4rem" }}>
       <MascotMonoIcon width={iconSize} height={iconSize} color={t.accent} />
       <svg height={height} viewBox="0 0 154 52" style={{ overflow: "visible", display: "block" }} xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -6411,11 +6411,11 @@ function App() {
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Sidebar border — starts below header height so it looks like one piece */}
-          <div style={{ position: "fixed", top: "48px", bottom: 0, width: "1px", background: T.border,
+          <div style={{ position: "fixed", top: sidebarCollapsed ? "48px" : "185px", bottom: 0, width: "1px", background: T.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
             transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
-          <div style={{ padding: "0 1.25rem", height: sidebarCollapsed ? "48px" : "120px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ padding: "0 1.25rem", height: sidebarCollapsed ? "48px" : "185px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
               <MascotMonoIcon width={28} height={28} color={T.accent} />
             ) : (
