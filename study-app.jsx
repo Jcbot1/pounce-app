@@ -440,7 +440,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
           <div className="menu-open" style={{
             position: "fixed",
             top: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "4rem"; const r = btn.getBoundingClientRect(); return r.bottom + 8 + "px"; })(),
-            right: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "1rem"; const r = btn.getBoundingClientRect(); return window.innerWidth - r.right + "px"; })(),
+            right: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "1rem"; const r = btn.getBoundingClientRect(); const popupW = Math.min(360, window.innerWidth - 32); const rightFromBtn = window.innerWidth - r.right; return Math.min(rightFromBtn, window.innerWidth - popupW - 16) + "px"; })(),
             background: T.mode === "light" ? T.accent + "06" : T.accent + "08",
             backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
             border: "1px solid " + T.accent + "22",
