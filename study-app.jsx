@@ -595,7 +595,7 @@ function randomMood() { return STU_MOODS[Math.floor(Math.random() * STU_MOODS.le
 // ── Responsive breakpoints ─────────────────────────────────────────────────
 const BREAKPOINT_TABLET  = 768;
 const BREAKPOINT_DESKTOP = 1200;
-const SIDEBAR_WIDTH      = 260;
+const SIDEBAR_WIDTH      = 240;
 const SIDEBAR_COLLAPSED  = 64;
 
 function useWindowWidth() {
