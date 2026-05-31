@@ -3832,16 +3832,9 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           <KebabMenuItem onClick={() => { setMenuOpen(false); setIconPickerOpen(true); }}>
             <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></span>Icon
           </KebabMenuItem>
-          <div style={{ display: "flex", alignItems: "center", }}>
-            <button onClick={() => { setMenuOpen(false); const uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(s, null, 2)); const a = document.createElement("a"); a.href = uri; a.download = s.name.replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json"; a.click(); }}
-              {...surfacePress()} style={{ flex: 1, display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", textAlign: "left" }}>
-              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>Export
-            </button>
-            <button onClick={() => { setMenuOpen(false); onExport(s); }}
-              {...surfacePress()} style={{ background: "transparent", border: "none", padding: "0.9rem 1rem", cursor: "pointer", color: T.muted, fontFamily: "'DM Mono', monospace", fontSize: "0.8rem", display: "flex", alignItems: "center" }}>
-              {"{}"}
-            </button>
-          </div>
+          <KebabMenuItem onClick={() => { setMenuOpen(false); const uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(s, null, 2)); const a = document.createElement("a"); a.href = uri; a.download = s.name.replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json"; a.click(); }}>
+            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>Export
+          </KebabMenuItem>
           <KebabMenuItem onClick={() => { setMenuOpen(false); setConfirmDelete(true); }} color={T.red} danger>
             <span style={{ display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>Delete
           </KebabMenuItem>
@@ -4515,16 +4508,9 @@ function HistoryCard({ session, onView, onExport, onDelete }) {
 
       {menuOpen && (
         <div ref={menuRef} className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: menuPos.openDown ? menuPos.top : undefined, bottom: menuPos.openDown ? undefined : window.innerHeight - menuPos.top, left: menuPos.left, zIndex: 9999, minWidth: "200px" }) }}>
-          <div style={{ display: "flex", alignItems: "center", }}>
-            <button onClick={() => { setMenuOpen(false); const uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(session, null, 2)); const a = document.createElement("a"); a.href = uri; a.download = (session.setName || "results").replace(/[^a-z0-9]/gi, "-").toLowerCase() + "-results.json"; a.click(); }}
-              {...surfacePress()} style={{ flex: 1, display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", textAlign: "left" }}>
-              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>Export
-            </button>
-            <button onClick={() => { setMenuOpen(false); onExport(session); }}
-              {...surfacePress()} style={{ background: "transparent", border: "none", padding: "0.9rem 1rem", cursor: "pointer", color: T.muted, fontFamily: "'DM Mono', monospace", fontSize: "0.8rem", display: "flex", alignItems: "center" }}>
-              {"{}"}
-            </button>
-          </div>
+          <KebabMenuItem onClick={() => { setMenuOpen(false); const uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(session, null, 2)); const a = document.createElement("a"); a.href = uri; a.download = (session.setName || "results").replace(/[^a-z0-9]/gi, "-").toLowerCase() + "-results.json"; a.click(); }}>
+            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>Export
+          </KebabMenuItem>
           <KebabMenuItem onClick={() => { setMenuOpen(false); onDelete(session); }} color={T.red} danger>
             <span style={{ display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>Delete
           </KebabMenuItem>
