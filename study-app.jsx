@@ -3634,7 +3634,6 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
                 </div>
 
-                <MobilePreviewToggle isMobile={forceMobile} onToggle={() => onToggleForceMobile && onToggleForceMobile()} />
               </div>
             </>
           )}
@@ -5589,18 +5588,6 @@ function ColorPicker({ accent, onSetAccent }) {
   );
 }
 
-// ── MobilePreviewToggle ────────────────────────────────────────────────────
-function MobilePreviewToggle({ isMobile, onToggle }) {
-  return (
-    <button onClick={onToggle} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "transparent", border: "none", padding: "0.4rem 0", cursor: "pointer" }}>
-      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: T.text }}>Mobile preview</span>
-      <div style={{ width: "36px", height: "20px", borderRadius: "99px", background: isMobile ? T.accent : T.surface2, position: "relative", flexShrink: 0, transition: "background 0.2s" }}>
-        <div style={{ position: "absolute", top: "2px", left: isMobile ? "18px" : "2px", width: "16px", height: "16px", borderRadius: "50%", background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.2)", transition: "left 0.2s" }} />
-      </div>
-    </button>
-  );
-}
-
 // ── SidebarActionButton ────────────────────────────────────────────────────
 function SidebarActionButton({ onClick, onJson, icon, label, danger = false }) {
   return (
@@ -6700,7 +6687,6 @@ function App() {
             <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
             <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
             <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
-            <MobilePreviewToggle isMobile={isMobile} onToggle={() => setForceMobile(f => f === true ? false : true)} />
             <div style={{ height: "1px", background: T.border, margin: "0.75rem 0" }} />
             <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
             <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} onJson={() => setShowImportJson("sets")} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>} label="Import" />
