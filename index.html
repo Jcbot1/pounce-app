@@ -6,7 +6,7 @@
     <title>Pounce</title>
     <meta name="description" content="Pounce — your personal study companion" />
     <meta name="theme-color" content="#fefcf9" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
     <!-- Fonts -->
@@ -27,13 +27,16 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script type="text/babel" src="./study-app.jsx" data-presets="react"></script>
-
-    <script>
-      window.addEventListener('load', function() {
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(App));
-      });
+    <script type="text/babel" data-presets="react">
+      // Inline fetch and eval of study-app.jsx
+      fetch('./study-app.jsx')
+        .then(r => r.text())
+        .then(code => {
+          const transformed = Babel.transform(code, { presets: ['react'] }).code;
+          // eslint-disable-next-line no-new-func
+          new Function('React', 'ReactDOM', transformed + '\nReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));')(React, ReactDOM);
+        })
+        .catch(e => console.error('Failed to load app:', e));
     </script>
   </body>
 </html>
