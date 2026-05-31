@@ -5484,7 +5484,7 @@ function SidebarActionButton({ onClick, icon, label, danger = false }) {
 function DesktopFAB({ homeTab, onCreate, disabled, sidebarWidth, setCount = 0 }) {
   if (homeTab !== "sets") return null;
   return (
-    <BottomPill sidebarOffset={sidebarWidth} left={setCount > 0 ? `${setCount} ${setCount === 1 ? "set" : "sets"}` : undefined}>
+    <BottomPill sidebarOffset={sidebarWidth} left={`${setCount} ${setCount === 1 ? "set" : "sets"}`}>
       <GradientBorderButton onClick={() => onCreate()} disabled={disabled} style={{ padding: "0.65rem 1.7rem" }}>
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
           <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
