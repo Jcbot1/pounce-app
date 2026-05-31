@@ -582,6 +582,21 @@ function validateSession(s) {
 const STORAGE_KEY = "az305_study_sets";
 const HISTORY_KEY = "az305_results_history";
 
+// Compressed localStorage helpers (LZString loaded via CDN in index.html).
+// decompressFromUTF16 returns null when the value isn't LZ-compressed, so we
+// fall back to the raw string — this gives zero-cost migration of existing data.
+function lzGet(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const d = LZString.decompressFromUTF16(raw);
+    return d != null ? d : raw;
+  } catch { return null; }
+}
+function lzSet(key, value) {
+  localStorage.setItem(key, LZString.compressToUTF16(value));
+}
+
 // ── 1. Proper UUID v4 generator ───────────────────────────────────────────────
 function uid() {
   if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
@@ -599,7 +614,7 @@ function uid() {
 const DataService = {
   getSets: async () => {
     try {
-      const sets = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      const sets = JSON.parse(lzGet(STORAGE_KEY)) || [];
       // Migrate: group string → tags array, add timestamps if missing
       return sets.map(s => ({
         ...s,
@@ -610,14 +625,14 @@ const DataService = {
     } catch { return []; }
   },
   saveSets: async (sets) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sets));
+    lzSet(STORAGE_KEY, JSON.stringify(sets));
   },
   getHistory: async () => {
-    try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+    try { return JSON.parse(lzGet(HISTORY_KEY)) || []; }
     catch { return []; }
   },
   saveHistory: async (history) => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    lzSet(HISTORY_KEY, JSON.stringify(history));
   },
 };
 
@@ -625,7 +640,7 @@ const DataService = {
 // (will be removed when fully async)
 function loadSets() {
   try {
-    const sets = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const sets = JSON.parse(lzGet(STORAGE_KEY)) || [];
     return sets.map(s => ({
       ...s,
       tags: s.tags || (s.group ? [s.group] : []),
@@ -634,9 +649,9 @@ function loadSets() {
     }));
   } catch { return []; }
 }
-function saveSets(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
-function loadHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; } }
-function saveHistory(h) { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); }
+function saveSets(s) { lzSet(STORAGE_KEY, JSON.stringify(s)); }
+function loadHistory() { try { return JSON.parse(lzGet(HISTORY_KEY)) || []; } catch { return []; } }
+function saveHistory(h) { lzSet(HISTORY_KEY, JSON.stringify(h)); }
 
 function blankQuestion(type = "single") {
   const base = { id: uid(), type, topic: "", question: "", hint: "", explanation: "" };
