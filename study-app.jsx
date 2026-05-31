@@ -3336,95 +3336,6 @@ function SessionPicker({ set, onStart, onClose }) {
 //  HOME — set list
 // ════════════════════════════════════════════════════════════════════════
 
-function ImportJsonModal({ onImport, onClose, type }) {
-  const [text, setText] = useState("");
-  const [error, setError] = useState("");
-
-  function handleImport() {
-    setError("");
-    try {
-      const parsed = JSON.parse(text);
-      const incoming = Array.isArray(parsed) ? parsed : [parsed];
-      let valid;
-      if (type === "sets") {
-        valid = incoming.filter(validateSet);
-        if (valid.length === 0) {
-          const looksLikeHistory = incoming.some(s => s && s.setName && Array.isArray(s.results));
-          if (looksLikeHistory) { setError("This looks like history data, not a study set. Try importing it from the History section instead."); return; }
-          setError("No valid sets found. Make sure this file was exported from Pounce."); return;
-        }
-      } else {
-        valid = incoming.filter(validateSession);
-        if (valid.length === 0) {
-          const looksLikeSets = incoming.some(s => s && s.name && Array.isArray(s.questions));
-          if (looksLikeSets) { setError("This looks like a study set, not history data. Try importing it from the Sets section instead."); return; }
-          setError("No valid history found. Make sure this file was exported from Pounce."); return;
-        }
-      }
-      onImport(valid);
-      onClose();
-    } catch { setError("Invalid JSON — please check your input."); }
-  }
-
-  return (
-    <Modal onClose={onClose} zIndex={600}>
-      <ModalCard pad="1.5rem" maxWidth={600} scroll>
-        <div>
-          <Label style={{ marginBottom: "0.1rem" }}>IMPORT {type === "sets" ? "STUDY SETS" : "HISTORY"} — PASTE JSON</Label>
-          <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Sans', sans-serif" }}>
-            Paste your exported JSON below.
-          </p>
-        </div>
-        <textarea value={text} onChange={e => { setText(e.target.value); setError(""); }}
-          placeholder='[{"id": "...", "name": "...", ...}]'
-          style={{ ...inp(), flex: 1, minHeight: "180px",
-            fontFamily: "'DM Mono', monospace", fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
-        {error && <p style={{ color: T.red, fontSize: "0.8rem", fontFamily: "'DM Sans', sans-serif" }}>{error}</p>}
-        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-          <PrimaryButton onClick={handleImport} small>Import</PrimaryButton>
-          <GhostButton onClick={onClose} small>Cancel</GhostButton>
-        </div>
-      </ModalCard>
-    </Modal>
-  );
-}
-
-function CopyJsonModal({ title, data, onClose }) {
-  const [copyLabel, setCopyLabel] = useState("Select all & copy");
-  const textareaRef = useRef(null);
-  const text = JSON.stringify(data, null, 2);
-
-  function handleCopy() {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.focus();
-    el.select();
-    el.setSelectionRange(0, 99999);
-    setCopyLabel(navigator.platform.includes("Mac") ? "Press ⌘C to copy" : "Press Ctrl+C to copy");
-    setTimeout(() => setCopyLabel("Select all & copy"), 3000);
-  }
-  return (
-    <Modal onClose={onClose}>
-      <ModalCard pad="1.5rem" maxWidth={600} scroll>
-        <div>
-          <Label style={{ marginBottom: "0.1rem" }}>EXPORT — {title}</Label>
-          <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Sans', sans-serif" }}>
-            Copy this JSON and save it somewhere safe to restore later.
-          </p>
-        </div>
-        <textarea ref={textareaRef} readOnly value={text} onFocus={e => e.target.select()} onClick={e => e.target.select()}
-          style={{ ...inp(), flex: 1, minHeight: "180px",
-            fontFamily: "'DM Mono', monospace", fontSize: "1rem", lineHeight: 1.5, color: T.muted2,
-            WebkitUserSelect: "text", userSelect: "text" }} />
-        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-          <PrimaryButton onClick={handleCopy} small>{copyLabel}</PrimaryButton>
-          <GhostButton onClick={onClose} small>Close</GhostButton>
-        </div>
-      </ModalCard>
-    </Modal>
-  );
-}
-
 function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   const [draftName,  setDraftName]  = useState(name);
   const [draftIconId, setDraftIconId] = useState(iconId);
@@ -3475,7 +3386,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onCopyAllSets, onCopyAllHist, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, onShowImportJson, activeSet }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet }) {
   const inSession = screen === "review" || screen === "edit";
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
@@ -3572,41 +3483,23 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
               )}
 
               {!inSession && (<>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <button onClick={() => importRef.current?.click()}
-                  {...surfacePress()} style={{ flex: 1, background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                  <span>Import</span>
-                </button>
-                <button onClick={() => { close(); onShowImportJson && onShowImportJson("sets"); }}
-                  {...surfacePress()} style={{ padding: "0.85rem 1rem", background: "transparent", border: "none", cursor: "pointer", color: T.muted, fontSize: "0.9rem", display: "flex", alignItems: "center" }}>
-                  &#123;&#125;
-                </button>
-              </div>
+              <button onClick={() => importRef.current?.click()}
+                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Import</span>
+              </button>
 
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <button onClick={() => { exportAll(sets, "studi-sets.json"); close(); }}
-                  {...surfacePress()} style={{ flex: 1, background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <span style={{ fontSize: "1rem" }}>⊞</span>
-                  <span>Export all sets</span>
-                </button>
-                <button onClick={() => { setOpen(false); setSection(null); onCopyAllSets(); }}
-                  {...surfacePress()} style={{ padding: "0.85rem 1rem", background: "transparent", border: "none", cursor: "pointer", color: T.muted, fontSize: "0.9rem", display: "flex", alignItems: "center" }}>
-                  &#123;&#125;
-                </button>
-              </div>
+              <button onClick={() => { exportAll(sets, "studi-sets.json"); close(); }}
+                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span style={{ fontSize: "1rem" }}>⊞</span>
+                <span>Export all sets</span>
+              </button>
 
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <button onClick={() => { exportAll(history, "studi-history.json"); close(); }}
-                  {...surfacePress()} style={{ flex: 1, background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <span style={{ fontSize: "1rem" }}>◷</span>
-                  <span>Export all history</span>
-                </button>
-                <button onClick={() => { setOpen(false); setSection(null); onCopyAllHist(); }}
-                  {...surfacePress()} style={{ padding: "0.85rem 1rem", background: "transparent", border: "none", cursor: "pointer", color: T.muted, fontSize: "0.9rem", display: "flex", alignItems: "center" }}>
-                  &#123;&#125;
-                </button>
-              </div>
+              <button onClick={() => { exportAll(history, "studi-history.json"); close(); }}
+                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span style={{ fontSize: "1rem" }}>◷</span>
+                <span>Export all history</span>
+              </button>
 
               <HamburgerMenuItem onClick={() => { close(); onRequestClear(); }} color={T.red} danger>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
@@ -5238,7 +5131,7 @@ function DeleteAnimation({ onComplete }) {
 // WELCOME & ONBOARDING
 // ════════════════════════════════════════════════════════════════════════
 
-function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent, onShowJson, showToast }) {
+function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent, showToast }) {
   const localT = buildTheme(resolveTheme(theme), accent);
   T = localT;
   const setsRef = useRef(null);
@@ -5336,13 +5229,6 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
                   fontWeight: 600, cursor: "pointer", textAlign: "center" }}>
                 ⊞ Import study sets
               </button>
-              <div style={{ width: "1px", background: localT.border, margin: "0.5rem 0" }} />
-              <button onClick={() => onShowJson("sets")}
-                {...surfacePress()}
-                style={{ background: "transparent", color: localT.muted2, border: "none",
-                  padding: "0.75rem 1rem", cursor: "pointer", fontSize: "0.9rem" }}>
-                &#123;&#125;
-              </button>
             </div>
           )}
           {/* Import history — GhostButton (grey surface) + {} */}
@@ -5358,13 +5244,6 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
                   padding: "0.75rem 1.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem",
                   cursor: "pointer", textAlign: "center" }}>
                 ◷ Import history
-              </button>
-              <div style={{ width: "1px", background: localT.mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)", margin: "0.5rem 0" }} />
-              <button onClick={() => onShowJson("history")}
-                {...surfacePress()}
-                style={{ background: "transparent", color: localT.muted, border: "none",
-                  padding: "0.75rem 1rem", cursor: "pointer", fontSize: "0.9rem" }}>
-                &#123;&#125;
               </button>
             </div>
           )}
@@ -5589,16 +5468,13 @@ function ColorPicker({ accent, onSetAccent }) {
 }
 
 // ── SidebarActionButton ────────────────────────────────────────────────────
-function SidebarActionButton({ onClick, onJson, icon, label, danger = false }) {
+function SidebarActionButton({ onClick, icon, label, danger = false }) {
   return (
     <div style={{ display: "flex", alignItems: "center", margin: "0 -0.75rem" }}>
       <button onClick={onClick} style={{ flex: 1, display: "flex", alignItems: "center", gap: "0.75rem", background: "transparent", border: "none", padding: "0.55rem 0.75rem", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: danger ? T.red : T.text, textAlign: "left" }}>
         <span style={{ color: danger ? T.red : T.muted, display: "flex", alignItems: "center", flexShrink: 0 }}>{icon}</span>
         {label}
       </button>
-      {onJson && (
-        <button onClick={onJson} style={{ padding: "0.55rem 0.75rem", background: "transparent", border: "none", cursor: "pointer", color: T.muted, fontSize: "0.85rem", fontFamily: "'DM Mono', monospace" }}>&#123;&#125;</button>
-      )}
     </div>
   );
 }
@@ -5727,22 +5603,17 @@ function App() {
     else document.body.classList.remove("modal-open");
     return () => document.body.classList.remove("modal-open");
   }, [modalOpen]);
-  const [copyAllSets, setCopyAllSets]    = useState(false);
-  const [copyAllHist, setCopyAllHist]    = useState(false);
   const [showClearConfirm,  setShowClearConfirm]  = useState(false);
   const [showClearConfirm2, setShowClearConfirm2] = useState(false);
   const [resultsExportModal, setResultsExportModal] = useState(false);
   const searchInputRef = useRef(null);
   const [resultsConfirmRetry, setResultsConfirmRetry] = useState(false);
-  const [showImportJson, setShowImportJson] = useState(null);
-  const [resultsCopyJson, setResultsCopyJson] = useState(null);
   const [resultsFilter, setResultsFilter] = useState("all");
   const [resultsFilterOpen, setResultsFilterOpen] = useState(false);
 
   const [showWelcome, setShowWelcome]  = useState(() => {
     return localStorage.getItem("studi_welcomed") !== "true";
   });
-  const [showWelcomeJson, setShowWelcomeJson] = useState(null);
   T = buildTheme(resolveTheme(theme), accent);
 
   const allTags = useMemo(() => [...new Set(sets.flatMap(s => s.tags || []))], [sets]);
@@ -5956,30 +5827,9 @@ function App() {
           onImportHistory={sessions => { handleImportHistory(sessions); }}
           onDismiss={() => { setShowWelcome(false); localStorage.setItem("studi_welcomed", "true"); }}
           theme={theme} accent={accent}
-          onShowJson={setShowWelcomeJson}
         />
       )}
 
-      {showWelcomeJson && (
-        <ImportJsonModal
-          type={showWelcomeJson}
-          onImport={showWelcomeJson === "sets"
-            ? imported => { handleImport(imported); setShowWelcomeJson(null); }
-            : sessions => { handleImportHistory(sessions); setShowWelcomeJson(null); }}
-          onClose={() => setShowWelcomeJson(null)}
-        />
-      )}
-      {showImportJson && (
-        <ImportJsonModal
-          type={showImportJson}
-          onImport={showImportJson === "sets"
-            ? imported => { handleImport(imported); setShowImportJson(null); }
-            : sessions => { handleImportHistory(sessions); setShowImportJson(null); }}
-          onClose={() => setShowImportJson(null)}
-        />
-      )}
-      {copyAllSets && <CopyJsonModal title="ALL STUDY SETS" data={sets} onClose={() => setCopyAllSets(false)} />}
-      {copyAllHist && <CopyJsonModal title="ALL HISTORY" data={history} onClose={() => setCopyAllHist(false)} />}
       {pendingStudySet && (
         <SessionPicker
           set={pendingStudySet}
@@ -6035,14 +5885,6 @@ function App() {
           </ModalCard>
         </Modal>
       )}
-      {resultsCopyJson && (
-        <CopyJsonModal
-          title="Session JSON"
-          data={resultsCopyJson}
-          onClose={() => setResultsCopyJson(null)}
-        />
-      )}
-
       <div style={{ minHeight: "100vh", background: "transparent", visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
@@ -6166,12 +6008,10 @@ function App() {
               sets={sets} history={history} onClearAll={handleClearAll} screen={screen}
               profileName={profileName} profileIconId={profileIconId} profileBg={profileBg} profileIColor={profileIColor}
               onSaveProfile={handleSaveProfile}
-              onCopyAllSets={() => setCopyAllSets(true)}
-              onCopyAllHist={() => setCopyAllHist(true)}
               onRequestClear={() => setShowClearConfirm(true)}
               forceMobile={isMobile} onToggleForceMobile={() => setForceMobile(f => f === true ? false : true)}
               onSmartImport={f => { if (!f) return; const r = new FileReader(); r.onload = ev => { try { const parsed = JSON.parse(ev.target.result); const inc = Array.isArray(parsed) ? parsed : [parsed]; const isHist = inc.every(s => s && s.setName && Array.isArray(s.results)); if (isHist) { const v = inc.filter(validateSession); if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); } else showToast("No valid history found."); } else { const v = inc.filter(validateSet); if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); } else showToast("No valid sets found."); } } catch { showToast("Could not read file — invalid JSON."); } }; r.readAsText(f); }}
-              onShowImportJson={setShowImportJson} activeSet={activeSet} />}
+              activeSet={activeSet} />}
           </div>
           </div>
 
@@ -6689,9 +6529,9 @@ function App() {
             <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
             <div style={{ height: "1px", background: T.border, margin: "0.75rem 0" }} />
             <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
-            <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} onJson={() => setShowImportJson("sets")} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>} label="Import" />
-            <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} onJson={() => setCopyAllSets(true)} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Export all sets" />
-            <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} onJson={() => setCopyAllHist(true)} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Export all history" />
+            <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>} label="Import" />
+            <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Export all sets" />
+            <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Export all history" />
             <SidebarActionButton onClick={() => setShowClearConfirm(true)} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>} label="Clear all data" danger />
           </div>
         </div>
