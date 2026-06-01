@@ -1261,6 +1261,23 @@ const TYPE_META = {
   flashcard: { label: "FLASHCARD", color: "#a855f7" },
 };
 
+// ── Collapsible — animates height to the measured content height ──────────
+function Collapsible({ open, children }) {
+  const innerRef = useRef(null);
+  const [h, setH] = useState(0);
+  useLayoutEffect(() => {
+    if (innerRef.current) {
+      const sh = innerRef.current.scrollHeight;
+      if (sh !== h) setH(sh);
+    }
+  });
+  return (
+    <div style={{ overflow: "hidden", height: open ? h + "px" : "0", transition: "height 0.3s ease" }}>
+      <div ref={innerRef}>{children}</div>
+    </div>
+  );
+}
+
 // ════════════════════════════════════════════════════════════════════════
 // QUESTION EDITOR
 // ════════════════════════════════════════════════════════════════════════
@@ -1340,13 +1357,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
         </span>
       </div>
 
-      <div style={{
-        display: "grid",
-        gridTemplateRows: open ? "1fr" : "0fr",
-        transition: "grid-template-rows 0.3s ease",
-        overflow: open ? "visible" : "hidden",
-      }}>
-        <div style={{ overflow: "hidden" }}>
+      <Collapsible open={open}>
         <div style={{ marginTop: "1.25rem" }}>
           {/* type + topic */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.9rem" }}>
@@ -1585,8 +1596,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               style={{ ...inp(), lineHeight: 1.6 }} />
           </div>
         </div>
-        </div>
-      </div>
+      </Collapsible>
     </div>
   );
 }
@@ -3165,13 +3175,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
               </span>
             </div>
 
-            <div style={{
-              display: "grid",
-              gridTemplateRows: open ? "1fr" : "0fr",
-              transition: "grid-template-rows 0.3s ease",
-              overflow: open ? "visible" : "hidden",
-            }}>
-              <div style={{ overflow: "hidden" }}>
+            <Collapsible open={open}>
               <div style={{ marginTop: "1rem" }}>
                 {/* Question text */}
                 <p style={{ color: T.text, fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", lineHeight: 1.65, marginBottom: "1rem", whiteSpace: "pre-wrap" }}>
@@ -3205,8 +3209,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                   </div>
                 )}
               </div>
-              </div>
-            </div>
+            </Collapsible>
           </div>
         );
       })}
