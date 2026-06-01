@@ -4902,7 +4902,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
       <div style={{
         width: "290px",
         display: "flex", alignItems: "center",
-        background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(255,255,255,0.15)",
+        background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(255,255,255,0.20)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         borderRadius: "99px",
