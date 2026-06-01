@@ -5967,7 +5967,6 @@ function App() {
               : "transparent",
           transition: editingSetName ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
-          ...(showSidebar ? { borderBottom: "1px solid " + T.border } : {}),
         }}>
           
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -6404,7 +6403,7 @@ function App() {
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Sidebar border — starts below header height so it looks like one piece */}
-          <div style={{ position: "fixed", top: "48px", bottom: 0, width: "1px", background: T.border,
+          <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: T.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
             transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
@@ -6566,6 +6565,21 @@ function App() {
             )}
           </div>
         </div>
+      )}
+
+      {/* Header bottom border — starts after the concave corner arc */}
+      {showSidebar && (
+        <div style={{
+          position: "fixed",
+          top: "48px",
+          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 12 + "px",
+          right: 0,
+          height: "1px",
+          background: T.border,
+          zIndex: 100,
+          pointerEvents: "none",
+          transition: "left 0.25s ease",
+        }} />
       )}
 
       {/* Concave corner between sidebar and content area */}
