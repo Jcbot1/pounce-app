@@ -5566,6 +5566,7 @@ function App() {
   const [sidebarAppearanceOpen, setSidebarAppearanceOpen] = useState(false);
   const [sidebarProfileOpen, setSidebarProfileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [recentTooltip, setRecentTooltip] = useState(null); // { name, y }
   const sidebarPopupRef = useRef(null);
   const sidebarCogRef = useRef(null);
   useEffect(() => {
@@ -6465,8 +6466,8 @@ function App() {
                     else { const session = history.find(h => h.id === item.id); if (session) { setHomeTab("history"); setScreen("home"); setHistorySearch(session.setName); } }
                   }}
                     style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
-                    onMouseEnter={e => e.currentTarget.style.background = T.surface2}
-                    onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                    onMouseEnter={e => { e.currentTarget.style.background = T.surface2; const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
                     {item.type === "set" ? (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                         <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
@@ -6564,6 +6565,31 @@ function App() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Recent item name tooltip */}
+      {recentTooltip && (
+        <div style={{
+          position: "fixed",
+          left: SIDEBAR_WIDTH + 10 + "px",
+          top: recentTooltip.y + "px",
+          transform: "translateY(-50%)",
+          background: T.mode === "light" ? T.surface : T.surface2,
+          border: "1px solid " + T.border,
+          borderRadius: "8px",
+          padding: "0.35rem 0.65rem",
+          boxShadow: T.mode === "light"
+            ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+            : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "0.85rem",
+          color: T.text,
+          whiteSpace: "nowrap",
+          zIndex: 300,
+          pointerEvents: "none",
+        }}>
+          {recentTooltip.name}
         </div>
       )}
 
