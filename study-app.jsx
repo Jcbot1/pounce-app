@@ -6570,17 +6570,33 @@ function App() {
 
       {/* Concave corner between sidebar and content area */}
       {showSidebar && (
-        <div style={{
-          position: "fixed",
-          top: "48px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
-          width: "12px",
-          height: "12px",
-          background: `radial-gradient(circle at 0% 0%, transparent 12px, ${T.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} 12px)`,
-          zIndex: 201,
-          pointerEvents: "none",
-          transition: "left 0.25s ease",
-        }} />
+        <>
+          <div style={{
+            position: "fixed",
+            top: "48px",
+            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
+            width: "12px",
+            height: "12px",
+            background: `radial-gradient(circle at 100% 100%, transparent 12px, ${T.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} 12px)`,
+            zIndex: 201,
+            pointerEvents: "none",
+            transition: "left 0.25s ease",
+          }} />
+          <div style={{
+            position: "fixed",
+            top: "48px",
+            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
+            width: "12px",
+            height: "12px",
+            borderTopLeftRadius: "12px",
+            borderTop: `1px solid ${T.border}`,
+            borderLeft: `1px solid ${T.border}`,
+            background: "transparent",
+            zIndex: 202,
+            pointerEvents: "none",
+            transition: "left 0.25s ease",
+          }} />
+        </>
       )}
 
     </div>
