@@ -5945,10 +5945,11 @@ function App() {
           </ModalCard>
         </Modal>
       )}
-      <div style={{ minHeight: "100vh", background: "transparent", visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
+      <div style={{ minHeight: "100vh", background: T.bg, visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
-        transition: "margin-left 0.25s ease" }}>
+        borderTopLeftRadius: showSidebar ? "12px" : 0,
+        transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
         
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
@@ -6565,6 +6566,21 @@ function App() {
             )}
           </div>
         </div>
+      )}
+
+      {/* Concave corner between sidebar and content area */}
+      {showSidebar && (
+        <div style={{
+          position: "fixed",
+          top: "48px",
+          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
+          width: "12px",
+          height: "12px",
+          background: `radial-gradient(circle at 0% 0%, transparent 12px, ${T.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} 12px)`,
+          zIndex: 201,
+          pointerEvents: "none",
+          transition: "left 0.25s ease",
+        }} />
       )}
 
     </div>
