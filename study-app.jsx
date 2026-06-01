@@ -4163,7 +4163,9 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
             SETS · {matchedSets.length}
           </p>
-          {matchedSets.map(s => <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} />)}
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+            {matchedSets.map(s => <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} />)}
+          </div>
         </div>
       )}
 
@@ -4173,7 +4175,9 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
             HISTORY · {matchedHistory.length}
           </p>
-          {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onExport={onExport} onDelete={onDeleteHistory} />)}
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+            {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onExport={onExport} onDelete={onDeleteHistory} />)}
+          </div>
         </div>
       )}
     </div>
