@@ -1340,7 +1340,13 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
         </span>
       </div>
 
-      {open && (
+      <div style={{
+        display: "grid",
+        gridTemplateRows: open ? "1fr" : "0fr",
+        transition: "grid-template-rows 0.3s ease",
+        overflow: open ? "visible" : "hidden",
+      }}>
+        <div style={{ overflow: "hidden" }}>
         <div style={{ marginTop: "1.25rem" }}>
           {/* type + topic */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.9rem" }}>
@@ -1579,7 +1585,8 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               style={{ ...inp(), lineHeight: 1.6 }} />
           </div>
         </div>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -3158,7 +3165,13 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
               </span>
             </div>
 
-            {open && (
+            <div style={{
+              display: "grid",
+              gridTemplateRows: open ? "1fr" : "0fr",
+              transition: "grid-template-rows 0.3s ease",
+              overflow: open ? "visible" : "hidden",
+            }}>
+              <div style={{ overflow: "hidden" }}>
               <div style={{ marginTop: "1rem" }}>
                 {/* Question text */}
                 <p style={{ color: T.text, fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", lineHeight: 1.65, marginBottom: "1rem", whiteSpace: "pre-wrap" }}>
@@ -3192,7 +3205,8 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                   </div>
                 )}
               </div>
-            )}
+              </div>
+            </div>
           </div>
         );
       })}
