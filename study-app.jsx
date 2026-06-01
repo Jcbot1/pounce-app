@@ -437,7 +437,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
       {hintOpen && (
         <>
           <div style={{ position: "fixed", inset: 0, zIndex: 9 }} onPointerDown={() => setHintOpen(false)} />
-          <div className="menu-open" style={{
+          <div className="menu-open" onPointerDown={() => setHintOpen(false)} style={{
             position: "fixed",
             top: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "4rem"; const r = btn.getBoundingClientRect(); return r.bottom + 8 + "px"; })(),
             right: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "1rem"; const r = btn.getBoundingClientRect(); const popupW = Math.min(360, window.innerWidth - 32); const rightFromBtn = window.innerWidth - r.right; return Math.min(rightFromBtn, window.innerWidth - popupW - 16) + "px"; })(),
