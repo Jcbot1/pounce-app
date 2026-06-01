@@ -3691,7 +3691,14 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const [renaming,        setRenaming]        = useState(false);
   const [renameVal,       setRenameVal]       = useState("");
   const renameRef = useRef(null);
-  useEffect(() => { if (renaming && renameRef.current) renameRef.current.focus({ preventScroll: true }); }, [renaming]);
+  useEffect(() => {
+    if (!renaming || !renameRef.current) return;
+    const el = renameRef.current;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+    el.focus({ preventScroll: true });
+    el.setSelectionRange(el.value.length, el.value.length);
+  }, [renaming]);
   const menuRef = useRef(null);
 
   const kebabRef = useRef(null);
@@ -3736,12 +3743,6 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
                 setRenameVal(e.target.value);
                 e.target.style.height = "auto";
                 e.target.style.height = e.target.scrollHeight + "px";
-              }}
-              onFocus={e => {
-                e.target.style.height = "auto";
-                e.target.style.height = e.target.scrollHeight + "px";
-                const len = e.target.value.length;
-                e.target.setSelectionRange(len, len);
               }}
               onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (renameVal.trim()) { onRename(s.id, renameVal.trim()); setRenaming(false); } } if (e.key === "Escape") setRenaming(false); }}
               rows={1}
