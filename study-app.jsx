@@ -6466,7 +6466,7 @@ function App() {
                     else { const session = history.find(h => h.id === item.id); if (session) { setHomeTab("history"); setScreen("home"); setHistorySearch(session.setName); } }
                   }}
                     style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
-                    onMouseEnter={e => { e.currentTarget.style.background = T.surface2; const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); }}
+                    onMouseEnter={e => { e.currentTarget.style.background = T.surface2; const nameEl = e.currentTarget.querySelector('span'); if (nameEl && nameEl.scrollWidth > nameEl.clientWidth) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); } }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
                     {item.type === "set" ? (
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
