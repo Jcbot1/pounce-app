@@ -5634,6 +5634,11 @@ function App() {
     document.addEventListener("pointerdown", handlePointerDown);
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, [editingSetName]);
+  useEffect(() => {
+    if (editingSetName && setNameTextareaRef.current) {
+      setNameTextareaRef.current.focus({ preventScroll: true });
+    }
+  }, [editingSetName]);
   const [editSearch, setEditSearch] = useState("");
   const [savedFlash, setSavedFlash] = useState(false);
   const [editCanSave, setEditCanSave] = useState(false);
@@ -5987,7 +5992,6 @@ function App() {
               (editingSetName ? (
                 <textarea
                   ref={setNameTextareaRef}
-                  autoFocus
                   value={activeSet ? activeSet.name : ""}
                   onChange={e => {
                     setActiveSet(s => ({ ...s, name: e.target.value }));
