@@ -3690,6 +3690,8 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const [confirmDelete,   setConfirmDelete]   = useState(false);
   const [renaming,        setRenaming]        = useState(false);
   const [renameVal,       setRenameVal]       = useState("");
+  const renameRef = useRef(null);
+  useEffect(() => { if (renaming && renameRef.current) renameRef.current.focus({ preventScroll: true }); }, [renaming]);
   const menuRef = useRef(null);
 
   const kebabRef = useRef(null);
@@ -3728,7 +3730,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           <ModalCard pad="1.5rem" maxWidth={360}>
             <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>RENAME SET</p>
             <textarea
-              autoFocus
+              ref={renameRef}
               value={renameVal}
               onChange={e => {
                 setRenameVal(e.target.value);
