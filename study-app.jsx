@@ -1271,8 +1271,9 @@ function Collapsible({ open, children }) {
       if (sh !== h) setH(sh);
     }
   });
+  const duration = Math.min(0.5, Math.max(0.25, h * 0.0005)) + "s";
   return (
-    <div style={{ overflow: "hidden", height: open ? h + "px" : "0", transition: "height 0.3s ease" }}>
+    <div style={{ overflow: "hidden", height: open ? h + "px" : "0", transition: `height ${duration} ease` }}>
       <div ref={innerRef}>{children}</div>
     </div>
   );
