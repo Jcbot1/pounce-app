@@ -1823,6 +1823,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
       display: "flex", justifyContent: "center", alignItems: "center",
       padding: "0 1rem", pointerEvents: "none",
       transform: sidebarOffset ? `translateX(${sidebarOffset / 2}px)` : undefined,
+      transition: "transform 0.25s ease",
     }}>
       <div style={{
         display: "flex", alignItems: "center", gap: "0.75rem",
