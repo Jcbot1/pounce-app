@@ -6036,7 +6036,7 @@ function App() {
             ) : !showSidebar ? (
               <PounceLogo height={24} />
             ) : screen === "home" ? (
-              <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem" }}>
+              <div style={{ position: "absolute", left: `calc(50% + ${(sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) / 2}px)`, transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem", transition: "left 0.25s ease" }}>
                 <div style={{ position: "relative", width: "100%" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.5, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
