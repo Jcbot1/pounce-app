@@ -5980,8 +5980,9 @@ function App() {
         }}>
           
           <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", height: showSidebar ? "48px" : undefined, padding: showSidebar ? "0 1rem" : editingSetName && !(screen === "edit" && (isDesktop || isTablet || titleBarVisible)) ? "0.5rem 1rem 1.75rem" : "0.5rem 1rem", display: "flex", alignItems: editingSetName ? "flex-start" : "center", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
-            
+          <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", height: showSidebar ? "48px" : undefined, padding: showSidebar ? "0 1rem" : editingSetName && !(screen === "edit" && (isDesktop || isTablet || titleBarVisible)) ? "0.5rem 1rem 1.75rem" : "0.5rem 1rem", display: "flex", position: "relative", zIndex: 1 }}>
+
+            <div style={{ width: "44px", flexShrink: 0, display: "flex", alignItems: "center" }}>
             {(screen === "edit" || screen === "review" || screen === "results" || screen === "historyResults") ? (
               <GlassButton onClick={() => { document.dispatchEvent(new CustomEvent("studi-back")); }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -5991,7 +5992,9 @@ function App() {
             ) : (
               <div style={{ width: "44px" }} />
             )}
+            </div>
 
+            <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: editingSetName ? "flex-start" : "center", minWidth: 0, overflow: "hidden" }}>
             {(screen === "edit" || screen === "review") ? (
               (editingSetName ? (
                 <textarea
@@ -6016,13 +6019,14 @@ function App() {
                     fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "1rem",
                     color: T.text, textAlign: "center", background: "transparent",
                     border: "none", borderBottom: "1px solid " + T.accent,
-                    outline: "none", maxWidth: "calc(100% - 120px)", width: "100%",
+                    outline: "none", width: "100%", padding: "0",
                     resize: "none", overflow: "hidden", lineHeight: 1.4,
                   }} />
               ) : (
                 <span onClick={() => screen === "edit" && setEditingSetName(true)} style={{
                   display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                  maxWidth: "calc(100% - 120px)",
+                  maxWidth: "100%", boxSizing: "border-box",
+                  paddingLeft: screen === "edit" ? "calc(12px + 0.5rem)" : undefined,
                   cursor: screen === "edit" ? "text" : "default",
                   borderBottom: screen === "edit" ? "1px solid transparent" : "none",
                 }}>
@@ -6072,7 +6076,9 @@ function App() {
             ) : (
               <div style={{ width: "44px" }} />
             )}
+            </div>
 
+            <div style={{ width: "44px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
             {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} accent={accent} onSetAccent={handleSetAccent}
               sets={sets} history={history} onClearAll={handleClearAll} screen={screen}
               profileName={profileName} profileIconId={profileIconId} profileBg={profileBg} profileIColor={profileIColor}
@@ -6081,6 +6087,7 @@ function App() {
               forceMobile={isMobile} onToggleForceMobile={() => setForceMobile(f => f === true ? false : true)}
               onSmartImport={f => { if (!f) return; const r = new FileReader(); r.onload = ev => { try { const parsed = JSON.parse(ev.target.result); const inc = Array.isArray(parsed) ? parsed : [parsed]; const isHist = inc.every(s => s && s.setName && Array.isArray(s.results)); if (isHist) { const v = inc.filter(validateSession); if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); } else showToast("No valid history found."); } else { const v = inc.filter(validateSet); if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); } else showToast("No valid sets found."); } } catch { showToast("Could not read file — invalid JSON."); } }; r.readAsText(f); }}
               activeSet={activeSet} />}
+            </div>
           </div>
           </div>
 
