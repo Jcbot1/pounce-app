@@ -1265,7 +1265,7 @@ const TYPE_META = {
 function Collapsible({ open, children }) {
   const innerRef = useRef(null);
   const [h, setH] = useState(0);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (innerRef.current) {
       const sh = innerRef.current.scrollHeight;
       if (sh !== h) setH(sh);
