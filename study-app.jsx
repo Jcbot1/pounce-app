@@ -5638,9 +5638,9 @@ function App() {
   }, [editingSetName]);
   useEffect(() => {
     if (editingSetName && setNameTextareaRef.current) {
-      const scrollY = window.scrollY;
+      const x = window.scrollX, y = window.scrollY;
       setNameTextareaRef.current.focus({ preventScroll: true });
-      requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "instant" }));
+      window.scrollTo(x, y);
     }
   }, [editingSetName]);
   const [editSearch, setEditSearch] = useState("");
