@@ -4954,7 +4954,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
             }}>
               <span style={{
                 display: "inline-flex", position: "relative",
-                color: active ? T.accent : T.mode === "light" ? "#9aa3b0" : "#6b6080",
+                color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
                 transition: "color 0.2s",
               }}>
                 {t.svg}
@@ -4976,7 +4976,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
               <span style={{
                 fontSize: "0.72rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
                 lineHeight: 1,
-                color: active ? T.accent : T.mode === "light" ? "#9aa3b0" : "#6b6080",
+                color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
                 transition: "color 0.2s",
               }}>
                 {t.label}
