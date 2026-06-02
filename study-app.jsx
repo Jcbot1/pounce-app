@@ -1753,8 +1753,8 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
                 if (e.key === "Escape") { setAddingTag(false); setNewTag(""); }
               }}
               style={{ ...inp({ width: "110px", fontSize: "16px", padding: "0.2rem 0.85rem", borderRadius: "99px", height: "100%", boxSizing: "border-box" }) }} />
-            <SuccessButton onClick={() => { addNewTag(); }} small style={{ height: "100%" }}>Save</SuccessButton>
-            <GhostButton onClick={() => { setAddingTag(false); setNewTag(""); }} small style={{ height: "100%" }}>Cancel</GhostButton>
+            <SuccessButton onClick={() => { addNewTag(); }} small style={{ height: "100%", minHeight: 0 }}>Save</SuccessButton>
+            <GhostButton onClick={() => { setAddingTag(false); setNewTag(""); }} small style={{ height: "100%", minHeight: 0 }}>Cancel</GhostButton>
           </div>
         ) : (draft.tags || []).length < 5 ? (
           <button onClick={() => setAddingTag(true)}
