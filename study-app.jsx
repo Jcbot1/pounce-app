@@ -4564,8 +4564,8 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
   ];
 
   const sorted = [...history].sort((a, b) => {
-    if (sortBy === "date-desc")  return b.date - a.date;
-    if (sortBy === "date-asc")   return a.date - b.date;
+    if (sortBy === "date-desc")  return new Date(b.date) - new Date(a.date);
+    if (sortBy === "date-asc")   return new Date(a.date) - new Date(b.date);
     const pctA = a.score / a.total, pctB = b.score / b.total;
     if (sortBy === "score-desc") return pctB - pctA;
     if (sortBy === "score-asc")  return pctA - pctB;
