@@ -6192,7 +6192,7 @@ function App() {
               display: "flex", justifyContent: "center",
             }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : "720px",
-                padding: titleBarVisible ? "0 1rem 0.65rem" : "0 1rem",
+                padding: titleBarVisible ? "3px 1rem calc(0.65rem + 2px)" : "3px 1rem",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
                 <div style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.6, pointerEvents: "none" }}
