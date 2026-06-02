@@ -6192,7 +6192,7 @@ function App() {
               display: "flex", justifyContent: "center",
             }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : "720px",
-                padding: titleBarVisible ? "0.25rem 1rem 0.75rem" : "0.25rem 1rem",
+                padding: titleBarVisible ? "0 1rem 0.65rem" : "0 1rem",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
                 <div style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.6, pointerEvents: "none" }}
@@ -6204,7 +6204,7 @@ function App() {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search sets, questions, history…"
-                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0.35rem", paddingBottom: "0.35rem", fontSize: "16px", borderRadius: "99px" }),
+                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0.35rem", paddingBottom: "0.35rem", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box" }),
                       background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box",
                       border: "2px solid transparent",
                     }}
