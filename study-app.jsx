@@ -6084,7 +6084,7 @@ function App() {
                     value={searchQuery}
                     onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") setHomeTab("search"); }}
                     placeholder="Search…"
-                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", fontSize: "16px", borderRadius: "99px" }) }}
+                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box" }) }}
                   />
                   {searchQuery && (
                     <button onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
