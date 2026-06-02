@@ -6013,7 +6013,7 @@ function App() {
             )}
             </div>
 
-            <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: editingSetName ? "flex-start" : "center", minWidth: 0, overflow: "hidden" }}>
+            <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: editingSetName ? "flex-start" : "center", minWidth: 0, overflow: "hidden", paddingRight: screen === "edit" ? "0.5rem" : undefined }}>
             {(screen === "edit" || screen === "review") ? (
               (editingSetName ? (
                 <textarea
