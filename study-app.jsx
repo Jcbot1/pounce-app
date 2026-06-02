@@ -6045,7 +6045,7 @@ function App() {
                 <span onClick={() => screen === "edit" && setEditingSetName(true)} style={{
                   display: "inline-flex", alignItems: "center", gap: "0.5rem",
                   maxWidth: "100%", boxSizing: "border-box",
-                  paddingLeft: screen === "edit" ? "calc(12px + 0.5rem)" : undefined,
+                  paddingLeft: undefined,
                   cursor: screen === "edit" ? "text" : "default",
                   borderBottom: screen === "edit" ? "1px solid transparent" : "none",
                 }}>
