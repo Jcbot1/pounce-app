@@ -2221,6 +2221,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
 
 function ReviewDropdown({ q, selections, onSelect, submitted }) {
   const [openId, setOpenId] = useState(null);
+  const [menuPos, setMenuPos] = useState(null);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -2252,7 +2253,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
 
         return (
           <div key={dd.id} style={{
-            display: "flex", alignItems: "flex-start", gap: "0.75rem",
+            display: "flex", flexDirection: "column", gap: "0.5rem",
             padding: "0.85rem 0.9rem",
             background: T.surface2, borderRadius: "12px",
             border: "1px solid " + (submitted ? (isCor ? T.green + "55" : isWrong ? T.red + "55" : T.border) : T.border),
@@ -2260,15 +2261,19 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
             {/* row label */}
             <span style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem", color: T.muted2,
-              flex: 1, paddingTop: "0.1rem",
             }}>
               {renderText(dd.rowLabel || "Row " + (di + 1))}
             </span>
             {/* custom dropdown */}
-            <div style={{ position: "relative", flexShrink: 0, width: "180px" }} ref={isOpen ? menuRef : null}>
+            <div style={{ position: "relative" }} ref={isOpen ? menuRef : null}>
               <button
                 disabled={submitted}
-                onClick={() => !submitted && setOpenId(isOpen ? null : dd.id)}
+                onClick={e => {
+                  if (!submitted) {
+                    if (isOpen) { setOpenId(null); }
+                    else { setMenuPos(e.currentTarget.getBoundingClientRect()); setOpenId(dd.id); }
+                  }
+                }}
                 style={{
                   width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem",
                   background: triggerBg, color: triggerColor,
@@ -2287,7 +2292,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   </svg>
                 )}
               </button>
-              {isOpen && (
+              {isOpen && menuPos && (
                 <div style={{
                   position: "fixed",
                   zIndex: 9999,
@@ -2297,18 +2302,9 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   boxShadow: T.mode === "light" ? "0 8px 24px rgba(0,0,0,0.12)" : "0 8px 24px rgba(0,0,0,0.4)",
                   overflow: "hidden",
                   minWidth: "180px", maxWidth: "260px",
-                  ...((() => {
-                    if (typeof window === "undefined") return { top: 0, right: 0 };
-                    const btn = menuRef.current?.querySelector("button");
-                    if (!btn) return { top: 0, right: 0 };
-                    const r = btn.getBoundingClientRect();
-                    const spaceBelow = window.innerHeight - r.bottom;
-                    const top = spaceBelow > 200 ? r.bottom + 4 : r.top - 4;
-                    const right = window.innerWidth - r.right;
-                    return spaceBelow > 200
-                      ? { top: r.bottom + 4, right: window.innerWidth - r.right }
-                      : { bottom: window.innerHeight - r.top + 4, right: window.innerWidth - r.right };
-                  })()),
+                  ...(window.innerHeight - menuPos.bottom > 200
+                    ? { top: menuPos.bottom + 4, right: window.innerWidth - menuPos.right }
+                    : { bottom: window.innerHeight - menuPos.top + 4, right: window.innerWidth - menuPos.right }),
                 }}>
                   {dd.options.map((opt, oi) => (
                     <button key={oi} onClick={() => { onSelect(dd.id, oi); setOpenId(null); }}
