@@ -381,12 +381,12 @@ function EditorTagChip({ tag, onRemove }) {
   return (
     <button onClick={onRemove} {...primaryPress()} style={{
       display: "flex", alignItems: "center", gap: "0.35rem",
-      padding: "0.5rem 1rem", borderRadius: "99px", border: "1px solid transparent", cursor: "pointer",
-      fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", fontWeight: 500,
+      padding: "0.3rem 0.85rem", borderRadius: "99px", border: "1px solid transparent", cursor: "pointer",
+      fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", fontWeight: 500,
       background: T.accent + "22", color: T.accent,
     }}>
       {tag}
-      <span style={{ fontSize: "0.72rem", opacity: 0.7 }}>✕</span>
+      <span style={{ fontSize: "0.65rem", opacity: 0.7 }}>✕</span>
     </button>
   );
 }
@@ -1739,20 +1739,20 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
       )}
 
       {/* Tags — inline pills + add button */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center", marginBottom: "1.5rem", minHeight: "38px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center", marginBottom: "1.5rem", minHeight: "30px" }}>
         {(draft.tags || []).map(tag => (
           <EditorTagChip key={tag} tag={tag} onRemove={() => toggleTag(tag)} />
         ))}
 
         {addingTag ? (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", height: "38px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", height: "30px" }}>
             <input autoFocus value={newTag} onChange={e => setNewTag(e.target.value)}
               maxLength={10} placeholder="Tag name…"
               onKeyDown={e => {
                 if (e.key === "Enter") { addNewTag(); }
                 if (e.key === "Escape") { setAddingTag(false); setNewTag(""); }
               }}
-              style={{ ...inp({ width: "110px", fontSize: "16px", padding: "0.5rem 1rem", borderRadius: "99px", height: "100%", boxSizing: "border-box" }) }} />
+              style={{ ...inp({ width: "110px", fontSize: "16px", padding: "0.2rem 0.85rem", borderRadius: "99px", height: "100%", boxSizing: "border-box" }) }} />
             <SuccessButton onClick={() => { addNewTag(); }} small style={{ height: "100%" }}>Save</SuccessButton>
             <GhostButton onClick={() => { setAddingTag(false); setNewTag(""); }} small style={{ height: "100%" }}>Cancel</GhostButton>
           </div>
@@ -1761,8 +1761,8 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
             {...primaryPress()}
             style={{
               display: "flex", alignItems: "center", gap: "0.35rem",
-              padding: "0.5rem 1rem", borderRadius: "99px", cursor: "pointer",
-              fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem",
+              padding: "0.3rem 0.85rem", borderRadius: "99px", cursor: "pointer",
+              fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem",
               background: "transparent",
               border: "1px dashed " + T.border2,
               color: T.muted,
