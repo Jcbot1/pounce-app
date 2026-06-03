@@ -2221,7 +2221,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
 
 function ReviewDropdown({ q, selections, onSelect, submitted }) {
   const [openId, setOpenId] = useState(null);
-  const openBtnRef = useRef(null);
+  const btnRefs = useRef([]);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -2267,13 +2267,9 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
             {/* custom dropdown */}
             <div style={{ position: "relative" }} ref={isOpen ? menuRef : null}>
               <button
+                ref={el => { btnRefs.current[di] = el; }}
                 disabled={submitted}
-                onClick={e => {
-                  if (!submitted) {
-                    if (isOpen) { setOpenId(null); }
-                    else { openBtnRef.current = e.currentTarget; setOpenId(dd.id); }
-                  }
-                }}
+                onClick={() => !submitted && setOpenId(isOpen ? null : dd.id)}
                 style={{
                   width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem",
                   background: triggerBg, color: triggerColor,
@@ -2292,8 +2288,10 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   </svg>
                 )}
               </button>
-              {isOpen && openBtnRef.current && (() => {
-                const r = openBtnRef.current.getBoundingClientRect();
+              {isOpen && (() => {
+                const btn = btnRefs.current[di];
+                if (!btn) return null;
+                const r = btn.getBoundingClientRect();
                 const spaceBelow = window.innerHeight - r.bottom;
                 const left = Math.max(8, Math.min(r.left, window.innerWidth - 276));
                 return (
