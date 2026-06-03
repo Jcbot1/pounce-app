@@ -305,9 +305,9 @@ function HamburgerMenuItem({ onClick, children, right, color, danger = false, st
 }
 
 // ── Hamburger Section Header ───────────────────────────────────────────────
-function HamburgerSectionHeader({ label, onBack, right }) {
+function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
   return (
-    <div style={{ padding: "1.2rem 1.25rem", borderBottom: "1px solid " + T.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div style={{ padding: "1.2rem 1.25rem", borderBottom: noBorder ? "none" : "1px solid " + T.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: "0.25rem", lineHeight: 1, display: "flex", alignItems: "center" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -6678,7 +6678,7 @@ function App() {
 
           {sidebarSection === null && (
             <>
-              <HamburgerSectionHeader label="SETTINGS" onBack={() => setSidebarAppearanceOpen(false)} />
+              <HamburgerSectionHeader label="SETTINGS" onBack={() => setSidebarAppearanceOpen(false)} noBorder />
 
               <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
               <div style={{ padding: "0.25rem 0.5rem" }}>
@@ -6693,7 +6693,7 @@ function App() {
 
           {sidebarSection === "appearance" && (
             <>
-              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} />
+              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
