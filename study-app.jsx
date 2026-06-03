@@ -2221,7 +2221,6 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
 
 function ReviewDropdown({ q, selections, onSelect, submitted }) {
   const [openId, setOpenId] = useState(null);
-  const btnRefs = useRef([]);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -2267,7 +2266,6 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
             {/* custom dropdown */}
             <div style={{ position: "relative" }} ref={isOpen ? menuRef : null}>
               <button
-                ref={el => { btnRefs.current[di] = el; }}
                 disabled={submitted}
                 onClick={() => !submitted && setOpenId(isOpen ? null : dd.id)}
                 style={{
@@ -2288,46 +2286,36 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   </svg>
                 )}
               </button>
-              {isOpen && (() => {
-                const btn = btnRefs.current[di];
-                if (!btn) return null;
-                const r = btn.getBoundingClientRect();
-                const spaceBelow = window.innerHeight - r.bottom;
-                const left = Math.max(8, Math.min(r.left, window.innerWidth - 276));
-                return (
-                  <div style={{
-                    position: "fixed",
-                    zIndex: 9999,
-                    left,
-                    minWidth: r.width,
-                    maxWidth: "260px",
-                    ...(spaceBelow > 200
-                      ? { top: r.bottom + 4 }
-                      : { bottom: window.innerHeight - r.top + 4 }),
-                    background: T.surface,
-                    border: "1px solid " + T.border,
-                    borderRadius: "10px",
-                    boxShadow: T.mode === "light" ? "0 8px 24px rgba(0,0,0,0.12)" : "0 8px 24px rgba(0,0,0,0.4)",
-                    overflow: "hidden",
-                  }}>
-                    {dd.options.map((opt, oi) => (
-                      <button key={oi} onClick={() => { onSelect(dd.id, oi); setOpenId(null); }}
-                        style={{
-                          display: "block", width: "100%", textAlign: "left",
-                          background: val === oi ? T.accent + "18" : "transparent",
-                          border: "none", padding: "0.65rem 0.9rem",
-                          fontFamily: "'DM Mono', monospace", fontSize: "0.8rem",
-                          color: val === oi ? T.accent : T.text,
-                          cursor: "pointer", lineHeight: 1.5, whiteSpace: "normal", wordBreak: "break-word",
-                        }}
-                        onMouseEnter={e => { if (val !== oi) e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = val === oi ? T.accent + "18" : "transparent"; }}>
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                );
-              })()}
+              {isOpen && (
+                <div style={{
+                  position: "absolute",
+                  top: "calc(100% + 4px)",
+                  left: 0,
+                  right: 0,
+                  zIndex: 9999,
+                  background: T.surface,
+                  border: "1px solid " + T.border,
+                  borderRadius: "10px",
+                  boxShadow: T.mode === "light" ? "0 8px 24px rgba(0,0,0,0.12)" : "0 8px 24px rgba(0,0,0,0.4)",
+                  overflow: "hidden",
+                }}>
+                  {dd.options.map((opt, oi) => (
+                    <button key={oi} onClick={() => { onSelect(dd.id, oi); setOpenId(null); }}
+                      style={{
+                        display: "block", width: "100%", textAlign: "left",
+                        background: val === oi ? T.accent + "18" : "transparent",
+                        border: "none", padding: "0.65rem 0.9rem",
+                        fontFamily: "'DM Mono', monospace", fontSize: "0.8rem",
+                        color: val === oi ? T.accent : T.text,
+                        cursor: "pointer", lineHeight: 1.5, whiteSpace: "normal", wordBreak: "break-word",
+                      }}
+                      onMouseEnter={e => { if (val !== oi) e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = val === oi ? T.accent + "18" : "transparent"; }}>
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              )}
               {isWrong && (
                 <span style={{ fontSize: "0.65rem", color: T.green, fontFamily: "'DM Mono', monospace", marginTop: "3px", display: "block" }}>
                   ✓ {renderText(dd.options[dd.correct])}
