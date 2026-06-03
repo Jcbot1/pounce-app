@@ -2221,6 +2221,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
 
 function ReviewDropdown({ q, selections, onSelect, submitted }) {
   const [openId, setOpenId] = useState(null);
+  const [openUpward, setOpenUpward] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -2267,7 +2268,16 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
             <div style={{ position: "relative" }} ref={isOpen ? menuRef : null}>
               <button
                 disabled={submitted}
-                onClick={() => !submitted && setOpenId(isOpen ? null : dd.id)}
+                onClick={e => {
+                  if (!submitted) {
+                    if (isOpen) { setOpenId(null); }
+                    else {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      setOpenUpward(window.innerHeight - r.bottom < 200);
+                      setOpenId(dd.id);
+                    }
+                  }
+                }}
                 style={{
                   width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem",
                   background: triggerBg, color: triggerColor,
@@ -2289,7 +2299,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
               {isOpen && (
                 <div style={{
                   position: "absolute",
-                  top: "calc(100% + 4px)",
+                  ...(openUpward ? { bottom: "calc(100% + 4px)" } : { top: "calc(100% + 4px)" }),
                   left: 0,
                   right: 0,
                   zIndex: 9999,
