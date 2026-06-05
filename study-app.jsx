@@ -1695,6 +1695,18 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   }, []);
 
   useEffect(() => {
+    function handler(e) { setDraft(d => ({ ...d, tags: e.detail })); }
+    document.addEventListener("studi-settags", handler);
+    return () => document.removeEventListener("studi-settags", handler);
+  }, []);
+
+  useEffect(() => {
+    function handler(e) { setDraft(d => ({ ...d, icon: e.detail })); }
+    document.addEventListener("studi-seticon", handler);
+    return () => document.removeEventListener("studi-seticon", handler);
+  }, []);
+
+  useEffect(() => {
     function handler() {
       if (canSave) {
         onSave(draft);
@@ -6076,9 +6088,9 @@ function App() {
               onSmartImport={f => { if (!f) return; const r = new FileReader(); r.onload = ev => { try { const parsed = JSON.parse(ev.target.result); const inc = Array.isArray(parsed) ? parsed : [parsed]; const isHist = inc.every(s => s && s.setName && Array.isArray(s.results)); if (isHist) { const v = inc.filter(validateSession); if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); } else showToast("No valid history found."); } else { const v = inc.filter(validateSet); if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); } else showToast("No valid sets found."); } } catch { showToast("Could not read file — invalid JSON."); } }; r.readAsText(f); }}
               activeSet={activeSet}
               allTags={allTags}
-              onRenameActiveSet={handleRename}
-              onSetActiveSetTags={handleSetTags}
-              onSetActiveSetIcon={handleSetIcon}
+              onRenameActiveSet={(id, name) => { handleRename(id, name); setActiveSet(s => s && s.id === id ? { ...s, name } : s); }}
+              onSetActiveSetTags={(id, tags) => { handleSetTags(id, tags); setActiveSet(s => s && s.id === id ? { ...s, tags } : s); document.dispatchEvent(new CustomEvent("studi-settags", { detail: tags })); }}
+              onSetActiveSetIcon={(id, icon) => { handleSetIcon(id, icon); setActiveSet(s => s && s.id === id ? { ...s, icon } : s); document.dispatchEvent(new CustomEvent("studi-seticon", { detail: icon })); }}
               onDeleteActiveSet={(id) => { handleDelete(id); setScreen("home"); }} />}
             </div>
           </div>
