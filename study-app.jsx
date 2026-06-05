@@ -1701,6 +1701,10 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   }, []);
 
   useEffect(() => {
+    document.dispatchEvent(new CustomEvent("studi-drafttags", { detail: draft.tags || [] }));
+  }, [draft.tags]);
+
+  useEffect(() => {
     function handler(e) { setDraft(d => ({ ...d, icon: e.detail })); }
     document.addEventListener("studi-seticon", handler);
     return () => document.removeEventListener("studi-seticon", handler);
@@ -5723,6 +5727,12 @@ function App() {
 
   useEffect(() => { saveSets(sets); },   [sets]);
   useEffect(() => { saveHistory(history); }, [history]);
+
+  useEffect(() => {
+    function handler(e) { setActiveSet(s => s ? { ...s, tags: e.detail } : s); }
+    document.addEventListener("studi-drafttags", handler);
+    return () => document.removeEventListener("studi-drafttags", handler);
+  }, []);
 
   function handleCreate(tag) {
     const s = blankSet();
