@@ -364,12 +364,23 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
 
 // ── Tag Chip ───────────────────────────────────────────────────────────────
 // Read-only accent tag pill (shown on set cards, results, etc.)
+const TAG_PALETTE = [
+  "#8b5cf6", "#3b82f6", "#06b6d4", "#10b981",
+  "#f59e0b", "#f97316", "#ef4444", "#ec4899",
+];
+function tagColor(tag) {
+  let h = 0;
+  for (let i = 0; i < tag.length; i++) h = (h * 31 + tag.charCodeAt(i)) >>> 0;
+  return TAG_PALETTE[h % TAG_PALETTE.length];
+}
+
 function TagChip({ tag }) {
+  const color = tagColor(tag);
   return (
     <span style={{
       display: "inline-block", padding: "0.15rem 0.55rem", borderRadius: "99px",
       fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
-      background: T.accent, color: "#fff", fontWeight: 600,
+      background: color, color: "#fff", fontWeight: 600,
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>{tag}</span>
   );
@@ -378,12 +389,13 @@ function TagChip({ tag }) {
 // ── Editor Tag Chip ────────────────────────────────────────────────────────
 // Interactive tag pill in the editor (tappable to remove)
 function EditorTagChip({ tag, onRemove }) {
+  const color = tagColor(tag);
   return (
     <button onClick={onRemove} {...primaryPress()} style={{
       display: "flex", alignItems: "center", gap: "0.35rem",
       padding: "0.3rem 0.85rem", borderRadius: "99px", border: "1px solid transparent", cursor: "pointer",
       fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", fontWeight: 500,
-      background: T.accent + "22", color: T.accent,
+      background: color + "22", color,
     }}>
       {tag}
       <span style={{ fontSize: "0.65rem", opacity: 0.7 }}>✕</span>
@@ -3769,11 +3781,12 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
           )}
           {[...new Set([...allTags, ...selected])].map(tag => {
             const active = selected.includes(tag);
+            const color = tagColor(tag);
             return (
               <button key={tag} onClick={() => toggle(tag)} style={{
                 padding: "0.35rem 0.85rem", borderRadius: "99px", border: "none", cursor: "pointer",
                 fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", fontWeight: active ? 600 : 400,
-                background: active ? T.accent : T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.08)",
+                background: active ? color : T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.08)",
                 color: active ? "#fff" : T.muted2,
               }}>{tag}</button>
             );
