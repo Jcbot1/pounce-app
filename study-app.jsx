@@ -3414,8 +3414,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
         )}
 
         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-          <GhostButton onClick={onClose} small>Cancel</GhostButton>
           {onEdit && <GhostButton onClick={() => { onClose(); onEdit(); }} small>Edit</GhostButton>}
+          <GhostButton onClick={onClose} small>Cancel</GhostButton>
         </div>
       </ModalCard>
     </Modal>
