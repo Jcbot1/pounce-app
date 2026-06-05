@@ -3265,7 +3265,7 @@ function ExportModal({ set, onClose }) {
 // SESSION PICKER & MODALS
 // ════════════════════════════════════════════════════════════════════════
 
-function SessionPicker({ set, onStart, onClose }) {
+function SessionPicker({ set, onStart, onClose, onEdit }) {
   const count = set.questions.length;
   const [step,      setStep]      = useState("mode");   // "mode" | "review-count" | "exam-timer"
   const [mode,      setMode]      = useState(null);     // "review" | "exam"
@@ -3413,7 +3413,10 @@ function SessionPicker({ set, onStart, onClose }) {
           </div>
         )}
 
-        <GhostButton onClick={onClose} small style={{ alignSelf: "flex-end" }}>Cancel</GhostButton>
+        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+          <GhostButton onClick={onClose} small>Cancel</GhostButton>
+          {onEdit && <GhostButton onClick={() => { onClose(); onEdit(); }} small>Edit</GhostButton>}
+        </div>
       </ModalCard>
     </Modal>
   );
@@ -3473,13 +3476,28 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
   const inSession = screen === "review" || screen === "edit";
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
   const [section, setSection] = useState(null); // null | "appearance" | "color"
   const navRef = useRef(null);
   const importRef = useRef(null);
+  const [renamingActiveSet,    setRenamingActiveSet]    = useState(false);
+  const [renameActiveSetVal,   setRenameActiveSetVal]   = useState("");
+  const renameActiveSetRef = useRef(null);
+  const [tagPickerActiveSetOpen,  setTagPickerActiveSetOpen]  = useState(false);
+  const [iconPickerActiveSetOpen, setIconPickerActiveSetOpen] = useState(false);
+  const [confirmDeleteActiveSet,  setConfirmDeleteActiveSet]  = useState(false);
+
+  useEffect(() => {
+    if (!renamingActiveSet || !renameActiveSetRef.current) return;
+    const el = renameActiveSetRef.current;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+    el.focus({ preventScroll: true });
+    el.setSelectionRange(el.value.length, el.value.length);
+  }, [renamingActiveSet]);
 
   useEffect(() => {
     if (!open || sidebarMode) return;
@@ -3508,6 +3526,48 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
   return (
     <div ref={navRef} style={{ position: "relative" }}>
       {showProfile && <ProfileModal name={profileName} iconId={profileIconId} bg={profileBg} iconColor={profileIColor} onSave={onSaveProfile} onClose={() => setShowProfile(false)} />}
+
+      {renamingActiveSet && activeSet && (
+        <Modal onClose={() => setRenamingActiveSet(false)}>
+          <ModalCard pad="1.5rem" maxWidth={360}>
+            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>RENAME SET</p>
+            <textarea
+              ref={renameActiveSetRef}
+              value={renameActiveSetVal}
+              onChange={e => { setRenameActiveSetVal(e.target.value); e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }}
+              onKeyDown={e => {
+                if (e.key === "Enter") { e.preventDefault(); if (renameActiveSetVal.trim()) { onRenameActiveSet(activeSet.id, renameActiveSetVal.trim()); document.dispatchEvent(new CustomEvent("studi-setname", { detail: renameActiveSetVal.trim() })); setRenamingActiveSet(false); } }
+                if (e.key === "Escape") setRenamingActiveSet(false);
+              }}
+              rows={1}
+              maxLength={160}
+              style={{ ...inp(), borderRadius: "12px", fontSize: "1rem", resize: "none", overflow: "hidden", lineHeight: 1.4 }}
+            />
+            <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+              <GhostButton onClick={() => setRenamingActiveSet(false)} small>Cancel</GhostButton>
+              <PrimaryButton onClick={() => { if (renameActiveSetVal.trim()) { onRenameActiveSet(activeSet.id, renameActiveSetVal.trim()); document.dispatchEvent(new CustomEvent("studi-setname", { detail: renameActiveSetVal.trim() })); setRenamingActiveSet(false); } }} small>Rename</PrimaryButton>
+            </div>
+          </ModalCard>
+        </Modal>
+      )}
+      {tagPickerActiveSetOpen && activeSet && (
+        <TagPicker set={activeSet} allTags={allTags || []} onSetTags={onSetActiveSetTags} onClose={() => setTagPickerActiveSetOpen(false)} />
+      )}
+      {iconPickerActiveSetOpen && activeSet && (
+        <IconPickerModal
+          currentIcon={activeSet.icon || null}
+          onSelect={iconId => { onSetActiveSetIcon && onSetActiveSetIcon(activeSet.id, iconId); setIconPickerActiveSetOpen(false); }}
+          onClose={() => setIconPickerActiveSetOpen(false)}
+        />
+      )}
+      {confirmDeleteActiveSet && activeSet && (
+        <ConfirmDialog
+          title="Delete this study set?"
+          message={activeSet.name + " and all its questions will be permanently removed."}
+          onConfirm={() => { setConfirmDeleteActiveSet(false); onDeleteActiveSet(activeSet.id); }}
+          onCancel={() => setConfirmDeleteActiveSet(false)}
+        />
+      )}
 
       {!sidebarMode && (
         <GlassButton onClick={() => { setOpen(o => !o); if (open) setSection(null); }}>
@@ -3561,12 +3621,38 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
               <input ref={importRef} type="file" accept=".json" onChange={e => { const f = e.target.files[0]; if (f && onSmartImport) { onSmartImport(f); close(); } e.target.value = ""; }} style={{ display: "none" }} />
 
               {screen === "edit" && activeSet && (
-                <HamburgerMenuItem onClick={() => { exportAll([activeSet], (activeSet.name || "set").replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json"); close(); }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    <span>Export set</span>
-                  </span>
-                </HamburgerMenuItem>
+                <>
+                  <HamburgerMenuItem onClick={() => { exportAll([activeSet], (activeSet.name || "set").replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json"); close(); }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      <span>Export set</span>
+                    </span>
+                  </HamburgerMenuItem>
+                  <HamburgerMenuItem onClick={() => { setRenameActiveSetVal(activeSet.name); setRenamingActiveSet(true); close(); }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                      <span>Rename set</span>
+                    </span>
+                  </HamburgerMenuItem>
+                  <HamburgerMenuItem onClick={() => { setTagPickerActiveSetOpen(true); close(); }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                      <span>Tags</span>
+                    </span>
+                  </HamburgerMenuItem>
+                  <HamburgerMenuItem onClick={() => { setIconPickerActiveSetOpen(true); close(); }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                      <span>Icon</span>
+                    </span>
+                  </HamburgerMenuItem>
+                  <HamburgerMenuItem onClick={() => { close(); setConfirmDeleteActiveSet(true); }} color={T.red} danger>
+                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                      <span>Delete set</span>
+                    </span>
+                  </HamburgerMenuItem>
+                </>
               )}
 
               {!inSession && (<>
@@ -3700,168 +3786,47 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
 // ── Set card ──────────────────────────────────────────────────────────────────
 function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession }) {
   const types = [...new Set(s.questions.map(q => q.type))];
-  const [menuOpen,        setMenuOpen]        = useState(false);
-  const [menuPos,         setMenuPos]         = useState({ top: 0, right: 0 });
-  const [tagPickerOpen,   setTagPickerOpen]   = useState(false);
-  const [iconPickerOpen,  setIconPickerOpen]  = useState(false);
-  const [confirmDelete,   setConfirmDelete]   = useState(false);
-  const [renaming,        setRenaming]        = useState(false);
-  const [renameVal,       setRenameVal]       = useState("");
-  const renameRef = useRef(null);
-  useEffect(() => {
-    if (!renaming || !renameRef.current) return;
-    const el = renameRef.current;
-    el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
-    el.focus({ preventScroll: true });
-    el.setSelectionRange(el.value.length, el.value.length);
-  }, [renaming]);
-  const menuRef = useRef(null);
-
-  const kebabRef = useRef(null);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    function handleClick(e) {
-      if (kebabRef.current && kebabRef.current.contains(e.target)) return;
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
-    }
-    document.addEventListener("pointerdown", handleClick);
-    return () => document.removeEventListener("pointerdown", handleClick);
-  }, [menuOpen]);
-
-  function openMenu(btnEl) {
-    if (!btnEl) return;
-    const rect = btnEl.getBoundingClientRect();
-    const menuW = 180;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const openDown = spaceBelow >= spaceAbove;
-    const top = openDown ? rect.bottom + 6 : rect.top - 6;
-    let left = rect.right - menuW;
-    if (left < 8) left = 8;
-    if (left + menuW > window.innerWidth - 8) left = window.innerWidth - menuW - 8;
-    setMenuPos({ top, left, openDown });
-    setMenuOpen(true);
-  }
-
   const canStudy = s.questions.length > 0;
 
   return (
-    <>
-      {renaming && (
-        <Modal onClose={() => setRenaming(false)}>
-          <ModalCard pad="1.5rem" maxWidth={360}>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>RENAME SET</p>
-            <textarea
-              ref={renameRef}
-              value={renameVal}
-              onChange={e => {
-                setRenameVal(e.target.value);
-                e.target.style.height = "auto";
-                e.target.style.height = e.target.scrollHeight + "px";
-              }}
-              onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (renameVal.trim()) { onRename(s.id, renameVal.trim()); setRenaming(false); } } if (e.key === "Escape") setRenaming(false); }}
-              rows={1}
-              maxLength={160}
-              style={{ ...inp(), borderRadius: "12px", fontSize: "1rem", resize: "none", overflow: "hidden", lineHeight: 1.4 }}
-            />
-            <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-              <GhostButton onClick={() => setRenaming(false)} small>Cancel</GhostButton>
-              <PrimaryButton onClick={() => { if (renameVal.trim()) { onRename(s.id, renameVal.trim()); setRenaming(false); } }} small>Rename</PrimaryButton>
-            </div>
-          </ModalCard>
-        </Modal>
-      )}
-      {tagPickerOpen && (
-        <TagPicker set={s} allTags={allTags} onSetTags={onSetTags} onClose={() => setTagPickerOpen(false)} />
-      )}
-      {iconPickerOpen && (
-        <IconPickerModal
-          currentIcon={s.icon || null}
-          onSelect={iconId => onSetIcon && onSetIcon(s.id, iconId)}
-          onClose={() => setIconPickerOpen(false)}
-        />
-      )}
-      {confirmDelete && (
-        <ConfirmDialog
-          title="Delete this study set?"
-          message={s.name + " and all its questions will be permanently removed."}
-          onConfirm={() => { setConfirmDelete(false); onDelete(s.id); }}
-          onCancel={() => setConfirmDelete(false)}
-        />
-      )}
-
-      <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
-        {/* Watermark icon */}
-        {s.icon && (() => {
-          const iconDef = SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon);
-          return iconDef ? (
-            <div style={{ position: "absolute", bottom: "4px", right: "4px", pointerEvents: "none" }}>
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.12 }}>
-                <path d={iconDef.path} />
-              </svg>
-            </div>
-          ) : null;
-        })()}
-        {/* Kebab — absolutely positioned top-right */}
-        <div style={{ position: "absolute", top: "0.75rem", right: "0.75rem" }}>
-          <GlassButton divRef={kebabRef} onClick={e => { e.stopPropagation(); if (menuOpen) setMenuOpen(false); else openMenu(e.currentTarget.closest("[data-glass-btn]")); }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted2}>
-              <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
+    <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
+      {/* Watermark icon */}
+      {s.icon && (() => {
+        const iconDef = SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon);
+        return iconDef ? (
+          <div style={{ position: "absolute", bottom: "4px", right: "4px", pointerEvents: "none" }}>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.12 }}>
+              <path d={iconDef.path} />
             </svg>
-          </GlassButton>
-        </div>
-
-        {/* Name + meta — full width */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-
-          {/* Row 1: Set name */}
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, paddingRight: "2.8rem", minHeight: "calc(0.95rem * 1.4 * 3)" }}>
-            {s.name}
-          </p>
-
-          {/* Row 2: Tags */}
-          {(s.tags && s.tags.length > 0) && (
-            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", paddingRight: "1.25rem", marginTop: "0.25rem" }}>
-              {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
-            </div>
-          )}
-
-          {/* Row 3: Question count + type bubbles */}
-          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center", paddingRight: "1.25rem" }}>
-            <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>
-              {s.questions.length} {s.questions.length === 1 ? "question" : "questions"}
-            </span>
-            {types.map(t => <Tag key={t} label={TYPE_META[t].label} color={TYPE_META[t].color} />)}
           </div>
+        ) : null;
+      })()}
 
-        </div>
-      </AppCard>
+      {/* Name + meta — full width */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
 
-      {menuOpen && (
-        <div ref={menuRef} className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: menuPos.openDown ? menuPos.top : undefined, bottom: menuPos.openDown ? undefined : window.innerHeight - menuPos.top, left: menuPos.left, zIndex: 9999, minWidth: "200px" }) }}>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); onEdit(s); }}>
-            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>Edit
-          </KebabMenuItem>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); setRenameVal(s.name); setRenaming(true); }}>
-            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></span>Rename
-          </KebabMenuItem>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); setTagPickerOpen(true); }}>
-            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>Tags
-          </KebabMenuItem>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); setIconPickerOpen(true); }}>
-            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></span>Icon
-          </KebabMenuItem>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); const uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(s, null, 2)); const a = document.createElement("a"); a.href = uri; a.download = s.name.replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json"; a.click(); }}>
-            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>Export
-          </KebabMenuItem>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); setConfirmDelete(true); }} color={T.red} danger>
-            <span style={{ display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>Delete
-          </KebabMenuItem>
+        {/* Row 1: Set name */}
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
+          {s.name}
+        </p>
+
+        {/* Row 2: Tags */}
+        {(s.tags && s.tags.length > 0) && (
+          <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginTop: "0.25rem" }}>
+            {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
+          </div>
+        )}
+
+        {/* Row 3: Question count + type bubbles */}
+        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
+          <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>
+            {s.questions.length} {s.questions.length === 1 ? "question" : "questions"}
+          </span>
+          {types.map(t => <Tag key={t} label={TYPE_META[t].label} color={TYPE_META[t].color} />)}
         </div>
-      )}
-    </>
+
+      </div>
+    </AppCard>
   );
 }
 // ── Icon Picker Modal ──────────────────────────────────────────────────────
@@ -4221,6 +4186,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
           set={pickingSet}
           onStart={(limit, mode, timerMinutes) => { setPickingSet(null); onStudy(pickingSet, limit, mode, timerMinutes); }}
           onClose={() => setPickingSet(null)}
+          onEdit={() => { setPickingSet(null); onEdit(pickingSet); }}
         />
       )}
 
@@ -5926,6 +5892,7 @@ function App() {
           set={pendingStudySet}
           onStart={(limit, mode, timer) => { setPendingStudySet(null); handleStudy(pendingStudySet, limit, mode, timer); }}
           onClose={() => setPendingStudySet(null)}
+          onEdit={() => { setPendingStudySet(null); handleEdit(pendingStudySet); }}
         />
       )}
       {showClearConfirm && (
@@ -6107,7 +6074,12 @@ function App() {
               onRequestClear={() => setShowClearConfirm(true)}
               forceMobile={isMobile} onToggleForceMobile={() => setForceMobile(f => f === true ? false : true)}
               onSmartImport={f => { if (!f) return; const r = new FileReader(); r.onload = ev => { try { const parsed = JSON.parse(ev.target.result); const inc = Array.isArray(parsed) ? parsed : [parsed]; const isHist = inc.every(s => s && s.setName && Array.isArray(s.results)); if (isHist) { const v = inc.filter(validateSession); if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); } else showToast("No valid history found."); } else { const v = inc.filter(validateSet); if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); } else showToast("No valid sets found."); } } catch { showToast("Could not read file — invalid JSON."); } }; r.readAsText(f); }}
-              activeSet={activeSet} />}
+              activeSet={activeSet}
+              allTags={allTags}
+              onRenameActiveSet={handleRename}
+              onSetActiveSetTags={handleSetTags}
+              onSetActiveSetIcon={handleSetIcon}
+              onDeleteActiveSet={(id) => { handleDelete(id); setScreen("home"); }} />}
             </div>
           </div>
           </div>
