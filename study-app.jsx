@@ -3835,8 +3835,12 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
 
         {/* Row 3: Question count + type bubbles */}
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
-          <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>
-            {s.questions.length} {s.questions.length === 1 ? "question" : "questions"}
+          <span style={{
+            display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
+            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
+            background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
+          }}>
+            {s.questions.length} Q
           </span>
           {types.map(t => <Tag key={t} label={TYPE_META[t].label} color={TYPE_META[t].color} />)}
         </div>
