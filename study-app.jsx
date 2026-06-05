@@ -5897,11 +5897,7 @@ function App() {
         ul { list-style-type: disc; }
         ol { list-style-type: decimal; }
         body { background: ${T.bg}; color: ${T.text}; }
-        body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-          background: ${T.mode === "light"
-            ? "linear-gradient(135deg, " + T.accent + "15 0%, " + T.gradient2 + "0a 30%, transparent 55%)"
-            : "linear-gradient(135deg, " + T.accent + "11 0%, " + T.gradient2 + "08 30%, transparent 55%)"};
-        }
+
         button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         input, textarea, select { outline: none; color: ${T.text}; }
         input:focus, textarea:focus, select:focus { border-color: ${T.accent} !important; box-shadow: 0 0 0 2px ${T.accent}22; }
@@ -5983,6 +5979,7 @@ function App() {
         </Modal>
       )}
       <div style={{ minHeight: "100vh", background: T.bg, visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
+        position: "relative",
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
