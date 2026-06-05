@@ -6461,6 +6461,8 @@ function App() {
           </div>
           
 
+          {sidebarCollapsed && <div style={{ flex: 1 }} />}
+
           {/* Nav tabs */}
           <nav style={{ padding: "0 0.75rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
             {[
