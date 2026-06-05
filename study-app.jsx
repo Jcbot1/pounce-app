@@ -5978,8 +5978,11 @@ function App() {
           </ModalCard>
         </Modal>
       )}
-      <div style={{ minHeight: "100vh", background: T.bg, visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
+      <div style={{ minHeight: "100vh", visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
         position: "relative",
+        background: T.mode === "light"
+          ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), ${T.bg}`
+          : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
