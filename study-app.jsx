@@ -5986,6 +5986,7 @@ function App() {
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
+        boxShadow: showSidebar ? (T.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
         transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
         
         <div style={{
@@ -6448,12 +6449,6 @@ function App() {
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
-          {/* Sidebar shadow — starts below header so sidebar+header read as one unit */}
-          <div style={{ position: "fixed", top: "48px", bottom: 0, width: "1px", pointerEvents: "none",
-            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
-            transition: "left 0.25s ease", zIndex: 199,
-            boxShadow: T.mode === "light" ? "4px 0 24px rgba(0,0,0,0.07)" : "4px 0 24px rgba(0,0,0,0.28)",
-          }} />
           {/* Sidebar border — starts below header height so it looks like one piece */}
           <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: T.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
