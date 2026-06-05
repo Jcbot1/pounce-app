@@ -6486,7 +6486,7 @@ function App() {
                 <button key={tab.id} onClick={() => { setHomeTab(tab.id); setScreen("home"); if (tab.id !== "search") setSearchQuery(""); if (tab.id === "sets") setSetsSearch(""); }}
                   title={sidebarCollapsed ? tab.label : undefined}
                   style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? T.accent + "18" : "transparent", color: active ? T.accent : T.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: active ? 600 : 400, transition: "background 0.15s" }}>
-                  <span style={{ color: active ? T.accent : T.muted, flexShrink: 0 }}>{active ? tab.iconFilled : tab.icon}</span>
+                  <span style={{ color: active ? T.accent : T.muted, flexShrink: 0, display: "flex", alignItems: "center" }}>{active ? tab.iconFilled : tab.icon}</span>
                   {!sidebarCollapsed && (
                     <>
                       {tab.label}
