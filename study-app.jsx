@@ -5990,10 +5990,11 @@ function App() {
         
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
-          ...(showSidebar ? { 
+          ...(showSidebar ? {
             left: 0,
             right: 0,
             height: "48px",
+            boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
           } : {}),
           background: showSidebar
             ? T.mode === "light" ? "rgba(255,253,250,0.98)" : "rgba(24,22,20,0.98)"
@@ -6446,6 +6447,7 @@ function App() {
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
+          boxShadow: T.mode === "light" ? "4px 0 24px rgba(0,0,0,0.07)" : "4px 0 24px rgba(0,0,0,0.28)",
         }}>
           {/* Sidebar border — starts below header height so it looks like one piece */}
           <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: T.border,
