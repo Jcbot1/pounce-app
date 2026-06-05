@@ -6447,8 +6447,13 @@ function App() {
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
-          boxShadow: T.mode === "light" ? "4px 0 24px rgba(0,0,0,0.07)" : "4px 0 24px rgba(0,0,0,0.28)",
         }}>
+          {/* Sidebar shadow — starts below header so sidebar+header read as one unit */}
+          <div style={{ position: "fixed", top: "48px", bottom: 0, width: "1px", pointerEvents: "none",
+            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
+            transition: "left 0.25s ease", zIndex: 199,
+            boxShadow: T.mode === "light" ? "4px 0 24px rgba(0,0,0,0.07)" : "4px 0 24px rgba(0,0,0,0.28)",
+          }} />
           {/* Sidebar border — starts below header height so it looks like one piece */}
           <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: T.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
