@@ -3823,8 +3823,8 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
       {s.icon && (() => {
         const iconDef = SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon);
         return iconDef ? (
-          <div style={{ position: "absolute", bottom: "4px", right: "4px", pointerEvents: "none" }}>
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.07 }}>
+          <div style={{ position: "absolute", bottom: "-8px", right: "-8px", pointerEvents: "none", transform: "rotate(15deg)" }}>
+            <svg width="110" height="110" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.07 }}>
               <path d={iconDef.path} />
             </svg>
           </div>
