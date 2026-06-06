@@ -5555,6 +5555,15 @@ function GridCanvas({ color, opacity = 0.13 }) {
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
       }
       ctx.globalAlpha = 1;
+
+      // Fade out downward using destination-in mask
+      const fade = ctx.createLinearGradient(0, 0, 0, H * 0.5);
+      fade.addColorStop(0, "rgba(0,0,0,1)");
+      fade.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.globalCompositeOperation = "destination-in";
+      ctx.fillStyle = fade;
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
     }
 
     draw();
