@@ -6148,7 +6148,7 @@ function App() {
                 </button>
 
                 {/* Edit-page kebab */}
-                <div style={{ position: "relative", flexShrink: 0 }}>
+                <div style={{ position: "relative", flexShrink: 0, zIndex: 9999 }}>
                   <GhostButton onClick={e => {
                     const rect = e.currentTarget.parentElement.getBoundingClientRect();
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
@@ -6347,7 +6347,7 @@ function App() {
                     )}
                   </div>
                   {/* Kebab options button */}
-                  <div style={{ position: "relative", flexShrink: 0 }}>
+                  <div style={{ position: "relative", flexShrink: 0, zIndex: 9999 }}>
                     <GhostButton onClick={e => {
                       const rect = e.currentTarget.parentElement.getBoundingClientRect();
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
