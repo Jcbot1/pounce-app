@@ -4464,8 +4464,8 @@ function HistoryCard({ session, onView }) {
   return (
     <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.9rem",
-          overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.9rem * 1.4 * 3)" }}>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem",
+          overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
           {session.setName}
         </p>
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
@@ -4476,6 +4476,9 @@ function HistoryCard({ session, onView }) {
           }}>
             {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
           </span>
+          {session.mode && (
+            <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={T.muted} />
+          )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
             fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.05em", fontWeight: 600,
@@ -4484,9 +4487,6 @@ function HistoryCard({ session, onView }) {
           }}>
             {pct}% · {session.score}/{session.total}
           </span>
-          {session.mode && (
-            <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={T.muted} />
-          )}
         </div>
       </div>
     </AppCard>
