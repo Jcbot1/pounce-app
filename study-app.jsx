@@ -5491,18 +5491,18 @@ function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
       canvas.height = H;
 
       const ctx     = canvas.getContext("2d");
-      const spacing = 18;
-      const maxR    = spacing * 0.42;
+      const spacing = 16;
+      const maxR    = spacing * 0.22;
       ctx.fillStyle = color;
 
       for (let x = 0; x <= W + spacing; x += spacing) {
-        const t        = x / W;
-        const boundary = H * (0.75 - t * 0.92) + Math.sin(t * Math.PI * 1.4) * H * 0.11;
-        const fadeW    = H * 0.32;
+        const tX       = x / W;
+        const boundary = H * 0.38 + Math.sin(tX * Math.PI * 1.5) * H * 0.09;
+        const fadeW    = H * 0.30;
         for (let y = 0; y <= H + spacing; y += spacing) {
           const s = Math.max(0, Math.min(1, (boundary - y) / fadeW));
           const r = s * maxR;
-          if (r < 0.4) continue;
+          if (r < 0.3) continue;
           ctx.globalAlpha = s * maxOpacity;
           ctx.beginPath();
           ctx.arc(x, y, r, 0, Math.PI * 2);
@@ -5932,7 +5932,7 @@ function App() {
         : `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
       : T.bg,
       minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
-      {bgStyle === "dots" && <HalftoneCanvas color={T.accent} maxOpacity={T.mode === "light" ? 0.15 : 0.11} />}
+      {bgStyle === "dots" && <HalftoneCanvas color={T.accent} maxOpacity={T.mode === "light" ? 0.10 : 0.07} />}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
