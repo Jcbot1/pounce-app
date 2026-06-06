@@ -6608,7 +6608,7 @@ function App() {
 
         
         <div style={{ position: "relative", display: "flex", justifyContent: "center", flex: 1,
-          padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : screen === "review" ? "1.5rem 0 7rem" : "1.5rem 0 4rem",
+          padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : (screen === "review" || screen === "edit") ? "1.5rem 0 7rem" : "1.5rem 0 4rem",
         }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", padding: "0 1rem" }}>
             {screen === "home" && (
