@@ -833,9 +833,10 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
 // ════════════════════════════════════════════════════════════════════════
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
-const THEME_KEY    = "studyapp_theme";
-const ACCENT_KEY   = "studyapp_accent";
-const BG_STYLE_KEY = "studyapp_bg_style";
+const THEME_KEY         = "studyapp_theme";
+const ACCENT_KEY        = "studyapp_accent";
+const BG_STYLE_KEY      = "studyapp_bg_style";
+const SIDEBAR_THEME_KEY = "studyapp_sidebar_theme";
 const PROFILE_NAME_KEY  = "studyapp_profile_name";
 const PROFILE_ICON_KEY  = "studyapp_profile_iconid";
 const PROFILE_BG_KEY    = "studyapp_profile_bg";
@@ -995,6 +996,8 @@ let T = buildTheme(
   resolveTheme(localStorage.getItem(THEME_KEY) || "system"),
   localStorage.getItem(ACCENT_KEY) || "purple"
 );
+// ST — sidebar theme, follows T unless overridden
+let ST = T;
 
 // ════════════════════════════════════════════════════════════════════════
 // SET ICON LIBRARY
@@ -3509,7 +3512,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
+function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
   const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
@@ -3714,6 +3717,11 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
+                </div>
+
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>SIDEBAR THEME</p>
+                <div style={{ marginBottom: "1rem" }}>
+                  <SidebarThemePicker sidebarTheme={sidebarTheme} onSetSidebarTheme={onSetSidebarTheme} />
                 </div>
 
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
@@ -5474,6 +5482,27 @@ function ThemePicker({ theme, onSetTheme }) {
   );
 }
 
+// ── SidebarThemePicker ──────────────────────────────────────────────────────
+function SidebarThemePicker({ sidebarTheme, onSetSidebarTheme }) {
+  const opts = [
+    { id: "light",  svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> },
+    { id: "dark",   svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> },
+    { id: "follow", svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> },
+  ];
+  return (
+    <div style={{ display: "flex", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)", borderRadius: "99px", padding: "0.2rem", gap: "0.1rem" }}>
+      {opts.map(opt => {
+        const active = sidebarTheme === opt.id;
+        return (
+          <button key={opt.id} onClick={() => onSetSidebarTheme(opt.id)} style={{ flex: 1, height: "26px", borderRadius: "99px", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: active ? (T.mode === "light" ? "#fff" : "#3d3558") : "transparent", color: active ? T.accent : T.muted, transition: "background 0.18s, color 0.18s" }}>
+            {opt.svg}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── HalftoneCanvas ─────────────────────────────────────────────────────────
 function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
   const canvasRef = useRef(null);
@@ -5701,6 +5730,7 @@ function App() {
   const [theme, setThemeState]         = useState(() => localStorage.getItem(THEME_KEY) || "system");
   const [accent, setAccentState]       = useState(() => localStorage.getItem(ACCENT_KEY) || "purple");
   const [bgStyle, setBgStyleState]     = useState(() => localStorage.getItem(BG_STYLE_KEY) || "gradient");
+  const [sidebarTheme, setSidebarThemeState] = useState(() => localStorage.getItem(SIDEBAR_THEME_KEY) || "follow");
   const [profileName,  setProfileName]  = useState(() => localStorage.getItem(PROFILE_NAME_KEY) || "Profile");
   const [profileIconId, setProfileIconId] = useState(() => localStorage.getItem(PROFILE_ICON_KEY) || "grad");
   const [profileBg,    setProfileBg]    = useState(() => localStorage.getItem(PROFILE_BG_KEY) || "#1e3a5f");
@@ -5796,6 +5826,7 @@ function App() {
     return localStorage.getItem("studi_welcomed") !== "true";
   });
   T = buildTheme(resolveTheme(theme), accent);
+  ST = sidebarTheme === "follow" ? T : buildTheme(sidebarTheme, accent);
 
   const allTags = useMemo(() => [...new Set(sets.flatMap(s => s.tags || []))], [sets]);
 
@@ -5803,6 +5834,10 @@ function App() {
     const saveMode = mode.startsWith("system") ? "system" : mode;
     localStorage.setItem(THEME_KEY, saveMode);
     setThemeState(mode);
+  }
+  function handleSetSidebarTheme(mode) {
+    localStorage.setItem(SIDEBAR_THEME_KEY, mode);
+    setSidebarThemeState(mode);
   }
 
   useEffect(() => {
@@ -6229,7 +6264,7 @@ function App() {
             </div>
 
             <div style={{ width: "44px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} accent={accent} onSetAccent={handleSetAccent} bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle}
+            {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} sidebarTheme={sidebarTheme} onSetSidebarTheme={handleSetSidebarTheme} accent={accent} onSetAccent={handleSetAccent} bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle}
               sets={sets} history={history} onClearAll={handleClearAll} screen={screen}
               profileName={profileName} profileIconId={profileIconId} profileBg={profileBg} profileIColor={profileIColor}
               onSaveProfile={handleSaveProfile}
@@ -6684,19 +6719,19 @@ function App() {
           position: "fixed", left: 0, top: 0, bottom: 0,
           width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
           transition: "width 0.25s ease",
-          background: T.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)",
+          background: ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)",
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Sidebar border — starts below header height so it looks like one piece */}
-          <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: T.border,
+          <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: ST.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
             transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
           <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? 0 : "1.5rem", height: sidebarCollapsed ? "48px" : "185px", display: "flex", alignItems: sidebarCollapsed ? "center" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
-              <MascotMonoIcon width={36} height={36} color={T.accent} />
+              <MascotMonoIcon width={36} height={36} color={ST.accent} />
             ) : (
               <PounceLogo height={44} stacked />
             )}
@@ -6725,13 +6760,13 @@ function App() {
               return (
                 <button key={tab.id} onClick={() => { setHomeTab(tab.id); setScreen("home"); if (tab.id !== "search") setSearchQuery(""); if (tab.id === "sets") setSetsSearch(""); }}
                   title={sidebarCollapsed ? tab.label : undefined}
-                  style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? T.accent + "18" : "transparent", color: active ? T.accent : T.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: active ? 600 : 400, transition: "background 0.15s" }}>
-                  <span style={{ color: active ? T.accent : T.muted, flexShrink: 0, display: "flex", alignItems: "center" }}>{active ? tab.iconFilled : tab.icon}</span>
+                  style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? ST.accent + "18" : "transparent", color: active ? ST.accent : ST.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: active ? 600 : 400, transition: "background 0.15s" }}>
+                  <span style={{ color: active ? ST.accent : ST.muted, flexShrink: 0, display: "flex", alignItems: "center" }}>{active ? tab.iconFilled : tab.icon}</span>
                   {!sidebarCollapsed && (
                     <>
                       {tab.label}
                       {tab.id === "history" && (history?.length ?? 0) > 0 && (
-                        <span style={{ marginLeft: "auto", background: T.accent + "22", color: T.accent, fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", fontWeight: 600, padding: "0.1rem 0.4rem", borderRadius: "99px" }}>{history.length}</span>
+                        <span style={{ marginLeft: "auto", background: ST.accent + "22", color: ST.accent, fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", fontWeight: 600, padding: "0.1rem 0.4rem", borderRadius: "99px" }}>{history.length}</span>
                       )}
                     </>
                   )}
@@ -6743,7 +6778,7 @@ function App() {
           {/* Recent — sets and history mixed, hidden when collapsed */}
           {!sidebarCollapsed && (sets.length > 0 || history.length > 0) && (
             <div style={{ flex: 1, overflow: "hidden", padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", letterSpacing: "0.1em", color: T.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>RECENT</p>
+              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>RECENT</p>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, meta: s.questions?.length ?? 0 })),
@@ -6754,19 +6789,19 @@ function App() {
                     else { const session = history.find(h => h.id === item.id); if (session) { setHomeTab("history"); setScreen("home"); setHistorySearch(session.setName); } }
                   }}
                     style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
-                    onMouseEnter={e => { e.currentTarget.style.background = T.surface2; const nameEl = e.currentTarget.querySelector('span'); if (nameEl && nameEl.scrollWidth > nameEl.clientWidth) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); } }}
+                    onMouseEnter={e => { e.currentTarget.style.background = ST.surface2; const nameEl = e.currentTarget.querySelector('span'); if (nameEl && nameEl.scrollWidth > nameEl.clientWidth) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); } }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
                     {item.type === "set" ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ST.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                         <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
                       </svg>
                     ) : (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ST.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                         <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M12 7v5l3 3"/>
                       </svg>
                     )}
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: T.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{item.name}</span>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", color: T.muted, flexShrink: 0 }}>{item.meta}</span>
+                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{item.name}</span>
+                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.meta}</span>
                   </button>
                 ))}
               </div>
@@ -6779,7 +6814,7 @@ function App() {
           {/* Sticky footer */}
           <div style={{
             marginTop: "auto", flexShrink: 0,
-            background: T.mode === "light"
+            background: ST.mode === "light"
               ? "linear-gradient(to bottom, rgba(255,253,250,0) 0%, rgba(255,253,250,1) 40%)"
               : "linear-gradient(to bottom, rgba(20,18,15,0) 0%, rgba(20,18,15,1) 40%)",
             padding: "1.5rem 0.75rem 0.6rem",
@@ -6790,13 +6825,13 @@ function App() {
               <>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.1rem" }}>
                   <button onClick={() => setSidebarProfileOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", display: "flex", alignItems: "center", borderRadius: "8px" }}
-                    onMouseEnter={e => e.currentTarget.style.background = T.surface2}
+                    onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
                     onMouseLeave={e => e.currentTarget.style.background = "none"}>
                     <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={30} />
                   </button>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.25rem" }}>
-                  <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Expand sidebar">
+                  <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Expand sidebar">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <line x1="9" y1="3" x2="9" y2="21"/>
@@ -6813,10 +6848,10 @@ function App() {
                 display: "flex", alignItems: "center", gap: "0.6rem", borderRadius: "12px",
                 width: "100%",
               }}
-                onMouseEnter={e => e.currentTarget.style.background = T.surface2}
+                onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}>
                 <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={24} />
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", fontWeight: 500, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", fontWeight: 500, color: ST.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {profileName || "Profile"}
                 </span>
               </button>
@@ -6825,14 +6860,14 @@ function App() {
             {/* Bottom row */}
             {!sidebarCollapsed && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.25rem 0.25rem 0.25rem 0.4rem", borderRadius: "8px" }}>
+              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem 0.25rem 0.25rem 0.4rem", borderRadius: "8px" }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="3"/>
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
               </button>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>v1.0.0</span>
-              <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Collapse sidebar">
+              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted }}>v1.0.0</span>
+              <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Collapse sidebar">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
                   <line x1="9" y1="3" x2="9" y2="21"/>
@@ -6844,7 +6879,7 @@ function App() {
             {/* Collapsed: just the cog */}
             {sidebarCollapsed && (
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }}>
+                <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="3"/>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -6905,7 +6940,7 @@ function App() {
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
             width: "12px",
             height: "12px",
-            background: `radial-gradient(circle at 100% 100%, transparent 12px, ${T.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} 12px)`,
+            background: `radial-gradient(circle at 100% 100%, transparent 12px, ${ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} 12px)`,
             zIndex: 201,
             pointerEvents: "none",
             transition: "left 0.25s ease",
@@ -6917,8 +6952,8 @@ function App() {
             width: "12px",
             height: "12px",
             borderTopLeftRadius: "12px",
-            borderTop: `1px solid ${T.border}`,
-            borderLeft: `1px solid ${T.border}`,
+            borderTop: `1px solid ${ST.border}`,
+            borderLeft: `1px solid ${ST.border}`,
             background: "transparent",
             zIndex: 202,
             pointerEvents: "none",
@@ -6952,6 +6987,8 @@ function App() {
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>SIDEBAR THEME</p>
+                <div style={{ marginBottom: "1rem" }}><SidebarThemePicker sidebarTheme={sidebarTheme} onSetSidebarTheme={handleSetSidebarTheme} /></div>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
