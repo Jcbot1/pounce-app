@@ -5483,14 +5483,6 @@ function ResultsChips({ isHist, hasMissed, onRetry, onRetryMissed, onExport, onS
           Retry
         </GhostButton>
       )}
-      {isHist && onStudySet && (
-        <GhostButton onClick={onStudySet} small style={{ height: "38px", paddingLeft: "1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap", flexShrink: 0, fontFamily: "'DM Sans', sans-serif" }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="5 3 19 12 5 21 5 3"/>
-          </svg>
-          Study set
-        </GhostButton>
-      )}
       {hasMissed && (
         <GhostButton onClick={onRetryMissed} small style={{ height: "38px", paddingLeft: "1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -5499,12 +5491,6 @@ function ResultsChips({ isHist, hasMissed, onRetry, onRetryMissed, onExport, onS
           Retry missed
         </GhostButton>
       )}
-      <GhostButton onClick={onExport} small style={{ height: "38px", paddingLeft: "1rem", paddingRight: "0.85rem", display: "flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap", flexShrink: 0, fontFamily: "'DM Sans', sans-serif" }}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        Export
-      </GhostButton>
     </div>
   );
 }
@@ -5700,6 +5686,10 @@ function App() {
   const [resultsConfirmRetry, setResultsConfirmRetry] = useState(false);
   const [resultsFilter, setResultsFilter] = useState("all");
   const [resultsFilterOpen, setResultsFilterOpen] = useState(false);
+  const [resultsKebabOpen, setResultsKebabOpen] = useState(false);
+  const [resultsKebabPos, setResultsKebabPos] = useState({ top: 0, right: 0 });
+  const [resultsDeleteConfirm, setResultsDeleteConfirm] = useState(false);
+  const [lastSavedSessionId, setLastSavedSessionId] = useState(null);
 
   const [showWelcome, setShowWelcome]  = useState(() => {
     return localStorage.getItem("studi_welcomed") !== "true";
@@ -5834,6 +5824,7 @@ function App() {
       if (exists) return prev; // no duplicates
       return [...prev, session];
     });
+    setLastSavedSessionId(session.id);
   }
 
   function handleImportHistory(sessions) {
@@ -5946,6 +5937,24 @@ function App() {
           confirmLabel="Yes, delete everything"
           onConfirm={() => { setShowClearConfirm2(false); handleClearAll(); }}
           onCancel={() => setShowClearConfirm2(false)}
+        />
+      )}
+      {resultsDeleteConfirm && (
+        <ConfirmDialog
+          title="Delete this result?"
+          message={screen === "historyResults" && historySession ? historySession.setName + " session from " + new Date(historySession.date).toLocaleDateString() + " will be removed." : "This result will be removed from your history."}
+          onConfirm={() => {
+            setResultsDeleteConfirm(false);
+            if (screen === "historyResults" && historySession) {
+              handleDeleteHistory(historySession.id);
+            } else if (lastSavedSessionId) {
+              handleDeleteHistory(lastSavedSessionId);
+              setLastSavedSessionId(null);
+            }
+            setScreen("home");
+            setResultsFilter("all");
+          }}
+          onCancel={() => setResultsDeleteConfirm(false)}
         />
       )}
       {allTagsModalOpen && (
@@ -6326,6 +6335,53 @@ function App() {
                           </button>
                         ))}
                       </div>
+                      </>
+                    )}
+                  </div>
+                  {/* Kebab options button */}
+                  <div style={{ position: "relative", flexShrink: 0 }}>
+                    <GhostButton onClick={e => {
+                      const rect = e.currentTarget.parentElement.getBoundingClientRect();
+                      setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+                      setResultsKebabOpen(o => !o);
+                    }} style={{ width: "38px", height: "38px", flexShrink: 0, justifyContent: "center", padding: "0" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted}>
+                        <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+                      </svg>
+                    </GhostButton>
+                    {resultsKebabOpen && (
+                      <>
+                        <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setResultsKebabOpen(false)} />
+                        <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
+                          {isHist && (
+                            <KebabMenuItem onClick={() => {
+                              setResultsKebabOpen(false);
+                              const set = sets.find(s => s.name === historySession?.setName);
+                              if (set) setPendingStudySet(set);
+                              else showToast("Original set not found.");
+                            }}>
+                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+                              Study set
+                            </KebabMenuItem>
+                          )}
+                          <KebabMenuItem onClick={() => {
+                            setResultsKebabOpen(false);
+                            const sess = isHist ? historySession : (reviewResults && reviewQs ? { results: reviewResults, questions: reviewQs, setName: activeSet?.name, date: new Date().toISOString() } : null);
+                            if (!sess) return;
+                            const json = JSON.stringify(sess, null, 2);
+                            const a = document.createElement("a");
+                            a.href = "data:application/json;charset=utf-8," + encodeURIComponent(json);
+                            a.download = (sess.setName || "results").replace(/\s+/g, "-").toLowerCase() + "-results.json";
+                            a.click();
+                          }}>
+                            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+                            Export
+                          </KebabMenuItem>
+                          <KebabMenuItem danger color={T.red} onClick={() => { setResultsKebabOpen(false); setResultsDeleteConfirm(true); }}>
+                            <span style={{ display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>
+                            Delete
+                          </KebabMenuItem>
+                        </div>
                       </>
                     )}
                   </div>
