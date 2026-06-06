@@ -5581,7 +5581,7 @@ function GridCanvas({ color, opacity = 0.13 }) {
 function BackgroundPicker({ bgStyle, onSetBgStyle, large = false }) {
   const opts = [
     { id: "gradient", label: "Gradient" },
-    { id: "dots",     label: "Halftone wave" },
+    { id: "dots",     label: "Dots" },
     { id: "grid",     label: "Grid" },
     { id: "none",     label: "None" },
   ];
