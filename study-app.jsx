@@ -5495,11 +5495,13 @@ function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
       const maxR    = spacing * 0.18;
       ctx.fillStyle = color;
 
+      const shear = 0.3; // ~17° tilt
       for (let x = 0; x <= W + spacing; x += spacing) {
         const tX       = x / W;
         const boundary = H * 0.38 + Math.sin(tX * Math.PI * 1.5) * H * 0.09;
         const fadeW    = H * 0.30;
-        for (let y = 0; y <= H + spacing; y += spacing) {
+        const yStart   = (x * shear) % spacing - spacing;
+        for (let y = yStart; y <= H + spacing; y += spacing) {
           const s = Math.max(0, Math.min(1, (boundary - y) / fadeW));
           const r = s * maxR;
           if (r < 0.3) continue;
