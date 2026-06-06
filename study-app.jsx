@@ -6142,7 +6142,7 @@ function App() {
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
-        boxShadow: showSidebar ? (T.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
+        boxShadow: showSidebar ? (ST.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
         transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
         
         <div style={{
@@ -6151,10 +6151,10 @@ function App() {
             left: 0,
             right: 0,
             height: "48px",
-            boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
+            boxShadow: ST.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
           } : {}),
           background: showSidebar
-            ? T.mode === "light" ? "rgba(255,253,250,0.98)" : "rgba(24,22,20,0.98)"
+            ? ST.mode === "light" ? "rgba(255,253,250,0.98)" : "rgba(24,22,20,0.98)"
             : (scrolled || screen === "results" || screen === "historyResults" || editingSetName)
               ? T.mode === "light"
                 ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
@@ -6242,7 +6242,7 @@ function App() {
               <div style={{ position: "absolute", left: `calc(50% + ${(sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) / 2}px)`, transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem", transition: "left 0.25s ease" }}>
                 <div style={{ position: "relative", width: "100%" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.5, pointerEvents: "none" }}
-                    width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={ST.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                   </svg>
                   <input
@@ -6250,11 +6250,11 @@ function App() {
                     value={searchQuery}
                     onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") setHomeTab("search"); }}
                     placeholder="Search…"
-                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box" }) }}
+                    style={{ background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", color: ST.text, fontFamily: "'DM Sans', sans-serif", fontSize: "16px", padding: "0.45rem 0.9rem", width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", height: "38px", boxSizing: "border-box", outline: "none" }}
                   />
                   {searchQuery && (
                     <button onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
-                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
+                      background: "none", border: "none", cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
                   )}
                 </div>
               </div>
