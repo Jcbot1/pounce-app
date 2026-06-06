@@ -3723,7 +3723,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
 
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}>
-                  <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} />
+                  <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} large />
                 </div>
 
               </div>
@@ -5475,19 +5475,19 @@ function ThemePicker({ theme, onSetTheme }) {
 }
 
 // ── BackgroundPicker ────────────────────────────────────────────────────────
-function BackgroundPicker({ bgStyle, onSetBgStyle }) {
+function BackgroundPicker({ bgStyle, onSetBgStyle, large = false }) {
   const opts = [
     { id: "gradient", label: "Gradient" },
     { id: "none",     label: "None" },
   ];
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: large ? 0 : "0.15rem" }}>
       {opts.map(opt => {
         const active = bgStyle === opt.id;
         return (
-          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", cursor: "pointer", padding: "0.3rem 0.1rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: active ? T.text : T.muted, textAlign: "left" }}>
-            <span style={{ width: "16px", height: "16px", borderRadius: "50%", border: `2px solid ${active ? T.accent : T.border2}`, background: active ? T.accent : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.15s, background 0.15s" }}>
-              {active && <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#fff" }} />}
+          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", cursor: "pointer", padding: large ? "0 0.1rem" : "0.3rem 0.1rem", height: large ? "44px" : undefined, fontFamily: "'DM Sans', sans-serif", fontSize: large ? "0.9rem" : "0.88rem", fontWeight: large ? 500 : 400, color: active ? T.text : T.muted, textAlign: "left" }}>
+            <span style={{ width: large ? "18px" : "16px", height: large ? "18px" : "16px", borderRadius: "50%", border: `2px solid ${active ? T.accent : T.border2}`, background: active ? T.accent : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.15s, background 0.15s" }}>
+              {active && <span style={{ width: large ? "7px" : "6px", height: large ? "7px" : "6px", borderRadius: "50%", background: "#fff" }} />}
             </span>
             {opt.label}
           </button>
