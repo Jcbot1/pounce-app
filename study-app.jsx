@@ -5474,10 +5474,60 @@ function ThemePicker({ theme, onSetTheme }) {
   );
 }
 
+// ── HalftoneCanvas ─────────────────────────────────────────────────────────
+function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+
+    function draw() {
+      const W = parent ? parent.offsetWidth  : window.innerWidth;
+      const H = parent ? parent.offsetHeight : window.innerHeight;
+      if (!W || !H) return;
+      canvas.width  = W;
+      canvas.height = H;
+
+      const ctx     = canvas.getContext("2d");
+      const spacing = 18;
+      const maxR    = spacing * 0.42;
+      ctx.fillStyle = color;
+
+      for (let x = 0; x <= W + spacing; x += spacing) {
+        const t        = x / W;
+        const boundary = H * (0.75 - t * 0.92) + Math.sin(t * Math.PI * 1.4) * H * 0.11;
+        const fadeW    = H * 0.32;
+        for (let y = 0; y <= H + spacing; y += spacing) {
+          const s = Math.max(0, Math.min(1, (boundary - y) / fadeW));
+          const r = s * maxR;
+          if (r < 0.4) continue;
+          ctx.globalAlpha = s * maxOpacity;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    draw();
+    const ro = new ResizeObserver(draw);
+    if (parent) ro.observe(parent);
+    return () => ro.disconnect();
+  }, [color, maxOpacity]);
+
+  return (
+    <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", display: "block" }} />
+  );
+}
+
 // ── BackgroundPicker ────────────────────────────────────────────────────────
 function BackgroundPicker({ bgStyle, onSetBgStyle, large = false }) {
   const opts = [
     { id: "gradient", label: "Gradient" },
+    { id: "dots",     label: "Halftone wave" },
     { id: "none",     label: "None" },
   ];
   return (
@@ -5881,7 +5931,8 @@ function App() {
         ? `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 45%), ${T.bg}`
         : `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
       : T.bg,
-      minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
+      {bgStyle === "dots" && <HalftoneCanvas color={T.accent} maxOpacity={T.mode === "light" ? 0.15 : 0.11} />}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -5996,7 +6047,7 @@ function App() {
           ? (T.mode === "light"
             ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), ${T.bg}`
             : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`)
-          : T.bg,
+          : bgStyle === "dots" ? "transparent" : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
