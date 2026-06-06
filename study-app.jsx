@@ -6945,20 +6945,6 @@ function App() {
             pointerEvents: "none",
             transition: "left 0.25s ease",
           }} />
-          <div style={{
-            position: "fixed",
-            top: "48px",
-            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
-            width: "12px",
-            height: "12px",
-            borderTopLeftRadius: "12px",
-            borderTop: `1px solid ${ST.border}`,
-            borderLeft: `1px solid ${ST.border}`,
-            background: "transparent",
-            zIndex: 202,
-            pointerEvents: "none",
-            transition: "left 0.25s ease",
-          }} />
         </>
       )}
 
