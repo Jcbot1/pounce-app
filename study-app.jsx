@@ -1606,7 +1606,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           </div>
 
           {/* explanation */}
-          <div style={{ marginBottom: "1rem" }}>
+          <div style={{ paddingBottom: "1rem" }}>
             <Label>EXPLANATION (shown after answering)</Label>
             <SnapTextarea value={q.explanation || ""} onChange={e => set("explanation", e.target.value)}
               rows={3} placeholder="Why is this the correct answer?" maxLength={10000}
