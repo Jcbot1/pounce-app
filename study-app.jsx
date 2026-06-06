@@ -5626,11 +5626,27 @@ function App() {
   const [resultsFilterOpen, setResultsFilterOpen] = useState(false);
   const [resultsKebabOpen, setResultsKebabOpen] = useState(false);
   const [resultsKebabPos, setResultsKebabPos] = useState({ top: 0, right: 0 });
+  const resultsKebabRef = useRef(null);
   const [editKebabOpen, setEditKebabOpen] = useState(false);
   const [editKebabPos, setEditKebabPos] = useState({ top: 0, right: 0 });
+  const editKebabRef = useRef(null);
   const [resultsDeleteConfirm, setResultsDeleteConfirm] = useState(false);
   const [lastSavedSessionId, setLastSavedSessionId] = useState(null);
   const [resultsSearch, setResultsSearch] = useState("");
+
+  useEffect(() => {
+    if (!resultsKebabOpen) return;
+    function handle(e) { if (resultsKebabRef.current && !resultsKebabRef.current.contains(e.target)) setResultsKebabOpen(false); }
+    document.addEventListener("pointerdown", handle);
+    return () => document.removeEventListener("pointerdown", handle);
+  }, [resultsKebabOpen]);
+
+  useEffect(() => {
+    if (!editKebabOpen) return;
+    function handle(e) { if (editKebabRef.current && !editKebabRef.current.contains(e.target)) setEditKebabOpen(false); }
+    document.addEventListener("pointerdown", handle);
+    return () => document.removeEventListener("pointerdown", handle);
+  }, [editKebabOpen]);
 
   const [showWelcome, setShowWelcome]  = useState(() => {
     return localStorage.getItem("studi_welcomed") !== "true";
@@ -6148,7 +6164,7 @@ function App() {
                 </button>
 
                 {/* Edit-page kebab */}
-                <div style={{ position: "relative", flexShrink: 0, zIndex: 9999 }}>
+                <div ref={editKebabRef} style={{ position: "relative", flexShrink: 0 }}>
                   <GhostButton onClick={e => {
                     const rect = e.currentTarget.parentElement.getBoundingClientRect();
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
@@ -6159,9 +6175,7 @@ function App() {
                     </svg>
                   </GhostButton>
                   {editKebabOpen && (
-                    <>
-                      <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onPointerDown={() => setEditKebabOpen(false)} />
-                      <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
+                    <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                         <KebabMenuItem onClick={() => {
                           setEditKebabOpen(false);
                           document.dispatchEvent(new CustomEvent("studi-edit-icon"));
@@ -6211,7 +6225,6 @@ function App() {
                           </span>Delete set
                         </KebabMenuItem>
                       </div>
-                    </>
                   )}
                 </div>
               </div>
@@ -6347,7 +6360,7 @@ function App() {
                     )}
                   </div>
                   {/* Kebab options button */}
-                  <div style={{ position: "relative", flexShrink: 0, zIndex: 9999 }}>
+                  <div ref={resultsKebabRef} style={{ position: "relative", flexShrink: 0 }}>
                     <GhostButton onClick={e => {
                       const rect = e.currentTarget.parentElement.getBoundingClientRect();
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
@@ -6358,8 +6371,6 @@ function App() {
                       </svg>
                     </GhostButton>
                     {resultsKebabOpen && (
-                      <>
-                        <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onPointerDown={() => setResultsKebabOpen(false)} />
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                           {!isHist && (
                             <KebabMenuItem onClick={() => { setResultsKebabOpen(false); setResultsConfirmRetry(true); }}>
@@ -6402,7 +6413,6 @@ function App() {
                             Delete
                           </KebabMenuItem>
                         </div>
-                      </>
                     )}
                   </div>
                   </div>
