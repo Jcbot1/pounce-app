@@ -5542,18 +5542,17 @@ function GridCanvas({ color, opacity = 0.13 }) {
       canvas.height = H;
 
       const ctx     = canvas.getContext("2d");
-      const spacing = 24;
-      const r       = 1.2;
+      const spacing = 32;
 
-      ctx.fillStyle  = color;
+      ctx.strokeStyle = color;
+      ctx.lineWidth   = 0.5;
       ctx.globalAlpha = opacity;
 
       for (let x = spacing; x < W; x += spacing) {
-        for (let y = spacing; y < H; y += spacing) {
-          ctx.beginPath();
-          ctx.arc(x, y, r, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      for (let y = spacing; y < H; y += spacing) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
       }
       ctx.globalAlpha = 1;
     }
@@ -5574,7 +5573,7 @@ function BackgroundPicker({ bgStyle, onSetBgStyle, large = false }) {
   const opts = [
     { id: "gradient", label: "Gradient" },
     { id: "dots",     label: "Halftone wave" },
-    { id: "grid",     label: "Dot grid" },
+    { id: "grid",     label: "Grid" },
     { id: "none",     label: "None" },
   ];
   return (
