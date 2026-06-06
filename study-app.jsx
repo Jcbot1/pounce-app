@@ -3553,6 +3553,12 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
   }, []);
 
   useEffect(() => {
+    function handle() { setTagPickerActiveSetOpen(true); }
+    document.addEventListener("studi-edit-tags", handle);
+    return () => document.removeEventListener("studi-edit-tags", handle);
+  }, []);
+
+  useEffect(() => {
     function handle() { setConfirmDeleteActiveSet(true); }
     document.addEventListener("studi-edit-delete", handle);
     return () => document.removeEventListener("studi-edit-delete", handle);
@@ -3668,14 +3674,6 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
 
               <input ref={importRef} type="file" accept=".json" onChange={e => { const f = e.target.files[0]; if (f && onSmartImport) { onSmartImport(f); close(); } e.target.value = ""; }} style={{ display: "none" }} />
 
-              {screen === "edit" && activeSet && (
-                <HamburgerMenuItem onClick={() => { setTagPickerActiveSetOpen(true); close(); }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                    <span>Tags</span>
-                  </span>
-                </HamburgerMenuItem>
-              )}
 
               {!inSession && (<>
               <button onClick={() => importRef.current?.click()}
@@ -6171,6 +6169,14 @@ function App() {
                           <span style={{ color: T.muted, display: "inline-flex" }}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
                           </span>Icon
+                        </KebabMenuItem>
+                        <KebabMenuItem onClick={() => {
+                          setEditKebabOpen(false);
+                          document.dispatchEvent(new CustomEvent("studi-edit-tags"));
+                        }}>
+                          <span style={{ color: T.muted, display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                          </span>Tags
                         </KebabMenuItem>
                         <KebabMenuItem onClick={() => {
                           setEditKebabOpen(false);
