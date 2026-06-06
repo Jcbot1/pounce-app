@@ -6166,6 +6166,22 @@ function App() {
                       <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                         <KebabMenuItem onClick={() => {
                           setEditKebabOpen(false);
+                          document.dispatchEvent(new CustomEvent("studi-edit-icon"));
+                        }}>
+                          <span style={{ color: T.muted, display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                          </span>Icon
+                        </KebabMenuItem>
+                        <KebabMenuItem onClick={() => {
+                          setEditKebabOpen(false);
+                          document.dispatchEvent(new CustomEvent("studi-edit-rename"));
+                        }}>
+                          <span style={{ color: T.muted, display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                          </span>Rename set
+                        </KebabMenuItem>
+                        <KebabMenuItem onClick={() => {
+                          setEditKebabOpen(false);
                           if (!activeSet) return;
                           const json = JSON.stringify([activeSet], null, 2);
                           const blob = new Blob([json], { type: "application/json" });
@@ -6179,22 +6195,6 @@ function App() {
                           <span style={{ color: T.muted, display: "inline-flex" }}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                           </span>Export set
-                        </KebabMenuItem>
-                        <KebabMenuItem onClick={() => {
-                          setEditKebabOpen(false);
-                          document.dispatchEvent(new CustomEvent("studi-edit-rename"));
-                        }}>
-                          <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                          </span>Rename set
-                        </KebabMenuItem>
-                        <KebabMenuItem onClick={() => {
-                          setEditKebabOpen(false);
-                          document.dispatchEvent(new CustomEvent("studi-edit-icon"));
-                        }}>
-                          <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-                          </span>Icon
                         </KebabMenuItem>
                         <KebabMenuItem danger color={T.red} onClick={() => {
                           setEditKebabOpen(false);
