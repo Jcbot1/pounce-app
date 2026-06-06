@@ -4471,7 +4471,7 @@ function HistoryCard({ session, onView }) {
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.05em",
+            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
             background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
           }}>
             {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
@@ -4481,7 +4481,7 @@ function HistoryCard({ session, onView }) {
           )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.05em", fontWeight: 600,
+            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", fontWeight: 600,
             background: (passed ? T.green : T.red) + "18", color: passed ? T.green : T.red,
             border: "1px solid " + (passed ? T.green : T.red) + "44",
           }}>
