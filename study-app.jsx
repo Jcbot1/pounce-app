@@ -3540,7 +3540,17 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
     return () => document.removeEventListener("pointerdown", handleClick);
   }, [open, sidebarMode]);
 
+  useEffect(() => {
+    function handle() { if (activeSet) { setRenameActiveSetVal(activeSet.name); setRenamingActiveSet(true); } }
+    document.addEventListener("studi-edit-rename", handle);
+    return () => document.removeEventListener("studi-edit-rename", handle);
+  }, [activeSet]);
 
+  useEffect(() => {
+    function handle() { setIconPickerActiveSetOpen(true); }
+    document.addEventListener("studi-edit-icon", handle);
+    return () => document.removeEventListener("studi-edit-icon", handle);
+  }, []);
 
   function exportAll(data, filename) {
     const json = JSON.stringify(data, null, 2);
@@ -3654,28 +3664,10 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
 
               {screen === "edit" && activeSet && (
                 <>
-                  <HamburgerMenuItem onClick={() => { exportAll([activeSet], (activeSet.name || "set").replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json"); close(); }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                      <span>Export set</span>
-                    </span>
-                  </HamburgerMenuItem>
-                  <HamburgerMenuItem onClick={() => { setRenameActiveSetVal(activeSet.name); setRenamingActiveSet(true); close(); }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                      <span>Rename set</span>
-                    </span>
-                  </HamburgerMenuItem>
                   <HamburgerMenuItem onClick={() => { setTagPickerActiveSetOpen(true); close(); }}>
                     <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                       <span>Tags</span>
-                    </span>
-                  </HamburgerMenuItem>
-                  <HamburgerMenuItem onClick={() => { setIconPickerActiveSetOpen(true); close(); }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-                      <span>Icon</span>
                     </span>
                   </HamburgerMenuItem>
                   <HamburgerMenuItem onClick={() => { close(); setConfirmDeleteActiveSet(true); }} color={T.red} danger>
@@ -5638,6 +5630,8 @@ function App() {
   const [resultsFilterOpen, setResultsFilterOpen] = useState(false);
   const [resultsKebabOpen, setResultsKebabOpen] = useState(false);
   const [resultsKebabPos, setResultsKebabPos] = useState({ top: 0, right: 0 });
+  const [editKebabOpen, setEditKebabOpen] = useState(false);
+  const [editKebabPos, setEditKebabPos] = useState({ top: 0, right: 0 });
   const [resultsDeleteConfirm, setResultsDeleteConfirm] = useState(false);
   const [lastSavedSessionId, setLastSavedSessionId] = useState(null);
   const [resultsSearch, setResultsSearch] = useState("");
@@ -6156,6 +6150,58 @@ function App() {
                     </>
                   )}
                 </button>
+
+                {/* Edit-page kebab */}
+                <div style={{ position: "relative", flexShrink: 0 }}>
+                  <GhostButton onClick={e => {
+                    const rect = e.currentTarget.parentElement.getBoundingClientRect();
+                    setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+                    setEditKebabOpen(o => !o);
+                  }} style={{ width: "36px", height: "36px", flexShrink: 0, justifyContent: "center", padding: "0" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted}>
+                      <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+                    </svg>
+                  </GhostButton>
+                  {editKebabOpen && (
+                    <>
+                      <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setEditKebabOpen(false)} />
+                      <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
+                        <KebabMenuItem onClick={() => {
+                          setEditKebabOpen(false);
+                          if (!activeSet) return;
+                          const json = JSON.stringify([activeSet], null, 2);
+                          const blob = new Blob([json], { type: "application/json" });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = (activeSet.name || "set").replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json";
+                          a.click();
+                          setTimeout(() => URL.revokeObjectURL(url), 1000);
+                        }}>
+                          <span style={{ color: T.muted, display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                          </span>Export set
+                        </KebabMenuItem>
+                        <KebabMenuItem onClick={() => {
+                          setEditKebabOpen(false);
+                          document.dispatchEvent(new CustomEvent("studi-edit-rename"));
+                        }}>
+                          <span style={{ color: T.muted, display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                          </span>Rename set
+                        </KebabMenuItem>
+                        <KebabMenuItem onClick={() => {
+                          setEditKebabOpen(false);
+                          document.dispatchEvent(new CustomEvent("studi-edit-icon"));
+                        }}>
+                          <span style={{ color: T.muted, display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                          </span>Icon
+                        </KebabMenuItem>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           )}
