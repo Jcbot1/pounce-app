@@ -5491,7 +5491,7 @@ function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
       canvas.height = H;
 
       const ctx     = canvas.getContext("2d");
-      const spacing = 11;
+      const spacing = 8;
       const maxR    = spacing * 0.18;
       ctx.fillStyle = color;
 
@@ -5934,7 +5934,7 @@ function App() {
         : `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
       : T.bg,
       minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
-      {bgStyle === "dots" && <HalftoneCanvas color={T.accent} maxOpacity={T.mode === "light" ? 0.10 : 0.07} />}
+      {bgStyle === "dots" && <HalftoneCanvas color={T.accent} maxOpacity={T.mode === "light" ? 0.07 : 0.05} />}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
