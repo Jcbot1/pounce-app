@@ -4157,7 +4157,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
                 RECENT SESSIONS
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-                {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onExport={onExport} onDelete={onDeleteHistory} />)}
+                {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} />)}
               </div>
             </div>
           )}
@@ -4198,7 +4198,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
             HISTORY · {matchedHistory.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-            {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onExport={onExport} onDelete={onDeleteHistory} />)}
+            {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} />)}
           </div>
         </div>
       )}
@@ -4469,82 +4469,30 @@ function ExportResultsModal({ session, onClose }) {
   );
 }
 
-function HistoryCard({ session, onView, onExport, onDelete }) {
+function HistoryCard({ session, onView }) {
   const pct    = Math.round((session.score / session.total) * 100);
   const passed = pct >= 70;
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [menuPos,  setMenuPos]  = useState({ top: 0, right: 0 });
-  const menuRef = useRef(null);
-
-  const kebabRef = useRef(null);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    function handleClick(e) {
-      if (kebabRef.current && kebabRef.current.contains(e.target)) return;
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
-    }
-    document.addEventListener("pointerdown", handleClick);
-    return () => document.removeEventListener("pointerdown", handleClick);
-  }, [menuOpen]);
-
-  function openMenu(btnEl) {
-    if (!btnEl) return;
-    const rect = btnEl.getBoundingClientRect();
-    const menuW = 180;
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const openDown = spaceBelow >= spaceAbove;
-    const top = openDown ? rect.bottom + 6 : rect.top - 6;
-    let left = rect.right - menuW;
-    if (left < 8) left = 8;
-    if (left + menuW > window.innerWidth - 8) left = window.innerWidth - menuW - 8;
-    setMenuPos({ top, left, openDown });
-    setMenuOpen(true);
-  }
 
   return (
-    <>
-      <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
-        {/* Kebab — absolutely positioned top-right */}
-        <div style={{ position: "absolute", top: "0.75rem", right: "0.75rem" }} onClick={e => e.stopPropagation()}>
-          <GlassButton divRef={kebabRef} onClick={e => { e.stopPropagation(); if (menuOpen) setMenuOpen(false); else openMenu(e.currentTarget.closest("[data-glass-btn]")); }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted2}>
-              <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
-            </svg>
-          </GlassButton>
+    <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.9rem",
+          overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.9rem * 1.4 * 3)" }}>
+          {session.setName}
+        </p>
+        <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>
+            {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
+          </span>
+          <span style={{ color: passed ? T.green : T.red, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace", fontWeight: 600 }}>
+            {pct}% · {session.score}/{session.total}
+          </span>
+          {session.mode && (
+            <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={T.muted} />
+          )}
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.9rem",
-            overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", paddingRight: "2.8rem", lineHeight: 1.4, minHeight: "calc(0.9rem * 1.4 * 3)" }}>
-            {session.setName}
-          </p>
-          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap", paddingRight: "1.25rem" }}>
-            <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>
-              {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
-            </span>
-            <span style={{ color: passed ? T.green : T.red, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace", fontWeight: 600 }}>
-              {pct}% · {session.score}/{session.total}
-            </span>
-            {session.mode && (
-              <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={T.muted} />
-            )}
-          </div>
-        </div>
-      </AppCard>
-
-      {menuOpen && (
-        <div ref={menuRef} className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: menuPos.openDown ? menuPos.top : undefined, bottom: menuPos.openDown ? undefined : window.innerHeight - menuPos.top, left: menuPos.left, zIndex: 9999, minWidth: "200px" }) }}>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); const uri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(session, null, 2)); const a = document.createElement("a"); a.href = uri; a.download = (session.setName || "results").replace(/[^a-z0-9]/gi, "-").toLowerCase() + "-results.json"; a.click(); }}>
-            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>Export
-          </KebabMenuItem>
-          <KebabMenuItem onClick={() => { setMenuOpen(false); onDelete(session); }} color={T.red} danger>
-            <span style={{ display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>Delete
-          </KebabMenuItem>
-        </div>
-      )}
-    </>
+      </div>
+    </AppCard>
   );
 }
 
@@ -4606,8 +4554,6 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
             key={session.id}
             session={session}
             onView={onView}
-            onExport={setExportSession}
-            onDelete={setConfirmDel}
           />
         ))}
       </div>
