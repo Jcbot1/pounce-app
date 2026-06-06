@@ -3509,7 +3509,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
 }
 
 function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
-  const inSession = screen === "review" || screen === "edit";
+  const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
   const [section, setSection] = useState(null); // null | "appearance" | "color"
