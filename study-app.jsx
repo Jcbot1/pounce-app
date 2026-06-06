@@ -3552,6 +3552,12 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
     return () => document.removeEventListener("studi-edit-icon", handle);
   }, []);
 
+  useEffect(() => {
+    function handle() { setConfirmDeleteActiveSet(true); }
+    document.addEventListener("studi-edit-delete", handle);
+    return () => document.removeEventListener("studi-edit-delete", handle);
+  }, []);
+
   function exportAll(data, filename) {
     const json = JSON.stringify(data, null, 2);
     const blob = new Blob([json], { type: "application/json" });
@@ -3663,20 +3669,12 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
               <input ref={importRef} type="file" accept=".json" onChange={e => { const f = e.target.files[0]; if (f && onSmartImport) { onSmartImport(f); close(); } e.target.value = ""; }} style={{ display: "none" }} />
 
               {screen === "edit" && activeSet && (
-                <>
-                  <HamburgerMenuItem onClick={() => { setTagPickerActiveSetOpen(true); close(); }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                      <span>Tags</span>
-                    </span>
-                  </HamburgerMenuItem>
-                  <HamburgerMenuItem onClick={() => { close(); setConfirmDeleteActiveSet(true); }} color={T.red} danger>
-                    <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                      <span>Delete set</span>
-                    </span>
-                  </HamburgerMenuItem>
-                </>
+                <HamburgerMenuItem onClick={() => { setTagPickerActiveSetOpen(true); close(); }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    <span>Tags</span>
+                  </span>
+                </HamburgerMenuItem>
               )}
 
               {!inSession && (<>
@@ -6197,6 +6195,14 @@ function App() {
                           <span style={{ color: T.muted, display: "inline-flex" }}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
                           </span>Icon
+                        </KebabMenuItem>
+                        <KebabMenuItem danger color={T.red} onClick={() => {
+                          setEditKebabOpen(false);
+                          document.dispatchEvent(new CustomEvent("studi-edit-delete"));
+                        }}>
+                          <span style={{ display: "inline-flex" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                          </span>Delete set
                         </KebabMenuItem>
                       </div>
                     </>
