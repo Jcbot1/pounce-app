@@ -835,6 +835,7 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
 // ── Theme ─────────────────────────────────────────────────────────────────────
 const THEME_KEY    = "studyapp_theme";
 const ACCENT_KEY   = "studyapp_accent";
+const BG_STYLE_KEY = "studyapp_bg_style";
 const PROFILE_NAME_KEY  = "studyapp_profile_name";
 const PROFILE_ICON_KEY  = "studyapp_profile_iconid";
 const PROFILE_BG_KEY    = "studyapp_profile_bg";
@@ -3508,7 +3509,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
   const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
@@ -3718,6 +3719,11 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, sets, history, onCl
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
+                </div>
+
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <div style={{ marginBottom: "0.25rem" }}>
+                  <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} />
                 </div>
 
               </div>
@@ -5468,6 +5474,26 @@ function ThemePicker({ theme, onSetTheme }) {
   );
 }
 
+// ── BackgroundPicker ────────────────────────────────────────────────────────
+function BackgroundPicker({ bgStyle, onSetBgStyle }) {
+  const opts = [
+    { id: "gradient", label: "Gradient" },
+    { id: "none",     label: "None" },
+  ];
+  return (
+    <div style={{ display: "flex", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)", borderRadius: "99px", padding: "0.2rem", gap: "0.1rem" }}>
+      {opts.map(opt => {
+        const active = bgStyle === opt.id;
+        return (
+          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ flex: 1, height: "26px", borderRadius: "99px", border: "none", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", fontWeight: active ? 600 : 400, background: active ? (T.mode === "light" ? "#fff" : "#3d3558") : "transparent", color: active ? T.accent : T.muted, transition: "background 0.18s, color 0.18s" }}>
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── ColorPicker ────────────────────────────────────────────────────────────
 function ColorPicker({ accent, onSetAccent }) {
   return (
@@ -5566,6 +5592,7 @@ function App() {
 
   const [theme, setThemeState]         = useState(() => localStorage.getItem(THEME_KEY) || "system");
   const [accent, setAccentState]       = useState(() => localStorage.getItem(ACCENT_KEY) || "purple");
+  const [bgStyle, setBgStyleState]     = useState(() => localStorage.getItem(BG_STYLE_KEY) || "gradient");
   const [profileName,  setProfileName]  = useState(() => localStorage.getItem(PROFILE_NAME_KEY) || "Profile");
   const [profileIconId, setProfileIconId] = useState(() => localStorage.getItem(PROFILE_ICON_KEY) || "grad");
   const [profileBg,    setProfileBg]    = useState(() => localStorage.getItem(PROFILE_BG_KEY) || "#1e3a5f");
@@ -5686,6 +5713,10 @@ function App() {
   function handleSetAccent(key) {
     localStorage.setItem(ACCENT_KEY, key);
     setAccentState(key);
+  }
+  function handleSetBgStyle(style) {
+    localStorage.setItem(BG_STYLE_KEY, style);
+    setBgStyleState(style);
   }
   function handleSaveProfile(name, iconId, bg, iconColor) {
     localStorage.setItem(PROFILE_NAME_KEY, name);
@@ -5842,9 +5873,11 @@ function App() {
 
   return (
     <>
-    <div style={{ background: T.mode === "light"
-      ? `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 45%), ${T.bg}`
-      : `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`,
+    <div style={{ background: bgStyle === "gradient"
+      ? (T.mode === "light"
+        ? `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 45%), ${T.bg}`
+        : `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
+      : T.bg,
       minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
@@ -5956,9 +5989,11 @@ function App() {
       )}
       <div style={{ minHeight: "100vh", visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
         position: "relative",
-        background: T.mode === "light"
-          ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), ${T.bg}`
-          : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`,
+        background: bgStyle === "gradient"
+          ? (T.mode === "light"
+            ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), ${T.bg}`
+            : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`)
+          : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
@@ -6084,7 +6119,7 @@ function App() {
             </div>
 
             <div style={{ width: "44px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} accent={accent} onSetAccent={handleSetAccent}
+            {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} accent={accent} onSetAccent={handleSetAccent} bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle}
               sets={sets} history={history} onClearAll={handleClearAll} screen={screen}
               profileName={profileName} profileIconId={profileIconId} profileBg={profileBg} profileIColor={profileIColor}
               onSaveProfile={handleSaveProfile}
@@ -6809,6 +6844,8 @@ function App() {
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <div style={{ marginBottom: "0.25rem" }}><BackgroundPicker bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle} /></div>
               </div>
             </>
           )}
