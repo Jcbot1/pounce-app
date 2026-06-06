@@ -3084,7 +3084,7 @@ function AnimatedPct({ target, color }) {
   );
 }
 
-function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, resultsFilter = "all" }) {
+function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, resultsFilter = "all", resultsSearch = "" }) {
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
   const passed = pct >= 70;
@@ -3176,6 +3176,10 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         if (resultsFilter === "correct") return r.correct;
         if (resultsFilter === "incorrect") return !r.correct;
         return true;
+      }).filter(r => {
+        if (!resultsSearch.trim()) return true;
+        const q = questions.find(q => q.id === r.qId);
+        return q?.question?.toLowerCase().includes(resultsSearch.toLowerCase());
       }).map((r, i) => {
         const q = questions.find(q => q.id === r.qId);
         if (!q) return null;
@@ -5690,6 +5694,7 @@ function App() {
   const [resultsKebabPos, setResultsKebabPos] = useState({ top: 0, right: 0 });
   const [resultsDeleteConfirm, setResultsDeleteConfirm] = useState(false);
   const [lastSavedSessionId, setLastSavedSessionId] = useState(null);
+  const [resultsSearch, setResultsSearch] = useState("");
 
   const [showWelcome, setShowWelcome]  = useState(() => {
     return localStorage.getItem("studi_welcomed") !== "true";
@@ -5953,6 +5958,7 @@ function App() {
             }
             setScreen("home");
             setResultsFilter("all");
+            setResultsSearch("");
           }}
           onCancel={() => setResultsDeleteConfirm(false)}
         />
@@ -6259,26 +6265,22 @@ function App() {
                     padding: titleBarVisible ? "0 1rem 0.65rem" : "0 1rem",
                     transition: "padding 0.3s ease",
                   }}>
-                  <ResultsChips
-                    isHist={isHist}
-                    hasMissed={hasMissed}
-                    onRetry={() => setResultsConfirmRetry(true)}
-                    onRetryMissed={() => handleRetryMissed(missed)}
-                    onStudySet={isHist ? () => {
-                      const set = sets.find(s => s.name === historySession?.setName);
-                      if (set) setPendingStudySet(set);
-                      else showToast("Original set not found.");
-                    } : undefined}
-                    onExport={() => {
-                      const sess = isHist ? historySession : (reviewResults && reviewQs ? { results: reviewResults, questions: reviewQs, setName: activeSet?.name, date: new Date().toISOString() } : null);
-                      if (!sess) return;
-                      const json = JSON.stringify(sess, null, 2);
-                      const a = document.createElement("a");
-                      a.href = "data:application/json;charset=utf-8," + encodeURIComponent(json);
-                      a.download = (sess.setName || "results").replace(/\s+/g, "-").toLowerCase() + "-results.json";
-                      a.click();
-                    }}
-                  />
+                  <div style={{ flex: 1, position: "relative", minWidth: 0 }}>
+                    <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.45, pointerEvents: "none" }}
+                      width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+                    </svg>
+                    <input
+                      value={resultsSearch}
+                      onChange={e => setResultsSearch(e.target.value)}
+                      placeholder="Search questions…"
+                      style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0", paddingBottom: "0", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box" }) }}
+                    />
+                    {resultsSearch && (
+                      <button onClick={() => setResultsSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
+                        background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
+                    )}
+                  </div>
                   {/* Sticky filter button */}
                   <div style={{ position: "relative", flexShrink: 0 }}>
                     {resultsFilter !== "all" ? (
@@ -6353,6 +6355,18 @@ function App() {
                       <>
                         <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setResultsKebabOpen(false)} />
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
+                          {!isHist && (
+                            <KebabMenuItem onClick={() => { setResultsKebabOpen(false); setResultsConfirmRetry(true); }}>
+                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
+                              Retry
+                            </KebabMenuItem>
+                          )}
+                          {hasMissed && (
+                            <KebabMenuItem onClick={() => { setResultsKebabOpen(false); handleRetryMissed(missed); }}>
+                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
+                              Retry missed
+                            </KebabMenuItem>
+                          )}
                           {isHist && (
                             <KebabMenuItem onClick={() => {
                               setResultsKebabOpen(false);
@@ -6439,12 +6453,12 @@ function App() {
             )}
             {screen === "results" && reviewResults && (
               <ResultsScreen results={reviewResults} questions={reviewQs}
-                set={activeSet} onRestart={handleRestart} onBack={() => { setScreen("home"); setResultsFilter("all"); }}
+                set={activeSet} onRestart={handleRestart} onBack={() => { setScreen("home"); setResultsFilter("all"); setResultsSearch(""); }}
                 onSaveToHistory={handleSaveToHistory} questionLimit={questionLimit}
                 onRetryMissed={handleRetryMissed}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
                 confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
-                resultsFilter={resultsFilter} />
+                resultsFilter={resultsFilter} resultsSearch={resultsSearch} />
             )}
             {screen === "historyResults" && historySession && (
               <ResultsScreen
@@ -6452,14 +6466,14 @@ function App() {
                 questions={historySession.questions}
                 set={{ name: historySession.setName, id: historySession.setId }}
                 onRestart={null}
-                onBack={() => { setScreen("home"); setResultsFilter("all"); }}
+                onBack={() => { setScreen("home"); setResultsFilter("all"); setResultsSearch(""); }}
                 onSaveToHistory={null}
                 questionLimit={historySession.total}
                 isHistoryView={true}
                 historyDate={historySession.date}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
                 confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
-                resultsFilter={resultsFilter} />
+                resultsFilter={resultsFilter} resultsSearch={resultsSearch} />
             )}
           </div>
         </div>
