@@ -3719,11 +3719,6 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
 
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>SIDEBAR THEME</p>
-                <div style={{ marginBottom: "1rem" }}>
-                  <SidebarThemePicker sidebarTheme={sidebarTheme} onSetSidebarTheme={onSetSidebarTheme} />
-                </div>
-
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
