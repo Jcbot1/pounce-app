@@ -3711,7 +3711,7 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
           )}
           {section === "appearance" && (
             <>
-              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} />
+              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
