@@ -5481,11 +5481,14 @@ function BackgroundPicker({ bgStyle, onSetBgStyle }) {
     { id: "none",     label: "None" },
   ];
   return (
-    <div style={{ display: "flex", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)", borderRadius: "99px", padding: "0.2rem", gap: "0.1rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
       {opts.map(opt => {
         const active = bgStyle === opt.id;
         return (
-          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ flex: 1, height: "26px", borderRadius: "99px", border: "none", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", fontWeight: active ? 600 : 400, background: active ? (T.mode === "light" ? "#fff" : "#3d3558") : "transparent", color: active ? T.accent : T.muted, transition: "background 0.18s, color 0.18s" }}>
+          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", cursor: "pointer", padding: "0.3rem 0.1rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.88rem", color: active ? T.text : T.muted, textAlign: "left" }}>
+            <span style={{ width: "16px", height: "16px", borderRadius: "50%", border: `2px solid ${active ? T.accent : T.border2}`, background: active ? T.accent : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.15s, background 0.15s" }}>
+              {active && <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#fff" }} />}
+            </span>
             {opt.label}
           </button>
         );
