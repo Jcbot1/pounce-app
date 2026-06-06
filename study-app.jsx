@@ -5491,8 +5491,8 @@ function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
       canvas.height = H;
 
       const ctx     = canvas.getContext("2d");
-      const spacing = 16;
-      const maxR    = spacing * 0.22;
+      const spacing = 11;
+      const maxR    = spacing * 0.18;
       ctx.fillStyle = color;
 
       for (let x = 0; x <= W + spacing; x += spacing) {
