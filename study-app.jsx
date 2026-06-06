@@ -6160,7 +6160,7 @@ function App() {
                   </GhostButton>
                   {editKebabOpen && (
                     <>
-                      <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setEditKebabOpen(false)} />
+                      <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onPointerDown={() => setEditKebabOpen(false)} />
                       <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                         <KebabMenuItem onClick={() => {
                           setEditKebabOpen(false);
@@ -6359,7 +6359,7 @@ function App() {
                     </GhostButton>
                     {resultsKebabOpen && (
                       <>
-                        <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setResultsKebabOpen(false)} />
+                        <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onPointerDown={() => setResultsKebabOpen(false)} />
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                           {!isHist && (
                             <KebabMenuItem onClick={() => { setResultsKebabOpen(false); setResultsConfirmRetry(true); }}>
