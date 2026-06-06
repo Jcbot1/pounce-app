@@ -6282,14 +6282,14 @@ function App() {
                     )}
                   </div>
                   {/* Sticky filter button */}
-                  <div style={{ position: "relative", flexShrink: 0, width: "112px" }}>
+                  <div style={{ position: "relative", flexShrink: 0 }}>
                     {resultsFilter !== "all" ? (
-                      <div style={{ borderRadius: "99px", padding: "2px", background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, display: "flex", width: "100%" }}>
+                      <div style={{ borderRadius: "99px", padding: "2px", background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, display: "inline-flex" }}>
                         <button onClick={e => {
                           const rect = e.currentTarget.closest("div").getBoundingClientRect();
                           setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                           setResultsFilterOpen(o => !o);
-                        }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", height: "34px", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", cursor: "pointer", color: T.accent, WebkitTapHighlightColor: "transparent", fontFamily: "'DM Sans', sans-serif" }}>
+                        }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", height: "34px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", cursor: "pointer", color: T.accent, WebkitTapHighlightColor: "transparent", fontFamily: "'DM Sans', sans-serif" }}>
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
                           </svg>
@@ -6301,7 +6301,7 @@ function App() {
                         const rect = e.currentTarget.parentElement.getBoundingClientRect();
                         setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                         setResultsFilterOpen(o => !o);
-                      }} style={{ width: "100%", height: "38px", flexShrink: 0, justifyContent: "center", gap: "0.35rem", padding: "0" }}>
+                      }} style={{ height: "38px", flexShrink: 0, justifyContent: "center", gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem" }}>
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
                         </svg>
