@@ -4777,7 +4777,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     .slice(0, 5);
 
   const statCard = (label, value, sub, color = T.accent) => (
-    <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem" }) }}>
+    <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
       <p style={{ fontFamily: FF_MONO, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, marginBottom: "0.3rem" }}>
         {value !== undefined && value !== null ? value : "—"}
       </p>
