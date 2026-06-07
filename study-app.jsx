@@ -6966,7 +6966,7 @@ function App() {
         <div style={{
           position: "fixed",
           top: "48px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 12 + "px",
+          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 13 + "px",
           right: 0,
           height: "1px",
           background: ST.border,
