@@ -1250,8 +1250,9 @@ const primaryPress = () => ({
   onPointerUp:   e => { _afterPress(e.currentTarget, '', 'press-primary'); },
   onPointerLeave:e => { _afterPress(e.currentTarget, '', 'press-primary'); },
 });
-const Label = ({ children, style }) => (
+const Label = ({ children, style, required }) => (
   <p style={{ fontFamily: FF_MONO, fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.4rem", ...style }}>
+    {required && <span style={{ color: T.red, marginRight: "0.2em" }}>*</span>}
     {children}
   </p>
 );
@@ -1391,7 +1392,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* type + topic */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "0.9rem" }}>
             <div style={{ flex: "1 1 180px" }}>
-              <Label>QUESTION TYPE</Label>
+              <Label required>QUESTION TYPE</Label>
               <select value={q.type} onChange={e => onChange({ ...blankQuestion(e.target.value), id: q.id })}
                 style={{ ...inp(), appearance: "none" }}>
                 <option value="single">Single answer</option>
@@ -1411,7 +1412,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* question text — hidden for flashcard which has its own Front/Back fields */}
           {q.type !== "flashcard" && (
             <div style={{ marginBottom: "0.9rem" }}>
-              <Label>QUESTION TEXT</Label>
+              <Label required>QUESTION TEXT</Label>
               <SnapTextarea value={q.question} onChange={e => set("question", e.target.value)}
                 rows={3} placeholder="Enter the question…" maxLength={10000}
                 style={{ ...inp(), lineHeight: 1.6 }} />
@@ -1430,7 +1431,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                   </select>
                 </div>
               )}
-              <Label>OPTIONS — click circle/checkbox to mark correct answer(s)
+              <Label required>OPTIONS — click circle/checkbox to mark correct answer(s)
                 {q.type === "multi" && (
                   <span style={{ marginLeft: "0.5rem", color: q.correct.length === q.selectCount ? T.green : T.red }}>
                     ({q.correct.length}/{q.selectCount} marked)
@@ -1490,7 +1491,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* ── dropdown ── */}
           {q.type === "dropdown" && (
             <>
-              <Label style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS — each row is one line of the question</Label>
+              <Label required style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS — each row is one line of the question</Label>
               {q.dropdowns.map((dd, di) => (
                 <div key={dd.id} style={{ marginBottom: "0.75rem", padding: "0.75rem", border: "1px solid " + T.border, borderRadius: "12px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
@@ -1504,7 +1505,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                       placeholder="Label text shown before the dropdown (e.g. Storage Tier)"
                       rows={2} maxLength={1000} />
                   </div>
-                  <Label>OPTIONS — select the correct one</Label>
+                  <Label required>OPTIONS — select the correct one</Label>
                   {dd.options.map((opt, oi) => (
                     <div key={oi} style={{ marginBottom: "0.5rem",
                       background: T.mode === "light" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.04)",
@@ -1556,7 +1557,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
 
           {q.type === "matching" && (
             <>
-              <Label style={{ marginBottom: "0.6rem" }}>PAIRS — enter each term and its correct match</Label>
+              <Label required style={{ marginBottom: "0.6rem" }}>PAIRS — enter each term and its correct match</Label>
               {q.pairs.map((pair, pi) => (
                 <div key={pair.id} style={{ marginBottom: "1rem", padding: "0.75rem", background: T.surface2, borderRadius: "12px", border: "1px solid " + T.border }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
@@ -1596,11 +1597,11 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* ── flashcard ── */}
           {q.type === "flashcard" && (
             <>
-              <Label style={{ marginBottom: "0.4rem" }}>FRONT (term, question, or concept)</Label>
+              <Label required style={{ marginBottom: "0.4rem" }}>FRONT (term, question, or concept)</Label>
               <SnapTextarea value={q.question || ""} onChange={e => set("question", e.target.value)}
                 rows={2} placeholder="Term or concept…" maxLength={10000}
                 style={{ ...inp(), lineHeight: 1.6, marginBottom: "1rem" }} />
-              <Label style={{ marginBottom: "0.4rem" }}>BACK (definition, answer, or explanation)</Label>
+              <Label required style={{ marginBottom: "0.4rem" }}>BACK (definition, answer, or explanation)</Label>
               <SnapTextarea value={q.back || ""} onChange={e => set("back", e.target.value)}
                 rows={2} placeholder="Definition or answer…" maxLength={10000}
                 style={{ ...inp(), lineHeight: 1.6 }} />
