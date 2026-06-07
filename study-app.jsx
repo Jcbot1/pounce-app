@@ -4515,7 +4515,7 @@ function HistoryCard({ session, onView }) {
           {session.mode && (
             <Tag
               label={session.mode === "quick" ? "QUICK " + session.total : session.mode === "exam" ? "EXAM" : "REVIEW"}
-              color={session.mode === "quick" ? T.accent : session.mode === "exam" ? "#f59e0b" : T.green}
+              color={session.mode === "quick" ? "#06b6d4" : session.mode === "exam" ? "#f59e0b" : "#8b5cf6"}
             />
           )}
           <span style={{
