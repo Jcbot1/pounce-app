@@ -2323,7 +2323,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
     return () => document.removeEventListener("pointerdown", handle);
   }, [openId]);
 
-  const selBg = T.mode === "light" ? T.accent + "18" : "#2d1f4e";
+  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "28";
   const corBg = T.mode === "light" ? T.green  + "18" : "#052e16";
   const wroBg = T.mode === "light" ? T.red    + "18" : "#2d0a0a";
 
@@ -2371,11 +2371,12 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                 style={{
                   width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem",
                   background: triggerBg, color: triggerColor,
-                  border: "1px solid " + triggerBorder,
+                  border: (hasVal && !submitted) ? "1.5px solid " + T.accent + "66" : "1px solid " + triggerBorder,
                   borderRadius: "6px", padding: "0.45rem 0.6rem",
                   fontFamily: FF_MONO, fontSize: "0.8rem",
                   cursor: submitted ? "default" : "pointer",
                   textAlign: "left", whiteSpace: "normal", wordBreak: "break-word",
+                  boxShadow: (hasVal && !submitted) ? glassyBtn(true).boxShadow : undefined,
                 }}>
                 <span style={{ flex: 1, lineHeight: 1.4 }}>
                   {hasVal ? dd.options[val] : "— select —"}
