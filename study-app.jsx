@@ -1151,6 +1151,8 @@ const glassyBtn = (active = false, color = null) => {
     boxShadow: T.mode === "light"
       ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
       : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
   };
 };
 
@@ -1164,6 +1166,8 @@ const inp = (extra = {}) => ({
   padding: "0.65rem 0.9rem",
   width: "100%",
   outline: "none",
+  backdropFilter: "blur(10px)",
+  WebkitBackdropFilter: "blur(10px)",
   ...extra,
 });
 
