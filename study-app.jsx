@@ -2973,7 +2973,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               cursor: isCurrent ? "default" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               position: "relative", transition: "all 0.15s", overflow: "visible",
-              boxShadow: T.mode === "light" ? "inset 0 1px 0 rgba(255,255,255,0.6)" : "inset 0 1px 0 rgba(255,255,255,0.08)",
+              boxShadow: T.mode === "light" ? "inset 0 1.5px 0 rgba(255,255,255,0.55)" : "inset 0 1.5px 0 rgba(255,255,255,0.2)",
             }}>
               {i + 1}
               {isAnswered && (
