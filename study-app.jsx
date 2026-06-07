@@ -215,10 +215,7 @@ function GhostButton({ onClick, children, small, style: extraStyle }) {
 function DangerButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...dangerPress()} style={{
-      ...glassyBtn(false),
-      background: T.mode === "light" ? T.red + "18" : T.red + "28",
-      border: "1.5px solid " + T.red + "66",
-      color: T.red,
+      ...glassyBtn(true, T.red),
       height: small ? "38px" : "44px",
       padding: small ? "0 1rem" : "0 1.25rem",
       fontSize: small ? "0.87rem" : "0.9rem",
@@ -249,10 +246,7 @@ function PrimaryButton({ onClick, children, small, disabled, style: extraStyle }
 function SuccessButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...glassPress()} style={{
-      ...glassyBtn(false),
-      background: T.mode === "light" ? T.green + "18" : T.green + "28",
-      border: "1.5px solid " + T.green + "66",
-      color: T.green,
+      ...glassyBtn(true, T.green),
       height: small ? "38px" : "44px",
       padding: small ? "0 1rem" : "0 1.25rem",
       fontSize: small ? "0.87rem" : "0.9rem",
@@ -1139,24 +1133,25 @@ const btn = (variant = "primary", small = false) => ({
   ...(variant === "primary"  && { background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box", border: "2px solid transparent", color: T.muted2, fontWeight: 600 }),
   ...(variant === "purple"   && { background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box", border: "2px solid transparent", color: T.muted2, fontWeight: 600 }),
   ...(variant === "ghost"    && { background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)", border: "none", color: T.text, boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)" }),
-  ...(variant === "danger"   && { background: T.red + "22",   border: "1px solid " + T.red + "18",   color: T.red }),
-  ...(variant === "success"  && { background: T.green + "18", border: "1px solid " + T.green + "18", color: T.green }),
   ...(variant === "disabled" && { background: T.surface2,             color: T.muted, cursor: "not-allowed" }),
 });
 
-const glassyBtn = (active = false) => ({
-  borderRadius: "99px",
-  cursor: "pointer",
-  display: "flex", alignItems: "center", justifyContent: "center",
-  background: active
-    ? (T.mode === "light" ? T.accent + "18" : T.accent + "28")
-    : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
-  border: active ? "1.5px solid " + T.accent + "66" : "none",
-  color: active ? T.accent : T.text,
-  boxShadow: T.mode === "light"
-    ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
-    : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
-});
+const glassyBtn = (active = false, color = null) => {
+  const c = color || T.accent;
+  return {
+    borderRadius: "99px",
+    cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    background: active
+      ? (T.mode === "light" ? c + "18" : c + "28")
+      : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
+    border: active ? "1.5px solid " + c + "66" : "none",
+    color: active ? c : T.text,
+    boxShadow: T.mode === "light"
+      ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
+      : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
+  };
+};
 
 const inp = (extra = {}) => ({
   background: T.surface,
@@ -1296,11 +1291,6 @@ const dangerPress = () => ({
   onPointerLeave:e => { _afterPress(e.currentTarget, '', `press-danger ${T.mode}`); },
 });
 
-const successPress = () => ({
-  onPointerDown: e => { const el = e.currentTarget; _remClass(el, 'press-success-done'); _addClass(el, `press-success ${T.mode}`); },
-  onPointerUp:   e => { _afterPress(e.currentTarget, '', `press-success ${T.mode}`); },
-  onPointerLeave:e => { _afterPress(e.currentTarget, '', `press-success ${T.mode}`); },
-});
 
 const primaryPress = () => ({
   onPointerDown: e => { const el = e.currentTarget; _remClass(el, 'press-primary-done'); _addClass(el, 'press-primary'); },
@@ -2979,9 +2969,9 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           const isCorrectQ = isAnswered && res.correct;
           let colorOverride = {};
           if (!isCurrent && isAnswered) {
-            if (examMode)        colorOverride = { background: T.mode === "light" ? T.accent + "18" : T.accent + "28", color: T.accent, border: "1.5px solid " + T.accent + "66" };
-            else if (isCorrectQ) colorOverride = { background: T.mode === "light" ? T.green + "18" : T.green + "28", color: T.green, border: "1.5px solid " + T.green + "66" };
-            else                 colorOverride = { background: T.mode === "light" ? T.red + "18" : T.red + "28", color: T.red, border: "1.5px solid " + T.red + "66" };
+            if (examMode)        colorOverride = glassyBtn(true);
+            else if (isCorrectQ) colorOverride = glassyBtn(true, T.green);
+            else                 colorOverride = glassyBtn(true, T.red);
           }
           return (
             <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)} style={{
@@ -5168,9 +5158,6 @@ const STATIC_STYLES = `
   .press-danger.light   { transition: none !important; background: #fca5a5 !important; }
   .press-danger.dark    { transition: none !important; background: #7f1d1d !important; }
   .press-danger-done    { transition: background 0.3s ease !important; }
-  .press-success.light  { transition: none !important; background: #6ee7b7 !important; }
-  .press-success.dark   { transition: none !important; background: #064e3b !important; }
-  .press-success-done   { transition: background 0.3s ease !important; }
   .glass-btn            { background: #ffffff; }
   .dark .glass-btn, .glass-btn.dark-mode { background: rgb(40,36,58); }
   .press-glass.light    { transition: none !important; background: rgba(255,255,255,0.5) !important; }
