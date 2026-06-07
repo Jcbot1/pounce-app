@@ -4513,7 +4513,7 @@ function HistoryCard({ session, onView }) {
             {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
           </span>
           {session.mode && (
-            <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={T.muted} />
+            <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={session.mode === "quick" ? T.accent : T.green} />
           )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
