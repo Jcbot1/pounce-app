@@ -232,8 +232,12 @@ function DangerButton({ onClick, children, small, style: extraStyle }) {
 function PrimaryButton({ onClick, children, small, disabled, style: extraStyle }) {
   const b = btn(disabled ? "disabled" : "primary", small);
   const { wrapperStyle, innerStyle } = splitStyle(extraStyle);
+  const canHover = window.matchMedia("(hover: hover)").matches;
   return (
-    <div style={{ background: b.background, border: b.border, borderRadius: "99px", display: "inline-flex", ...wrapperStyle }}>
+    <div
+      onMouseEnter={(!disabled && canHover) ? e => { e.currentTarget.style.filter = "brightness(0.92)"; } : undefined}
+      onMouseLeave={(!disabled && canHover) ? e => { e.currentTarget.style.filter = ""; } : undefined}
+      style={{ background: b.background, border: b.border, borderRadius: "99px", display: "inline-flex", ...wrapperStyle }}>
       <button onClick={onClick} {...(disabled ? {} : surfacePress())}
         style={{ ...b, background: "transparent", border: "none", borderRadius: "99px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", ...innerStyle }}>
         {children}
