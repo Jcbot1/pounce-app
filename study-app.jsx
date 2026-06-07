@@ -4,7 +4,7 @@
 
 const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = React;
 
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.0.1";
 
 const FF_SANS  = "'DM Sans', sans-serif";
 const FF_MONO  = "'DM Mono', monospace";
