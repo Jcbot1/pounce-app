@@ -2,7 +2,7 @@
 // IMPORTS
 // ════════════════════════════════════════════════════════════════════════
 
-const { useState, useEffect, useRef, Fragment, useMemo } = React;
+const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = React;
 
 const FF_SANS  = "'DM Sans', sans-serif";
 const FF_MONO  = "'DM Mono', monospace";
@@ -1118,7 +1118,7 @@ function SnapTextarea({ style, maxLength, ...props }) {
   const ref = useRef(null);
   const len = (props.value || "").length;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     const scrollY = window.scrollY;
@@ -1148,7 +1148,7 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
   const ref = useRef(null);
   const len = (value || "").length;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     const scrollY = window.scrollY;
