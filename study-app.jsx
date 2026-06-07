@@ -6379,12 +6379,12 @@ function App() {
             <div style={{
               display: "flex", justifyContent: "center",
               overflow: "hidden",
-              maxHeight: (isDesktop || isTablet || titleBarVisible) ? "80px" : "0",
+              maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
               opacity: (isDesktop || isTablet || titleBarVisible) ? 1 : 0,
               transition: "max-height 0.3s ease, opacity 0.3s ease",
             }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.75rem",
-                padding: titleBarVisible ? "0.5rem 1rem 0.65rem" : "0.5rem 1rem" }}>
+                padding: titleBarVisible ? "0.5rem 1rem 1.25rem" : "0.5rem 1rem 1rem" }}>
                 <div style={{ flex: 1, position: "relative" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.4, pointerEvents: "none" }}
                     width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -6550,7 +6550,7 @@ function App() {
             const hasMissed = missed.length > 0 && !isHist;
             return (
               <div style={{
-                maxHeight: (isDesktop || isTablet || titleBarVisible) ? "80px" : "0",
+                maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
                 opacity: (isDesktop || isTablet || titleBarVisible) ? 1 : 0,
                 overflow: "hidden",
                 transition: "max-height 0.3s ease, opacity 0.3s ease",
@@ -6560,7 +6560,7 @@ function App() {
                   justifyContent: "center",
                 }}>
                   <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.5rem",
-                    padding: titleBarVisible ? "0.5rem 1rem 0.65rem" : "0.5rem 1rem",
+                    padding: titleBarVisible ? "0.5rem 1rem 1.25rem" : "0.5rem 1rem 1rem",
                     transition: "padding 0.3s ease",
                   }}>
                   <div style={{ flex: 1, position: "relative", minWidth: 0 }}>
