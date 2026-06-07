@@ -6969,7 +6969,7 @@ function App() {
           left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 12 + "px",
           right: 0,
           height: "1px",
-          background: T.border,
+          background: ST.border,
           zIndex: 100,
           pointerEvents: "none",
           transition: "left 0.25s ease",
