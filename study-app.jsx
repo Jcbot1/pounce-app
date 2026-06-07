@@ -510,14 +510,13 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
         </>
       )}
       <button ref={btnRef} onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
-        width: "36px", height: "36px", borderRadius: "99px",
-        background: hintOpen ? "linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%)" : T.surface2,
-        color: hintOpen ? "#fff" : T.muted2, border: "none", cursor: "pointer",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: hintOpen
-          ? (T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.55)" : "0 4px 24px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2), inset 0 1.5px 0 rgba(255,255,255,0.22)")
-          : (T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)"),
-        transition: "background 0.2s",
+        ...glassyBtn(),
+        width: "36px", height: "36px",
+        ...(hintOpen
+          ? { background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, color: "#fff" }
+          : { color: T.muted2 }
+        ),
+        transition: "background 0.2s, box-shadow 0.2s",
       }}>
         <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
           <path d="M9 18h6M10 21h4M12 2a7 7 0 0 1 4 12.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26A7 7 0 0 1 12 2z" />
@@ -1123,6 +1122,20 @@ const btn = (variant = "primary", small = false) => ({
   ...(variant === "danger"   && { background: T.red + "22",   border: "1px solid " + T.red + "18",   color: T.red }),
   ...(variant === "success"  && { background: T.green + "18", border: "1px solid " + T.green + "18", color: T.green }),
   ...(variant === "disabled" && { background: T.surface2,             color: T.muted, cursor: "not-allowed" }),
+});
+
+const glassyBtn = (active = false) => ({
+  borderRadius: "99px",
+  cursor: "pointer",
+  display: "flex", alignItems: "center", justifyContent: "center",
+  background: active
+    ? (T.mode === "light" ? T.accent + "18" : T.accent + "28")
+    : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
+  border: active ? "1.5px solid " + T.accent + "66" : "none",
+  color: active ? T.accent : T.text,
+  boxShadow: T.mode === "light"
+    ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
+    : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
 });
 
 const inp = (extra = {}) => ({
@@ -2935,8 +2948,8 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           const isCurrent  = i === idx;
           const isAnswered = res !== undefined;
           const isCorrectQ = isAnswered && res.correct;
-          let bg, color, border, bubbleShadow;
-          if (isCurrent) { bg = T.accent; color = "#fff"; border = "none"; bubbleShadow = T.mode === "light" ? "0 2px 8px rgba(0,0,0,0.12), inset 0 1.5px 0 rgba(255,255,255,0.45)" : "0 2px 8px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.22)"; }
+          let bg, color, border;
+          if (isCurrent) { bg = T.accent; color = "#fff"; border = "none"; }
           else if (!isAnswered) { bg = T.surface2; color = T.muted; border = "1px solid " + T.border; }
           else if (examMode) { bg = T.mode === "light" ? T.accent + "22" : T.accent + "33"; color = T.accent; border = "1px solid " + T.accent + "55"; }
           else if (isCorrectQ) { bg = T.mode === "light" ? T.green + "22" : "#052e16"; color = T.green; border = "1px solid " + T.green + "55"; }
@@ -2949,7 +2962,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               cursor: isCurrent ? "default" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               position: "relative", transition: "all 0.15s", overflow: "visible",
-              boxShadow: bubbleShadow,
+              boxShadow: isCurrent ? glassyBtn().boxShadow : undefined,
             }}>
               {i + 1}
               {isAnswered && (
@@ -2976,10 +2989,12 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
             <span style={{ flex: 1 }} />
             <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
             <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))} {...primaryPress()} style={{
-              width: "36px", height: "36px", borderRadius: "99px",
-              background: flagged[idx] ? "linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%)" : T.surface2,
-              border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
+              ...glassyBtn(),
+              width: "36px", height: "36px",
+              ...(flagged[idx]
+                ? { background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, color: "#fff" }
+                : { color: T.muted2 }
+              ),
             }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "#fff" : "none"} stroke={flagged[idx] ? "#fff" : T.muted2} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
@@ -3475,10 +3490,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
                 <button onClick={() => setCustomMin(m => Math.max(5, m - 5))}
                   {...surfacePress()}
-                  style={{ width: "44px", height: "44px", borderRadius: "99px", border: "none", cursor: "pointer",
-                    background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)",
-                    color: T.text, fontSize: "1.4rem", display: "flex", alignItems: "center", justifyContent: "center",
-                    boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)" }}>
+                  style={{ ...glassyBtn(), width: "44px", height: "44px", fontSize: "1.4rem" }}>
                   −
                 </button>
                 <div style={{ textAlign: "center", minWidth: "80px" }}>
@@ -3487,10 +3499,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 </div>
                 <button onClick={() => setCustomMin(m => Math.min(240, m + 5))}
                   {...surfacePress()}
-                  style={{ width: "44px", height: "44px", borderRadius: "99px", border: "none", cursor: "pointer",
-                    background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)",
-                    color: T.text, fontSize: "1.4rem", display: "flex", alignItems: "center", justifyContent: "center",
-                    boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)" }}>
+                  style={{ ...glassyBtn(), width: "44px", height: "44px", fontSize: "1.4rem" }}>
                   +
                 </button>
               </div>
@@ -3498,19 +3507,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
                 {TIMER_OPTIONS.map(min => (
                   <button key={min} onClick={() => setCustomMin(min)} {...surfacePress()}
-                    style={{
-                      flex: 1, height: "44px", borderRadius: "99px", cursor: "pointer",
-                      border: customMin === min ? "1.5px solid " + T.accent + "66" : "none",
-                      background: customMin === min
-                        ? (T.mode === "light" ? T.accent + "18" : T.accent + "28")
-                        : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
-                      color: customMin === min ? T.accent : T.text,
-                      fontFamily: FF_MONO, fontSize: "0.85rem", fontWeight: 600,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      boxShadow: T.mode === "light"
-                        ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
-                        : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
-                    }}>
+                    style={{ ...glassyBtn(customMin === min), flex: 1, height: "44px", fontFamily: FF_MONO, fontSize: "0.85rem", fontWeight: 600 }}>
                     {min}m
                   </button>
                 ))}
@@ -4318,7 +4315,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
               <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 {setsActiveTag ? (
-                  <button onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.accent + "18" : T.accent + "28", border: "1.5px solid " + T.accent + "66", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", boxShadow: T.mode === "light" ? "0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.7)" : "0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.12)" }}>
+                  <button onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ ...glassyBtn(true), gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent" }}>
                     <FilterIcon size={13} />
                     <span style={{ fontSize: "0.85rem" }}>{setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag}</span>
                   </button>
