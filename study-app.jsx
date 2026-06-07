@@ -2960,9 +2960,9 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           const isCorrectQ = isAnswered && res.correct;
           let colorOverride = {};
           if (!isCurrent && isAnswered) {
-            if (examMode)        colorOverride = { background: T.mode === "light" ? T.accent + "22" : T.accent + "33", color: T.accent, border: "1px solid " + T.accent + "55" };
-            else if (isCorrectQ) colorOverride = { background: T.mode === "light" ? T.green + "22" : "#052e16", color: T.green, border: "1px solid " + T.green + "55" };
-            else                 colorOverride = { background: T.mode === "light" ? T.red + "22" : "#2d0a0a", color: T.red, border: "1px solid " + T.red + "55" };
+            if (examMode)        colorOverride = { background: T.mode === "light" ? T.accent + "18" : T.accent + "28", color: T.accent, border: "1.5px solid " + T.accent + "66" };
+            else if (isCorrectQ) colorOverride = { background: T.mode === "light" ? T.green + "18" : T.green + "28", color: T.green, border: "1.5px solid " + T.green + "66" };
+            else                 colorOverride = { background: T.mode === "light" ? T.red + "18" : T.red + "28", color: T.red, border: "1.5px solid " + T.red + "66" };
           }
           return (
             <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)} style={{
