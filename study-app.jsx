@@ -4249,10 +4249,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                     </button>
                   </div>
                 ) : (
-                  <GhostButton onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0 }}>
+                  <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem" }}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
                     <span style={{ fontSize: "0.9rem" }}>All</span>
-                  </GhostButton>
+                  </button>
                 )}
                 {setsFilterOpen && (
                   <>
@@ -4303,10 +4303,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>RECENT</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
-                <GhostButton onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0 }}>
+                <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem" }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
                   <span style={{ fontSize: "0.9rem" }}>{{ "date-desc": "Newest", "date-asc": "Oldest", "score-desc": "Score ↓", "score-asc": "Score ↑" }[historySortBy] || "Sort"}</span>
-                </GhostButton>
+                </button>
                 {historySortOpen && (
                   <>
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setHistorySortOpen(false)} />
@@ -6498,16 +6498,16 @@ function App() {
                         </button>
                       </div>
                     ) : (
-                      <GhostButton onClick={e => {
+                      <button {...surfacePress()} onClick={e => {
                         const rect = e.currentTarget.parentElement.getBoundingClientRect();
                         setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                         setResultsFilterOpen(o => !o);
-                      }} style={{ height: "38px", flexShrink: 0, justifyContent: "center", gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem" }}>
+                      }} style={{ height: "38px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem" }}>
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
                         </svg>
                         <span style={{ fontSize: "0.85rem" }}>All</span>
-                      </GhostButton>
+                      </button>
                     )}
                     {resultsFilterOpen && (
                       <>
