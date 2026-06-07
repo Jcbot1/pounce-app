@@ -510,13 +510,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
         </>
       )}
       <button ref={btnRef} onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
-        ...glassyBtn(),
-        width: "36px", height: "36px",
-        ...(hintOpen
-          ? { background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, color: "#fff" }
-          : { color: T.muted2 }
-        ),
-        transition: "background 0.2s, box-shadow 0.2s",
+        ...glassyBtn(hintOpen), width: "36px", height: "36px", transition: "background 0.2s, box-shadow 0.2s",
       }}>
         <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
           <path d="M9 18h6M10 21h4M12 2a7 7 0 0 1 4 12.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26A7 7 0 0 1 12 2z" />
@@ -2989,12 +2983,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
             <span style={{ flex: 1 }} />
             <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
             <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))} {...primaryPress()} style={{
-              ...glassyBtn(),
-              width: "36px", height: "36px",
-              ...(flagged[idx]
-                ? { background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, color: "#fff" }
-                : { color: T.muted2 }
-              ),
+              ...glassyBtn(!!flagged[idx]), width: "36px", height: "36px",
             }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "#fff" : "none"} stroke={flagged[idx] ? "#fff" : T.muted2} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
