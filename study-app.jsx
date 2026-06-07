@@ -461,6 +461,29 @@ function AppCard({ onClick, children, style: extraStyle }) {
 // ── Hint Button ────────────────────────────────────────────────────────────
 // Reusable hint button + popup used in both regular and flashcard review
 function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
+  const btnRef = useRef(null);
+  const [popupPos, setPopupPos] = useState({ top: "4rem", right: "1rem" });
+
+  useLayoutEffect(() => {
+    if (!hintOpen || !btnRef.current) return;
+    function updatePos() {
+      const r = btnRef.current.getBoundingClientRect();
+      const popupW = Math.min(360, window.innerWidth - 32);
+      const rightFromBtn = window.innerWidth - r.right;
+      setPopupPos({
+        top: r.bottom + 8 + "px",
+        right: Math.min(rightFromBtn, window.innerWidth - popupW - 16) + "px",
+      });
+    }
+    updatePos();
+    window.addEventListener("scroll", updatePos, { passive: true, capture: true });
+    window.addEventListener("resize", updatePos);
+    return () => {
+      window.removeEventListener("scroll", updatePos, { capture: true });
+      window.removeEventListener("resize", updatePos);
+    };
+  }, [hintOpen]);
+
   if (!hint || examMode) return null;
   return (
     <div style={{ position: "relative" }}>
@@ -469,8 +492,8 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
           <div style={{ position: "fixed", inset: 0, zIndex: 9 }} onClick={() => setHintOpen(false)} />
           <div className="menu-open" style={{
             position: "fixed",
-            top: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "4rem"; const r = btn.getBoundingClientRect(); return r.bottom + 8 + "px"; })(),
-            right: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "1rem"; const r = btn.getBoundingClientRect(); const popupW = Math.min(360, window.innerWidth - 32); const rightFromBtn = window.innerWidth - r.right; return Math.min(rightFromBtn, window.innerWidth - popupW - 16) + "px"; })(),
+            top: popupPos.top,
+            right: popupPos.right,
             background: T.mode === "light" ? T.accent + "06" : T.accent + "08",
             backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
             border: "1px solid " + T.accent + "22",
@@ -486,7 +509,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
           </div>
         </>
       )}
-      <button data-hint-btn onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
+      <button ref={btnRef} onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
         width: "36px", height: "36px", borderRadius: "99px",
         background: hintOpen ? "linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%)" : T.surface2,
         color: hintOpen ? "#fff" : T.muted2, border: "none", cursor: "pointer",
