@@ -1900,6 +1900,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
 function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, isDesktop = false, questionCount = 0 }) {
   const [open, setOpen] = useState(false);
   const [showAI, setShowAI] = useState(false);
+  const [menuCenter, setMenuCenter] = useState(null);
 
   const types = [
     { type: "single",    label: "Single answer",  color: TYPE_META.single.color    },
@@ -1932,7 +1933,7 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
             display: "flex", flexDirection: "column", gap: "0.4rem",
             alignItems: "center",
             animation: "menuIn 0.2s ease forwards",
-            position: "fixed", bottom: "calc(1.5rem + 70px)", left: "50%", transform: "translateX(-50%)", zIndex: 110, width: 0, overflow: "visible",
+            position: "fixed", bottom: "calc(1.5rem + 70px)", left: menuCenter !== null ? menuCenter + "px" : "50%", transform: "translateX(-50%)", zIndex: 110, width: 0, overflow: "visible",
           }}>
             {types.map(t => (
               <FabMenuButton key={t.type} onClick={() => { onAddQuestion(t.type); setOpen(false); }} color={t.color}>
@@ -1944,7 +1945,7 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
 
         {/* FAB pill */}
         <BottomPill left={`${questionCount} ${questionCount === 1 ? "question" : "questions"}`}>
-          <GradientBorderButton onClick={() => setOpen(o => !o)} style={{ padding: "0.65rem 1.7rem" }}>
+          <GradientBorderButton onClick={e => { const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(o => !o); }} style={{ padding: "0.65rem 1.7rem" }}>
             <span style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center",
               transform: open ? "rotate(45deg)" : "rotate(0deg)",
