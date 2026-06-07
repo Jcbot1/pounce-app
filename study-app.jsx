@@ -1892,7 +1892,7 @@ function GradientBorderButton({ onClick, children, size, style: extraStyle, disa
         background: T.mode === "light" ? T.surface : "#181614",
         border: "none", cursor: disabled ? "default" : "pointer",
         display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
-        fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.accent,
+        fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.muted2,
         WebkitTapHighlightColor: "transparent",
         ...extraStyle,
       }}>
@@ -2885,7 +2885,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               padding: "0.7rem 1.75rem", borderRadius: "99px",
               background: `linear-gradient(${T.surface}, ${T.surface}) padding-box, linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%) border-box`,
               border: "2px solid transparent", cursor: "pointer",
-              fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.accent,
+              fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.muted2,
               boxShadow: "0 4px 20px " + T.accent + "30",
             }}>Resume</button>
           </ModalCard>
