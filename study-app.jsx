@@ -4,6 +4,13 @@
 
 const { useState, useEffect, useRef, Fragment, useMemo } = React;
 
+const FF_SANS  = "'DM Sans', sans-serif";
+const FF_MONO  = "'DM Mono', monospace";
+const FF_SERIF = "'Fraunces', serif";
+
+const IC  = { fill: "none", stroke: "currentColor", strokeWidth: 2,   strokeLinecap: "round", strokeLinejoin: "round" };
+const IC5 = { fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" };
+
 function renderText(text) {
   if (!text) return null;
   const lines = text.split("\n");
@@ -59,7 +66,7 @@ function useToast() {
       background: T.mode === "light" ? "rgba(30,26,46,0.92)" : "rgba(255,255,255,0.92)",
       color: T.mode === "light" ? "#fff" : "#1e1a2e",
       padding: "0.75rem 1.25rem", borderRadius: "99px",
-      fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500,
+      fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500,
       zIndex: 9999, boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
       maxWidth: "calc(100vw - 2rem)", textAlign: "center",
       animation: "cardFadeUp 0.2s ease forwards",
@@ -96,8 +103,8 @@ function Modal({ onClose, children, zIndex = 1000 }) {
 // ════════════════════════════════════════════════════════════════════════
 
 // ── FAB menu button styles ─────────────────────────────────────────────────
-const fabMenuBtn     = () => ({ background: "transparent", border: "none", height: "44px", paddingLeft: "1.1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500, color: T.text, whiteSpace: "nowrap" });
-const fabMenuJsonBtn = () => ({ background: "transparent", border: "none", height: "44px", width: "44px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontFamily: "'DM Mono', monospace", fontSize: "0.8rem", lineHeight: 1, textAlign: "center", color: T.muted, flexShrink: 0 });
+const fabMenuBtn     = () => ({ background: "transparent", border: "none", height: "44px", paddingLeft: "1.1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text, whiteSpace: "nowrap" });
+const fabMenuJsonBtn = () => ({ background: "transparent", border: "none", height: "44px", width: "44px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontFamily: FF_MONO, fontSize: "0.8rem", lineHeight: 1, textAlign: "center", color: T.muted, flexShrink: 0 });
 const fabMenuWrap    = () => ({ display: "flex", alignItems: "center", background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)" });
 
 // ── Icon Button ────────────────────────────────────────────────────────────
@@ -121,8 +128,8 @@ function FabMenuButton({ onClick, children, color, jsonBtn = false, bare = false
       background: "transparent", border: "none", cursor: "pointer",
       height: "44px",
       ...(jsonBtn
-        ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Mono', monospace", fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
-        : { paddingLeft: "1.1rem", paddingRight: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500, color: color || T.text, whiteSpace: "nowrap" }
+        ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FF_MONO, fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
+        : { paddingLeft: "1.1rem", paddingRight: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: color || T.text, whiteSpace: "nowrap" }
       ),
     }}>
       {children}
@@ -139,8 +146,8 @@ function FabMenuButton({ onClick, children, color, jsonBtn = false, bare = false
         background: "transparent", border: "none", cursor: "pointer",
         height: "44px",
         ...(jsonBtn
-          ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Mono', monospace", fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
-          : { paddingLeft: "1.1rem", paddingRight: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500, color: color || T.text, whiteSpace: "nowrap" }
+          ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FF_MONO, fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
+          : { paddingLeft: "1.1rem", paddingRight: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: color || T.text, whiteSpace: "nowrap" }
         ),
       }}>
         {children}
@@ -281,12 +288,23 @@ function KebabMenuItem({ onClick, children, color, danger = false }) {
         display: "flex", alignItems: "center", gap: "0.6rem",
         width: "100%", textAlign: "left", background: "transparent",
         border: "none", padding: "0.85rem 1.1rem",
-        fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem",
+        fontFamily: FF_SANS, fontSize: "0.9rem",
         color: color || T.text, cursor: "pointer",
       }}>
       {children}
     </button>
   );
+}
+
+// ── Icon primitives ──────────────────────────────────────────────────────────
+function FilterIcon({ size = 14, sw = 2.5 }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" {...(sw === 2.5 ? IC5 : IC)}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>;
+}
+function TrashIcon({ size = 15 }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" {...IC}><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
+}
+function DotsVerticalIcon({ size = 16, color }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill={color}><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>;
 }
 
 // ── Hamburger Menu Item ────────────────────────────────────────────────────
@@ -295,7 +313,7 @@ function HamburgerMenuItem({ onClick, children, right, color, danger = false, st
     <button onClick={onClick} {...(danger ? dangerPress() : surfacePress())} style={{
       display: "flex", alignItems: "center", justifyContent: "space-between",
       width: "100%", textAlign: "left", background: "transparent", border: "none",
-      padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem",
+      padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem",
       color: color || T.text, cursor: "pointer", ...extraStyle,
     }}>
       {children}
@@ -310,9 +328,9 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
     <div style={{ padding: "1.2rem 1.25rem", borderBottom: noBorder ? "none" : "1px solid " + T.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: "0.25rem", lineHeight: 1, display: "flex", alignItems: "center" }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2 }}>{label}</p>
+        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2 }}>{label}</p>
       </div>
       {right && <div>{right}</div>}
     </div>
@@ -326,7 +344,7 @@ function AnswerButton({ onClick, children, bg, border, color, shadow, submitted,
     <button onClick={onClick} style={{
       background: bg, border, color, borderRadius: "12px", padding: "1rem 1.1rem",
       textAlign: "left", cursor: submitted ? "default" : "pointer",
-      fontFamily: "'DM Sans', sans-serif", fontSize: "0.93rem", lineHeight: 1.5,
+      fontFamily: FF_SANS, fontSize: "0.93rem", lineHeight: 1.5,
       display: "flex", alignItems: "flex-start", gap: "0.7rem",
       transition: "all 0.15s", whiteSpace: "pre-wrap",
       boxShadow: shadow || "none", width: "100%", ...extraStyle,
@@ -354,7 +372,7 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
       display: "flex", alignItems: "center", gap: "1rem", cursor: disabled ? "not-allowed" : "pointer",
       width: "100%", opacity: disabled ? 0.45 : 1,
       boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
-      transition: "opacity 0.15s", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text,
+      transition: "opacity 0.15s", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text,
       ...extraStyle,
     }}>
       {children}
@@ -379,7 +397,7 @@ function TagChip({ tag }) {
   return (
     <span style={{
       display: "inline-block", padding: "0.15rem 0.55rem", borderRadius: "99px",
-      fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
+      fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
       background: color, color: "#fff", fontWeight: 600,
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>{tag}</span>
@@ -394,7 +412,7 @@ function EditorTagChip({ tag, onRemove }) {
     <button onClick={onRemove} {...primaryPress()} style={{
       display: "flex", alignItems: "center", gap: "0.35rem",
       padding: "0.3rem 0.85rem", borderRadius: "99px", border: "1px solid transparent", cursor: "pointer",
-      fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", fontWeight: 500,
+      fontFamily: FF_SANS, fontSize: "0.8rem", fontWeight: 500,
       background: color + "22", color,
     }}>
       {tag}
@@ -462,8 +480,8 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
               : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)",
             width: "min(360px, calc(100vw - 2rem))", zIndex: 10,
           }}>
-            <p style={{ color: T.muted, fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HINT</p>
-            <p style={{ color: T.text, fontSize: "0.9rem", fontFamily: "'DM Sans', sans-serif", lineHeight: 1.6 }}>{renderText(hint)}</p>
+            <p style={{ color: T.muted, fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HINT</p>
+            <p style={{ color: T.text, fontSize: "0.9rem", fontFamily: FF_SANS, lineHeight: 1.6 }}>{renderText(hint)}</p>
           </div>
         </>
       )}
@@ -477,7 +495,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
           : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
         transition: "background 0.2s",
       }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
           <path d="M9 18h6M10 21h4M12 2a7 7 0 0 1 4 12.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26A7 7 0 0 1 12 2z" />
         </svg>
       </button>
@@ -584,7 +602,7 @@ function PounceLogo({ height = 28, theme, stacked = false }) {
             <stop offset="100%" stopColor={t.gradient2}/>
           </linearGradient>
         </defs>
-        <text x="0" y="42" fontFamily="'Fraunces', serif" fontSize="44" fontWeight="600" fill={`url(#${gradId})`} letterSpacing="0.5">pounce</text>
+        <text x="0" y="42" fontFamily={FF_SERIF} fontSize="44" fontWeight="600" fill={`url(#${gradId})`} letterSpacing="0.5">pounce</text>
       </svg>
     </div>
   );
@@ -809,11 +827,11 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
           <Label style={{ color: T.red, marginBottom: "0.4rem" }}>
             {headerLabel}
           </Label>
-          <h3 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.15rem", color: T.text, marginBottom: "0.4rem" }}>
+          <h3 style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.15rem", color: T.text, marginBottom: "0.4rem" }}>
             {title}
           </h3>
           {message && (
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: T.muted2, lineHeight: 1.55 }}>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted2, lineHeight: 1.55 }}>
               {message}
             </p>
           )}
@@ -1069,7 +1087,7 @@ const btn = (variant = "primary", small = false) => ({
   display: "inline-flex", alignItems: "center", gap: "0.4rem",
   padding: small ? "0.5rem 1rem" : "0.65rem 1.4rem",
   borderRadius: "12px",
-  fontFamily: "'DM Sans', sans-serif",
+  fontFamily: FF_SANS,
   fontSize: small ? "0.8rem" : "0.9rem",
   fontWeight: 500,
   cursor: "pointer", border: "none",
@@ -1088,7 +1106,7 @@ const inp = (extra = {}) => ({
   border: "1px solid " + T.border + "",
   borderRadius: "12px",
   color: T.text,
-  fontFamily: "'DM Sans', sans-serif",
+  fontFamily: FF_SANS,
   fontSize: "1rem",
   padding: "0.65rem 0.9rem",
   width: "100%",
@@ -1116,7 +1134,7 @@ function SnapTextarea({ style, maxLength, ...props }) {
       {maxLength && (
         <span style={{
           position: "absolute", bottom: "0.65rem", right: "0.65rem",
-          fontFamily: "'DM Mono', monospace", fontSize: "0.6rem",
+          fontFamily: FF_MONO, fontSize: "0.6rem",
           color: len >= maxLength ? T.red : len >= maxLength * 0.85 ? "#f59e0b" : T.muted,
           pointerEvents: "none", lineHeight: 1,
         }}>{len}/{maxLength}</span>
@@ -1156,7 +1174,7 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
       {maxLength && (
         <span style={{
           position: "absolute", bottom: "0.65rem", right: "0.65rem",
-          fontFamily: "'DM Mono', monospace", fontSize: "0.6rem",
+          fontFamily: FF_MONO, fontSize: "0.6rem",
           color: len >= maxLength ? T.red : len >= maxLength * 0.85 ? "#f59e0b" : T.muted,
           pointerEvents: "none", lineHeight: 1,
         }}>{len}/{maxLength}</span>
@@ -1237,7 +1255,7 @@ const primaryPress = () => ({
   onPointerLeave:e => { _afterPress(e.currentTarget, '', 'press-primary'); },
 });
 const Label = ({ children, style }) => (
-  <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.4rem", ...style }}>
+  <p style={{ fontFamily: FF_MONO, fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.4rem", ...style }}>
     {children}
   </p>
 );
@@ -1260,7 +1278,7 @@ function Tag({ label, color }) {
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-      fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
+      fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
       background: color + "22", color, border: "1px solid " + color + "44",
       maxWidth: "100%", minWidth: 0, verticalAlign: "middle",
     }}>
@@ -1363,13 +1381,11 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* Right — delete, pinned */}
           <div style={{ flexShrink: 0 }}>
             <IconButton variant="danger" size={28} onPointerDown={e => e.stopPropagation()} onClick={e => { e.stopPropagation(); onDeleteRequest(); }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-              </svg>
+              <TrashIcon size={13} />
             </IconButton>
           </div>
         </div>
-        <span style={{ color: q.question ? T.text : T.muted, fontSize: "0.87rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "'DM Sans', sans-serif", paddingRight: "1.5rem" }}>
+        <span style={{ color: q.question ? T.text : T.muted, fontSize: "0.87rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: FF_SANS, paddingRight: "1.5rem" }}>
           {q.question || "Untitled question…"}
         </span>
       </div>
@@ -1444,7 +1460,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                         display: "flex", alignItems: "center", gap: "0.35rem",
                         background: "none", border: "none", cursor: "pointer", padding: 0,
                         color: isCor ? T.green : T.muted, fontSize: "0.72rem",
-                        fontFamily: "'DM Sans', sans-serif",
+                        fontFamily: FF_SANS,
                       }}>
                         <span style={{
                           width: "16px", height: "16px", flexShrink: 0,
@@ -1457,7 +1473,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                         {isCor ? "Correct" : "Mark correct"}
                       </button>
                       {q.options.length > 2 && (
-                        <IconButton variant="danger" size={26} onClick={() => removeOpt(i)}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
+                        <IconButton variant="danger" size={26} onClick={() => removeOpt(i)}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                       )}
                     </div>
                     {/* Textarea */}
@@ -1483,9 +1499,9 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                 <div key={dd.id} style={{ marginBottom: "0.75rem", padding: "0.75rem", border: "1px solid " + T.border, borderRadius: "12px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
-                      <span style={{ color: T.muted, fontFamily: "'DM Mono', monospace", fontSize: "0.72rem" }}>ROW {di + 1}</span>
+                      <span style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem" }}>ROW {di + 1}</span>
                       {q.dropdowns.length > 1 && (
-                        <IconButton variant="danger" size={26} onClick={() => removeDD(di)}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
+                        <IconButton variant="danger" size={26} onClick={() => removeDD(di)}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                       )}
                     </div>
                     <EditorTextarea value={dd.rowLabel} onChange={e => setDDRowLabel(di, e.target.value)}
@@ -1510,7 +1526,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                           display: "flex", alignItems: "center", gap: "0.35rem",
                           background: "none", border: "none", cursor: "pointer", padding: 0,
                           color: dd.correct === oi ? T.green : T.muted, fontSize: "0.72rem",
-                          fontFamily: "'DM Sans', sans-serif",
+                          fontFamily: FF_SANS,
                         }}>
                           <span style={{
                             width: "16px", height: "16px", flexShrink: 0,
@@ -1523,7 +1539,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                           {dd.correct === oi ? "Correct" : "Mark correct"}
                         </button>
                         {dd.options.length > 2 && (
-                          <IconButton variant="danger" size={26} onClick={() => removeDDOpt(di, oi)}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
+                          <IconButton variant="danger" size={26} onClick={() => removeDDOpt(di, oi)}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                         )}
                       </div>
                       {/* Textarea */}
@@ -1548,9 +1564,9 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               {q.pairs.map((pair, pi) => (
                 <div key={pair.id} style={{ marginBottom: "1rem", padding: "0.75rem", background: T.surface2, borderRadius: "12px", border: "1px solid " + T.border }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                    <span style={{ color: T.muted, fontFamily: "'DM Mono', monospace", fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
+                    <span style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
                     {q.pairs.length > 2 && (
-                      <IconButton variant="danger" size={26} onClick={() => set("pairs", q.pairs.filter((_, i) => i !== pi))}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
+                      <IconButton variant="danger" size={26} onClick={() => set("pairs", q.pairs.filter((_, i) => i !== pi))}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                     )}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
@@ -1573,7 +1589,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                   }} placeholder={"Distractor " + (di + 1)} rows={2} maxLength={1000}
                     style={{ ...inp(), flex: 1, borderColor: T.red + "44" }} />
                   <div style={{ paddingTop: "0.35rem" }}>
-                    <IconButton variant="danger" size={26} onClick={() => set("distractors", (q.distractors || []).filter((_, i) => i !== di))}><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
+                    <IconButton variant="danger" size={26} onClick={() => set("distractors", (q.distractors || []).filter((_, i) => i !== di))}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                   </div>
                 </div>
               ))}
@@ -1794,7 +1810,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
             style={{
               display: "flex", alignItems: "center", gap: "0.35rem",
               padding: "0.3rem 0.85rem", borderRadius: "99px", cursor: "pointer",
-              fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem",
+              fontFamily: FF_SANS, fontSize: "0.8rem",
               background: "transparent",
               border: "1px dashed " + T.border2,
               color: T.muted,
@@ -1806,7 +1822,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
 
       {draft.questions.length === 0 && (
         <div style={{ textAlign: "center", padding: "3rem 0", color: T.muted,
-          fontFamily: "'DM Mono', monospace", fontSize: "0.78rem", letterSpacing: "0.08em" }}>
+          fontFamily: FF_MONO, fontSize: "0.78rem", letterSpacing: "0.08em" }}>
           NO QUESTIONS YET
         </div>
       )}
@@ -1855,7 +1871,7 @@ function GradientBorderButton({ onClick, children, size, style: extraStyle, disa
         background: T.mode === "light" ? T.surface : "#181614",
         border: "none", cursor: disabled ? "default" : "pointer",
         display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
-        fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.95rem", color: T.accent,
+        fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.accent,
         WebkitTapHighlightColor: "transparent",
         ...extraStyle,
       }}>
@@ -1887,7 +1903,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
       }}>
         {left && (
           <span style={{ color: T.mode === "light" ? T.muted2 : "#64748b", fontSize: "0.72rem",
-            fontFamily: "'DM Mono', monospace", letterSpacing: "0.05em", flexShrink: 0 }}>
+            fontFamily: FF_MONO, letterSpacing: "0.05em", flexShrink: 0 }}>
             {left}
           </span>
         )}
@@ -2045,11 +2061,11 @@ Rules:
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
             </svg>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.accent }}>
+            <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.accent }}>
               AI QUESTION GENERATOR
             </p>
           </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: T.muted2 }}>
+          <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted2 }}>
             {setName ? "Adding to: " + setName : "Generating questions"}
           </p>
         </div>
@@ -2083,7 +2099,7 @@ Rules:
                     style={{
                       display: "inline-flex", alignItems: "center", gap: "0.4rem",
                       padding: "0.5rem 1rem", borderRadius: "99px",
-                      fontFamily: "'DM Mono', monospace", fontSize: "0.74rem",
+                      fontFamily: FF_MONO, fontSize: "0.74rem",
                       fontWeight: 500, letterSpacing: "0.07em", cursor: "pointer",
                       minHeight: "38px", transition: "opacity 0.15s",
                       background: types[key] ? (TYPE_META[key]?.color || T.accent) + "22" : T.surface2,
@@ -2107,7 +2123,7 @@ Rules:
                   style={{ width: "36px", height: "36px", borderRadius: "99px", border: "none",
                     background: T.surface2, color: T.text, fontSize: "1.2rem", cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "1.5rem", fontWeight: 700, color: T.text, minWidth: "2rem", textAlign: "center" }}>{count}</span>
+                <span style={{ fontFamily: FF_MONO, fontSize: "1.5rem", fontWeight: 700, color: T.text, minWidth: "2rem", textAlign: "center" }}>{count}</span>
                 <button onClick={() => setCount(c => Math.min(20, c + 1))}
                   {...surfacePress()}
                   onPointerUp={e => { const el = e.currentTarget; setTimeout(() => { el.style.transition = "background 0.3s ease"; el.style.background = T.surface2; }, 150); }}
@@ -2115,11 +2131,11 @@ Rules:
                   style={{ width: "36px", height: "36px", borderRadius: "99px", border: "none",
                     background: T.surface2, color: T.text, fontSize: "1.2rem", cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: T.muted }}>max 20</span>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted }}>max 20</span>
               </div>
             </div>
 
-            {error && <p style={{ color: T.red, fontSize: "0.8rem", fontFamily: "'DM Sans', sans-serif" }}>{error}</p>}
+            {error && <p style={{ color: T.red, fontSize: "0.8rem", fontFamily: FF_SANS }}>{error}</p>}
 
             <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
               <GhostButton onClick={onClose} small>Cancel</GhostButton>
@@ -2132,10 +2148,10 @@ Rules:
           <>
             {/* Preview */}
             <div>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>
+              <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>
                 {preview.length} question{preview.length !== 1 ? "s" : ""} generated
               </p>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: T.muted2 }}>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted2 }}>
                 Review them below, then add to your set.
               </p>
             </div>
@@ -2143,16 +2159,16 @@ Rules:
               {preview.map((q, i) => (
                 <div key={q.id} style={{ ...card({ padding: "0.9rem 1rem" }) }}>
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.4rem" }}>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.6rem", color: T.muted }}>Q{i + 1}</span>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.6rem",
+                    <span style={{ fontFamily: FF_MONO, fontSize: "0.6rem", color: T.muted }}>Q{i + 1}</span>
+                    <span style={{ fontFamily: FF_MONO, fontSize: "0.6rem",
                       color: TYPE_META[q.type]?.color || "#0ea5e9",
                       background: (TYPE_META[q.type]?.color || "#0ea5e9") + "18",
                       padding: "0.1rem 0.4rem", borderRadius: "4px" }}>
                       {(TYPE_META[q.type]?.label || "MATCHING").toUpperCase()}
                     </span>
-                    {q.topic && <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: T.muted }}>{q.topic}</span>}
+                    {q.topic && <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>{q.topic}</span>}
                   </div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: T.text, lineHeight: 1.5 }}>{renderText(q.question)}</p>
+                  <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.text, lineHeight: 1.5 }}>{renderText(q.question)}</p>
                 </div>
               ))}
             </div>
@@ -2217,7 +2233,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
-      <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
+      <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
         CHOOSE {q.selectCount} · {selected.length}/{q.selectCount} selected
       </p>
       {q.options.map((opt, i) => {
@@ -2240,7 +2256,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
         return (
           <AnswerButton key={i} onClick={() => !submitted && onToggle(i)} bg={bg} border={border} color={color} shadow={shadow} submitted={submitted} label={null}>
             <span style={{ minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "4px",
-              display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontFamily: "'DM Mono', monospace", fontWeight: 600,
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontFamily: FF_MONO, fontWeight: 600,
               flexShrink: 0, marginTop: "2px", background: isSel && !submitted ? T.accent + "33" : "transparent" }}>
               {isSel && !submitted ? "✓" : label}
             </span>
@@ -2293,7 +2309,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
           }}>
             {/* row label */}
             <span style={{
-              fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem", color: T.muted2,
+              fontFamily: FF_SANS, fontSize: "0.92rem", color: T.muted2,
             }}>
               {renderText(dd.rowLabel || "Row " + (di + 1))}
             </span>
@@ -2316,7 +2332,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   background: triggerBg, color: triggerColor,
                   border: "1px solid " + triggerBorder,
                   borderRadius: "6px", padding: "0.45rem 0.6rem",
-                  fontFamily: "'DM Mono', monospace", fontSize: "0.8rem",
+                  fontFamily: FF_MONO, fontSize: "0.8rem",
                   cursor: submitted ? "default" : "pointer",
                   textAlign: "left", whiteSpace: "normal", wordBreak: "break-word",
                 }}>
@@ -2348,7 +2364,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                         display: "block", width: "100%", textAlign: "left",
                         background: val === oi ? T.accent + "18" : "transparent",
                         border: "none", padding: "0.65rem 0.9rem",
-                        fontFamily: "'DM Mono', monospace", fontSize: "0.8rem",
+                        fontFamily: FF_MONO, fontSize: "0.8rem",
                         color: val === oi ? T.accent : T.text,
                         cursor: "pointer", lineHeight: 1.5, whiteSpace: "normal", wordBreak: "break-word",
                       }}
@@ -2360,7 +2376,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                 </div>
               )}
               {isWrong && (
-                <span style={{ fontSize: "0.65rem", color: T.green, fontFamily: "'DM Mono', monospace", marginTop: "3px", display: "block" }}>
+                <span style={{ fontSize: "0.65rem", color: T.green, fontFamily: FF_MONO, marginTop: "3px", display: "block" }}>
                   ✓ {renderText(dd.options[dd.correct])}
                 </span>
               )}
@@ -2406,12 +2422,12 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
               border: "1px solid " + (examMode ? T.border : isCorrect ? T.green : T.red),
               borderRadius: "12px", padding: "0.75rem 1rem",
             }}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", color: T.muted, marginBottom: "0.25rem" }}>{renderText(pair.term)}</div>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500, color: examMode ? T.text : isCorrect ? T.green : T.red }}>
+              <div style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted, marginBottom: "0.25rem" }}>{renderText(pair.term)}</div>
+              <div style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: examMode ? T.text : isCorrect ? T.green : T.red }}>
                 → {renderText(userMatches[i])}
               </div>
               {!examMode && !isCorrect && (
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", color: T.green, marginTop: "0.25rem" }}>
+                <div style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.green, marginTop: "0.25rem" }}>
                   ✓ {renderText(pair.match)}
                 </div>
               )}
@@ -2430,8 +2446,8 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
               }}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.45"}
               onMouseLeave={e => e.currentTarget.style.opacity = "0.6"}>
-              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", color: T.muted, marginBottom: "0.25rem" }}>{renderText(pair.term)}</div>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500, color: T.text }}>
+              <div style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted, marginBottom: "0.25rem" }}>{renderText(pair.term)}</div>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text }}>
                 → {renderText(userMatches[i])}
                 <span style={{ float: "right", color: T.muted, fontSize: "0.72rem", fontWeight: 400 }}>tap to change</span>
               </p>
@@ -2446,10 +2462,10 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
                 <div style={{ height: "1px", background: T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)", margin: "0.5rem 0 1rem" }} />
               )}
               <div style={{ background: T.surface2, border: "1px solid #0ea5e9", borderRadius: "12px", padding: "0.75rem 1rem", marginBottom: "0.5rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: "#0ea5e9", marginBottom: "0.4rem" }}>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: "#0ea5e9", marginBottom: "0.4rem" }}>
                   MATCH THIS TERM
                 </p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", fontWeight: 500, color: T.text, whiteSpace: "pre-wrap" }}>
+                <p style={{ fontFamily: FF_SANS, fontSize: "1rem", fontWeight: 500, color: T.text, whiteSpace: "pre-wrap" }}>
                   {pair.term}
                 </p>
               </div>
@@ -2476,14 +2492,14 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
               border: "1px dashed " + (T.mode === "light" ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.12)"),
               borderRadius: "12px", padding: "0.75rem 1rem",
             }}>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: T.muted, whiteSpace: "pre-wrap", opacity: 0.6 }}>{pair.term}</p>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted, whiteSpace: "pre-wrap", opacity: 0.6 }}>{pair.term}</p>
             </div>
           </div>
         );
       })}
 
       {allMatched && !submitted && (
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: T.muted, textAlign: "center", padding: "0.5rem" }}>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted, textAlign: "center", padding: "0.5rem" }}>
           All pairs matched — submit when ready.
         </p>
       )}
@@ -2524,7 +2540,7 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
             backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
           }}>
             <Label style={{ marginBottom: 0 }}>TERM</Label>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1.1rem", fontWeight: 600, color: T.text, lineHeight: 1.5 }}>
+            <div style={{ fontFamily: FF_SANS, fontSize: "1.1rem", fontWeight: 600, color: T.text, lineHeight: 1.5 }}>
               {renderText(q.question)}
             </div>
           </div>
@@ -2541,7 +2557,7 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
             transform: "rotateY(180deg)",
           }}>
             <Label style={{ marginBottom: 0 }}>ANSWER</Label>
-            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: T.text, lineHeight: 1.6 }}>
+            <div style={{ fontFamily: FF_SANS, fontSize: "1rem", color: T.text, lineHeight: 1.6 }}>
               {renderText(q.back)}
             </div>
           </div>
@@ -2552,13 +2568,13 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
       {flipped && !submitted && (
         <div style={{ display: "flex", gap: "0.75rem" }}>
           <DangerButton onClick={() => onGrade(false)} style={{ flex: 1, justifyContent: "center" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "0.4rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" {...IC5} style={{ marginRight: "0.4rem" }}>
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
             Missed it
           </DangerButton>
           <SuccessButton onClick={() => onGrade(true)} style={{ flex: 1, justifyContent: "center" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "0.4rem" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" {...IC5} style={{ marginRight: "0.4rem" }}>
               <polyline points="20 6 9 17 4 12"/>
             </svg>
             Got it
@@ -2810,9 +2826,9 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {/* Bubble navigator */}
       {timerMinutes ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
+          <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.78rem", fontWeight: 600, color: timerColor, transition: "color 0.5s", letterSpacing: "0.05em" }}>{formatTime(secsLeft)}</span>
+            <span style={{ fontFamily: FF_MONO, fontSize: "0.78rem", fontWeight: 600, color: timerColor, transition: "color 0.5s", letterSpacing: "0.05em" }}>{formatTime(secsLeft)}</span>
             <button onClick={() => setPaused(true)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.1rem" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
             </button>
@@ -2820,7 +2836,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         </div>
       ) : (
         <div style={{ marginBottom: "0.35rem" }}>
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
+          <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
         </div>
       )}
 
@@ -2828,9 +2844,9 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {paused && (
         <Modal onClose={() => setPaused(false)} zIndex={1100}>
           <ModalCard style={{ maxWidth: "340px", width: "100%", textAlign: "center" }}>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "1rem" }}>EXAM PAUSED</p>
-            <p style={{ fontFamily: "'Fraunces', serif", fontSize: "1.5rem", fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>{formatTime(secsLeft)}</p>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: T.muted, marginBottom: "1.5rem" }}>remaining</p>
+            <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "1rem" }}>EXAM PAUSED</p>
+            <p style={{ fontFamily: FF_SERIF, fontSize: "1.5rem", fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>{formatTime(secsLeft)}</p>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: T.muted, marginBottom: "1.5rem" }}>remaining</p>
             <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginBottom: "1.75rem" }}>
               {[
                 { label: "Answered",   value: Object.keys(results).length, color: T.green },
@@ -2838,8 +2854,8 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
                 { label: "Flagged",    value: flaggedCount, color: T.accent },
               ].map(({ label, value, color }) => (
                 <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
-                  <span style={{ fontFamily: "'Fraunces', serif", fontSize: "1.75rem", fontWeight: 600, color }}>{value}</span>
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>{label.toUpperCase()}</span>
+                  <span style={{ fontFamily: FF_SERIF, fontSize: "1.75rem", fontWeight: 600, color }}>{value}</span>
+                  <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>{label.toUpperCase()}</span>
                 </div>
               ))}
             </div>
@@ -2848,7 +2864,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               padding: "0.7rem 1.75rem", borderRadius: "99px",
               background: `linear-gradient(${T.surface}, ${T.surface}) padding-box, linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%) border-box`,
               border: "2px solid transparent", cursor: "pointer",
-              fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.95rem", color: T.accent,
+              fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.accent,
               boxShadow: "0 4px 20px " + T.accent + "30",
             }}>Resume</button>
           </ModalCard>
@@ -2877,7 +2893,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
             <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)} style={{
               width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
               background: bg, color, border: border || "none",
-              fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", fontWeight: 600,
+              fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600,
               cursor: isCurrent ? "default" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               position: "relative", transition: "all 0.15s", overflow: "visible",
@@ -2951,7 +2967,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           <Tag label={meta.label} color={meta.color} />
           {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
         </div>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: T.text, lineHeight: 1.65, marginBottom: "1.25rem" }}>
+        <p style={{ fontFamily: FF_SANS, fontSize: "1rem", color: T.text, lineHeight: 1.65, marginBottom: "1.25rem" }}>
           {renderText(q.question)}
         </p>
 
@@ -3005,7 +3021,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         }}>
           <div style={{ width: "3px", background: T.accent, flexShrink: 0 }} />
           <div style={{ padding: "0.9rem 1rem" }}>
-            <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
+            <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
             <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>{renderText(q.explanation)}</p>
           </div>
         </div>
@@ -3019,7 +3035,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       }}>
         {/* Scroll button */}
         <GlassButton onClick={handleScrollBtn} style={{ transition: "transform 0.3s ease" }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          <svg width="18" height="18" viewBox="0 0 24 24" {...IC5}
             style={{ transform: atBottom ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}>
             <line x1="12" y1="5" x2="12" y2="19"/>
             <polyline points="19 12 12 19 5 12"/>
@@ -3032,7 +3048,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {/* Fixed bottom — submit pill only */}
       <BottomPill left={`${Object.keys(results).length} / ${questions.length}`}>
         {q.type === "flashcard" && !isSubmitted ? (
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.78rem", color: T.muted, fontStyle: "italic" }}>Tap card to flip</span>
+          <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted, fontStyle: "italic" }}>Tap card to flip</span>
         ) : !examMode && !isSubmitted ? (
           <PrimaryButton onClick={handleSubmit} disabled={!canSubmit()} style={{ justifyContent: "center", minWidth: "150px" }}>Submit answer</PrimaryButton>
         ) : !allAnswered ? (
@@ -3083,7 +3099,7 @@ function AnimatedPct({ target, color }) {
     requestAnimationFrame(step);
   }, [target]);
   return (
-    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "1.5rem", fontWeight: 700, color }}>
+    <span style={{ fontFamily: FF_MONO, fontSize: "1.5rem", fontWeight: 700, color }}>
       {display}%
     </span>
   );
@@ -3158,14 +3174,14 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
             <AnimatedPct target={pct} color={passed ? T.green : T.red} />
           </div>
           <div>
-            <p style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.3rem", color: T.text, marginBottom: "0.2rem" }}>
+            <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text, marginBottom: "0.2rem" }}>
               {passed ? "Pass ✓" : "Almost there"}
             </p>
-            <p style={{ color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem" }}>
+            <p style={{ color: T.muted2, fontFamily: FF_SANS, fontSize: "0.9rem" }}>
               {score} of {results.length} correct · {set.name}
             </p>
             {isHistoryView && historyDate && (
-              <p style={{ color: T.muted, fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", marginTop: "0.2rem" }}>
+              <p style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem", marginTop: "0.2rem" }}>
                 {new Date(historyDate).toLocaleDateString(undefined, { dateStyle: "full" })}
               </p>
             )}
@@ -3199,15 +3215,15 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 <span style={{ fontSize: "0.9rem", color: r.correct ? T.green : T.red, flexShrink: 0 }}>
                   {r.correct ? "✓" : "✗"}
                 </span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", color: T.muted, flexShrink: 0 }}>
+                <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", color: T.muted, flexShrink: 0 }}>
                   Q{i + 1}
                 </span>
                 <Tag label={TYPE_META[q.type].label} color={TYPE_META[q.type].color} />
                 {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
                 <span style={{ flex: 1 }} />
-                <span style={{ color: T.muted, display: "flex", flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span style={{ color: T.muted, display: "flex", flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC}><polyline points="6 9 12 15 18 9"/></svg></span>
               </div>
-              <span style={{ color: T.muted2, fontSize: "0.9rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "'DM Sans', sans-serif", paddingRight: "1.5rem" }}>
+              <span style={{ color: T.muted2, fontSize: "0.9rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: FF_SANS, paddingRight: "1.5rem" }}>
                 {q.question}
               </span>
             </div>
@@ -3215,7 +3231,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
             <Collapsible open={open}>
               <div style={{ marginTop: "1rem" }}>
                 {/* Question text */}
-                <p style={{ color: T.text, fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", lineHeight: 1.65, marginBottom: "1rem", whiteSpace: "pre-wrap" }}>
+                <p style={{ color: T.text, fontFamily: FF_SANS, fontSize: "0.95rem", lineHeight: 1.65, marginBottom: "1rem", whiteSpace: "pre-wrap" }}>
                   {renderText(q.question)}
                 </p>
 
@@ -3239,7 +3255,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 {q.explanation && (
                   <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "6px",
                     borderLeft: "3px solid " + T.accent }}>
-                    <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
+                    <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
                       EXPLANATION
                     </p>
                     <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.55 }}>{renderText(q.explanation)}</p>
@@ -3280,14 +3296,14 @@ function ExportModal({ set, onClose }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <Label style={{ marginBottom: "0.1rem" }}>EXPORT — "{set.name}"</Label>
-            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Sans', sans-serif" }}>
+            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>
               Download or copy this JSON to restore later.
             </p>
           </div>
         </div>
         <textarea ref={textareaRef} readOnly value={text}
           style={{ ...inp(), flex: 1, minHeight: "180px",
-            fontFamily: "'DM Mono', monospace", fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
+            fontFamily: FF_MONO, fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
           <PrimaryButton onClick={handleCopy} small>{copyLabel}</PrimaryButton>
           <GhostButton onClick={onClose} small>Close</GhostButton>
@@ -3329,14 +3345,14 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             {back && (
               <button onClick={back}
                 {...surfacePress()}
-                style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted, cursor: "pointer", padding: "0.25rem", lineHeight: 1, display: "flex", alignItems: "center" }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+                style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted, cursor: "pointer", padding: "0.25rem", lineHeight: 1, display: "flex", alignItems: "center" }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg></button>
             )}
-            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em" }}>
+            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.1em" }}>
               {stepLabel}
             </p>
           </div>
-          <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.3rem", color: T.text }}>{set.name}</h2>
-          <p style={{ color: T.muted2, fontSize: "0.8rem", fontFamily: "'DM Sans', sans-serif", marginTop: "0.25rem" }}>
+          <h2 style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text }}>{set.name}</h2>
+          <p style={{ color: T.muted2, fontSize: "0.8rem", fontFamily: FF_SANS, marginTop: "0.25rem" }}>
             {count} question{count !== 1 ? "s" : ""} in this set
           </p>
         </div>
@@ -3347,8 +3363,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             <OptionButton onClick={() => { if (QUICK_OPTIONS.length > 0) { setMode("review"); setStep("review-count"); } }} disabled={QUICK_OPTIONS.length === 0}>
               <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
               <div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Quick</p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Quick</p>
+                <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
                   {QUICK_OPTIONS.length > 0 ? "A handful of random questions with feedback" : "Need at least 3 questions for this mode"}
                 </p>
               </div>
@@ -3356,8 +3372,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             <OptionButton onClick={() => onStart(null, "review", null)}>
               <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
               <div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Review Mode</p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Review Mode</p>
+                <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
                   All {count} questions, answers as you go
                 </p>
               </div>
@@ -3365,8 +3381,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             <OptionButton onClick={() => { setMode("exam"); setStep("exam-timer"); }}>
               <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
               <div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Exam Mode</p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Exam Mode</p>
+                <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
                   Timed, no feedback until the end
                 </p>
               </div>
@@ -3381,8 +3397,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               <OptionButton key={n} onClick={() => onStart(n, "review", null)}>
                 <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                 <div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>{n} questions</p>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
+                  <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>{n} questions</p>
+                  <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
                     Random selection
                   </p>
                 </div>
@@ -3391,8 +3407,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             <OptionButton onClick={() => onStart(null, "review", null)}>
               <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
               <div>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Full Set</p>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Full Set</p>
+                <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
                   All {count} questions, shuffled
                 </p>
               </div>
@@ -3410,7 +3426,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               borderRadius: "20px", padding: "1.25rem 1rem",
               boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
             }}>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.25rem" }}>CUSTOM TIME</p>
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.25rem" }}>CUSTOM TIME</p>
               <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
                 <button onClick={() => setCustomMin(m => Math.max(5, m - 5))}
                   {...surfacePress()}
@@ -3421,8 +3437,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                   −
                 </button>
                 <div style={{ textAlign: "center", minWidth: "80px" }}>
-                  <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "2.5rem", fontWeight: 700, color: T.text, lineHeight: 1 }}>{customMin}</p>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: T.muted, marginTop: "0.25rem" }}>minutes</p>
+                  <p style={{ fontFamily: FF_MONO, fontSize: "2.5rem", fontWeight: 700, color: T.text, lineHeight: 1 }}>{customMin}</p>
+                  <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted, marginTop: "0.25rem" }}>minutes</p>
                 </div>
                 <button onClick={() => setCustomMin(m => Math.min(240, m + 5))}
                   {...surfacePress()}
@@ -3493,12 +3509,12 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
             </div>
           </button>
         </div>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.75rem", color: T.muted,
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted,
           textAlign: "center", marginBottom: "1.25rem" }}>Tap to change</p>
         <input value={draftName} onChange={e => setDraftName(e.target.value)}
           placeholder="Your name" maxLength={15}
           style={{ ...inp({ width: "100%", marginBottom: "1.25rem", textAlign: "center",
-            fontFamily: "'DM Sans', sans-serif", fontSize: "1rem" }) }} />
+            fontFamily: FF_SANS, fontSize: "1rem" }) }} />
         <div style={{ display: "flex", gap: "0.5rem" }}>
           <PrimaryButton onClick={() => { onSave(draftName || "Profile", draftIconId, draftBg, draftIColor); onClose(); }}
             style={{ flex: 1, justifyContent: "center" }}>
@@ -3589,7 +3605,7 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
       {renamingActiveSet && activeSet && (
         <Modal onClose={() => setRenamingActiveSet(false)}>
           <ModalCard pad="1.5rem" maxWidth={360}>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>RENAME SET</p>
+            <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>RENAME SET</p>
             <textarea
               ref={renameActiveSetRef}
               value={renameActiveSetVal}
@@ -3654,10 +3670,10 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
             onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
             <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={36} />
             <div style={{ textAlign: "left" }}>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.92rem", color: T.text, lineHeight: 1.2 }}>
+              <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.92rem", color: T.text, lineHeight: 1.2 }}>
                 {profileName}
               </p>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: T.muted }}>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>
                 Edit profile
               </p>
             </div>
@@ -3669,7 +3685,7 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
             <>
               <HamburgerMenuItem onClick={() => setSection("appearance")} right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
                     <circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/>
                     <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
                   </svg>
@@ -3682,28 +3698,26 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
 
               {!inSession && (<>
               <button onClick={() => importRef.current?.click()}
-                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 <span>Import</span>
               </button>
 
               <button onClick={() => { exportAll(sets, "studi-sets.json"); close(); }}
-                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1rem" }}>⊞</span>
                 <span>Export all sets</span>
               </button>
 
               <button onClick={() => { exportAll(history, "studi-history.json"); close(); }}
-                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1rem" }}>◷</span>
                 <span>Export all history</span>
               </button>
 
               <HamburgerMenuItem onClick={() => { close(); onRequestClear(); }} color={T.red} danger>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                  </svg>
+                  <TrashIcon size={15} />
                   <span>Clear all data</span>
                 </span>
               </HamburgerMenuItem>
@@ -3715,17 +3729,17 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
 
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
                 </div>
 
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}>
                   <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} large />
                 </div>
@@ -3736,7 +3750,7 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
 
           {/* Version */}
           {section === null && (
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.6rem", letterSpacing: "0.1em",
+            <p style={{ fontFamily: FF_MONO, fontSize: "0.6rem", letterSpacing: "0.1em",
               color: T.muted, textAlign: "center", padding: "0.6rem 1.25rem",
                }}>
               POUNCE v1.0.0
@@ -3772,14 +3786,14 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
         onClick={e => e.stopPropagation()}>
         <div style={{ padding: "1.1rem 1.25rem 0.75rem",
            }}>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2, marginBottom: "0.25rem" }}>TAGS</p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.95rem", color: T.text,
+          <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2, marginBottom: "0.25rem" }}>TAGS</p>
+          <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.text,
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{set.name}</p>
         </div>
 
         <div style={{ padding: "0.9rem 1.25rem", display: "flex", flexWrap: "wrap", gap: "0.5rem", minHeight: "3rem" }}>
           {allTags.length === 0 && selected.length === 0 && !newTag && (
-            <p style={{ color: T.muted, fontSize: "0.8rem", fontFamily: "'DM Sans', sans-serif" }}>No tags yet — create one below.</p>
+            <p style={{ color: T.muted, fontSize: "0.8rem", fontFamily: FF_SANS }}>No tags yet — create one below.</p>
           )}
           {[...new Set([...allTags, ...selected])].map(tag => {
             const active = selected.includes(tag);
@@ -3787,7 +3801,7 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
             return (
               <button key={tag} onClick={() => toggle(tag)} style={{
                 padding: "0.35rem 0.85rem", borderRadius: "99px", border: "none", cursor: "pointer",
-                fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", fontWeight: active ? 600 : 400,
+                fontFamily: FF_SANS, fontSize: "0.8rem", fontWeight: active ? 600 : 400,
                 background: active ? color : T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.08)",
                 color: active ? "#fff" : T.muted2,
               }}>{tag}</button>
@@ -3837,7 +3851,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
 
         {/* Row 1: Set name */}
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
+        <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
           {s.name}
         </p>
 
@@ -3852,7 +3866,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
+            fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
             background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
           }}>
             {s.questions.length} Q
@@ -3869,7 +3883,7 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
   return (
     <Modal onClose={onClose}>
       <ModalCard pad="1.25rem" maxWidth={380} scroll>
-        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>SET ICON</p>
+        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>SET ICON</p>
 
         {/* No icon option */}
         <div
@@ -3887,14 +3901,14 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
           </div>
-          <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: T.text, fontWeight: currentIcon === null ? 600 : 400 }}>No icon</span>
+          <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.text, fontWeight: currentIcon === null ? 600 : 400 }}>No icon</span>
           {currentIcon === null && <span style={{ marginLeft: "auto", color: T.accent, fontSize: "0.8rem" }}>✓</span>}
         </div>
 
         {/* Categories */}
         {SET_ICONS.map(cat => (
           <div key={cat.category} style={{ marginBottom: "1.25rem" }}>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>{cat.category.toUpperCase()}</p>
+            <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>{cat.category.toUpperCase()}</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.5rem" }}>
               {cat.icons.map(icon => {
                 const active = currentIcon === icon.id;
@@ -3914,7 +3928,7 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
                         <path d={icon.path} />
                       </svg>
                     </div>
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.62rem", color: active ? T.accent : T.muted, textAlign: "center", lineHeight: 1.2 }}>{icon.label}</span>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: active ? T.accent : T.muted, textAlign: "center", lineHeight: 1.2 }}>{icon.label}</span>
                   </div>
                 );
               })}
@@ -3944,7 +3958,7 @@ function GhostCard({ onClick }) {
     >
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem" }}>
         <span style={{ fontSize: "1.4rem", color: T.accent, opacity: 0.5, lineHeight: 1 }}>＋</span>
-        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", color: T.muted, fontWeight: 500 }}>New set</span>
+        <span style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted, fontWeight: 500 }}>New set</span>
       </div>
     </div>
   );
@@ -3961,15 +3975,15 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
     <div style={{ marginBottom: "1.25rem" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem", cursor: "pointer" }}
         onClick={() => setCollapsed(c => !c)}>
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em",
+        <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em",
           color: T.accent, fontWeight: 600, flex: 1 }}>
           {tag.toUpperCase()}
         </span>
-        <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>
+        <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO }}>
           {tagSets.length} set{tagSets.length !== 1 ? "s" : ""}
         </span>
         <span style={{ color: T.muted, display: "flex", marginLeft: "0.25rem", transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" {...IC}><polyline points="6 9 12 15 18 9"/></svg>
         </span>
       </div>
       <div style={{
@@ -4052,8 +4066,8 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
       {sets.length === 0 && (
         <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
           <div className="stu-bob" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}><Mochi size={90} /></div>
-          <p style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.4rem", color: T.text, marginBottom: "0.5rem" }}>No sets yet</p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6, maxWidth: "260px", margin: "0 auto" }}>
+          <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.4rem", color: T.text, marginBottom: "0.5rem" }}>No sets yet</p>
+          <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6, maxWidth: "260px", margin: "0 auto" }}>
             Tap the <span style={{ fontWeight: 700, color: T.accent }}>+</span> button below to create your first study set.
           </p>
         </div>
@@ -4061,8 +4075,8 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
 
       {sets.length > 0 && isFiltered && filteredSets.length === 0 && (
         <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
-          <p style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.2rem", color: T.text, marginBottom: "0.4rem" }}>No matches</p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.9rem" }}>Try a different search or filter.</p>
+          <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.2rem", color: T.text, marginBottom: "0.4rem" }}>No matches</p>
+          <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.9rem" }}>Try a different search or filter.</p>
         </div>
       )}
 
@@ -4086,8 +4100,8 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
             <div style={{ marginBottom: "1.25rem" }}>
               {allTags.length > 0 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted, fontWeight: 600 }}>UNTAGGED</span>
-                  <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Mono', monospace" }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
+                  <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted, fontWeight: 600 }}>UNTAGGED</span>
+                  <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
                 </div>
               )}
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4141,7 +4155,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
         <div>
           {recentSets.length > 0 && (
             <div style={{ marginBottom: "1.5rem" }}>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
                 RECENT SETS
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4151,7 +4165,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           )}
           {recentHistory.length > 0 && (
             <div>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
                 RECENT SESSIONS
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4164,7 +4178,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block", margin: "0 auto 1rem", opacity: 0.5 }}>
                 <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
               </svg>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem" }}>Search across your sets, questions, and history</p>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.95rem" }}>Search across your sets, questions, and history</p>
             </div>
           )}
         </div>
@@ -4173,14 +4187,14 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {/* No results */}
       {q && !hasResults && (
         <div style={{ textAlign: "center", padding: "3rem 1rem", color: T.muted }}>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem" }}>No results for <strong>"{query}"</strong></p>
+          <p style={{ fontFamily: FF_SANS, fontSize: "0.95rem" }}>No results for <strong>"{query}"</strong></p>
         </div>
       )}
 
       {/* Sets results */}
       {matchedSets.length > 0 && (
         <div style={{ marginBottom: "1.5rem" }}>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+          <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
             SETS · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4192,7 +4206,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {/* History results */}
       {matchedHistory.length > 0 && (
         <div>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+          <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
             HISTORY · {matchedHistory.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4240,18 +4254,18 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 {setsActiveTag ? (
                   <div style={{ borderRadius: "99px", padding: "2px", background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, display: "inline-flex", flexShrink: 0 }}>
-                    <button onClick={e => { const rect = e.currentTarget.closest("div").getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "32px", paddingLeft: "0.85rem", paddingRight: "0.85rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: "'DM Sans', sans-serif", WebkitTapHighlightColor: "transparent" }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    <button onClick={e => { const rect = e.currentTarget.closest("div").getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "32px", paddingLeft: "0.85rem", paddingRight: "0.85rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: FF_SANS, WebkitTapHighlightColor: "transparent" }}>
+                      <FilterIcon size={13} />
                       <span style={{ fontSize: "0.85rem" }}>{setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag}</span>
                     </button>
                   </div>
                 ) : (
-                  <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem" }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                  <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem" }}>
+                    <FilterIcon />
                     <span style={{ fontSize: "0.9rem" }}>All</span>
                   </button>
                 )}
@@ -4260,14 +4274,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setSetsFilterOpen(false)} />
                     <div className="menu-open" style={{ position: "fixed", top: setsFilterPos.top, right: setsFilterPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "20px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "160px" }}>
                       {[null, ...allTags.slice(0, 5), "__untagged__"].map((tag) => (
-                        <button key={tag || "all"} {...surfacePress()} onClick={() => { setSetsActiveTag(tag); setSetsFilterOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: setsActiveTag === tag ? T.accent + "18" : "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem", color: setsActiveTag === tag ? T.accent : T.text, cursor: "pointer" }}
+                        <button key={tag || "all"} {...surfacePress()} onClick={() => { setSetsActiveTag(tag); setSetsFilterOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: setsActiveTag === tag ? T.accent + "18" : "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: FF_SANS, fontSize: "0.92rem", color: setsActiveTag === tag ? T.accent : T.text, cursor: "pointer" }}
                           onMouseEnter={e => { e.currentTarget.style.background = setsActiveTag === tag ? T.accent + "18" : T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = setsActiveTag === tag ? T.accent + "18" : "transparent"; }}>
                           {tag === null ? "All" : tag === "__untagged__" ? "Untagged" : tag}
                         </button>
                       ))}
                       {allTags.length > 5 && (
-                        <button {...surfacePress()} onClick={() => { setSetsFilterOpen(false); setAllTagsModalOpen(true); setModalOpen(true); }} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem", color: T.accent, cursor: "pointer", fontWeight: 500 }}
+                        <button {...surfacePress()} onClick={() => { setSetsFilterOpen(false); setAllTagsModalOpen(true); setModalOpen(true); }} style={{ display: "block", width: "100%", textAlign: "left", background: "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: FF_SANS, fontSize: "0.92rem", color: T.accent, cursor: "pointer", fontWeight: 500 }}
                           onMouseEnter={e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
                           More ({allTags.length - 5} more) →
@@ -4302,10 +4316,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>RECENT</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>RECENT</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
-                <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
+                <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" {...IC}><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
                   <span style={{ fontSize: "0.9rem" }}>{{ "date-desc": "Newest", "date-asc": "Oldest", "score-desc": "Score ↓", "score-asc": "Score ↑" }[historySortBy] || "Sort"}</span>
                 </button>
                 {historySortOpen && (
@@ -4313,7 +4327,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setHistorySortOpen(false)} />
                     <div className="menu-open" style={{ position: "fixed", top: historySortPos.top, right: historySortPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "20px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "180px" }}>
                       {HISTORY_SORT_OPTIONS.map(opt => (
-                        <button key={opt.id} {...surfacePress()} onClick={() => { setHistorySortBy(opt.id); setHistorySortOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: historySortBy === opt.id ? T.accent + "18" : "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem", color: historySortBy === opt.id ? T.accent : T.text, cursor: "pointer" }}
+                        <button key={opt.id} {...surfacePress()} onClick={() => { setHistorySortBy(opt.id); setHistorySortOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: historySortBy === opt.id ? T.accent + "18" : "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: FF_SANS, fontSize: "0.92rem", color: historySortBy === opt.id ? T.accent : T.text, cursor: "pointer" }}
                           onMouseEnter={e => { e.currentTarget.style.background = historySortBy === opt.id ? T.accent + "18" : T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = historySortBy === opt.id ? T.accent + "18" : "transparent"; }}>
                           {opt.label}{historySortBy === opt.id && <span style={{ float: "right" }}>✓</span>}
@@ -4373,9 +4387,9 @@ function TopicBar({ topic, correct, total }) {
   return (
     <div style={{ marginBottom: "0.85rem" }}>
       <div style={{ marginBottom: "0.35rem" }}>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8rem", fontWeight: 500, color: T.text,
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", fontWeight: 500, color: T.text,
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.15rem" }}>{topic}</p>
-        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", color, fontWeight: 600 }}>
+        <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", color, fontWeight: 600 }}>
           {correct}/{total} · {pct}%
         </span>
       </div>
@@ -4450,14 +4464,14 @@ function ExportResultsModal({ session, onClose }) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             <Label style={{ marginBottom: "0.1rem" }}>EXPORT RESULTS — "{session.setName}"</Label>
-            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: "'DM Sans', sans-serif" }}>
+            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>
               {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "full" })} · {session.score}/{session.total} correct
             </p>
           </div>
         </div>
         <textarea ref={textareaRef} readOnly value={text}
           style={{ ...inp(), flex: 1, minHeight: "180px",
-            fontFamily: "'DM Mono', monospace", fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
+            fontFamily: FF_MONO, fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
           <PrimaryButton onClick={handleCopy} small>{copyLabel}</PrimaryButton>
           <GhostButton onClick={onClose} small>Close</GhostButton>
@@ -4474,14 +4488,14 @@ function HistoryCard({ session, onView }) {
   return (
     <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem",
+        <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
           overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
           {session.setName}
         </p>
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em",
+            fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
             background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
           }}>
             {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
@@ -4491,7 +4505,7 @@ function HistoryCard({ session, onView }) {
           )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: "'DM Mono', monospace", letterSpacing: "0.1em", fontWeight: 600,
+            fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em", fontWeight: 600,
             background: (passed ? T.green : T.red) + "18", color: passed ? T.green : T.red,
             border: "1px solid " + (passed ? T.green : T.red) + "44",
           }}>
@@ -4546,10 +4560,10 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
       {(history?.length ?? 0) === 0 && (
         <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
           <div className="stu-bob" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}><Mochi size={90} /></div>
-          <p style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.4rem", color: T.text, marginBottom: "0.5rem" }}>
+          <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.4rem", color: T.text, marginBottom: "0.5rem" }}>
             No results yet
           </p>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6, maxWidth: "260px", margin: "0 auto" }}>
+          <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6, maxWidth: "260px", margin: "0 auto" }}>
             Complete a study session to start tracking your progress.
           </p>
         </div>
@@ -4604,10 +4618,10 @@ function QuickQuestion({ sets }) {
   return (
     <div>
       <div style={{ marginBottom: "0.6rem" }}>
-        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>QUICK QUESTION</p>
+        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>QUICK QUESTION</p>
       </div>
       <div style={card({})}>
-        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: 500, color: T.text, marginBottom: "1rem", lineHeight: 1.5 }}>
+        <div style={{ fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: 500, color: T.text, marginBottom: "1rem", lineHeight: 1.5 }}>
           {renderText(q.question)}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -4628,7 +4642,7 @@ function QuickQuestion({ sets }) {
                 style={{ background: bg, border, color, borderRadius: "12px", padding: "0.75rem 1rem",
                   textAlign: "left", cursor: submitted ? "default" : "pointer",
                   display: "flex", alignItems: "center", gap: "0.75rem",
-                  fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", lineHeight: 1.4,
+                  fontFamily: FF_SANS, fontSize: "0.9rem", lineHeight: 1.4,
                   transition: "background 0.15s, border 0.15s" }}>
                 <span style={{
                   minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "50%",
@@ -4645,7 +4659,7 @@ function QuickQuestion({ sets }) {
         </div>
         {submitted && (
           <div style={{ marginTop: "0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem",
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem",
               color: selected === correctLabel ? T.green : T.red }}>
               {selected === correctLabel ? "\u2713 Correct!" : "\u2717 Incorrect"}
             </p>
@@ -4718,18 +4732,18 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem" }) }}>
-      <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, marginBottom: "0.3rem" }}>
+      <p style={{ fontFamily: FF_MONO, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, marginBottom: "0.3rem" }}>
         {value !== undefined && value !== null ? value : "—"}
       </p>
-      <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: sub ? "0.15rem" : 0 }}>
+      <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: sub ? "0.15rem" : 0 }}>
         {label}
       </p>
-      {sub && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", color: T.muted2 }}>{sub}</p>}
+      {sub && <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted2 }}>{sub}</p>}
     </div>
   );
 
   const sectionLabel = (text) => (
-    <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.6rem" }}>
+    <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.6rem" }}>
       {text}
     </p>
   );
@@ -4738,10 +4752,10 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     return (
       <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
         <div className="stu-bob" style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}><Mochi size={90} /></div>
-        <p style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.4rem", color: T.text, marginBottom: "0.5rem" }}>
+        <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.4rem", color: T.text, marginBottom: "0.5rem" }}>
           No sessions yet
         </p>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>
+        <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>
           Complete a study session and save it from the results screen to start tracking your progress here.
         </p>
       </div>
@@ -4782,17 +4796,17 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                   ? T.mode === "light" ? T.green + "18" : "#052e16"
                   : T.mode === "light" ? T.red + "18" : "#2d0a0a",
                 display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontWeight: 700, fontSize: "1rem",
+                <span style={{ fontFamily: FF_MONO, fontWeight: 700, fontSize: "1rem",
                   color: lastSession.score / lastSession.total >= 0.7 ? T.green : T.red }}>
                   {Math.round((lastSession.score / lastSession.total) * 100)}%
                 </span>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.text, fontSize: "0.95rem",
+                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
                   overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.2rem" }}>
                   {lastSession.setName}
                 </p>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", color: T.muted }}>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", color: T.muted }}>
                   {new Date(lastSession.date).toLocaleDateString(undefined, { dateStyle: "medium" })} · {lastSession.score}/{lastSession.total} correct
                 </p>
               </div>
@@ -4811,12 +4825,12 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
               <div key={t.topic} style={{ marginBottom: i < weakTopics.length - 1 ? "1rem" : 0 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", fontWeight: 500, color: T.text }}>{t.topic}</span>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", color: T.muted, marginLeft: "0.5rem" }}>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text }}>{t.topic}</span>
+                    <span style={{ fontFamily: FF_MONO, fontSize: "0.62rem", color: T.muted, marginLeft: "0.5rem" }}>
                       {t.setNames.join(", ")}
                     </span>
                   </div>
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem",
+                  <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem",
                     color: t.pct >= 40 ? T.accent : T.red, fontWeight: 600, flexShrink: 0, marginLeft: "0.5rem" }}>
                     {t.pct}%
                   </span>
@@ -4939,7 +4953,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
                     position: "absolute", top: "-10px", right: "-14px",
                     background: T.accent,
                     color: "#fff",
-                    fontSize: "0.65rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 700,
+                    fontSize: "0.65rem", fontFamily: FF_SANS, fontWeight: 700,
                     borderRadius: "99px",
                     minWidth: "18px", height: "18px",
                     display: "flex", alignItems: "center", justifyContent: "center",
@@ -4950,7 +4964,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
                 )}
               </span>
               <span style={{
-                fontSize: "0.72rem", fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
+                fontSize: "0.72rem", fontFamily: FF_SANS, fontWeight: 500,
                 lineHeight: 1,
                 color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
                 transition: "color 0.2s",
@@ -5156,7 +5170,7 @@ function DeleteAnimation({ onComplete }) {
         </svg>
       </div>
 
-      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1rem", color: T.muted2, letterSpacing: "0.02em" }}>
+      <p style={{ fontFamily: FF_SANS, fontSize: "1rem", color: T.muted2, letterSpacing: "0.02em" }}>
         {phase === "close" || phase === "done" ? "All done." : "Clearing data…"}
       </p>
     </div>
@@ -5242,16 +5256,16 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
         <div style={{ marginBottom: "0.25rem", display: "flex", justifyContent: "center" }}>
           <PounceLogo height={38} theme={localT} />
         </div>
-        <p style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.3rem", color: localT.text, marginBottom: "0.5rem" }}>
+        <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: localT.text, marginBottom: "0.5rem" }}>
           Welcome!
         </p>
-        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: localT.muted2, lineHeight: 1.6, marginBottom: "2rem" }}>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: localT.muted2, lineHeight: 1.6, marginBottom: "2rem" }}>
           Get started by importing an existing study set, or create your first one from scratch.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
           {/* Import sets — PrimaryButton (gradient border) + {} */}
           {setsImported ? (
-            <div style={{ display: "flex", borderRadius: "99px", background: localT.green + "22", border: "1px solid " + localT.green, padding: "0.75rem 1.5rem", justifyContent: "center", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: 600, color: localT.green }}>
+            <div style={{ display: "flex", borderRadius: "99px", background: localT.green + "22", border: "1px solid " + localT.green, padding: "0.75rem 1.5rem", justifyContent: "center", fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: 600, color: localT.green }}>
               ✓ Sets imported
             </div>
           ) : (
@@ -5261,7 +5275,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
               <button onClick={() => { if (setsRef.current) setsRef.current.click(); }}
                 {...surfacePress()}
                 style={{ flex: 1, background: "transparent", color: localT.muted2, border: "none",
-                  padding: "0.75rem 1.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem",
+                  padding: "0.75rem 1.5rem", fontFamily: FF_SANS, fontSize: "0.95rem",
                   fontWeight: 600, cursor: "pointer", textAlign: "center" }}>
                 ⊞ Import study sets
               </button>
@@ -5269,7 +5283,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
           )}
           {/* Import history — GhostButton (grey surface) + {} */}
           {histImported ? (
-            <div style={{ display: "flex", borderRadius: "99px", background: localT.green + "22", border: "1px solid " + localT.green, padding: "0.75rem 1.5rem", justifyContent: "center", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", color: localT.green }}>
+            <div style={{ display: "flex", borderRadius: "99px", background: localT.green + "22", border: "1px solid " + localT.green, padding: "0.75rem 1.5rem", justifyContent: "center", fontFamily: FF_SANS, fontSize: "0.95rem", color: localT.green }}>
               ✓ History imported
             </div>
           ) : (
@@ -5277,7 +5291,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
               <button onClick={() => { if (histRef.current) histRef.current.click(); }}
                 {...surfacePress()}
                 style={{ flex: 1, background: "transparent", color: localT.muted2, border: "none",
-                  padding: "0.75rem 1.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem",
+                  padding: "0.75rem 1.5rem", fontFamily: FF_SANS, fontSize: "0.95rem",
                   cursor: "pointer", textAlign: "center" }}>
                 ◷ Import history
               </button>
@@ -5289,7 +5303,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
             style={{ background: "transparent", color: setsImported || histImported ? localT.accent : localT.muted,
               fontWeight: setsImported || histImported ? 600 : 400,
               border: "none", borderRadius: "99px",
-              padding: "0.75rem 1.5rem", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem",
+              padding: "0.75rem 1.5rem", fontFamily: FF_SANS, fontSize: "0.95rem",
               cursor: "pointer", width: "100%" }}>
             {setsImported || histImported ? "Let's go! →" : "Start fresh"}
           </button>
@@ -5615,7 +5629,7 @@ function BackgroundPicker({ bgStyle, onSetBgStyle, large = false }) {
       {opts.map(opt => {
         const active = bgStyle === opt.id;
         return (
-          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", cursor: "pointer", padding: large ? "0 0.1rem" : "0.3rem 0.1rem", height: large ? "44px" : undefined, fontFamily: "'DM Sans', sans-serif", fontSize: large ? "0.9rem" : "0.88rem", fontWeight: large ? 500 : 400, color: active ? T.text : T.muted, textAlign: "left" }}>
+          <button key={opt.id} onClick={() => onSetBgStyle(opt.id)} style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "transparent", border: "none", cursor: "pointer", padding: large ? "0 0.1rem" : "0.3rem 0.1rem", height: large ? "44px" : undefined, fontFamily: FF_SANS, fontSize: large ? "0.9rem" : "0.88rem", fontWeight: large ? 500 : 400, color: active ? T.text : T.muted, textAlign: "left" }}>
             <span style={{ width: large ? "18px" : "16px", height: large ? "18px" : "16px", borderRadius: "50%", border: `2px solid ${active ? T.accent : T.border2}`, background: active ? T.accent : "transparent", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", transition: "border-color 0.15s, background 0.15s" }}>
               {active && <span style={{ width: large ? "7px" : "6px", height: large ? "7px" : "6px", borderRadius: "50%", background: "#fff" }} />}
             </span>
@@ -5642,7 +5656,7 @@ function ColorPicker({ accent, onSetAccent }) {
 function SidebarActionButton({ onClick, icon, label, danger = false, right }) {
   return (
     <div style={{ display: "flex", alignItems: "center", margin: "0 -0.75rem" }}>
-      <button onClick={onClick} style={{ flex: 1, display: "flex", alignItems: "center", gap: "0.75rem", background: "transparent", border: "none", padding: "0.55rem 0.75rem", cursor: "pointer", fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem", color: danger ? T.red : T.text, textAlign: "left" }}>
+      <button onClick={onClick} style={{ flex: 1, display: "flex", alignItems: "center", gap: "0.75rem", background: "transparent", border: "none", padding: "0.55rem 0.75rem", cursor: "pointer", fontFamily: FF_SANS, fontSize: "0.9rem", color: danger ? T.red : T.text, textAlign: "left" }}>
         <span style={{ color: danger ? T.red : T.muted, display: "flex", alignItems: "center", flexShrink: 0 }}>{icon}</span>
         {label}
         {right && <span style={{ marginLeft: "auto" }}>{right}</span>}
@@ -6102,7 +6116,7 @@ function App() {
         <Modal onClose={() => { setAllTagsModalOpen(false); setModalOpen(false); }}>
           <ModalCard pad="1.5rem" maxWidth={480} scroll>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>ALL TAGS</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>ALL TAGS</span>
               <button onClick={() => { setAllTagsModalOpen(false); setModalOpen(false); }} {...surfacePress()}
                 style={{ background: "none", border: "none", borderRadius: "99px", cursor: "pointer", color: T.muted, fontSize: "1.2rem", lineHeight: 1, padding: "0.25rem" }}>✕</button>
             </div>
@@ -6113,7 +6127,7 @@ function App() {
                     textAlign: "left", background: setsActiveTag === tag ? T.accent + "18" : T.surface2,
                     border: "1px solid " + (setsActiveTag === tag ? T.accent + "44" : T.border),
                     borderRadius: "12px", padding: "0.6rem 0.75rem",
-                    fontFamily: "'DM Sans', sans-serif", fontSize: "0.9rem",
+                    fontFamily: FF_SANS, fontSize: "0.9rem",
                     color: setsActiveTag === tag ? T.accent : T.text, cursor: "pointer",
                     overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                   }}>
@@ -6197,7 +6211,7 @@ function App() {
                   maxLength={160}
                   rows={1}
                   style={{
-                    fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "1rem",
+                    fontFamily: FF_SANS, fontWeight: 600, fontSize: "1rem",
                     color: T.text, textAlign: "center", background: "transparent",
                     border: "none", borderBottom: "1px solid " + T.accent,
                     outline: "none", width: "100%", padding: "0",
@@ -6212,7 +6226,7 @@ function App() {
                   borderBottom: screen === "edit" ? "1px solid transparent" : "none",
                 }}>
                   <span style={{
-                    fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.95rem",
+                    fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem",
                     color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
                     minWidth: 0,
                   }}>
@@ -6227,7 +6241,7 @@ function App() {
               ))
             ) : (screen === "results" || screen === "historyResults") ? (
               <span style={{
-                fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.95rem",
+                fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem",
                 color: T.text, textAlign: "center",
               }}>
                 Results
@@ -6246,7 +6260,7 @@ function App() {
                     value={searchQuery}
                     onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") setHomeTab("search"); }}
                     placeholder="Search…"
-                    style={{ background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", color: ST.text, fontFamily: "'DM Sans', sans-serif", fontSize: "16px", padding: "0.45rem 0.9rem", width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", height: "38px", boxSizing: "border-box", outline: "none" }}
+                    style={{ background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", color: ST.text, fontFamily: FF_SANS, fontSize: "16px", padding: "0.45rem 0.9rem", width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", height: "38px", boxSizing: "border-box", outline: "none" }}
                   />
                   {searchQuery && (
                     <button onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
@@ -6340,7 +6354,7 @@ function App() {
                     </>
                   ) : (
                     <>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}>
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
                       </svg>
                       Save
@@ -6355,9 +6369,7 @@ function App() {
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                     setEditKebabOpen(o => !o);
                   }} style={{ width: "36px", height: "36px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted}>
-                      <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-                    </svg>
+                    <DotsVerticalIcon color={T.muted} />
                   </button>
                   {editKebabOpen && (
                     <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
@@ -6366,7 +6378,7 @@ function App() {
                           document.dispatchEvent(new CustomEvent("studi-edit-icon"));
                         }}>
                           <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
                           </span>Icon
                         </KebabMenuItem>
                         <KebabMenuItem onClick={() => {
@@ -6374,7 +6386,7 @@ function App() {
                           document.dispatchEvent(new CustomEvent("studi-edit-tags"));
                         }}>
                           <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                           </span>Tags
                         </KebabMenuItem>
                         <KebabMenuItem onClick={() => {
@@ -6382,7 +6394,7 @@ function App() {
                           document.dispatchEvent(new CustomEvent("studi-edit-rename"));
                         }}>
                           <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
                           </span>Rename set
                         </KebabMenuItem>
                         <KebabMenuItem onClick={() => {
@@ -6398,7 +6410,7 @@ function App() {
                           setTimeout(() => URL.revokeObjectURL(url), 1000);
                         }}>
                           <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                           </span>Export set
                         </KebabMenuItem>
                         <KebabMenuItem danger color={T.red} onClick={() => {
@@ -6406,7 +6418,7 @@ function App() {
                           document.dispatchEvent(new CustomEvent("studi-edit-delete"));
                         }}>
                           <span style={{ display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                            <TrashIcon />
                           </span>Delete set
                         </KebabMenuItem>
                       </div>
@@ -6491,10 +6503,8 @@ function App() {
                           const rect = e.currentTarget.closest("div").getBoundingClientRect();
                           setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                           setResultsFilterOpen(o => !o);
-                        }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", height: "34px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", cursor: "pointer", color: T.accent, WebkitTapHighlightColor: "transparent", fontFamily: "'DM Sans', sans-serif" }}>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                          </svg>
+                        }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", height: "34px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", cursor: "pointer", color: T.accent, WebkitTapHighlightColor: "transparent", fontFamily: FF_SANS }}>
+                          <FilterIcon size={13} />
                           <span style={{ fontSize: "0.85rem" }}>{resultsFilter === "correct" ? "Correct" : "Incorrect"}</span>
                         </button>
                       </div>
@@ -6503,10 +6513,8 @@ function App() {
                         const rect = e.currentTarget.parentElement.getBoundingClientRect();
                         setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                         setResultsFilterOpen(o => !o);
-                      }} style={{ height: "38px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: "'DM Sans', sans-serif", fontWeight: 500, fontSize: "0.9rem" }}>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                        </svg>
+                      }} style={{ height: "38px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem" }}>
+                        <FilterIcon size={13} />
                         <span style={{ fontSize: "0.85rem" }}>All</span>
                       </button>
                     )}
@@ -6531,7 +6539,7 @@ function App() {
                               display: "block", width: "100%", textAlign: "left",
                               background: resultsFilter === opt.id ? T.accent + "18" : "transparent",
                               border: "none", padding: "0.85rem 1.1rem",
-                              fontFamily: "'DM Sans', sans-serif", fontSize: "0.92rem",
+                              fontFamily: FF_SANS, fontSize: "0.92rem",
                               color: resultsFilter === opt.id ? T.accent : T.text, cursor: "pointer",
                             }}
                             onMouseEnter={e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
@@ -6551,21 +6559,19 @@ function App() {
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                       setResultsKebabOpen(o => !o);
                     }} style={{ width: "38px", height: "38px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer" }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted}>
-                        <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-                      </svg>
+                      <DotsVerticalIcon color={T.muted} />
                     </button>
                     {resultsKebabOpen && (
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                           {!isHist && (
                             <KebabMenuItem onClick={() => { setResultsKebabOpen(false); setResultsConfirmRetry(true); }}>
-                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
+                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
                               Retry
                             </KebabMenuItem>
                           )}
                           {hasMissed && (
                             <KebabMenuItem onClick={() => { setResultsKebabOpen(false); handleRetryMissed(missed); }}>
-                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
+                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
                               Retry missed
                             </KebabMenuItem>
                           )}
@@ -6576,7 +6582,7 @@ function App() {
                               if (set) setPendingStudySet(set);
                               else showToast("Original set not found.");
                             }}>
-                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
                               Study set
                             </KebabMenuItem>
                           )}
@@ -6590,11 +6596,11 @@ function App() {
                             a.download = (sess.setName || "results").replace(/\s+/g, "-").toLowerCase() + "-results.json";
                             a.click();
                           }}>
-                            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+                            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
                             Export
                           </KebabMenuItem>
                           <KebabMenuItem danger color={T.red} onClick={() => { setResultsKebabOpen(false); setResultsDeleteConfirm(true); }}>
-                            <span style={{ display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></span>
+                            <span style={{ display: "inline-flex" }}><TrashIcon /></span>
                             Delete
                           </KebabMenuItem>
                         </div>
@@ -6740,29 +6746,29 @@ function App() {
           <nav style={{ padding: "0 0.75rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
             {[
               { id: "home",    label: "Home",
-                icon:       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+                icon:       <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
                 iconFilled: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" strokeWidth="1.5"/></svg> },
               { id: "sets",    label: "Sets",
-                icon:       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,
+                icon:       <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,
                 iconFilled: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> },
               { id: "history", label: "History",
-                icon:       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+                icon:       <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
                 iconFilled: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round"/></svg> },
               { id: "search",  label: "Search",
-                icon:       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+                icon:       <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
                 iconFilled: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg> },
             ].filter(tab => !(tab.id === "search" && showSidebar)).map(tab => {
               const active = screen === "home" && homeTab === tab.id;
               return (
                 <button key={tab.id} onClick={() => { setHomeTab(tab.id); setScreen("home"); if (tab.id !== "search") setSearchQuery(""); if (tab.id === "sets") setSetsSearch(""); }}
                   title={sidebarCollapsed ? tab.label : undefined}
-                  style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? ST.accent + "18" : "transparent", color: active ? ST.accent : ST.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: "'DM Sans', sans-serif", fontSize: "0.95rem", fontWeight: active ? 600 : 400, transition: "background 0.15s" }}>
+                  style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? ST.accent + "18" : "transparent", color: active ? ST.accent : ST.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: active ? 600 : 400, transition: "background 0.15s" }}>
                   <span style={{ color: active ? ST.accent : ST.muted, flexShrink: 0, display: "flex", alignItems: "center" }}>{active ? tab.iconFilled : tab.icon}</span>
                   {!sidebarCollapsed && (
                     <>
                       {tab.label}
                       {tab.id === "history" && (history?.length ?? 0) > 0 && (
-                        <span style={{ marginLeft: "auto", background: ST.accent + "22", color: ST.accent, fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", fontWeight: 600, padding: "0.1rem 0.4rem", borderRadius: "99px" }}>{history.length}</span>
+                        <span style={{ marginLeft: "auto", background: ST.accent + "22", color: ST.accent, fontFamily: FF_MONO, fontSize: "0.65rem", fontWeight: 600, padding: "0.1rem 0.4rem", borderRadius: "99px" }}>{history.length}</span>
                       )}
                     </>
                   )}
@@ -6774,7 +6780,7 @@ function App() {
           {/* Recent — sets and history mixed, hidden when collapsed */}
           {!sidebarCollapsed && (sets.length > 0 || history.length > 0) && (
             <div style={{ flex: 1, overflow: "hidden", padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>RECENT</p>
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>RECENT</p>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, meta: s.questions?.length ?? 0 })),
@@ -6796,8 +6802,8 @@ function App() {
                         <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M12 7v5l3 3"/>
                       </svg>
                     )}
-                    <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{item.name}</span>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.meta}</span>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{item.name}</span>
+                    <span style={{ fontFamily: FF_MONO, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.meta}</span>
                   </button>
                 ))}
               </div>
@@ -6828,7 +6834,7 @@ function App() {
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.25rem" }}>
                   <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Expand sidebar">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
                       <rect x="3" y="3" width="18" height="18" rx="2"/>
                       <line x1="9" y1="3" x2="9" y2="21"/>
                       <rect x="3" y="3" width="6" height="18" rx="2" fill="currentColor" stroke="none"/>
@@ -6847,7 +6853,7 @@ function App() {
                 onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}>
                 <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={24} />
-                <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.85rem", fontWeight: 500, color: ST.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500, color: ST.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {profileName || "Profile"}
                 </span>
               </button>
@@ -6857,14 +6863,14 @@ function App() {
             {!sidebarCollapsed && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem 0.25rem 0.25rem 0.4rem", borderRadius: "8px" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" {...IC}>
                   <circle cx="12" cy="12" r="3"/>
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
               </button>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted }}>v1.0.0</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted }}>v1.0.0</span>
               <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Collapse sidebar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
                   <line x1="9" y1="3" x2="9" y2="21"/>
                   <rect x="3" y="3" width="6" height="18" rx="2" fill="currentColor" stroke="none"/>
@@ -6876,7 +6882,7 @@ function App() {
             {sidebarCollapsed && (
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" {...IC}>
                     <circle cx="12" cy="12" r="3"/>
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                   </svg>
@@ -6901,7 +6907,7 @@ function App() {
           boxShadow: T.mode === "light"
             ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
             : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
-          fontFamily: "'DM Sans', sans-serif",
+          fontFamily: FF_SANS,
           fontSize: "0.85rem",
           color: T.text,
           whiteSpace: "nowrap",
@@ -6962,11 +6968,11 @@ function App() {
 
               <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
               <div style={{ padding: "0.25rem 0.5rem" }}>
-                <SidebarActionButton onClick={() => setSidebarSection("appearance")} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>} label="Appearance" right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>} />
-                <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>} label="Import" />
+                <SidebarActionButton onClick={() => setSidebarSection("appearance")} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>} label="Appearance" right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>} />
+                <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>} label="Import" />
                 <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Export all sets" />
                 <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Export all history" />
-                <SidebarActionButton onClick={() => setShowClearConfirm(true)} icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>} label="Clear all data" danger />
+                <SidebarActionButton onClick={() => setShowClearConfirm(true)} icon={<TrashIcon size={14} />} label="Clear all data" danger />
               </div>
             </>
           )}
@@ -6975,13 +6981,13 @@ function App() {
             <>
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>SIDEBAR THEME</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>SIDEBAR THEME</p>
                 <div style={{ marginBottom: "1rem" }}><SidebarThemePicker sidebarTheme={sidebarTheme} onSetSidebarTheme={handleSetSidebarTheme} /></div>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}><BackgroundPicker bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle} /></div>
               </div>
             </>
