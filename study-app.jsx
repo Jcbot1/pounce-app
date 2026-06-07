@@ -6965,7 +6965,7 @@ function App() {
       {showSidebar && (
         <div style={{
           position: "fixed",
-          top: "47px",
+          top: "48px",
           left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 12 + "px",
           right: 0,
           height: "1px",
@@ -6980,7 +6980,7 @@ function App() {
       {showSidebar && (
         <div style={{
           position: "fixed",
-          top: "48px",
+          top: "49px",
           left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
           width: "12px",
           height: "12px",
