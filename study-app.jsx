@@ -1150,7 +1150,7 @@ const glassyBtn = (active = false, color = null) => {
     background: active
       ? (T.mode === "light" ? c + "18" : c + "45")
       : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
-    border: active ? "1.5px solid " + c + "66" : "none",
+    border: active ? "1.5px solid " + c + "44" : "none",
     color: active ? c : T.text,
     boxShadow: T.mode === "light"
       ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
@@ -2266,11 +2266,11 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
           ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.9)"
           : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.06)";
         if (submitted) {
-          if (!examMode && isCor)    { bg = corBg; border = "1.5px solid " + T.green + "66"; color = T.green; shadow = revShadow; }
-          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "66"; color = T.red;   shadow = revShadow; }
-          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; }
+          if (!examMode && isCor)    { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; shadow = revShadow; }
+          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "44"; color = T.red;   shadow = revShadow; }
+          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "44"; color = selColor; }
         } else if (isSel) {
-          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor;
+          bg = selBg; border = "1.5px solid " + T.accent + "44"; color = selColor;
         }
         return (
           <AnswerButton key={i} onClick={() => !submitted && onSelect(i)} bg={bg} border={border} color={color} shadow={shadow} submitted={submitted} label={submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i)}>
@@ -2305,11 +2305,11 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
           ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.9)"
           : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.06)";
         if (submitted) {
-          if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "66"; color = T.green; shadow = revShadow; }
-          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "66"; color = T.red;   shadow = revShadow; }
-          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; }
+          if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; shadow = revShadow; }
+          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "44"; color = T.red;   shadow = revShadow; }
+          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "44"; color = T.accent; }
         } else if (isSel) {
-          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent;
+          bg = selBg; border = "1.5px solid " + T.accent + "44"; color = T.accent;
         }
         const label = submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i);
         return (
@@ -2389,7 +2389,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                 style={{
                   width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem",
                   background: triggerBg, color: triggerColor,
-                  border: (hasVal && !submitted) ? "1.5px solid " + T.accent + "66" : "1px solid " + triggerBorder,
+                  border: (hasVal && !submitted) ? "1.5px solid " + T.accent + "44" : "1px solid " + triggerBorder,
                   borderRadius: "6px", padding: "0.45rem 0.6rem",
                   fontFamily: FF_MONO, fontSize: "0.8rem",
                   cursor: submitted ? "default" : "pointer",
