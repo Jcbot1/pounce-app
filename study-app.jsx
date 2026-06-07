@@ -92,7 +92,7 @@ function Modal({ onClose, children, zIndex = 1000 }) {
       display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem",
     }}
       onWheel={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}
-      onPointerDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       {children}
     </div>
   );
@@ -466,8 +466,8 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
     <div style={{ position: "relative" }}>
       {hintOpen && (
         <>
-          <div style={{ position: "fixed", inset: 0, zIndex: 9 }} onPointerDown={() => setHintOpen(false)} />
-          <div className="menu-open" onPointerDown={() => setHintOpen(false)} style={{
+          <div style={{ position: "fixed", inset: 0, zIndex: 9 }} onClick={() => setHintOpen(false)} />
+          <div className="menu-open" style={{
             position: "fixed",
             top: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "4rem"; const r = btn.getBoundingClientRect(); return r.bottom + 8 + "px"; })(),
             right: (() => { const btn = document.querySelector('[data-hint-btn]'); if (!btn) return "1rem"; const r = btn.getBoundingClientRect(); const popupW = Math.min(360, window.innerWidth - 32); const rightFromBtn = window.innerWidth - r.right; return Math.min(rightFromBtn, window.innerWidth - popupW - 16) + "px"; })(),
@@ -479,13 +479,14 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
               ? "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)"
               : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)",
             width: "min(360px, calc(100vw - 2rem))", zIndex: 10,
+            maxHeight: "60vh", overflowY: "auto", WebkitOverflowScrolling: "touch",
           }}>
             <p style={{ color: T.muted, fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HINT</p>
             <p style={{ color: T.text, fontSize: "0.9rem", fontFamily: FF_SANS, lineHeight: 1.6 }}>{renderText(hint)}</p>
           </div>
         </>
       )}
-      <button data-hint-btn onPointerDown={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
+      <button data-hint-btn onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
         width: "36px", height: "36px", borderRadius: "99px",
         background: hintOpen ? "linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%)" : T.surface2,
         color: hintOpen ? "#fff" : T.muted2, border: "none", cursor: "pointer",
