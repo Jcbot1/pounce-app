@@ -2214,10 +2214,10 @@ Rules:
 // ════════════════════════════════════════════════════════════════════════
 
 function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
-  const selBg   = T.mode === "light" ? T.accent + "18" : "#2d1f4e";
+  const selBg   = T.mode === "light" ? T.accent + "18" : T.accent + "28";
   const corBg   = T.mode === "light" ? T.green  + "18" : "#052e16";
   const wroBg   = T.mode === "light" ? T.red    + "18" : "#2d0a0a";
-  const selColor = T.mode === "light" ? T.accent2 : T.accent2;
+  const selColor = T.accent;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
@@ -2233,9 +2233,9 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
         if (submitted) {
           if (!examMode && isCor)    { bg = corBg; border = "1px solid " + T.green; color = T.green; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
           else if (!examMode && isSel) { bg = wroBg; border = "1px solid " + T.red;   color = T.red;   shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
-          else if (isSel) { bg = selBg; border = "1px solid " + T.accent; color = selColor; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
+          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
         } else if (isSel) {
-          bg = selBg; border = "1px solid " + T.accent; color = selColor; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)";
+          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)";
         }
         return (
           <AnswerButton key={i} onClick={() => !submitted && onSelect(i)} bg={bg} border={border} color={color} shadow={shadow} submitted={submitted} label={submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i)}>
@@ -2248,7 +2248,7 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
 }
 
 function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
-  const selBg = T.mode === "light" ? T.accent + "18" : "#2d1f4e";
+  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "28";
   const corBg = T.mode === "light" ? T.green  + "18" : "#052e16";
   const wroBg = T.mode === "light" ? T.red    + "18" : "#2d0a0a";
 
@@ -2269,9 +2269,9 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
         if (submitted) {
           if (!examMode && isCor)      { bg = corBg; border = "1px solid " + T.green; color = T.green; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
           else if (!examMode && isSel) { bg = wroBg; border = "1px solid " + T.red;   color = T.red; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
-          else if (isSel) { bg = selBg; border = "1px solid " + T.accent; color = T.accent2; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
+          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
         } else if (isSel) {
-          bg = selBg; border = "1px solid " + T.accent; color = T.accent2; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)";
+          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)";
         }
         const label = submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i);
         return (
@@ -4317,12 +4317,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
               <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 {setsActiveTag ? (
-                  <div style={{ borderRadius: "99px", padding: "2px", background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, display: "inline-flex", flexShrink: 0 }}>
-                    <button onClick={e => { const rect = e.currentTarget.closest("div").getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "32px", paddingLeft: "0.85rem", paddingRight: "0.85rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: FF_SANS, WebkitTapHighlightColor: "transparent" }}>
-                      <FilterIcon size={13} />
-                      <span style={{ fontSize: "0.85rem" }}>{setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag}</span>
-                    </button>
-                  </div>
+                  <button onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.accent + "18" : T.accent + "28", border: "1.5px solid " + T.accent + "66", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent" }}>
+                    <FilterIcon size={13} />
+                    <span style={{ fontSize: "0.85rem" }}>{setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag}</span>
+                  </button>
                 ) : (
                   <button {...surfacePress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer", color: T.muted2, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem" }}>
                     <FilterIcon />
