@@ -6966,7 +6966,7 @@ function App() {
         <div style={{
           position: "fixed",
           top: "48px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 12 + "px",
+          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 13 + "px",
           right: 0,
           height: "1px",
           background: ST.border,
@@ -6982,7 +6982,7 @@ function App() {
           position: "fixed",
           top: "47px",
           left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
-          width: "12px",
+          width: "13px",
           height: "13px",
           overflow: "hidden",
           zIndex: 201,
@@ -6991,12 +6991,12 @@ function App() {
         }}>
           <div style={{
             position: "absolute",
-            right: "-12px",
-            bottom: "-12px",
-            width: "24px",
-            height: "24px",
+            right: "-13px",
+            bottom: "-13px",
+            width: "26px",
+            height: "26px",
             borderRadius: "50%",
-            boxShadow: `0 0 0 12px ${ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"}`,
+            boxShadow: `0 0 0 13px ${ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"}`,
           }} />
         </div>
       )}
