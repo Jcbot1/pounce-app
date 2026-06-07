@@ -280,10 +280,16 @@ function ModalCard({ children, maxWidth = 420, pad = "1.75rem", scroll = false, 
 // ── Kebab Menu Item ────────────────────────────────────────────────────────
 // Single source for all kebab/context menu row buttons.
 function KebabMenuItem({ onClick, children, color, danger = false }) {
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  const hoverBg = danger
+    ? (T.mode === "light" ? T.red + "12" : T.red + "18")
+    : (T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)");
   return (
     <button
       onClick={onClick}
       {...(danger ? dangerPress() : surfacePress())}
+      onMouseEnter={canHover ? e => { e.currentTarget.style.background = hoverBg; } : undefined}
+      onMouseLeave={canHover ? e => { e.currentTarget.style.background = "transparent"; } : undefined}
       style={{
         display: "flex", alignItems: "center", gap: "0.6rem",
         width: "100%", textAlign: "left", background: "transparent",
@@ -309,13 +315,20 @@ function DotsVerticalIcon({ size = 16, color }) {
 
 // ── Hamburger Menu Item ────────────────────────────────────────────────────
 function HamburgerMenuItem({ onClick, children, right, color, danger = false, style: extraStyle }) {
+  const canHover = window.matchMedia("(hover: hover)").matches;
+  const hoverBg = danger
+    ? (T.mode === "light" ? T.red + "12" : T.red + "18")
+    : (T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)");
   return (
-    <button onClick={onClick} {...(danger ? dangerPress() : surfacePress())} style={{
-      display: "flex", alignItems: "center", justifyContent: "space-between",
-      width: "100%", textAlign: "left", background: "transparent", border: "none",
-      padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem",
-      color: color || T.text, cursor: "pointer", ...extraStyle,
-    }}>
+    <button onClick={onClick} {...(danger ? dangerPress() : surfacePress())}
+      onMouseEnter={canHover ? e => { e.currentTarget.style.background = hoverBg; } : undefined}
+      onMouseLeave={canHover ? e => { e.currentTarget.style.background = "transparent"; } : undefined}
+      style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        width: "100%", textAlign: "left", background: "transparent", border: "none",
+        padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem",
+        color: color || T.text, cursor: "pointer", ...extraStyle,
+      }}>
       {children}
       {right && <span>{right}</span>}
     </button>
