@@ -514,9 +514,9 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
         background: hintOpen ? "linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%)" : T.surface2,
         color: hintOpen ? "#fff" : T.muted2, border: "none", cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: T.mode === "light"
-          ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
-          : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
+        boxShadow: hintOpen
+          ? (T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.55)" : "0 4px 24px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.2), inset 0 1.5px 0 rgba(255,255,255,0.22)")
+          : (T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)"),
         transition: "background 0.2s",
       }}>
         <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
@@ -2935,8 +2935,8 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           const isCurrent  = i === idx;
           const isAnswered = res !== undefined;
           const isCorrectQ = isAnswered && res.correct;
-          let bg, color, border;
-          if (isCurrent) { bg = T.accent; color = "#fff"; border = "none"; }
+          let bg, color, border, bubbleShadow;
+          if (isCurrent) { bg = T.accent; color = "#fff"; border = "none"; bubbleShadow = T.mode === "light" ? "0 2px 8px rgba(0,0,0,0.12), inset 0 1.5px 0 rgba(255,255,255,0.45)" : "0 2px 8px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.22)"; }
           else if (!isAnswered) { bg = T.surface2; color = T.muted; border = "1px solid " + T.border; }
           else if (examMode) { bg = T.mode === "light" ? T.accent + "22" : T.accent + "33"; color = T.accent; border = "1px solid " + T.accent + "55"; }
           else if (isCorrectQ) { bg = T.mode === "light" ? T.green + "22" : "#052e16"; color = T.green; border = "1px solid " + T.green + "55"; }
@@ -2949,6 +2949,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               cursor: isCurrent ? "default" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               position: "relative", transition: "all 0.15s", overflow: "visible",
+              boxShadow: bubbleShadow,
             }}>
               {i + 1}
               {isAnswered && (
@@ -2978,7 +2979,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               width: "36px", height: "36px", borderRadius: "99px",
               background: flagged[idx] ? "linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%)" : T.surface2,
               border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08)" : "0 4px 24px rgba(0,0,0,0.22)",
+              boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
             }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "#fff" : "none"} stroke={flagged[idx] ? "#fff" : T.muted2} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
