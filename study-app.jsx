@@ -2958,22 +2958,20 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           const isCurrent  = i === idx;
           const isAnswered = res !== undefined;
           const isCorrectQ = isAnswered && res.correct;
-          const glassy = isCurrent ? glassyBtn(true) : null;
-          let bg, color, border;
-          if (isCurrent) { bg = glassy.background; color = glassy.color; border = glassy.border; }
-          else if (!isAnswered) { bg = T.surface2; color = T.muted; border = "1px solid " + T.border; }
-          else if (examMode) { bg = T.mode === "light" ? T.accent + "22" : T.accent + "33"; color = T.accent; border = "1px solid " + T.accent + "55"; }
-          else if (isCorrectQ) { bg = T.mode === "light" ? T.green + "22" : "#052e16"; color = T.green; border = "1px solid " + T.green + "55"; }
-          else { bg = T.mode === "light" ? T.red + "22" : "#2d0a0a"; color = T.red; border = "1px solid " + T.red + "55"; }
+          let stateStyle;
+          if (isCurrent)    { stateStyle = glassyBtn(true); }
+          else if (!isAnswered) { stateStyle = { background: T.surface2, color: T.muted, border: "1px solid " + T.border }; }
+          else if (examMode)    { stateStyle = { background: T.mode === "light" ? T.accent + "22" : T.accent + "33", color: T.accent, border: "1px solid " + T.accent + "55" }; }
+          else if (isCorrectQ)  { stateStyle = { background: T.mode === "light" ? T.green + "22" : "#052e16", color: T.green, border: "1px solid " + T.green + "55" }; }
+          else                  { stateStyle = { background: T.mode === "light" ? T.red + "22" : "#2d0a0a", color: T.red, border: "1px solid " + T.red + "55" }; }
           return (
             <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)} style={{
+              ...stateStyle,
               width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
-              background: bg, color, border: border || "none",
               fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600,
               cursor: isCurrent ? "default" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               position: "relative", transition: "all 0.15s", overflow: "visible",
-              boxShadow: glassy ? (T.mode === "light" ? "inset 0 1.5px 0 rgba(255,255,255,0.55)" : "inset 0 1.5px 0 rgba(255,255,255,0.2)") : undefined,
             }}>
               {i + 1}
               {isAnswered && (
