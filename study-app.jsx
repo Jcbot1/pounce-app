@@ -4,6 +4,8 @@
 
 const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = React;
 
+const APP_VERSION = "1.0.0";
+
 const FF_SANS  = "'DM Sans', sans-serif";
 const FF_MONO  = "'DM Mono', monospace";
 const FF_SERIF = "'Fraunces', serif";
@@ -3823,7 +3825,7 @@ function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent,
             <p style={{ fontFamily: FF_MONO, fontSize: "0.6rem", letterSpacing: "0.1em",
               color: T.muted, textAlign: "center", padding: "0.6rem 1.25rem",
                }}>
-              POUNCE v1.0.0
+              {`POUNCE v${APP_VERSION}`}
             </p>
           )}
 
@@ -6960,7 +6962,7 @@ function App() {
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                 </svg>
               </button>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted }}>v1.0.0</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted }}>{`v${APP_VERSION}`}</span>
               <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", padding: "0.25rem", borderRadius: "8px" }} title="Collapse sidebar">
                 <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
