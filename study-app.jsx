@@ -512,7 +512,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
       <button ref={btnRef} onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
         ...glassyBtn(hintOpen), width: "36px", height: "36px", transition: "background 0.2s, box-shadow 0.2s",
       }}>
-        <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill={hintOpen ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 18h6M10 21h4M12 2a7 7 0 0 1 4 12.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26A7 7 0 0 1 12 2z" />
         </svg>
       </button>
@@ -2919,16 +2919,18 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           bubbleDragX.current = e.clientX;
           bubbleDragSL.current = bubbleRef.current.scrollLeft;
           bubbleDragDist.current = 0;
-          e.currentTarget.setPointerCapture(e.pointerId);
         }}
         onPointerMove={e => {
           if (bubbleDragX.current === null) return;
           const dx = e.clientX - bubbleDragX.current;
           bubbleDragDist.current = Math.abs(dx);
-          bubbleRef.current.scrollLeft = bubbleDragSL.current - dx;
+          if (bubbleDragDist.current > 4) {
+            if (!e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.setPointerCapture(e.pointerId);
+            bubbleRef.current.scrollLeft = bubbleDragSL.current - dx;
+          }
         }}
         onPointerUp={() => { bubbleDragX.current = null; }}
-        onClickCapture={e => { if (bubbleDragDist.current > 5) e.stopPropagation(); }}
+        onClickCapture={e => { if (bubbleDragDist.current > 4) e.stopPropagation(); }}
         style={{
         display: "flex", gap: "0.35rem", overflowX: "auto", overflowY: "visible",
         paddingBottom: "0.5rem", paddingTop: "0.5rem", paddingLeft: "0.35rem",
@@ -2957,7 +2959,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               cursor: isCurrent ? "default" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               position: "relative", transition: "all 0.15s", overflow: "visible",
-              boxShadow: glassy ? glassy.boxShadow : undefined,
+              boxShadow: glassy ? (T.mode === "light" ? "inset 0 1.5px 0 rgba(255,255,255,0.55)" : "inset 0 1.5px 0 rgba(255,255,255,0.2)") : undefined,
             }}>
               {i + 1}
               {isAnswered && (
