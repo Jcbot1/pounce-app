@@ -6981,7 +6981,7 @@ function App() {
         <svg viewBox="0 0 12 12" width="12" height="12" style={{
           position: "fixed",
           top: "47px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
+          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
           display: "block",
           zIndex: 201,
           pointerEvents: "none",
