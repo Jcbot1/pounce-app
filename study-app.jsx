@@ -3585,12 +3585,12 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
           placeholder="Your name" maxLength={15}
           style={{ ...inp({ width: "100%", marginBottom: "1.25rem", textAlign: "center",
             fontFamily: FF_SANS, fontSize: "1rem" }) }} />
-        <div style={{ display: "flex", gap: "0.5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
           <PrimaryButton onClick={() => { onSave(draftName || "Profile", draftIconId, draftBg, draftIColor); onClose(); }}
-            style={{ flex: 1, justifyContent: "center" }}>
+            style={{ width: "100%", justifyContent: "center" }}>
             Save
           </PrimaryButton>
-          <GhostButton onClick={onClose} style={{ flex: 1, justifyContent: "center" }}>
+          <GhostButton onClick={onClose} style={{ width: "100%", justifyContent: "center" }}>
             Cancel
           </GhostButton>
         </div>
