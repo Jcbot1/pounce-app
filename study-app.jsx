@@ -3345,7 +3345,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
   const [mode,      setMode]      = useState(null);     // "review" | "exam"
   const [customMin, setCustomMin] = useState(60);
 
-  const QUICK_OPTIONS = [3, 5, 10].filter(n => n <= count);
+  const QUICK_OPTIONS = [3, 5, 10, 20].filter(n => n <= count);
   const TIMER_OPTIONS = [30, 60, 90, 120];
 
   const stepLabel = {
@@ -3425,15 +3425,6 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 </div>
               </OptionButton>
             ))}
-            <OptionButton onClick={() => onStart(null, "review", null)}>
-              <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
-              <div>
-                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem" }}>Full Set</p>
-                <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.8rem", marginTop: "0.15rem" }}>
-                  All {count} questions, shuffled
-                </p>
-              </div>
-            </OptionButton>
           </div>
         )}
 
@@ -4605,19 +4596,18 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
 
 // ── Quick Question widget ─────────────────────────────────────────────────────
 function QuickQuestion({ sets }) {
-  const allSingleQs = [];
+  const allQs = [];
   sets.forEach(function(s) {
     (s.questions || []).forEach(function(q) {
-      if (q.type === "single") allSingleQs.push({ q, setName: s.name });
+      if (q.type === "single" || q.type === "multi") allQs.push({ q, setName: s.name });
     });
   });
 
   function pickRandom() {
-    if (!allSingleQs.length) return null;
-    const item = allSingleQs[Math.floor(Math.random() * allSingleQs.length)];
+    if (!allQs.length) return null;
+    const item = allQs[Math.floor(Math.random() * allQs.length)];
     const q = item.q;
     const options = q.options ? [...q.options] : [];
-    // Shuffle options
     for (let i = options.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       const tmp = options[i]; options[i] = options[j]; options[j] = tmp;
@@ -4626,15 +4616,32 @@ function QuickQuestion({ sets }) {
   }
 
   const [current, setCurrent] = useState(() => pickRandom());
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
-  function next() { setCurrent(pickRandom()); setSelected(null); }
+  function next() { setCurrent(pickRandom()); setSelected([]); setSubmitted(false); }
 
   if (!current) return null;
 
   const { q, options } = current;
-  const submitted = selected !== null;
-  const correctLabel = q.options[q.correct];
+  const isMulti = q.type === "multi";
+  const correctLabels = q.correct.map(i => q.options[i]);
+  const isCorrectOverall = submitted &&
+    [...selected].sort().join("|||") === [...correctLabels].sort().join("|||");
+
+  function handleClick(opt) {
+    if (submitted) return;
+    if (isMulti) {
+      setSelected(prev =>
+        prev.includes(opt)
+          ? prev.filter(x => x !== opt)
+          : prev.length < q.selectCount ? [...prev, opt] : prev
+      );
+    } else {
+      setSelected([opt]);
+      setSubmitted(true);
+    }
+  }
 
   return (
     <div>
@@ -4642,13 +4649,18 @@ function QuickQuestion({ sets }) {
         <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>QUICK QUESTION</p>
       </div>
       <div style={card({})}>
+        {isMulti && (
+          <p style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted2, marginBottom: "0.5rem" }}>
+            Select {q.selectCount}
+          </p>
+        )}
         <div style={{ fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: 500, color: T.text, marginBottom: "1rem", lineHeight: 1.5 }}>
           {renderText(q.question)}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
           {options.map(function(opt, i) {
-            const isSelected = selected === opt;
-            const isCorrect  = opt === correctLabel;
+            const isSelected = selected.includes(opt);
+            const isCorrect  = correctLabels.includes(opt);
             let bg = T.surface;
             let border = "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)");
             let color = T.text;
@@ -4659,30 +4671,40 @@ function QuickQuestion({ sets }) {
               bg = T.accent + "18"; border = "1px solid " + T.accent; color = T.accent;
             }
             return (
-              <button key={i} onClick={function() { if (!submitted) setSelected(opt); }}
+              <button key={i} onClick={() => handleClick(opt)}
                 style={{ background: bg, border, color, borderRadius: "12px", padding: "0.75rem 1rem",
                   textAlign: "left", cursor: submitted ? "default" : "pointer",
                   display: "flex", alignItems: "center", gap: "0.75rem",
                   fontFamily: FF_SANS, fontSize: "0.9rem", lineHeight: 1.4,
                   transition: "background 0.15s, border 0.15s" }}>
                 <span style={{
-                  minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "50%",
+                  minWidth: "20px", height: "20px", border: "1px solid currentColor",
+                  borderRadius: isMulti ? "4px" : "50%",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "0.65rem", flexShrink: 0, marginTop: "2px",
                   opacity: isSelected || (submitted && isCorrect) ? 1 : 0.35,
                 }}>
-                  {submitted && isCorrect ? "✓" : submitted && isSelected ? "✗" : String.fromCharCode(65 + i)}
+                  {submitted && isCorrect ? "✓" : submitted && isSelected && !isCorrect ? "✗" : String.fromCharCode(65 + i)}
                 </span>
                 <span>{renderText(opt)}</span>
               </button>
             );
           })}
         </div>
+        {isMulti && !submitted && (
+          <div style={{ marginTop: "0.75rem", display: "flex", justifyContent: "flex-end" }}>
+            <PrimaryButton onClick={() => setSubmitted(true)} small
+              style={{ padding: "0.4rem 1rem", fontSize: "0.8rem",
+                opacity: selected.length === q.selectCount ? 1 : 0.4,
+                pointerEvents: selected.length === q.selectCount ? "auto" : "none" }}>
+              Submit
+            </PrimaryButton>
+          </div>
+        )}
         {submitted && (
           <div style={{ marginTop: "0.85rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem",
-              color: selected === correctLabel ? T.green : T.red }}>
-              {selected === correctLabel ? "\u2713 Correct!" : "\u2717 Incorrect"}
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: isCorrectOverall ? T.green : T.red }}>
+              {isCorrectOverall ? "\u2713 Correct!" : "\u2717 Incorrect"}
             </p>
             <PrimaryButton onClick={next} small style={{ padding: "0.4rem 1rem", fontSize: "0.8rem" }}>
               Next →
