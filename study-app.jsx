@@ -3469,14 +3469,6 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               borderRadius: "20px", padding: "1.25rem 1rem",
               boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
             }}>
-              {/* Quick picks */}
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", width: "100%" }}>
-                {TIMER_OPTIONS.map(min => (
-                  <OptionButton key={min} onClick={() => setCustomMin(min)} active={customMin === min} style={{ flex: 1, justifyContent: "center" }}>
-                    {min}m
-                  </OptionButton>
-                ))}
-              </div>
               {/* Stepper */}
               <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.1rem" }}>CUSTOM TIME</p>
               <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
@@ -3500,6 +3492,14 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                     boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)" }}>
                   +
                 </button>
+              </div>
+              {/* Quick picks */}
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", width: "100%" }}>
+                {TIMER_OPTIONS.map(min => (
+                  <OptionButton key={min} onClick={() => setCustomMin(min)} active={customMin === min} style={{ flex: 1, justifyContent: "center" }}>
+                    {min}m
+                  </OptionButton>
+                ))}
               </div>
             </div>
 
