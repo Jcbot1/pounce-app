@@ -1121,10 +1121,8 @@ function SnapTextarea({ style, maxLength, ...props }) {
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const scrollY = window.scrollY;
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
-    window.scrollTo({ top: scrollY, behavior: "instant" });
   }, [props.value]);
 
   return (
@@ -1151,10 +1149,8 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const scrollY = window.scrollY;
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
-    window.scrollTo({ top: scrollY, behavior: "instant" });
   }, [value]);
 
   return (
