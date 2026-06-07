@@ -213,17 +213,21 @@ function GhostButton({ onClick, children, small, style: extraStyle }) {
 
 // ── Danger Button ──────────────────────────────────────────────────────────
 function DangerButton({ onClick, children, small, style: extraStyle }) {
-  const b = btn("danger", small);
-  const { wrapperStyle, innerStyle } = splitStyle(extraStyle);
-  const wrapperBg = innerStyle.background || b.background;
-  delete innerStyle.background;
   return (
-    <div style={{ background: wrapperBg, borderRadius: "99px", display: "inline-flex", ...wrapperStyle }}>
-      <button onClick={onClick} {...dangerPress()}
-        style={{ ...b, background: "transparent", borderRadius: "99px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", ...innerStyle }}>
-        {children}
-      </button>
-    </div>
+    <button onClick={onClick} {...dangerPress()} style={{
+      ...glassyBtn(false),
+      background: T.mode === "light" ? T.red + "18" : T.red + "28",
+      border: "1.5px solid " + T.red + "66",
+      color: T.red,
+      height: small ? "38px" : "44px",
+      padding: small ? "0 1rem" : "0 1.25rem",
+      fontSize: small ? "0.87rem" : "0.9rem",
+      fontFamily: FF_SANS, fontWeight: 600,
+      WebkitTapHighlightColor: "transparent",
+      ...extraStyle,
+    }}>
+      {children}
+    </button>
   );
 }
 
@@ -243,15 +247,21 @@ function PrimaryButton({ onClick, children, small, disabled, style: extraStyle }
 
 // ── Success Button ─────────────────────────────────────────────────────────
 function SuccessButton({ onClick, children, small, style: extraStyle }) {
-  const b = btn("success", small);
-  const { wrapperStyle, innerStyle } = splitStyle(extraStyle);
   return (
-    <div style={{ background: b.background, borderRadius: "99px", display: "inline-flex", ...wrapperStyle }}>
-      <button onClick={onClick} {...successPress()}
-        style={{ ...b, background: "transparent", borderRadius: "99px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", ...innerStyle }}>
-        {children}
-      </button>
-    </div>
+    <button onClick={onClick} {...glassPress()} style={{
+      ...glassyBtn(false),
+      background: T.mode === "light" ? T.green + "18" : T.green + "28",
+      border: "1.5px solid " + T.green + "66",
+      color: T.green,
+      height: small ? "38px" : "44px",
+      padding: small ? "0 1rem" : "0 1.25rem",
+      fontSize: small ? "0.87rem" : "0.9rem",
+      fontFamily: FF_SANS, fontWeight: 600,
+      WebkitTapHighlightColor: "transparent",
+      ...extraStyle,
+    }}>
+      {children}
+    </button>
   );
 }
 
@@ -381,14 +391,14 @@ function AnswerButton({ onClick, children, bg, border, color, shadow, submitted,
 // Session picker mode/count/timer option buttons
 function OptionButton({ onClick, children, active = false, disabled = false, style: extraStyle }) {
   return (
-    <button onClick={onClick} {...surfacePress()} style={{
-      background: active ? T.accent + "22" : T.surface2,
-      border: active ? "1px solid " + T.accent : "1px solid " + T.border,
-      borderRadius: "99px", padding: "1rem 1.4rem", textAlign: "left",
-      display: "flex", alignItems: "center", gap: "1rem", cursor: disabled ? "not-allowed" : "pointer",
+    <button onClick={onClick} {...glassPress()} style={{
+      ...glassyBtn(active),
+      padding: "1rem 1.4rem", textAlign: "left",
+      display: "flex", alignItems: "center", gap: "1rem",
+      cursor: disabled ? "not-allowed" : "pointer",
       width: "100%", opacity: disabled ? 0.45 : 1,
-      boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
-      transition: "opacity 0.15s", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text,
+      transition: "opacity 0.15s", fontFamily: FF_SANS, fontSize: "0.95rem",
+      WebkitTapHighlightColor: "transparent",
       ...extraStyle,
     }}>
       {children}
@@ -871,7 +881,7 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
         </div>
         <div style={{ display: "flex", gap: "0.6rem", flexDirection: "column" }}>
           {extraButton}
-          <DangerButton onClick={onConfirm} style={{ background: T.red + "22", width: "100%", justifyContent: "center" }}>{confirmLabel}</DangerButton>
+          <DangerButton onClick={onConfirm} style={{ width: "100%", justifyContent: "center" }}>{confirmLabel}</DangerButton>
           <GhostButton onClick={onCancel} style={{ width: "100%", justifyContent: "center" }}>Cancel</GhostButton>
         </div>
       </ModalCard>
@@ -6457,11 +6467,11 @@ function App() {
 
                 {/* Edit-page kebab */}
                 <div ref={editKebabRef} style={{ position: "relative", flexShrink: 0 }}>
-                  <button {...surfacePress()} onClick={e => {
+                  <button {...glassPress()} onClick={e => {
                     const rect = e.currentTarget.parentElement.getBoundingClientRect();
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                     setEditKebabOpen(o => !o);
-                  }} style={{ width: "36px", height: "36px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer" }}>
+                  }} style={{ ...glassyBtn(editKebabOpen), width: "36px", height: "36px", flexShrink: 0, padding: "0" }}>
                     <DotsVerticalIcon color={T.muted} />
                   </button>
                   {editKebabOpen && (
@@ -6647,11 +6657,11 @@ function App() {
                   </div>
                   {/* Kebab options button */}
                   <div ref={resultsKebabRef} style={{ position: "relative", flexShrink: 0 }}>
-                    <button {...surfacePress()} onClick={e => {
+                    <button {...glassPress()} onClick={e => {
                       const rect = e.currentTarget.parentElement.getBoundingClientRect();
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                       setResultsKebabOpen(o => !o);
-                    }} style={{ width: "38px", height: "38px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer" }}>
+                    }} style={{ ...glassyBtn(resultsKebabOpen), width: "38px", height: "38px", flexShrink: 0, padding: "0" }}>
                       <DotsVerticalIcon color={T.muted} />
                     </button>
                     {resultsKebabOpen && (
