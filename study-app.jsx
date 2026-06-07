@@ -3463,13 +3463,22 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
         {step === "exam-timer" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
 
-            {/* Stepper */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem",
+            {/* Timer card: quick picks + stepper */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem",
               background: T.mode === "light" ? "#ede8e0" : "#181614",
               borderRadius: "20px", padding: "1.25rem 1rem",
               boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
             }}>
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.25rem" }}>CUSTOM TIME</p>
+              {/* Quick picks */}
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", width: "100%" }}>
+                {TIMER_OPTIONS.map(min => (
+                  <OptionButton key={min} onClick={() => setCustomMin(min)} active={customMin === min} style={{ flex: 1, justifyContent: "center" }}>
+                    {min}m
+                  </OptionButton>
+                ))}
+              </div>
+              {/* Stepper */}
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.1rem" }}>CUSTOM TIME</p>
               <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
                 <button onClick={() => setCustomMin(m => Math.max(5, m - 5))}
                   {...surfacePress()}
@@ -3492,19 +3501,12 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                   +
                 </button>
               </div>
-              <PrimaryButton onClick={() => onStart(null, "exam", customMin)} small style={{ marginTop: "0.5rem", minWidth: "120px", justifyContent: "center" }}>
-                Start
-              </PrimaryButton>
             </div>
 
-            {/* Quick picks */}
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              {TIMER_OPTIONS.map(min => (
-                <OptionButton key={min} onClick={() => setCustomMin(min)} active={customMin === min} style={{ flex: 1, justifyContent: "center" }}>
-                  {min}m
-                </OptionButton>
-              ))}
-            </div>
+            {/* Start button outside the card */}
+            <PrimaryButton onClick={() => onStart(null, "exam", customMin)} small style={{ minWidth: "120px", justifyContent: "center" }}>
+              Start
+            </PrimaryButton>
 
           </div>
         )}
