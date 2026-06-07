@@ -6396,7 +6396,7 @@ function App() {
                   </svg>
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
-                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0", paddingBottom: "0", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box" }) }} />
+                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0", paddingBottom: "0", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box", background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)", border: "none" }) }} />
                   {editSearch && (
                     <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
                       background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
@@ -6576,7 +6576,7 @@ function App() {
                       value={resultsSearch}
                       onChange={e => setResultsSearch(e.target.value)}
                       placeholder="Search questions…"
-                      style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0", paddingBottom: "0", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box" }) }}
+                      style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0", paddingBottom: "0", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box", background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)", border: "none" }) }}
                     />
                     {resultsSearch && (
                       <button onClick={() => setResultsSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
