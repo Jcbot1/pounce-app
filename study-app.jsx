@@ -1397,7 +1397,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                 style={{ ...inp(), appearance: "none" }}>
                 <option value="single">Single answer</option>
                 <option value="multi">Multi-select</option>
-                <option value="dropdown">Fill-in-blank (dropdowns)</option>
+                <option value="dropdown">Dropdown</option>
                 <option value="matching">Matching</option>
                 <option value="flashcard">Flashcard</option>
               </select>
@@ -1918,7 +1918,7 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
   const types = [
     { type: "single",    label: "Single answer",  color: TYPE_META.single.color    },
     { type: "multi",     label: "Multi-select",    color: TYPE_META.multi.color     },
-    { type: "dropdown",  label: "Fill-in-blank",   color: TYPE_META.dropdown.color  },
+    { type: "dropdown",  label: "Dropdown",          color: TYPE_META.dropdown.color  },
     { type: "matching",  label: "Matching",        color: "#0ea5e9"                 },
     { type: "flashcard", label: "Flashcard",       color: TYPE_META.flashcard.color },
   ];
@@ -2091,7 +2091,7 @@ Rules:
             <div>
               <Label style={{ marginBottom: "0.5rem" }}>QUESTION TYPES</Label>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {Object.entries({ single: "Single answer", multi: "Multi-select", matching: "Matching", dropdown: "Fill-in-blank" }).map(([key, label]) => (
+                {Object.entries({ single: "Single answer", multi: "Multi-select", matching: "Matching", dropdown: "Dropdown" }).map(([key, label]) => (
                   <button key={key} onClick={() => setTypes(t => ({ ...t, [key]: !t[key] }))}
                     style={{
                       display: "inline-flex", alignItems: "center", gap: "0.4rem",
