@@ -864,7 +864,7 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
     : "CONFIRM";
   return (
     <Modal onClose={onCancel}>
-      <ModalCard pad="1.75rem" maxWidth={360}>
+      <ModalCard pad="2.25rem" maxWidth={360}>
         <div>
           <Label style={{ color: T.red, marginBottom: "0.4rem" }}>
             {headerLabel}
