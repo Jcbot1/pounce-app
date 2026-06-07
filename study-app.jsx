@@ -3126,7 +3126,7 @@ function AnimatedPct({ target, color }) {
   );
 }
 
-function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, resultsFilter = "all", resultsSearch = "" }) {
+function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, resultsFilter = "all", resultsSearch = "" }) {
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
   const passed = pct >= 70;
@@ -3148,7 +3148,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
       date:      new Date().toISOString(),
       score,
       total:     results.length,
-      mode:      questionLimit ? "quick" : "full",
+      mode:      examMode ? "exam" : questionLimit ? "quick" : "review",
       results,
       questions,
     };
@@ -4513,7 +4513,10 @@ function HistoryCard({ session, onView }) {
             {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
           </span>
           {session.mode && (
-            <Tag label={session.mode === "quick" ? "QUICK " + session.total : "FULL SET"} color={session.mode === "quick" ? T.accent : T.green} />
+            <Tag
+              label={session.mode === "quick" ? "QUICK " + session.total : session.mode === "exam" ? "EXAM" : "REVIEW"}
+              color={session.mode === "quick" ? T.accent : session.mode === "exam" ? "#f59e0b" : T.green}
+            />
           )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
@@ -6704,7 +6707,7 @@ function App() {
             {screen === "results" && reviewResults && (
               <ResultsScreen results={reviewResults} questions={reviewQs}
                 set={activeSet} onRestart={handleRestart} onBack={() => { setScreen("home"); setResultsFilter("all"); setResultsSearch(""); }}
-                onSaveToHistory={handleSaveToHistory} questionLimit={questionLimit}
+                onSaveToHistory={handleSaveToHistory} questionLimit={questionLimit} examMode={examMode}
                 onRetryMissed={handleRetryMissed}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
                 confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
