@@ -1148,7 +1148,7 @@ const glassyBtn = (active = false, color = null) => {
     cursor: "pointer",
     display: "flex", alignItems: "center", justifyContent: "center",
     background: active
-      ? (T.mode === "light" ? c + "18" : c + "28")
+      ? (T.mode === "light" ? c + "18" : c + "45")
       : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
     border: active ? "1.5px solid " + c + "66" : "none",
     color: active ? c : T.text,
@@ -2246,9 +2246,9 @@ Rules:
 // ════════════════════════════════════════════════════════════════════════
 
 function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
-  const selBg   = T.mode === "light" ? T.accent + "18" : T.accent + "28";
-  const corBg   = T.mode === "light" ? T.green  + "18" : T.green  + "28";
-  const wroBg   = T.mode === "light" ? T.red    + "18" : T.red    + "28";
+  const selBg   = T.mode === "light" ? T.accent + "18" : T.accent + "45";
+  const corBg   = T.mode === "light" ? T.green  + "18" : T.green  + "45";
+  const wroBg   = T.mode === "light" ? T.red    + "18" : T.red    + "45";
   const selColor = T.accent;
   const revShadow = T.mode === "light"
     ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1.5px 0 rgba(255,255,255,0.55)"
@@ -2283,9 +2283,9 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
 }
 
 function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
-  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "28";
-  const corBg = T.mode === "light" ? T.green  + "18" : T.green  + "28";
-  const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "28";
+  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "45";
+  const corBg = T.mode === "light" ? T.green  + "18" : T.green  + "45";
+  const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "45";
   const revShadow = T.mode === "light"
     ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1.5px 0 rgba(255,255,255,0.55)"
     : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1.5px 0 rgba(255,255,255,0.2)";
@@ -2341,9 +2341,9 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
     return () => document.removeEventListener("pointerdown", handle);
   }, [openId]);
 
-  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "28";
-  const corBg = T.mode === "light" ? T.green  + "18" : "#052e16";
-  const wroBg = T.mode === "light" ? T.red    + "18" : "#2d0a0a";
+  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "45";
+  const corBg = T.mode === "light" ? T.green  + "18" : T.green  + "45";
+  const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "45";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
