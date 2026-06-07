@@ -2235,9 +2235,12 @@ Rules:
 
 function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
   const selBg   = T.mode === "light" ? T.accent + "18" : T.accent + "28";
-  const corBg   = T.mode === "light" ? T.green  + "18" : "#052e16";
-  const wroBg   = T.mode === "light" ? T.red    + "18" : "#2d0a0a";
+  const corBg   = T.mode === "light" ? T.green  + "18" : T.green  + "28";
+  const wroBg   = T.mode === "light" ? T.red    + "18" : T.red    + "28";
   const selColor = T.accent;
+  const revShadow = T.mode === "light"
+    ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1.5px 0 rgba(255,255,255,0.55)"
+    : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1.5px 0 rgba(255,255,255,0.2)";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
@@ -2251,8 +2254,8 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
           ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.9)"
           : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.06)";
         if (submitted) {
-          if (!examMode && isCor)    { bg = corBg; border = "1px solid " + T.green; color = T.green; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
-          else if (!examMode && isSel) { bg = wroBg; border = "1px solid " + T.red;   color = T.red;   shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
+          if (!examMode && isCor)    { bg = corBg; border = "1.5px solid " + T.green + "66"; color = T.green; shadow = revShadow; }
+          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "66"; color = T.red;   shadow = revShadow; }
           else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; }
         } else if (isSel) {
           bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor;
@@ -2269,8 +2272,11 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
 
 function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
   const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "28";
-  const corBg = T.mode === "light" ? T.green  + "18" : "#052e16";
-  const wroBg = T.mode === "light" ? T.red    + "18" : "#2d0a0a";
+  const corBg = T.mode === "light" ? T.green  + "18" : T.green  + "28";
+  const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "28";
+  const revShadow = T.mode === "light"
+    ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1.5px 0 rgba(255,255,255,0.55)"
+    : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1.5px 0 rgba(255,255,255,0.2)";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
@@ -2287,8 +2293,8 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
           ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.9)"
           : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.06)";
         if (submitted) {
-          if (!examMode && isCor)      { bg = corBg; border = "1px solid " + T.green; color = T.green; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
-          else if (!examMode && isSel) { bg = wroBg; border = "1px solid " + T.red;   color = T.red; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
+          if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "66"; color = T.green; shadow = revShadow; }
+          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "66"; color = T.red;   shadow = revShadow; }
           else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; }
         } else if (isSel) {
           bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent;
