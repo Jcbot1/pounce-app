@@ -6770,7 +6770,7 @@ function App() {
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Sidebar border — starts below header height so it looks like one piece */}
-          <div style={{ position: "fixed", top: "60px", bottom: 0, width: "1px", background: ST.border,
+          <div style={{ position: "fixed", top: "59px", bottom: 0, width: "1px", background: ST.border,
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
             transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
@@ -6966,7 +6966,7 @@ function App() {
         <div style={{
           position: "fixed",
           top: "47px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 12 + "px",
+          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 11 + "px",
           right: 0,
           height: "1px",
           background: ST.border,
