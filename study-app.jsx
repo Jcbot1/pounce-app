@@ -6996,7 +6996,7 @@ function App() {
             width: "24px",
             height: "24px",
             borderRadius: "50%",
-            boxShadow: `0 0 0 12px ${ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"}`,
+            boxShadow: `0 0 0 1px ${ST.border}, 0 0 0 12px ${ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"}`,
           }} />
         </div>
       )}
