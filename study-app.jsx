@@ -2233,9 +2233,9 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
         if (submitted) {
           if (!examMode && isCor)    { bg = corBg; border = "1px solid " + T.green; color = T.green; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
           else if (!examMode && isSel) { bg = wroBg; border = "1px solid " + T.red;   color = T.red;   shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
-          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
+          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; }
         } else if (isSel) {
-          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)";
+          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = selColor;
         }
         return (
           <AnswerButton key={i} onClick={() => !submitted && onSelect(i)} bg={bg} border={border} color={color} shadow={shadow} submitted={submitted} label={submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i)}>
@@ -2269,9 +2269,9 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
         if (submitted) {
           if (!examMode && isCor)      { bg = corBg; border = "1px solid " + T.green; color = T.green; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
           else if (!examMode && isSel) { bg = wroBg; border = "1px solid " + T.red;   color = T.red; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
-          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)"; }
+          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; }
         } else if (isSel) {
-          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent; shadow = "inset 0 1px 0 rgba(255,255,255,0.12)";
+          bg = selBg; border = "1.5px solid " + T.accent + "66"; color = T.accent;
         }
         const label = submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i);
         return (
@@ -4317,7 +4317,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
               <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 {setsActiveTag ? (
-                  <button onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.accent + "18" : T.accent + "28", border: "1.5px solid " + T.accent + "66", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent" }}>
+                  <button onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} {...surfacePress()} style={{ background: T.mode === "light" ? T.accent + "18" : T.accent + "28", border: "1.5px solid " + T.accent + "66", borderRadius: "99px", display: "flex", alignItems: "center", gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, cursor: "pointer", color: T.accent, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", boxShadow: T.mode === "light" ? "0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.7)" : "0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.12)" }}>
                     <FilterIcon size={13} />
                     <span style={{ fontSize: "0.85rem" }}>{setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag}</span>
                   </button>
