@@ -6156,7 +6156,7 @@ function App() {
                 ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
                 : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,1) 60%, rgba(15,9,5,0) 100%)`
               : "transparent",
-          transition: editingSetName ? "none" : "background 0.3s ease",
+          transition: (editingSetName || showSidebar) ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
         }}>
           
