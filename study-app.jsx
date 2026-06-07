@@ -6349,15 +6349,15 @@ function App() {
 
                 {/* Edit-page kebab */}
                 <div ref={editKebabRef} style={{ position: "relative", flexShrink: 0 }}>
-                  <GhostButton onClick={e => {
+                  <button {...surfacePress()} onClick={e => {
                     const rect = e.currentTarget.parentElement.getBoundingClientRect();
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                     setEditKebabOpen(o => !o);
-                  }} style={{ width: "36px", height: "36px", flexShrink: 0, justifyContent: "center", padding: "0" }}>
+                  }} style={{ width: "36px", height: "36px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer" }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted}>
                       <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
                     </svg>
-                  </GhostButton>
+                  </button>
                   {editKebabOpen && (
                     <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                         <KebabMenuItem onClick={() => {
@@ -6545,15 +6545,15 @@ function App() {
                   </div>
                   {/* Kebab options button */}
                   <div ref={resultsKebabRef} style={{ position: "relative", flexShrink: 0 }}>
-                    <GhostButton onClick={e => {
+                    <button {...surfacePress()} onClick={e => {
                       const rect = e.currentTarget.parentElement.getBoundingClientRect();
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                       setResultsKebabOpen(o => !o);
-                    }} style={{ width: "38px", height: "38px", flexShrink: 0, justifyContent: "center", padding: "0" }}>
+                    }} style={{ width: "38px", height: "38px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "0", borderRadius: "99px", background: T.surface, border: "1px solid " + T.border, cursor: "pointer" }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill={T.muted}>
                         <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
                       </svg>
-                    </GhostButton>
+                    </button>
                     {resultsKebabOpen && (
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
                           {!isHist && (
