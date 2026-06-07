@@ -2620,6 +2620,9 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
   const bubbleRef      = useRef(null);
   const [bubbleAtStart, setBubbleAtStart] = useState(true);
   const [bubbleAtEnd,   setBubbleAtEnd]   = useState(false);
+  const bubbleDragX    = useRef(null);
+  const bubbleDragSL   = useRef(0);
+  const bubbleDragDist = useRef(0);
 
   function checkBubbleScroll(el) {
     setBubbleAtStart(el.scrollLeft <= 4);
@@ -2630,6 +2633,18 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
     const el = bubbleRef.current;
     if (el) checkBubbleScroll(el);
   }, [questions.length]);
+
+  useEffect(() => {
+    const el = bubbleRef.current;
+    if (!el) return;
+    const handler = e => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      el.scrollLeft += e.deltaY;
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
   const topRef         = useRef(null);
   const answersRef     = useRef(null);
   const explanationRef = useRef(null);
@@ -2891,10 +2906,26 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           </ModalCard>
         </Modal>
       )}
-      <div ref={bubbleRef} onScroll={e => checkBubbleScroll(e.currentTarget)} style={{
+      <div ref={bubbleRef} onScroll={e => checkBubbleScroll(e.currentTarget)}
+        onPointerDown={e => {
+          if (e.button !== 0) return;
+          bubbleDragX.current = e.clientX;
+          bubbleDragSL.current = bubbleRef.current.scrollLeft;
+          bubbleDragDist.current = 0;
+          e.currentTarget.setPointerCapture(e.pointerId);
+        }}
+        onPointerMove={e => {
+          if (bubbleDragX.current === null) return;
+          const dx = e.clientX - bubbleDragX.current;
+          bubbleDragDist.current = Math.abs(dx);
+          bubbleRef.current.scrollLeft = bubbleDragSL.current - dx;
+        }}
+        onPointerUp={() => { bubbleDragX.current = null; }}
+        onClickCapture={e => { if (bubbleDragDist.current > 5) e.stopPropagation(); }}
+        style={{
         display: "flex", gap: "0.35rem", overflowX: "auto", overflowY: "visible",
         paddingBottom: "0.5rem", paddingTop: "0.5rem", paddingLeft: "0.35rem",
-        marginBottom: "1.25rem", scrollbarWidth: "none",
+        marginBottom: "1.25rem", scrollbarWidth: "none", cursor: "grab",
         maskImage: `linear-gradient(to right, ${bubbleAtStart ? "black" : "transparent"} 0%, black 10%, black 88%, ${bubbleAtEnd ? "black" : "transparent"} 100%)`,
         WebkitMaskImage: `linear-gradient(to right, ${bubbleAtStart ? "black" : "transparent"} 0%, black 10%, black 88%, ${bubbleAtEnd ? "black" : "transparent"} 100%)`,
       }}>
