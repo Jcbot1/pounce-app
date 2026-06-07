@@ -388,7 +388,7 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
     <button onClick={onClick} {...glassPress()} style={{
       ...glassyBtn(active),
       padding: "1rem 1.4rem", textAlign: "left",
-      display: "flex", alignItems: "center", gap: "1rem",
+      display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "1rem",
       cursor: disabled ? "not-allowed" : "pointer",
       width: "100%", opacity: disabled ? 0.45 : 1,
       transition: "opacity 0.15s", fontFamily: FF_SANS, fontSize: "0.95rem",
