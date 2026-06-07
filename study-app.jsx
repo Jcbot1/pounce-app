@@ -6415,7 +6415,7 @@ function App() {
                     flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem",
                     minWidth: "80px", width: "90px",
                     transition: "background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.2s ease",
-                    position: "relative",
+                    position: "relative", overflow: "hidden",
                     cursor: savedFlash ? "default" : editCanSave ? "pointer" : "default",
                     ...(savedFlash ? {
                       background: T.green,
