@@ -20,7 +20,7 @@ function renderText(text) {
   function flushUl() {
     if (ulItems.length) {
       result.push(<ul key={result.length} style={{ margin: "0.25rem 0", paddingLeft: "1.4rem", listStyleType: "disc", listStylePosition: "outside" }}>
-        {ulItems.map((item, i) => <li key={i} style={{ marginBottom: "0.1rem", display: "list-item", listStyleType: "disc" }}>{item}</li>)}
+        {ulItems.map((item, i) => <li key={i} style={{ marginBottom: "0.1rem", display: "list-item", listStyleType: "disc", whiteSpace: "pre-wrap" }}>{item}</li>)}
       </ul>);
       ulItems = [];
     }
@@ -28,7 +28,7 @@ function renderText(text) {
   function flushOl() {
     if (olItems.length) {
       result.push(<ol key={result.length} style={{ margin: "0.25rem 0", paddingLeft: "1.4rem", listStyleType: "decimal" }}>
-        {olItems.map((item, i) => <li key={i} style={{ marginBottom: "0.1rem", display: "list-item" }}>{item}</li>)}
+        {olItems.map((item, i) => <li key={i} style={{ marginBottom: "0.1rem", display: "list-item", whiteSpace: "pre-wrap" }}>{item}</li>)}
       </ol>);
       olItems = [];
     }
@@ -45,7 +45,7 @@ function renderText(text) {
         // Empty line — always add a break to preserve spacing
         result.push(<br key={result.length} />);
       } else {
-        result.push(<span key={result.length}>{line}{i < lines.length - 1 ? <br/> : null}</span>);
+        result.push(<span key={result.length} style={{ whiteSpace: "pre-wrap" }}>{line}{i < lines.length - 1 ? <br/> : null}</span>);
       }
     }
   });
