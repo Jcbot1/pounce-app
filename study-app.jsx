@@ -431,8 +431,8 @@ function EditorTagChip({ tag, onRemove }) {
   return (
     <button onClick={onRemove} {...primaryPress()} style={{
       display: "flex", alignItems: "center", gap: "0.35rem",
-      padding: "0.3rem 0.85rem", borderRadius: "99px", border: "none", cursor: "pointer",
-      fontFamily: FF_MONO, fontSize: "0.63rem", fontWeight: 600, letterSpacing: "0.1em",
+      padding: "0.38rem 0.9rem", borderRadius: "99px", border: "none", cursor: "pointer",
+      fontFamily: FF_MONO, fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em",
       background: color, color: "#fff",
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>
