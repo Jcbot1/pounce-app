@@ -6987,9 +6987,9 @@ function App() {
           pointerEvents: "none",
           transition: "left 0.25s ease",
         }}>
-          <path d="M 12 0 A 12 12 0 0 1 0 12 L 0 0 Z"
+          <path d="M 12 0 A 12 12 0 0 0 0 12 L 0 0 Z"
             fill={ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} />
-          <path d="M 12 0 A 12 12 0 0 1 0 12"
+          <path d="M 12 0 A 12 12 0 0 0 0 12"
             fill="none" stroke={ST.border} strokeWidth="1" />
         </svg>
       )}
