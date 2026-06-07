@@ -3494,11 +3494,24 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 </button>
               </div>
               {/* Quick picks */}
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", width: "100%" }}>
+              <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
                 {TIMER_OPTIONS.map(min => (
-                  <OptionButton key={min} onClick={() => setCustomMin(min)} active={customMin === min} style={{ flex: 1, justifyContent: "center" }}>
+                  <button key={min} onClick={() => setCustomMin(min)} {...surfacePress()}
+                    style={{
+                      flex: 1, height: "44px", borderRadius: "99px", cursor: "pointer",
+                      border: customMin === min ? "1.5px solid " + T.accent + "66" : "none",
+                      background: customMin === min
+                        ? (T.mode === "light" ? T.accent + "18" : T.accent + "28")
+                        : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
+                      color: customMin === min ? T.accent : T.text,
+                      fontFamily: FF_MONO, fontSize: "0.85rem", fontWeight: 600,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      boxShadow: T.mode === "light"
+                        ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
+                        : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
+                    }}>
                     {min}m
-                  </OptionButton>
+                  </button>
                 ))}
               </div>
             </div>
