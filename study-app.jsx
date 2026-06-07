@@ -196,15 +196,18 @@ function splitStyle(extraStyle = {}) {
 
 // ── Ghost Button ───────────────────────────────────────────────────────────
 function GhostButton({ onClick, children, small, style: extraStyle }) {
-  const b = btn("ghost", small);
-  const { wrapperStyle, innerStyle } = splitStyle(extraStyle);
   return (
-    <div onClick={onClick} {...surfacePress()} style={{ background: b.background, border: b.border, borderRadius: "99px", display: "inline-flex", alignItems: "center", overflow: "hidden", cursor: "pointer", ...wrapperStyle }}>
-      <button
-        style={{ ...b, background: "transparent", border: "none", borderRadius: "99px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", height: wrapperStyle.height || undefined, cursor: "pointer", ...innerStyle }}>
-        {children}
-      </button>
-    </div>
+    <button onClick={onClick} {...glassPress()} style={{
+      ...glassyBtn(false),
+      height: small ? "38px" : "44px",
+      padding: small ? "0 1rem" : "0 1.25rem",
+      fontSize: small ? "0.87rem" : "0.9rem",
+      fontFamily: FF_SANS, fontWeight: 500,
+      WebkitTapHighlightColor: "transparent",
+      ...extraStyle,
+    }}>
+      {children}
+    </button>
   );
 }
 
@@ -1125,7 +1128,7 @@ const btn = (variant = "primary", small = false) => ({
   minHeight: small ? "38px" : "44px",
   ...(variant === "primary"  && { background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box", border: "2px solid transparent", color: T.muted2, fontWeight: 600 }),
   ...(variant === "purple"   && { background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box", border: "2px solid transparent", color: T.muted2, fontWeight: 600 }),
-  ...(variant === "ghost"    && { background: T.surface2, border: `1px solid ${T.mode === "light" ? "rgba(0,0,0,0.03)" : "rgba(255,255,255,0.03)"}`, color: T.muted2 }),
+  ...(variant === "ghost"    && { background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)", border: "none", color: T.text, boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)" }),
   ...(variant === "danger"   && { background: T.red + "22",   border: "1px solid " + T.red + "18",   color: T.red }),
   ...(variant === "success"  && { background: T.green + "18", border: "1px solid " + T.green + "18", color: T.green }),
   ...(variant === "disabled" && { background: T.surface2,             color: T.muted, cursor: "not-allowed" }),
