@@ -6743,7 +6743,7 @@ function App() {
           {sidebarCollapsed && <div style={{ flex: 1 }} />}
 
           {/* Nav tabs */}
-          <nav style={{ padding: "0 0.75rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+          <nav style={{ padding: "0 0.75rem", display: "flex", flexDirection: "column", gap: sidebarCollapsed ? "0.5rem" : "0.2rem" }}>
             {[
               { id: "home",    label: "Home",
                 icon:       <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
