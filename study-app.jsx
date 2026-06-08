@@ -91,6 +91,7 @@ function Modal({ onClose, children, zIndex = 1000 }) {
     <div style={{
       position: "fixed", inset: 0, background: "#00000099", zIndex,
       backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+      transform: "translateZ(0)",
       display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem",
     }}
       onWheel={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}
@@ -171,6 +172,7 @@ function GlassButton({ onClick, onPointerDown, children, size = 44, style: extra
         ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)"
         : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
       display: "flex", ...extraStyle,
+      transform: extraStyle?.transform ? `translateZ(0) ${extraStyle.transform}` : "translateZ(0)",
     }}>
       <button onClick={onClick} onPointerDown={onPointerDown} {...glassPress()} style={{
         flex: 1, background: "transparent", border: "none",
@@ -1159,6 +1161,7 @@ const glassyBtn = (active = false, color = null) => {
       : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
+    transform: "translateZ(0)",
   };
 };
 
@@ -6142,7 +6145,7 @@ function App() {
         input:focus, textarea:focus, select:focus { border-color: ${T.accent} !important; box-shadow: 0 0 0 2px ${T.accent}22; }
         @media (hover: hover) { button:hover:not(:disabled) { filter: brightness(0.95); } }
         button:focus { outline: none; }
-        button:active:not(:disabled) { opacity: 0.7; }
+        button:active:not(:disabled) { transform: scale(0.96); }
         * { -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: ${T.surface}; }
@@ -6390,8 +6393,7 @@ function App() {
               display: "flex", justifyContent: "center",
               overflow: "hidden",
               maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
-              opacity: (isDesktop || isTablet || titleBarVisible) ? 1 : 0,
-              transition: "max-height 0.3s ease, opacity 0.3s ease",
+              transition: "max-height 0.3s ease",
             }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.75rem",
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem" }}>
@@ -6561,9 +6563,8 @@ function App() {
             return (
               <div style={{
                 maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
-                opacity: (isDesktop || isTablet || titleBarVisible) ? 1 : 0,
                 overflow: "hidden",
-                transition: "max-height 0.3s ease, opacity 0.3s ease",
+                transition: "max-height 0.3s ease",
               }}>
                 <div style={{
                   display: "flex", alignItems: "center",
