@@ -1700,8 +1700,17 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   useEffect(() => {
     const handler = () => {
       const isDirty = JSON.stringify(draft) !== savedDraftRef.current;
-      if (isDirty) setConfirmBack(true);
-      else onBack();
+      if (isDirty) {
+        // Blur any focused input to dismiss the iOS keyboard before the modal
+        // appears — prevents a compositing race where backdrop-filter fails
+        // during the keyboard dismissal animation.
+        if (document.activeElement && document.activeElement !== document.body) {
+          document.activeElement.blur();
+        }
+        setTimeout(() => setConfirmBack(true), 50);
+      } else {
+        onBack();
+      }
     };
     document.addEventListener("studi-back", handler);
     return () => document.removeEventListener("studi-back", handler);
@@ -6255,14 +6264,18 @@ function App() {
             right: 0,
             height: "48px",
             boxShadow: ST.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
+            backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           } : {}),
           background: showSidebar
-            ? ST.mode === "light" ? "rgba(255,253,250,0.98)" : "rgba(24,22,20,0.98)"
+            ? ST.mode === "light" ? "rgba(255,253,250,0.90)" : "rgba(24,22,20,0.90)"
             : (scrolled || screen === "results" || screen === "historyResults" || editingSetName)
               ? T.mode === "light"
-                ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
-                : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,1) 60%, rgba(15,9,5,0) 100%)`
+                ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,0.85) 60%, rgba(247,245,242,0) 100%)`
+                : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,0.85) 60%, rgba(15,9,5,0) 100%)`
               : "transparent",
+          ...((scrolled || screen === "results" || screen === "historyResults" || editingSetName) && !showSidebar ? {
+            backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          } : {}),
           transition: (editingSetName || showSidebar) ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
         }}>
