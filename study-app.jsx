@@ -92,6 +92,7 @@ function Modal({ onClose, children, zIndex = 1000 }) {
     <div style={{
       position: "fixed", inset: 0, background: "#00000099", zIndex,
       backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+      animation: "sf-blur-fix 0.01s linear forwards",
       display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem",
     }}
       onWheel={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}
@@ -5174,6 +5175,8 @@ const STATIC_STYLES = `
   .press-glass.light    { transition: none !important; background: rgba(255,255,255,0.5) !important; }
   .press-glass.dark     { transition: none !important; background: rgba(255,255,255,0.25) !important; }
   .press-glass-done     { transition: background 0.3s ease !important; }
+
+  @keyframes sf-blur-fix { from { opacity: 0.9999; } to { opacity: 1; } }
 `;
 
 function DeleteAnimation({ onComplete }) {
