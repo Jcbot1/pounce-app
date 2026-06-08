@@ -83,10 +83,6 @@ function useToast() {
 // ════════════════════════════════════════════════════════════════════════
 
 function Modal({ onClose, children, zIndex = 1000 }) {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
   return (
     <div style={{
       position: "fixed", inset: 0, background: "#00000099", zIndex,
@@ -6391,7 +6387,7 @@ function App() {
           {screen === "edit" && (
             <div style={{
               display: "flex", justifyContent: "center",
-              overflow: "hidden",
+              clipPath: "inset(0)",
               maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
               transition: "max-height 0.3s ease",
             }}>
@@ -6563,7 +6559,7 @@ function App() {
             return (
               <div style={{
                 maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
-                overflow: "hidden",
+                clipPath: "inset(0)",
                 transition: "max-height 0.3s ease",
               }}>
                 <div style={{
