@@ -83,7 +83,12 @@ function useToast() {
 // ════════════════════════════════════════════════════════════════════════
 
 function Modal({ onClose, children, zIndex = 1000 }) {
-  return (
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+  return ReactDOM.createPortal(
     <div style={{
       position: "fixed", inset: 0, background: "#00000099", zIndex,
       backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
@@ -92,7 +97,8 @@ function Modal({ onClose, children, zIndex = 1000 }) {
       onWheel={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}
       onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
       {children}
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -1827,7 +1833,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
 
   return (
     <div>
-      {confirmBack && ReactDOM.createPortal(
+      {confirmBack && (
         <ConfirmDialog
           title="Leave without saving?"
           message="Any unsaved changes to this study set will be lost."
@@ -1839,8 +1845,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
               Save & Leave
             </SuccessButton>
           )}
-        />,
-        document.body
+        />
       )}
 
       {/* Tags — inline pills + add button */}
