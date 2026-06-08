@@ -4067,7 +4067,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         display: "grid",
         gridTemplateRows: collapsed ? "0fr" : "1fr",
         transition: "grid-template-rows 0.3s ease",
-        overflow: collapsed ? "hidden" : "visible",
+        overflow: "hidden",
       }}>
         <div style={{ overflow: "hidden", margin: "-8px -8px -8px -16px", padding: "8px 8px 8px 16px" }}>
           <div style={{ paddingLeft: cardColumns > 1 ? 0 : "1rem", borderLeft: cardColumns > 1 ? "none" : "2px solid " + T.accent + "44" }}>
