@@ -6266,7 +6266,7 @@ function App() {
             boxShadow: ST.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
           } : {}),
           background: showSidebar
-            ? ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"
+            ? ST.surface
             : (scrolled || screen === "results" || screen === "historyResults" || editingSetName)
               ? T.mode === "light"
                 ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
@@ -6821,7 +6821,7 @@ function App() {
           position: "fixed", left: 0, top: 0, bottom: 0,
           width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
           transition: "width 0.25s ease",
-          background: ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)",
+          background: ST.surface,
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
