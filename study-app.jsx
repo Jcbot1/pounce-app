@@ -167,8 +167,7 @@ function GlassButton({ onClick, onPointerDown, children, size = 44, style: extra
   return (
     <div ref={divRef} data-glass-btn="1" style={{
       width: size, height: size, borderRadius: "99px", flexShrink: 0,
-      background: T.mode === "light"
-        ? T.surface,
+      background: T.surface,
       border: "1px solid " + T.border,
       boxShadow: T.mode === "light"
         ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
@@ -1154,8 +1153,7 @@ const glassyBtn = (active = false, color = null) => {
     display: "flex", alignItems: "center", justifyContent: "center",
     background: active
       ? (T.mode === "light" ? c + "18" : c + "45")
-      : T.mode === "light"
-        ? T.surface,
+      : T.surface,
     border: active ? "1.5px solid " + c + "44" : "1px solid " + T.border,
     color: active ? c : T.text,
     boxShadow: T.mode === "light"
