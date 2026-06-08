@@ -4069,7 +4069,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         transition: "grid-template-rows 0.3s ease",
         overflow: "hidden",
       }}>
-        <div style={{ overflow: "hidden", margin: "-8px -8px -8px -16px", padding: "8px 8px 8px 16px" }}>
+        <div style={{ overflow: "hidden" }}>
           <div style={{ paddingLeft: cardColumns > 1 ? 0 : "1rem", borderLeft: cardColumns > 1 ? "none" : "2px solid " + T.accent + "44" }}>
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
               {tagSets.map(s => (
