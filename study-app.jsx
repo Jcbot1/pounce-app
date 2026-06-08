@@ -6261,8 +6261,8 @@ function App() {
         
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
-          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           ...(showSidebar ? {
+            backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
             left: 0,
             right: 0,
             height: "48px",
@@ -6399,7 +6399,7 @@ function App() {
           {screen === "edit" && (
             <div style={{
               display: "flex", justifyContent: "center",
-              clipPath: "inset(0)",
+              overflow: "hidden",
               maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
               transition: "max-height 0.3s ease",
             }}>
@@ -6571,7 +6571,7 @@ function App() {
             return (
               <div style={{
                 maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
-                clipPath: "inset(0)",
+                overflow: "hidden",
                 transition: "max-height 0.3s ease",
               }}>
                 <div style={{
