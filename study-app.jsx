@@ -167,9 +167,8 @@ function GlassButton({ onClick, onPointerDown, children, size = 44, style: extra
   return (
     <div ref={divRef} data-glass-btn="1" style={{
       width: size, height: size, borderRadius: "99px", flexShrink: 0,
-      background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(255,255,255,0.12)",
-      backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-      border: T.mode === "light" ? "1px solid rgba(255,255,255,0.6)" : "1px solid rgba(255,255,255,0.15)",
+      background: T.surface2,
+      border: "1px solid " + T.border,
       boxShadow: T.mode === "light"
         ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)"
         : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
@@ -1154,14 +1153,12 @@ const glassyBtn = (active = false, color = null) => {
     display: "flex", alignItems: "center", justifyContent: "center",
     background: active
       ? (T.mode === "light" ? c + "18" : c + "45")
-      : (T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)"),
-    border: active ? "1.5px solid " + c + "44" : "none",
+      : T.surface2,
+    border: active ? "1.5px solid " + c + "44" : "1px solid " + T.border,
     color: active ? c : T.text,
     boxShadow: T.mode === "light"
-      ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
-      : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
+      ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05)"
+      : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15)",
   };
 };
 
