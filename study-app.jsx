@@ -4326,12 +4326,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
       {/* ── HOME TAB ── */}
       {tab === "home" && (
-        <Dashboard
-          history={history}
-          sets={sets}
-          onStudy={onStudy}
-          onViewHistory={onViewHistory}
-        />
+        <div style={{ marginTop: "calc(36px + 1rem)" }}>
+          <Dashboard
+            history={history}
+            sets={sets}
+            onStudy={onStudy}
+            onViewHistory={onViewHistory}
+          />
+        </div>
       )}
 
       {/* ── SETS TAB ── */}
