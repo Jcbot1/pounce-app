@@ -5860,6 +5860,9 @@ function App() {
   const isTablet     = windowWidth >= BREAKPOINT_TABLET && windowWidth < BREAKPOINT_DESKTOP;
   const isDesktop    = windowWidth >= BREAKPOINT_DESKTOP;
   const showSidebar  = !isMobile && screen !== "review" && screen !== "edit" && screen !== "results" && screen !== "historyResults";
+  const prevShowSidebarRef = useRef(showSidebar);
+  const sidebarJustLeft = prevShowSidebarRef.current && !showSidebar;
+  prevShowSidebarRef.current = showSidebar;
   const cardColumns  = isDesktop ? 3 : isTablet ? 2 : 1;
   const [homeTab, setHomeTab]          = useState("home");
   const [editingSetName, setEditingSetName] = useState(false);
@@ -6262,7 +6265,7 @@ function App() {
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
         boxShadow: showSidebar ? (ST.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
-        transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
+        transition: showSidebar ? "margin-left 0.25s ease, border-top-left-radius 0.25s ease" : "none" }}>
         
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
@@ -6280,7 +6283,7 @@ function App() {
                 ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
                 : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,1) 60%, rgba(15,9,5,0) 100%)`
               : "transparent",
-          transition: (editingSetName || showSidebar) ? "none" : "background 0.3s ease",
+          transition: (editingSetName || showSidebar || sidebarJustLeft) ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
         }}>
           
