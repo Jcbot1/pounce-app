@@ -6272,7 +6272,7 @@ function App() {
             : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`)
           : (bgStyle === "dots" || bgStyle === "grid") ? "transparent" : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
-        paddingTop: showSidebar ? "48px" : 0,
+        paddingTop: (showSidebar || headerFixed) ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
         boxShadow: showSidebar ? (ST.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
         transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
