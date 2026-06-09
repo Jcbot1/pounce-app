@@ -6568,7 +6568,7 @@ function App() {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search sets, questions, history…"
-                    style={{ ...inp({ width: "100%", paddingLeft: "2.1rem", paddingTop: "0.35rem", paddingBottom: "0.35rem", fontSize: "16px", borderRadius: "99px", height: "38px", boxSizing: "border-box", background: T.mode === "light" ? T.surface2 : "rgba(255,255,255,0.09)", border: "1px solid " + (T.mode === "light" ? T.border : "rgba(255,255,255,0.12)") }) }}
+                    style={{ ...glassyBtn(false), width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", fontSize: "16px", fontFamily: FF_SANS, height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none" }}
                   />
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
