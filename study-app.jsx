@@ -6441,7 +6441,7 @@ function App() {
                     setTimeout(() => setSavedFlash(false), 4000);
                   }}
                   style={{
-                    ...btn(savedFlash ? "ghost" : editCanSave ? "primary" : "ghost", true), borderRadius: "99px",
+                    ...btn(savedFlash ? "ghost" : editCanSave ? "primary" : "disabled", true), borderRadius: "99px",
                     height: "36px", padding: "0 1rem", fontSize: "0.85rem",
                     flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem",
                     minWidth: "80px", width: "90px",
