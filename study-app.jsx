@@ -6259,16 +6259,17 @@ function App() {
             : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`)
           : (bgStyle === "dots" || bgStyle === "grid") ? "transparent" : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
-        paddingTop: (showSidebar || isDesktop) ? "48px" : 0,
+        paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: showSidebar ? "12px" : 0,
         boxShadow: showSidebar ? (ST.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
         transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
         
         <div style={{
-          position: (showSidebar || isDesktop) ? "fixed" : "sticky", top: 0, zIndex: 99,
-          ...((showSidebar || isDesktop) ? { left: 0, right: 0 } : {}),
+          position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
           ...(showSidebar ? {
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+            left: 0,
+            right: 0,
             height: "48px",
             boxShadow: ST.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
           } : {}),
@@ -6279,7 +6280,7 @@ function App() {
                 ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
                 : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,1) 60%, rgba(15,9,5,0) 100%)`
               : "transparent",
-          transition: editingSetName ? "none" : "background 0.25s ease, box-shadow 0.25s ease",
+          transition: (editingSetName || showSidebar) ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
         }}>
           
