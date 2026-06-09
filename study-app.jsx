@@ -6413,11 +6413,11 @@ function App() {
 
           {screen === "edit" && (
             <div style={{
-              display: "flex", justifyContent: "center",
-              overflow: "hidden",
-              maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
-              transition: "max-height 0.3s ease",
+              display: "grid",
+              gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
+              transition: "grid-template-rows 0.3s ease",
             }}>
+            <div style={{ minHeight: 0, overflow: "hidden", display: "flex", justifyContent: "center" }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.75rem",
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem" }}>
                 <div style={{ flex: 1, position: "relative" }}>
@@ -6545,15 +6545,16 @@ function App() {
                 </div>
               </div>
             </div>
+            </div>
           )}
           {screen === "home" && homeTab === "search" && !showSidebar && (
             <div style={{
-              overflow: titleBarVisible ? "hidden" : "hidden",
-              maxHeight: (isDesktop || isTablet || titleBarVisible) ? "80px" : "0",
+              display: "grid",
+              gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
               opacity: (isDesktop || isTablet || titleBarVisible) ? 1 : 0,
-              transition: "max-height 0.3s ease, opacity 0.3s ease",
-              display: "flex", justifyContent: "center",
+              transition: "grid-template-rows 0.3s ease, opacity 0.3s ease",
             }}>
+            <div style={{ minHeight: 0, overflow: "hidden" }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : "720px",
                 padding: titleBarVisible ? "3px 1rem calc(0.65rem + 2px)" : "3px 1rem",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
@@ -6576,6 +6577,7 @@ function App() {
                 </div>
               </div>
             </div>
+            </div>
           )}
           {(screen === "results" || screen === "historyResults") && (() => {
             const isHist = screen === "historyResults";
@@ -6585,14 +6587,11 @@ function App() {
             const hasMissed = missed.length > 0 && !isHist;
             return (
               <div style={{
-                maxHeight: (isDesktop || isTablet || titleBarVisible) ? "100px" : "0",
-                overflow: "hidden",
-                transition: "max-height 0.3s ease",
+                display: "grid",
+                gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
+                transition: "grid-template-rows 0.3s ease",
               }}>
-                <div style={{
-                  display: "flex", alignItems: "center",
-                  justifyContent: "center",
-                }}>
+                <div style={{ minHeight: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.5rem",
                     padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
                     transition: "padding 0.3s ease",
