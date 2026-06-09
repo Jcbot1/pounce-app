@@ -4043,7 +4043,16 @@ function GhostCard({ onClick }) {
 
 function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, cardColumns = 1, onCreate, history = [] }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [contentHeight, setContentHeight] = useState(9999);
+  const contentRef = useRef(null);
   const tagSets = sets.filter(s => (s.tags || []).includes(tag));
+
+  useLayoutEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight);
+    }
+  });
+
   function lastSession(s) {
     const sessions = history.filter(h => h.setId === s.id || h.setName === s.name);
     return sessions.length ? sessions.sort((a, b) => new Date(b.date) - new Date(a.date))[0] : null;
@@ -4064,12 +4073,11 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         </span>
       </div>
       <div style={{
-        display: "grid",
-        gridTemplateRows: collapsed ? "0fr" : "1fr",
-        transition: "grid-template-rows 0.3s ease",
+        height: collapsed ? 0 : contentHeight,
         overflow: "hidden",
+        transition: "height 0.3s ease",
       }}>
-        <div style={{ overflow: "hidden" }}>
+        <div ref={contentRef}>
           <div style={{ paddingLeft: cardColumns > 1 ? 0 : "1rem", borderLeft: cardColumns > 1 ? "none" : "2px solid " + T.accent + "44" }}>
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
               {tagSets.map(s => (
