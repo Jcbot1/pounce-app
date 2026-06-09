@@ -4326,7 +4326,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
       {/* ── HOME TAB ── */}
       {tab === "home" && (
-        <div style={{ marginTop: "calc(36px + 1rem)" }}>
+        <div style={{ marginTop: "11px" }}>
           <Dashboard
             history={history}
             sets={sets}
