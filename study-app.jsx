@@ -4043,7 +4043,7 @@ function GhostCard({ onClick }) {
 
 function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, cardColumns = 1, onCreate, history = [] }) {
   const [collapsed, setCollapsed] = useState(false);
-  const [contentHeight, setContentHeight] = useState(9999);
+  const [contentHeight, setContentHeight] = useState(null);
   const contentRef = useRef(null);
   const tagSets = sets.filter(s => (s.tags || []).includes(tag));
 
@@ -4073,7 +4073,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         </span>
       </div>
       <div style={{
-        height: collapsed ? 0 : contentHeight,
+        height: collapsed ? 0 : (contentHeight !== null ? contentHeight : "auto"),
         overflow: "hidden",
         transition: "height 0.3s ease",
       }}>
