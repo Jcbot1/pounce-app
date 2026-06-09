@@ -4724,37 +4724,43 @@ function QuickQuestion({ sets }) {
         <div style={{ fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: 500, color: T.text, marginBottom: "1rem", lineHeight: 1.5 }}>
           {renderText(q.question)}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
           {options.map(function(opt, i) {
             const isSelected = selected.includes(opt);
             const isCorrect  = correctLabels.includes(opt);
+            const selBg  = T.mode === "light" ? T.accent + "18" : T.accent + "45";
+            const corBg  = T.mode === "light" ? T.green  + "18" : T.green  + "45";
+            const wroBg  = T.mode === "light" ? T.red    + "18" : T.red    + "45";
             let bg = T.surface;
-            let border = "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)");
-            let color = T.text;
+            let border = "1px solid " + T.border;
+            let color = T.muted2;
+            let shadow = T.mode === "light"
+              ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.9)"
+              : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.06)";
+            const revShadow = T.mode === "light"
+              ? "0 2px 8px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03), inset 0 1.5px 0 rgba(255,255,255,0.55)"
+              : "0 2px 8px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1), inset 0 1.5px 0 rgba(255,255,255,0.2)";
             if (submitted) {
-              if (isCorrect)             { bg = T.mode === "light" ? T.green + "18" : "#052e16"; border = "1px solid " + T.green; color = T.green; }
-              else if (isSelected)       { bg = T.mode === "light" ? T.red   + "18" : "#2d0a0a"; border = "1px solid " + T.red;   color = T.red; }
+              if (isCorrect)       { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; shadow = revShadow; }
+              else if (isSelected) { bg = wroBg; border = "1.5px solid " + T.red   + "44"; color = T.red;   shadow = revShadow; }
             } else if (isSelected) {
-              bg = T.accent + "18"; border = "1px solid " + T.accent; color = T.accent;
+              bg = selBg; border = "1.5px solid " + T.accent + "44"; color = T.accent;
             }
+            const label = submitted && isCorrect ? "✓" : submitted && isSelected && !isCorrect ? "✗" : String.fromCharCode(65 + i);
             return (
-              <button key={i} onClick={() => handleClick(opt)}
-                style={{ background: bg, border, color, borderRadius: "12px", padding: "0.75rem 1rem",
-                  textAlign: "left", cursor: submitted ? "default" : "pointer",
-                  display: "flex", alignItems: "center", gap: "0.75rem",
-                  fontFamily: FF_SANS, fontSize: "0.9rem", lineHeight: 1.4,
-                  transition: "background 0.15s, border 0.15s" }}>
-                <span style={{
-                  minWidth: "20px", height: "20px", border: "1px solid currentColor",
-                  borderRadius: isMulti ? "4px" : "50%",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.65rem", flexShrink: 0, marginTop: "2px",
-                  opacity: isSelected || (submitted && isCorrect) ? 1 : 0.35,
-                }}>
-                  {submitted && isCorrect ? "✓" : submitted && isSelected && !isCorrect ? "✗" : String.fromCharCode(65 + i)}
-                </span>
+              <AnswerButton key={i} onClick={() => handleClick(opt)} bg={bg} border={border} color={color} shadow={shadow} submitted={submitted} label={isMulti ? null : label}>
+                {isMulti && (
+                  <span style={{
+                    minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "4px",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "0.65rem", fontFamily: FF_MONO, fontWeight: 600,
+                    flexShrink: 0, marginTop: "2px", background: isSelected && !submitted ? T.accent + "33" : "transparent",
+                  }}>
+                    {isSelected && !submitted ? "✓" : label}
+                  </span>
+                )}
                 <span>{renderText(opt)}</span>
-              </button>
+              </AnswerButton>
             );
           })}
         </div>
