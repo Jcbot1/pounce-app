@@ -1423,18 +1423,18 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
       <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", cursor: "pointer" }} onClick={() => setOpen(o => !o)}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           {/* Left — type bubble, pinned */}
-          <div style={{ flexShrink: 0 }}>
+          <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
             <Tag label={meta.label} color={meta.color} />
           </div>
           {/* Center — topic, grows and shrinks */}
           {q.topic && (
-            <div style={{ flex: 1, minWidth: 0, display: "flex" }}>
+            <div style={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center" }}>
               <Tag label={q.topic} color={T.muted2} />
             </div>
           )}
           {!q.topic && <div style={{ flex: 1 }} />}
           {/* Right — delete, pinned */}
-          <div style={{ flexShrink: 0 }}>
+          <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
             <IconButton variant="danger" size={28} onPointerDown={e => e.stopPropagation()} onClick={e => { e.stopPropagation(); onDeleteRequest(); }}>
               <TrashIcon size={13} />
             </IconButton>
