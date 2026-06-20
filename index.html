@@ -35,7 +35,7 @@
       fetch('./study-app.jsx')
         .then(r => r.text())
         .then(code => {
-          const transformed = Babel.transform(code, { presets: ['react'] }).code;
+          const transformed = Babel.transform(code, { presets: [['react', { runtime: 'classic' }]] }).code;
           // eslint-disable-next-line no-new-func
           new Function('React', 'ReactDOM', transformed + '\nReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));')(React, ReactDOM);
         })
