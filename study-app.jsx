@@ -2212,7 +2212,7 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
         const isSel = selected.includes(i);
         const isCor = q.correct.includes(i);
         let bg = T.surface;
-        let border = "1px solid " + T.border;
+        let border = "1.5px solid transparent";
         let color = T.muted2;
         if (submitted) {
           if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; }
@@ -2244,7 +2244,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
         const isSel = selected.includes(i);
         const isCor = q.correct.includes(i);
         let bg = T.surface;
-        let border = "1px solid " + T.border;
+        let border = "1.5px solid transparent";
         let color = T.muted2;
         if (submitted) {
           if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; }
@@ -4683,7 +4683,7 @@ function QuickQuestion({ sets }) {
             const corBg  = T.mode === "light" ? T.green  + "18" : T.green  + "45";
             const wroBg  = T.mode === "light" ? T.red    + "18" : T.red    + "45";
             let bg = T.surface;
-            let border = "1px solid " + T.border;
+            let border = "1.5px solid transparent";
             let color = T.muted2;
             if (submitted) {
               if (isCorrect)       { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; }
