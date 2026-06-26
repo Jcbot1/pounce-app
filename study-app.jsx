@@ -4761,7 +4761,7 @@ function QuickQuestion({ sets }) {
             <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: isCorrectOverall ? T.green : T.red }}>
               {isCorrectOverall ? "\u2713 Correct!" : "\u2717 Incorrect"}
             </p>
-            <PrimaryButton onClick={next} small style={{ width: "auto", padding: "0 1.25rem" }}>
+            <PrimaryButton onClick={next} style={{ width: "auto", padding: "0 1.25rem" }}>
               Next →
             </PrimaryButton>
           </div>
