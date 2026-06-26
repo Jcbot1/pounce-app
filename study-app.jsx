@@ -871,7 +871,6 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
 const THEME_KEY         = "studyapp_theme";
 const ACCENT_KEY        = "studyapp_accent";
 const BG_STYLE_KEY      = "studyapp_bg_style";
-const SIDEBAR_THEME_KEY = "studyapp_sidebar_theme";
 const PROFILE_NAME_KEY  = "studyapp_profile_name";
 const PROFILE_ICON_KEY  = "studyapp_profile_iconid";
 const PROFILE_BG_KEY    = "studyapp_profile_bg";
@@ -3598,7 +3597,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, sidebarTheme, onSetSidebarTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
   const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
@@ -5607,26 +5606,6 @@ function ThemePicker({ theme, onSetTheme }) {
   );
 }
 
-// ── SidebarThemePicker ──────────────────────────────────────────────────────
-function SidebarThemePicker({ sidebarTheme, onSetSidebarTheme }) {
-  const opts = [
-    { id: "light",  svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> },
-    { id: "dark",   svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> },
-    { id: "follow", svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> },
-  ];
-  return (
-    <div style={{ display: "flex", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)", borderRadius: "99px", padding: "0.2rem", gap: "0.1rem" }}>
-      {opts.map(opt => {
-        const active = sidebarTheme === opt.id;
-        return (
-          <button key={opt.id} onClick={() => onSetSidebarTheme(opt.id)} style={{ flex: 1, height: "26px", borderRadius: "99px", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: active ? (T.mode === "light" ? "#fff" : "#3d3558") : "transparent", color: active ? T.accent : T.muted, transition: "background 0.18s, color 0.18s" }}>
-            {opt.svg}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
 
 // ── HalftoneCanvas ─────────────────────────────────────────────────────────
 function HalftoneCanvas({ color, maxOpacity = 0.15 }) {
@@ -5855,7 +5834,6 @@ function App() {
   const [theme, setThemeState]         = useState(() => localStorage.getItem(THEME_KEY) || "system");
   const [accent, setAccentState]       = useState(() => localStorage.getItem(ACCENT_KEY) || "purple");
   const [bgStyle, setBgStyleState]     = useState(() => localStorage.getItem(BG_STYLE_KEY) || "gradient");
-  const [sidebarTheme, setSidebarThemeState] = useState(() => localStorage.getItem(SIDEBAR_THEME_KEY) || "follow");
   const [profileName,  setProfileName]  = useState(() => localStorage.getItem(PROFILE_NAME_KEY) || "Profile");
   const [profileIconId, setProfileIconId] = useState(() => localStorage.getItem(PROFILE_ICON_KEY) || "grad");
   const [profileBg,    setProfileBg]    = useState(() => localStorage.getItem(PROFILE_BG_KEY) || "#1e3a5f");
@@ -5954,7 +5932,7 @@ function App() {
     return localStorage.getItem("studi_welcomed") !== "true";
   });
   T = buildTheme(resolveTheme(theme), accent);
-  ST = sidebarTheme === "follow" ? T : buildTheme(sidebarTheme, accent);
+  ST = T;
 
   const allTags = useMemo(() => [...new Set(sets.flatMap(s => s.tags || []))], [sets]);
 
@@ -5962,10 +5940,6 @@ function App() {
     const saveMode = mode.startsWith("system") ? "system" : mode;
     localStorage.setItem(THEME_KEY, saveMode);
     setThemeState(mode);
-  }
-  function handleSetSidebarTheme(mode) {
-    localStorage.setItem(SIDEBAR_THEME_KEY, mode);
-    setSidebarThemeState(mode);
   }
 
   useEffect(() => {
@@ -6393,7 +6367,7 @@ function App() {
             </div>
 
             <div style={{ width: "44px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} sidebarTheme={sidebarTheme} onSetSidebarTheme={handleSetSidebarTheme} accent={accent} onSetAccent={handleSetAccent} bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle}
+            {!showSidebar && <GlobalNav theme={theme} onSetTheme={handleSetTheme} accent={accent} onSetAccent={handleSetAccent} bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle}
               sets={sets} history={history} onClearAll={handleClearAll} screen={screen}
               profileName={profileName} profileIconId={profileIconId} profileBg={profileBg} profileIColor={profileIColor}
               onSaveProfile={handleSaveProfile}
@@ -7077,8 +7051,7 @@ function App() {
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>SIDEBAR THEME</p>
-                <div style={{ marginBottom: "1rem" }}><SidebarThemePicker sidebarTheme={sidebarTheme} onSetSidebarTheme={handleSetSidebarTheme} /></div>
+
                 <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
                 <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
