@@ -855,8 +855,8 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
         </div>
         <div style={{ display: "flex", gap: "0.6rem", flexDirection: "column" }}>
           {extraButton}
-          <DangerButton onClick={onConfirm} style={{ width: "100%", justifyContent: "center" }}>{confirmLabel}</DangerButton>
-          <GhostButton onClick={onCancel} style={{ width: "100%", justifyContent: "center" }}>Cancel</GhostButton>
+          <DangerButton onClick={onConfirm} style={{ width: "100%", justifyContent: "center", height: "44px" }}>{confirmLabel}</DangerButton>
+          <GhostButton onClick={onCancel} style={{ width: "100%", justifyContent: "center", height: "44px" }}>Cancel</GhostButton>
         </div>
       </ModalCard>
     </Modal>
