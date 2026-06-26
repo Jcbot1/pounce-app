@@ -3493,12 +3493,13 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             }}>
               {/* Stepper */}
               <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted }}>CUSTOM TIME</p>
-              <div className="stepper stepper-large stepper-round stepper-raised">
+              <div className="stepper stepper-large stepper-round stepper-raised"
+                style={{ "--f7-theme-color": T.accent, background: T.mode === "light" ? "#fff" : T.surface2 }}>
                 <div className="stepper-button-minus" onClick={() => setCustomMin(m => Math.max(5, m - 5))} />
                 <div className="stepper-input-wrap">
                   <input type="number" min="5" max="240" step="5" value={customMin}
                     onChange={e => setCustomMin(Math.min(240, Math.max(5, Number(e.target.value))))}
-                    style={{ fontFamily: FF_MONO }} />
+                    style={{ fontFamily: FF_MONO, textAlign: "center", color: T.text }} />
                 </div>
                 <div className="stepper-button-plus" onClick={() => setCustomMin(m => Math.min(240, m + 5))} />
               </div>
