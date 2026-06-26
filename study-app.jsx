@@ -494,7 +494,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
             background: T.mode === "light" ? T.accent + "06" : T.accent + "08",
             backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
             border: "1px solid " + T.accent + "22",
-            borderRadius: "20px", padding: "0.9rem 1rem",
+            borderRadius: "16px", padding: "0.9rem 1rem",
             boxShadow: T.mode === "light"
               ? "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)"
               : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)",
@@ -1136,7 +1136,7 @@ const glassyBtn = (active = false, color = null) => {
 const inp = (extra = {}) => ({
   background: T.surface,
   border: "1.5px solid " + T.border,
-  borderRadius: "10px",
+  borderRadius: "8px",
   color: T.text,
   fontFamily: FF_SANS,
   fontSize: "1rem",
@@ -1217,7 +1217,7 @@ const menuPopupStyle = (extra = {}) => ({
   background: T.mode === "light" ? "rgba(255,255,255,1)" : "rgba(30,26,46,1)",
   backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
   border: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.08)"),
-  borderRadius: "20px", overflow: "hidden",
+  borderRadius: "16px", overflow: "hidden",
   boxShadow: T.mode === "light"
     ? "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)"
     : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)",
@@ -2552,7 +2552,7 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
       <div
         onClick={() => !submitted && setFlipped(f => !f)}
         style={{
-          minHeight: "220px", borderRadius: "20px", cursor: submitted ? "default" : "pointer",
+          minHeight: "220px", borderRadius: "16px", cursor: submitted ? "default" : "pointer",
           position: "relative", perspective: "1000px", marginBottom: "1rem",
         }}>
         <div style={{
@@ -2563,7 +2563,7 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
         }}>
           {/* Front */}
           <div style={{
-            position: "absolute", inset: 0, borderRadius: "20px",
+            position: "absolute", inset: 0, borderRadius: "16px",
             background: T.surface, border: gradedBorder,
             boxShadow: T.mode === "light"
               ? "0 4px 20px rgba(0,0,0,0.08)" : "0 4px 20px rgba(0,0,0,0.25)",
@@ -2579,7 +2579,7 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
 
           {/* Back */}
           <div style={{
-            position: "absolute", inset: 0, borderRadius: "20px",
+            position: "absolute", inset: 0, borderRadius: "16px",
             background: T.surface, border: gradedBorder,
             boxShadow: T.mode === "light"
               ? "0 4px 20px rgba(0,0,0,0.08)" : "0 4px 20px rgba(0,0,0,0.25)",
@@ -3078,7 +3078,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
 
       {isSubmitted && q.explanation && !examMode && (
         <div ref={explanationRef} style={{
-          marginTop: "0.75rem", borderRadius: "20px", overflow: "hidden",
+          marginTop: "0.75rem", borderRadius: "16px", overflow: "hidden",
           background: T.surface, border: "1px solid " + T.border,
           boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
           display: "flex", scrollMarginTop: "80px",
@@ -3488,7 +3488,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             {/* Timer card: quick picks + stepper */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem",
               background: T.mode === "light" ? "#ede8e0" : "#181614",
-              borderRadius: "20px", padding: "1.25rem 1rem",
+              borderRadius: "16px", padding: "1.25rem 1rem",
               boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
             }}>
               {/* Stepper */}
@@ -3850,7 +3850,7 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
 
   return (
     <Modal onClose={onClose} zIndex={1000}>
-      <div style={{ ...card({ padding: 0, borderRadius: "20px", width: "100%", maxWidth: "360px", display: "flex", flexDirection: "column", overflow: "hidden" }) }}
+      <div style={{ ...card({ padding: 0, borderRadius: "16px", width: "100%", maxWidth: "360px", display: "flex", flexDirection: "column", overflow: "hidden" }) }}
         onClick={e => e.stopPropagation()}>
         <div style={{ padding: "1.1rem 1.25rem 0.75rem",
            }}>
@@ -4012,7 +4012,7 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
 function GhostCard({ onClick }) {
   return (
     <div onClick={onClick} style={{
-      borderRadius: "20px",
+      borderRadius: "16px",
       border: "2px dashed " + T.accent + "44",
       background: T.accent + "05",
       cursor: "pointer",
@@ -4344,7 +4344,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                 {setsFilterOpen && (
                   <>
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setSetsFilterOpen(false)} />
-                    <div className="menu-open" style={{ position: "fixed", top: setsFilterPos.top, right: setsFilterPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "20px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "160px" }}>
+                    <div className="menu-open" style={{ position: "fixed", top: setsFilterPos.top, right: setsFilterPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "16px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "160px" }}>
                       {[null, ...allTags.slice(0, 5), "__untagged__"].map((tag) => (
                         <button key={tag || "all"} {...surfacePress()} onClick={() => { setSetsActiveTag(tag); setSetsFilterOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: setsActiveTag === tag ? T.accent + "18" : "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: FF_SANS, fontSize: "0.92rem", color: setsActiveTag === tag ? T.accent : T.text, cursor: "pointer" }}
                           onMouseEnter={e => { e.currentTarget.style.background = setsActiveTag === tag ? T.accent + "18" : T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
@@ -4400,7 +4400,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                 {historySortOpen && (
                   <>
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setHistorySortOpen(false)} />
-                    <div className="menu-open" style={{ position: "fixed", top: historySortPos.top, right: historySortPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "20px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "180px" }}>
+                    <div className="menu-open" style={{ position: "fixed", top: historySortPos.top, right: historySortPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "16px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "180px" }}>
                       {HISTORY_SORT_OPTIONS.map(opt => (
                         <button key={opt.id} {...surfacePress()} onClick={() => { setHistorySortBy(opt.id); setHistorySortOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: historySortBy === opt.id ? T.accent + "18" : "transparent", border: "none", padding: "0.85rem 1.1rem", fontFamily: FF_SANS, fontSize: "0.92rem", color: historySortBy === opt.id ? T.accent : T.text, cursor: "pointer" }}
                           onMouseEnter={e => { e.currentTarget.style.background = historySortBy === opt.id ? T.accent + "18" : T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
@@ -5360,7 +5360,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
       <div style={{
         background: localT.surface,
         border: "1px solid " + (localT.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.07)"),
-        borderRadius: "20px", padding: "2.5rem 2rem",
+        borderRadius: "16px", padding: "2.5rem 2rem",
         maxWidth: "380px", width: "100%", textAlign: "center",
         boxShadow: localT.mode === "light"
           ? "0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)"
@@ -6655,7 +6655,7 @@ function App() {
                         position: "fixed", top: setsFilterPos.top, right: setsFilterPos.right, zIndex: 9999,
                         background: T.mode === "light" ? "#ffffff" : "#1e1630",
                         border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"),
-                        borderRadius: "20px", overflow: "hidden",
+                        borderRadius: "16px", overflow: "hidden",
                         boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)",
                         minWidth: "160px",
                       }}>
