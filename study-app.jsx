@@ -186,7 +186,7 @@ function GhostButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...glassPress()}
       className={`button button-outline button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, color: T.text, borderColor: T.border, textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, color: T.text, borderColor: T.border, textTransform: "none", WebkitTapHighlightColor: "transparent", ...(!small && { height: "44px" }), ...extraStyle }}>
       {children}
     </button>
   );
@@ -197,7 +197,7 @@ function DangerButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...dangerPress()}
       className={`button button-fill button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, background: T.red, color: "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, background: T.red, color: "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...(!small && { height: "44px" }), ...extraStyle }}>
       {children}
     </button>
   );
@@ -209,7 +209,7 @@ function PrimaryButton({ onClick, children, small, disabled, style: extraStyle }
     <button onClick={onClick} {...(disabled ? {} : surfacePress())}
       disabled={disabled}
       className={`button button-fill button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, background: disabled ? T.surface2 : T.accent, color: disabled ? T.muted : "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, background: disabled ? T.surface2 : T.accent, color: disabled ? T.muted : "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...(!small && { height: "44px" }), ...extraStyle }}>
       {children}
     </button>
   );
@@ -220,7 +220,7 @@ function SuccessButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...glassPress()}
       className={`button button-fill button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, background: T.green, color: "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, background: T.green, color: "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...(!small && { height: "44px" }), ...extraStyle }}>
       {children}
     </button>
   );
@@ -855,8 +855,8 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
         </div>
         <div style={{ display: "flex", gap: "0.6rem", flexDirection: "column" }}>
           {extraButton}
-          <DangerButton onClick={onConfirm} style={{ width: "100%", justifyContent: "center", height: "44px" }}>{confirmLabel}</DangerButton>
-          <GhostButton onClick={onCancel} style={{ width: "100%", justifyContent: "center", height: "44px" }}>Cancel</GhostButton>
+          <DangerButton onClick={onConfirm} style={{ width: "100%", justifyContent: "center" }}>{confirmLabel}</DangerButton>
+          <GhostButton onClick={onCancel} style={{ width: "100%", justifyContent: "center" }}>Cancel</GhostButton>
         </div>
       </ModalCard>
     </Modal>
@@ -1807,7 +1807,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
           onConfirm={() => { setConfirmBack(false); onBack(); }}
           onCancel={() => setConfirmBack(false)}
           extraButton={canSave && (
-            <SuccessButton onClick={() => { onSave(draft); setConfirmBack(false); onBack(); }} style={{ width: "100%", justifyContent: "center", height: "44px" }}>
+            <SuccessButton onClick={() => { onSave(draft); setConfirmBack(false); onBack(); }} style={{ width: "100%", justifyContent: "center" }}>
               Save & Leave
             </SuccessButton>
           )}
@@ -3578,10 +3578,10 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
             fontFamily: FF_SANS, fontSize: "1rem" }) }} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
           <PrimaryButton onClick={() => { onSave(draftName || "Profile", draftIconId, draftBg, draftIColor); onClose(); }}
-            style={{ width: "100%", justifyContent: "center", height: "44px" }}>
+            style={{ width: "100%", justifyContent: "center" }}>
             Save
           </PrimaryButton>
-          <GhostButton onClick={onClose} style={{ width: "100%", justifyContent: "center", height: "44px" }}>
+          <GhostButton onClick={onClose} style={{ width: "100%", justifyContent: "center" }}>
             Cancel
           </GhostButton>
         </div>
