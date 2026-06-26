@@ -7050,7 +7050,7 @@ function App() {
 
     </div>
       {sidebarAppearanceOpen ? (
-        <div ref={sidebarPopupRef} className="menu-open-up-left" onClick={e => e.stopPropagation()} style={{ ...menuPopupStyle({ position: "fixed", bottom: "3.5rem", left: (sidebarCollapsed ? 4 : 8) + "px", zIndex: 10000, width: SIDEBAR_WIDTH - 16 + "px" }) }}>
+        <div ref={sidebarPopupRef} className="menu-open-up-left" onClick={e => e.stopPropagation()} style={{ ...menuPopupStyle({ position: "fixed", bottom: "3.5rem", left: (sidebarCollapsed ? 12 : 16) + "px", zIndex: 10000, width: SIDEBAR_WIDTH - 16 + "px" }) }}>
 
           {sidebarSection === null && (
             <>
