@@ -1807,7 +1807,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
           onConfirm={() => { setConfirmBack(false); onBack(); }}
           onCancel={() => setConfirmBack(false)}
           extraButton={canSave && (
-            <SuccessButton onClick={() => { onSave(draft); setConfirmBack(false); onBack(); }} style={{ width: "100%", justifyContent: "center" }}>
+            <SuccessButton onClick={() => { onSave(draft); setConfirmBack(false); onBack(); }} style={{ width: "100%", justifyContent: "center", height: "44px" }}>
               Save & Leave
             </SuccessButton>
           )}
@@ -3578,10 +3578,10 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
             fontFamily: FF_SANS, fontSize: "1rem" }) }} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
           <PrimaryButton onClick={() => { onSave(draftName || "Profile", draftIconId, draftBg, draftIColor); onClose(); }}
-            style={{ width: "100%", justifyContent: "center" }}>
+            style={{ width: "100%", justifyContent: "center", height: "44px" }}>
             Save
           </PrimaryButton>
-          <GhostButton onClick={onClose} style={{ width: "100%", justifyContent: "center" }}>
+          <GhostButton onClick={onClose} style={{ width: "100%", justifyContent: "center", height: "44px" }}>
             Cancel
           </GhostButton>
         </div>
