@@ -329,12 +329,12 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
 
 // ── Answer Button ──────────────────────────────────────────────────────────
 // Quiz answer choice button (single, multi, matching)
-function AnswerButton({ onClick, children, bg, border, color, submitted, label, style: extraStyle }) {
+function AnswerButton({ onClick, children, bg, color, submitted, label, style: extraStyle }) {
   return (
     <button onClick={onClick}
       className="button button-raised"
       style={{
-        background: bg, border, color, borderRadius: "12px", padding: "1rem 1.1rem",
+        background: bg, color, borderRadius: "12px", padding: "1rem 1.1rem",
         textAlign: "left", cursor: submitted ? "default" : "pointer",
         fontFamily: FF_SANS, fontSize: "0.93rem", lineHeight: 1.5,
         display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.7rem",
@@ -2212,17 +2212,16 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
         const isSel = selected.includes(i);
         const isCor = q.correct.includes(i);
         let bg = T.surface;
-        let border = "1.5px solid transparent";
         let color = T.muted2;
         if (submitted) {
-          if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; }
-          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "44"; color = T.red; }
-          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "44"; color = selColor; }
+          if (!examMode && isCor)      { bg = corBg; color = T.green; }
+          else if (!examMode && isSel) { bg = wroBg; color = T.red; }
+          else if (isSel)              { bg = selBg; color = selColor; }
         } else if (isSel) {
-          bg = selBg; border = "1.5px solid " + T.accent + "44"; color = selColor;
+          bg = selBg; color = selColor;
         }
         return (
-          <AnswerButton key={i} onClick={() => !submitted && onSelect(i)} bg={bg} border={border} color={color} submitted={submitted} label={submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i)}>
+          <AnswerButton key={i} onClick={() => !submitted && onSelect(i)} bg={bg} color={color} submitted={submitted} label={submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i)}>
             <span>{renderText(opt)}</span>
           </AnswerButton>
         );
@@ -2244,18 +2243,17 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
         const isSel = selected.includes(i);
         const isCor = q.correct.includes(i);
         let bg = T.surface;
-        let border = "1.5px solid transparent";
         let color = T.muted2;
         if (submitted) {
-          if (!examMode && isCor)      { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; }
-          else if (!examMode && isSel) { bg = wroBg; border = "1.5px solid " + T.red   + "44"; color = T.red; }
-          else if (isSel) { bg = selBg; border = "1.5px solid " + T.accent + "44"; color = T.accent; }
+          if (!examMode && isCor)      { bg = corBg; color = T.green; }
+          else if (!examMode && isSel) { bg = wroBg; color = T.red; }
+          else if (isSel)              { bg = selBg; color = T.accent; }
         } else if (isSel) {
-          bg = selBg; border = "1.5px solid " + T.accent + "44"; color = T.accent;
+          bg = selBg; color = T.accent;
         }
         const label = submitted && !examMode && isCor ? "✓" : submitted && !examMode && isSel ? "✗" : String.fromCharCode(65 + i);
         return (
-          <AnswerButton key={i} onClick={() => !submitted && onToggle(i)} bg={bg} border={border} color={color} submitted={submitted} label={null}>
+          <AnswerButton key={i} onClick={() => !submitted && onToggle(i)} bg={bg} color={color} submitted={submitted} label={null}>
             <span style={{ minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "4px",
               display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontFamily: FF_MONO, fontWeight: 600,
               flexShrink: 0, marginTop: "2px", background: isSel && !submitted ? T.accent + "33" : "transparent" }}>
@@ -4683,17 +4681,16 @@ function QuickQuestion({ sets }) {
             const corBg  = T.mode === "light" ? T.green  + "18" : T.green  + "45";
             const wroBg  = T.mode === "light" ? T.red    + "18" : T.red    + "45";
             let bg = T.surface;
-            let border = "1.5px solid transparent";
             let color = T.muted2;
             if (submitted) {
-              if (isCorrect)       { bg = corBg; border = "1.5px solid " + T.green + "44"; color = T.green; }
-              else if (isSelected) { bg = wroBg; border = "1.5px solid " + T.red   + "44"; color = T.red; }
+              if (isCorrect)       { bg = corBg; color = T.green; }
+              else if (isSelected) { bg = wroBg; color = T.red; }
             } else if (isSelected) {
-              bg = selBg; border = "1.5px solid " + T.accent + "44"; color = T.accent;
+              bg = selBg; color = T.accent;
             }
             const label = submitted && isCorrect ? "✓" : submitted && isSelected && !isCorrect ? "✗" : String.fromCharCode(65 + i);
             return (
-              <AnswerButton key={i} onClick={() => handleClick(opt)} bg={bg} border={border} color={color} submitted={submitted} label={isMulti ? null : label}>
+              <AnswerButton key={i} onClick={() => handleClick(opt)} bg={bg} color={color} submitted={submitted} label={isMulti ? null : label}>
                 {isMulti && (
                   <span style={{
                     minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "4px",
