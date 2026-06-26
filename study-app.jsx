@@ -6857,6 +6857,10 @@ function App() {
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
+          {/* Sidebar border */}
+          <div style={{ position: "fixed", top: 0, bottom: 0, width: "1px", background: ST.border,
+            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
+            transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
           <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? 0 : "1.5rem", height: sidebarCollapsed ? "48px" : "185px", display: "flex", alignItems: sidebarCollapsed ? "center" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
@@ -7060,23 +7064,6 @@ function App() {
         }} />
       )}
 
-      {/* Concave corner between sidebar and content area */}
-      {showSidebar && (
-        <svg viewBox="0 0 20 20" width="20" height="20" style={{
-          position: "fixed",
-          top: "47px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
-          display: "block",
-          zIndex: 201,
-          pointerEvents: "none",
-          transition: "left 0.25s ease",
-        }}>
-          <path d="M 20 0 A 20 20 0 0 0 0 20 L 0 0 Z"
-            fill={ST.mode === "light" ? "rgba(255,253,250,0.97)" : "rgba(24,22,20,0.97)"} />
-          <path d="M 20 0 A 20 20 0 0 0 0 20"
-            fill="none" stroke={ST.border} strokeWidth="1" />
-        </svg>
-      )}
 
     </div>
       {sidebarAppearanceOpen ? (
