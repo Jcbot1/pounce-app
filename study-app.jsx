@@ -357,13 +357,13 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
     <button onClick={onClick} {...glassPress()}
       className={`button button-raised button-round${active ? ' button-fill' : ''}`}
       style={{
-        padding: "1rem 1.4rem", textAlign: "left",
-        display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "1rem",
+        padding: "0.65rem 1rem", textAlign: "left",
+        display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.75rem",
         cursor: disabled ? "not-allowed" : "pointer",
         width: "100%", opacity: disabled ? 0.45 : 1,
         fontFamily: FF_SANS, fontSize: "0.95rem",
         WebkitTapHighlightColor: "transparent",
-        height: "auto", minHeight: "64px",
+        height: "auto", minHeight: "52px",
         textTransform: "none", whiteSpace: "normal",
         ...(active ? { background: T.accent, color: "#fff" } : { background: T.surface, color: T.text }),
         ...extraStyle,
