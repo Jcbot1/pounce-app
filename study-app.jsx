@@ -1231,8 +1231,8 @@ const card = (extra = {}) => ({
   position: "relative",
   isolation: "isolate",
   boxShadow: T.mode === "light"
-    ? "0px 10px 20px rgba(0,0,0,0.1), 0px 6px 6px rgba(0,0,0,0.08)"
-    : "0px 10px 20px rgba(0,0,0,0.35), 0px 6px 6px rgba(0,0,0,0.25)",
+    ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
+    : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
   ...extra,
 });
 
