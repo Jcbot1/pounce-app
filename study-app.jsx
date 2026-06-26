@@ -2957,7 +2957,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
                   : isCorrectQ
                     ? { background: T.green + "25", color: T.green }
                     : { background: T.red + "25", color: T.red })
-              : { color: T.text, background: T.surface, border: "1.5px solid " + T.border };
+              : { color: T.text, background: T.surface2 };
           return (
             <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)}
               className={bubbleClass}
