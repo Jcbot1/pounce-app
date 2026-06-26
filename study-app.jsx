@@ -358,7 +358,7 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
       className={`button button-raised button-round${active ? ' button-fill' : ''}`}
       style={{
         padding: "0.55rem 0.9rem", textAlign: "left",
-        display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.65rem",
+        display: "flex", alignItems: "flex-start", justifyContent: "flex-start", gap: "0.65rem",
         cursor: disabled ? "not-allowed" : "pointer",
         width: "100%", opacity: disabled ? 0.45 : 1,
         fontFamily: FF_SANS, fontSize: "0.95rem",
