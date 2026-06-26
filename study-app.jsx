@@ -6145,8 +6145,8 @@ function App() {
     <>
     <div style={{ background: bgStyle === "gradient"
       ? (T.mode === "light"
-        ? `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 45%), ${T.bg}`
-        : `radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
+        ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 45%), ${T.bg}`
+        : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
       : T.bg,
       minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
       {bgStyle === "dots" && <HalftoneCanvas color={T.accent} maxOpacity={T.mode === "light" ? 0.07 : 0.05} />}
@@ -6261,11 +6261,7 @@ function App() {
       )}
       <div style={{ minHeight: "100vh", visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
         position: "relative",
-        background: bgStyle === "gradient"
-          ? (T.mode === "light"
-            ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), ${T.bg}`
-            : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`)
-          : (bgStyle === "dots" || bgStyle === "grid") ? "transparent" : T.bg,
+        background: bgStyle === "gradient" || bgStyle === "dots" || bgStyle === "grid" ? "transparent" : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 + "px" : SIDEBAR_WIDTH + 16 + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: 0,
