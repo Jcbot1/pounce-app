@@ -2661,6 +2661,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
   const explanationRef = useRef(null);
   const bottomRef      = useRef(null);
   const [atBottom, setAtBottom] = useState(false);
+  const atBottomRef = useRef(false);
   const [flagged,  setFlagged]  = useState({});
 
   // Timer
@@ -2696,14 +2697,17 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
   useEffect(() => {
     const el = bottomRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => setAtBottom(entry.isIntersecting), { threshold: 0 });
+    const obs = new IntersectionObserver(([entry]) => {
+      atBottomRef.current = entry.isIntersecting;
+      setAtBottom(entry.isIntersecting);
+    }, { threshold: 0 });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
   function handleScrollBtn() {
-    if (atBottom) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    if (atBottomRef.current) {
+      topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
     const HEADER = 80;
