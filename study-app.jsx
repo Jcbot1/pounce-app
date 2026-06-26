@@ -4329,7 +4329,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
-                  <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }} style={{ ...glassyBtn(!!setsActiveTag || setsFilterOpen), gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent" }}>
+                  <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }}
+                    className={`button button-round ${(!!setsActiveTag || setsFilterOpen) ? 'button-tonal' : 'button-raised'}`}
+                    style={{ gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
+                      ...((!!setsActiveTag || setsFilterOpen) ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
                     <FilterIcon size={13} />
                     <span style={{ fontSize: "0.85rem" }}>{setsActiveTag ? (setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag) : "All"}</span>
                   </button>
@@ -6473,8 +6476,10 @@ function App() {
                     const rect = e.currentTarget.parentElement.getBoundingClientRect();
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                     setEditKebabOpen(o => !o);
-                  }} style={{ ...glassyBtn(editKebabOpen), width: "36px", height: "36px", flexShrink: 0, padding: "0" }}>
-                    <DotsVerticalIcon color={T.muted} />
+                  }} className={`button button-round ${editKebabOpen ? 'button-tonal' : 'button-raised'}`}
+                  style={{ width: "36px", height: "36px", flexShrink: 0, padding: 0, transition: "background 0.2s, box-shadow 0.2s",
+                    ...(editKebabOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
+                    <DotsVerticalIcon color={editKebabOpen ? T.accent : T.muted} />
                   </button>
                   {editKebabOpen && (
                     <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
@@ -6616,7 +6621,9 @@ function App() {
                         const rect = e.currentTarget.parentElement.getBoundingClientRect();
                         setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                         setResultsFilterOpen(o => !o);
-                      }} style={{ ...glassyBtn(resultsFilterOpen), height: "38px", flexShrink: 0, gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem", fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent" }}>
+                      }} className={`button button-round ${resultsFilterOpen ? 'button-tonal' : 'button-raised'}`}
+                      style={{ height: "38px", flexShrink: 0, gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem", fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
+                        ...(resultsFilterOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
                         <FilterIcon size={13} />
                         <span style={{ fontSize: "0.85rem" }}>All</span>
                       </button>
@@ -6661,8 +6668,10 @@ function App() {
                       const rect = e.currentTarget.parentElement.getBoundingClientRect();
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                       setResultsKebabOpen(o => !o);
-                    }} style={{ ...glassyBtn(resultsKebabOpen), width: "38px", height: "38px", flexShrink: 0, padding: "0" }}>
-                      <DotsVerticalIcon color={T.muted} />
+                    }} className={`button button-round ${resultsKebabOpen ? 'button-tonal' : 'button-raised'}`}
+                    style={{ width: "38px", height: "38px", flexShrink: 0, padding: 0, transition: "background 0.2s, box-shadow 0.2s",
+                      ...(resultsKebabOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
+                      <DotsVerticalIcon color={resultsKebabOpen ? T.accent : T.muted} />
                     </button>
                     {resultsKebabOpen && (
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
