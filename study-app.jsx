@@ -3472,7 +3472,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
                 <button onClick={() => setCustomMin(m => Math.max(5, m - 5))}
                   {...surfacePress()}
-                  style={{ ...glassyBtn(), width: "44px", height: "44px", fontSize: "1.4rem" }}>
+                  className="button button-outline button-round"
+                  style={{ color: T.text, borderColor: T.border, width: "44px", height: "44px", fontSize: "1.4rem", padding: 0, flexShrink: 0 }}>
                   −
                 </button>
                 <div style={{ textAlign: "center", minWidth: "80px" }}>
@@ -3481,7 +3482,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 </div>
                 <button onClick={() => setCustomMin(m => Math.min(240, m + 5))}
                   {...surfacePress()}
-                  style={{ ...glassyBtn(), width: "44px", height: "44px", fontSize: "1.4rem" }}>
+                  className="button button-outline button-round"
+                  style={{ color: T.text, borderColor: T.border, width: "44px", height: "44px", fontSize: "1.4rem", padding: 0, flexShrink: 0 }}>
                   +
                 </button>
               </div>
@@ -3489,7 +3491,9 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
                 {TIMER_OPTIONS.map(min => (
                   <button key={min} onClick={() => setCustomMin(min)} {...surfacePress()}
-                    style={{ ...glassyBtn(customMin === min), flex: 1, height: "44px", fontFamily: FF_MONO, fontSize: "0.85rem", fontWeight: 600 }}>
+                    className={`button button-round${customMin === min ? ' button-fill' : ' button-outline'}`}
+                    style={{ flex: 1, height: "44px", fontFamily: FF_MONO, fontSize: "0.85rem", fontWeight: 600,
+                      ...(customMin === min ? { background: T.accent, color: "#fff" } : { color: T.text, borderColor: T.border }) }}>
                     {min}m
                   </button>
                 ))}
