@@ -3497,8 +3497,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 style={{ "--f7-theme-color": T.accent, background: T.mode === "light" ? "#fff" : T.surface2 }}>
                 <div className="stepper-button-minus" onClick={() => setCustomMin(m => Math.max(5, m - 5))} />
                 <div className="stepper-input-wrap">
-                  <input type="number" min="5" max="240" step="5" value={customMin}
-                    onChange={e => setCustomMin(Math.min(240, Math.max(5, Number(e.target.value))))}
+                  <input type="text" inputMode="numeric" value={customMin}
+                    onChange={e => { const v = parseInt(e.target.value); if (!isNaN(v)) setCustomMin(Math.min(240, Math.max(5, v))); }}
                     style={{ fontFamily: FF_MONO, textAlign: "center", color: T.text }} />
                 </div>
                 <div className="stepper-button-plus" onClick={() => setCustomMin(m => Math.min(240, m + 5))} />
