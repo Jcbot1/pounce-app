@@ -1228,7 +1228,7 @@ const card = (extra = {}) => ({
   background: T.mode === "light" ? "#fff" : "rgba(36,32,54,1)",
   borderRadius: "16px",
   border: "none",
-  padding: "1.25rem",
+  padding: "1rem",
   position: "relative",
   isolation: "isolate",
   boxShadow: T.mode === "light"
