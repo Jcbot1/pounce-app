@@ -6853,8 +6853,8 @@ function App() {
           position: "fixed", left: "8px", top: "8px", bottom: "8px",
           width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
           transition: "width 0.25s ease",
-          background: ST.surface,
-          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          background: ST.surface + "cc",
+          backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
           borderRadius: "16px",
           boxShadow: ST.mode === "light"
             ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
