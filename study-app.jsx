@@ -357,7 +357,7 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
     <button onClick={onClick} {...glassPress()}
       className={`button button-raised button-round${active ? ' button-fill' : ''}`}
       style={{
-        padding: "0.9rem", textAlign: "left",
+        padding: "1.8rem", textAlign: "left",
         display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.65rem",
         cursor: disabled ? "not-allowed" : "pointer",
         width: "100%", opacity: disabled ? 0.45 : 1,
