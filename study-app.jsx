@@ -340,7 +340,7 @@ function AnswerButton({ onClick, children, bg, border, color, shadow, submitted,
         fontFamily: FF_SANS, fontSize: "0.93rem", lineHeight: 1.5,
         display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.7rem",
         transition: "all 0.15s", whiteSpace: "pre-wrap", textTransform: "none",
-        width: "100%", ...extraStyle,
+        width: "100%", height: "auto", minHeight: "52px", ...extraStyle,
       }}>
       {label && (
         <span style={{ minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "50%",
