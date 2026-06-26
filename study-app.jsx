@@ -440,14 +440,14 @@ function AppCard({ onClick, children, style: extraStyle }) {
       onMouseEnter={canHover ? e => {
         e.currentTarget.style.transform = "translateY(-2px)";
         e.currentTarget.style.boxShadow = T.mode === "light"
-          ? "0px 16px 32px rgba(0,0,0,0.14), 0px 8px 10px rgba(0,0,0,0.1)"
-          : "0px 16px 32px rgba(0,0,0,0.5), 0px 8px 10px rgba(0,0,0,0.35)";
+          ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
+          : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)";
       } : undefined}
       onMouseLeave={canHover ? e => {
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = T.mode === "light"
-          ? "0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9)"
-          : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.06)";
+          ? "0 1px 4px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.08)"
+          : "0 1px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)";
       } : undefined}
     >
       {children}
@@ -1232,8 +1232,8 @@ const card = (extra = {}) => ({
   position: "relative",
   isolation: "isolate",
   boxShadow: T.mode === "light"
-    ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
-    : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
+    ? "0 1px 4px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.08)"
+    : "0 1px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)",
   ...extra,
 });
 
