@@ -2693,21 +2693,24 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
     : T.text
     : T.text;
 
+  function checkAtBottom() {
+    setAtBottom(window.innerHeight + window.scrollY >= document.body.scrollHeight - 20);
+  }
+
   useEffect(() => {
     let ticking = false;
     function handleScroll() {
       if (!ticking) {
-        requestAnimationFrame(() => {
-          const atPageBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 20;
-          setAtBottom(atPageBottom);
-          ticking = false;
-        });
+        requestAnimationFrame(() => { checkAtBottom(); ticking = false; });
         ticking = true;
       }
     }
     window.addEventListener("scroll", handleScroll, { passive: true });
+    checkAtBottom();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => { checkAtBottom(); }, [idx]);
 
   function handleScrollBtn() {
     if (atBottom) {
