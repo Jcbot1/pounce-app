@@ -1987,7 +1987,7 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
 
         {/* FAB pill */}
         <BottomPill left={`${questionCount} ${questionCount === 1 ? "question" : "questions"}`}>
-          <GradientBorderButton onClick={e => { const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(o => !o); }} style={{ padding: "0.65rem 1.7rem" }}>
+          <GradientBorderButton onClick={e => { const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(o => !o); }} style={{ padding: "0.9rem 1.7rem" }}>
             <span style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center",
               transform: open ? "rotate(45deg)" : "rotate(0deg)",
@@ -3117,11 +3117,11 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         {q.type === "flashcard" && !isSubmitted ? (
           <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted, fontStyle: "italic" }}>Tap card to flip</span>
         ) : !examMode && !isSubmitted ? (
-          <GradientBorderButton onClick={handleSubmit} disabled={!canSubmit()} style={{ justifyContent: "center", minWidth: "150px" }}>Submit answer</GradientBorderButton>
+          <GradientBorderButton onClick={handleSubmit} disabled={!canSubmit()} style={{ justifyContent: "center", minWidth: "150px", padding: "0.9rem 1.7rem" }}>Submit answer</GradientBorderButton>
         ) : !allAnswered ? (
-          <PrimaryButton onClick={goNextUnanswered} style={{ justifyContent: "center", minWidth: "150px" }}>Next unanswered →</PrimaryButton>
+          <PrimaryButton onClick={goNextUnanswered} style={{ justifyContent: "center", minWidth: "150px", padding: "0.9rem 1.7rem" }}>Next unanswered →</PrimaryButton>
         ) : (
-          <PrimaryButton onClick={() => setConfirmFinish(true)} style={{ justifyContent: "center", minWidth: "150px" }}>See results →</PrimaryButton>
+          <PrimaryButton onClick={() => setConfirmFinish(true)} style={{ justifyContent: "center", minWidth: "150px", padding: "0.9rem 1.7rem" }}>See results →</PrimaryButton>
         )}
       </BottomPill>
 
@@ -5786,7 +5786,7 @@ function DesktopFAB({ homeTab, onCreate, disabled, sidebarWidth, setCount = 0 })
   if (homeTab !== "sets") return null;
   return (
     <BottomPill sidebarOffset={sidebarWidth} left={`${setCount} ${setCount === 1 ? "set" : "sets"}`}>
-      <GradientBorderButton onClick={() => onCreate()} disabled={disabled} style={{ padding: "0.65rem 1.7rem" }}>
+      <GradientBorderButton onClick={() => onCreate()} disabled={disabled} style={{ padding: "0.9rem 1.7rem" }}>
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
           <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
           <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
