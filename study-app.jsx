@@ -338,7 +338,7 @@ function AnswerButton({ onClick, children, bg, border, color, shadow, submitted,
         background: bg, border, color, borderRadius: "12px", padding: "1rem 1.1rem",
         textAlign: "left", cursor: submitted ? "default" : "pointer",
         fontFamily: FF_SANS, fontSize: "0.93rem", lineHeight: 1.5,
-        display: "flex", alignItems: "flex-start", gap: "0.7rem",
+        display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.7rem",
         transition: "all 0.15s", whiteSpace: "pre-wrap", textTransform: "none",
         width: "100%", ...extraStyle,
       }}>
