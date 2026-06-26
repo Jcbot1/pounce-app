@@ -6271,7 +6271,6 @@ function App() {
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
           ...(showSidebar ? {
-            backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : SIDEBAR_WIDTH + 16) + "px", right: 0,
             height: "48px",
             transition: "left 0.25s ease",
@@ -6287,6 +6286,14 @@ function App() {
           display: "flex", flexDirection: "column",
         }}>
           
+          {showSidebar && (
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+              backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+              WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
+              maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
+            }} />
+          )}
           <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", height: showSidebar ? "48px" : undefined, padding: showSidebar ? "0 1rem" : editingSetName && !(screen === "edit" && (isDesktop || isTablet || titleBarVisible)) ? "0.5rem 1rem 1.75rem" : "0.5rem 1rem", display: "flex", position: "relative", zIndex: 1 }}>
 
