@@ -4468,20 +4468,14 @@ function TopicBar({ topic, correct, total }) {
           {correct}/{total} · {pct}%
         </span>
       </div>
-      <div style={{ position: "relative", height: "10px", borderRadius: "99px", overflow: "hidden",
-        background: T.accent }}>
+      <div style={{ height: "4px", borderRadius: "4px", overflow: "hidden",
+        background: T.mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.12)" }}>
         <div style={{
-          position: "absolute", top: 0, bottom: 0, right: 0,
-          width: (100 - animPct) + "%",
-          background: T.mode === "light" ? "rgba(247,245,242,0.82)" : "rgba(15,9,5,0.82)",
+          height: "100%",
+          width: animPct + "%",
+          background: color,
+          borderRadius: "4px",
           transition: "width 0.8s cubic-bezier(0.34, 1.2, 0.64, 1)",
-        }} />
-        <div style={{
-          position: "absolute", top: "-2px", bottom: "-2px", width: "2.5px", borderRadius: "2px",
-          background: "#fff",
-          left: "calc(" + animPct + "% - 1px)",
-          boxShadow: "0 0 4px rgba(0,0,0,0.4)",
-          transition: "left 0.8s cubic-bezier(0.34, 1.2, 0.64, 1)",
         }} />
       </div>
     </div>
@@ -4950,17 +4944,13 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                     {t.pct}%
                   </span>
                 </div>
-                <div style={{ position: "relative", height: "10px", borderRadius: "99px", overflow: "hidden",
-                  background: T.accent }}>
+                <div style={{ height: "4px", borderRadius: "4px", overflow: "hidden",
+                  background: T.mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.12)" }}>
                   <div style={{
-                    position: "absolute", top: 0, bottom: 0, right: 0,
-                    width: (100 - t.pct) + "%",
-                    background: T.mode === "light" ? "rgba(247,245,242,0.82)" : "rgba(15,9,5,0.82)",
-                  }} />
-                  <div style={{
-                    position: "absolute", top: "-2px", bottom: "-2px", width: "2.5px", borderRadius: "2px",
-                    background: "#fff", left: "calc(" + t.pct + "% - 1px)",
-                    boxShadow: "0 0 4px rgba(0,0,0,0.4)",
+                    height: "100%",
+                    width: t.pct + "%",
+                    background: t.pct >= 70 ? T.green : t.pct >= 40 ? "#f59e0b" : T.red,
+                    borderRadius: "4px",
                   }} />
                 </div>
               </div>
