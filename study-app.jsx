@@ -6268,9 +6268,9 @@ function App() {
           : (bgStyle === "dots" || bgStyle === "grid") ? "transparent" : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
-        borderTopLeftRadius: showSidebar ? "12px" : 0,
-        boxShadow: showSidebar ? (ST.mode === "light" ? "inset 4px 0 24px rgba(0,0,0,0.07)" : "inset 4px 0 24px rgba(0,0,0,0.28)") : "none",
-        transition: "margin-left 0.25s ease, border-top-left-radius 0.25s ease" }}>
+        borderTopLeftRadius: 0,
+        boxShadow: "none",
+        transition: "margin-left 0.25s ease" }}>
         
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
@@ -6278,10 +6278,9 @@ function App() {
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
             left: 0, right: 0,
             height: "48px",
-            boxShadow: ST.mode === "light" ? "0 4px 24px rgba(0,0,0,0.07)" : "0 4px 24px rgba(0,0,0,0.28)",
           } : {}),
           background: showSidebar
-            ? ST.surface
+            ? "transparent"
             : (scrolled || screen === "results" || screen === "historyResults" || editingSetName)
               ? T.mode === "light"
                 ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
