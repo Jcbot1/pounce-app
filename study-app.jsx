@@ -6409,16 +6409,17 @@ function App() {
             <div style={{ minHeight: 0, overflow: "hidden", display: "flex", justifyContent: "center" }}>
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.75rem",
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem" }}>
-                <div style={{ flex: 1, position: "relative" }}>
+                <div className="button button-raised button-round"
+                  onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
+                  onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
+                  style={{ flex: 1, position: "relative", height: "38px", padding: 0, display: "flex", alignItems: "center", cursor: "text", background: T.surface, border: "1.5px solid transparent", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.4, pointerEvents: "none" }}
                     width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                   </svg>
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
-                    onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
-                    onBlur={e => { e.target.style.border = "1px solid " + T.border; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
-                    style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }} />
+                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }} />
                   {editSearch && (
                     <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
                       background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
@@ -6552,7 +6553,10 @@ function App() {
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : "720px",
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                <div style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%" }}>
+                <div className="button button-raised button-round"
+                  onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
+                  onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
+                  style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%", height: "38px", padding: 0, display: "flex", alignItems: "center", cursor: "text", background: T.surface, border: "1.5px solid transparent", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
                   <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.6, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6562,9 +6566,7 @@ function App() {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search sets, questions, history…"
-                    onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
-                    onBlur={e => { e.target.style.border = "1px solid " + T.border; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
-                    style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }}
+                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }}
                   />
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
@@ -6592,7 +6594,10 @@ function App() {
                     padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
                     transition: "padding 0.3s ease",
                   }}>
-                  <div style={{ flex: 1, position: "relative", minWidth: 0 }}>
+                  <div className="button button-raised button-round"
+                    onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
+                    onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
+                    style={{ flex: 1, position: "relative", minWidth: 0, height: "38px", padding: 0, display: "flex", alignItems: "center", cursor: "text", background: T.surface, border: "1.5px solid transparent", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
                     <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.45, pointerEvents: "none" }}
                       width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6601,9 +6606,7 @@ function App() {
                       value={resultsSearch}
                       onChange={e => setResultsSearch(e.target.value)}
                       placeholder="Search questions…"
-                      onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
-                      onBlur={e => { e.target.style.border = "1.5px solid transparent"; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
-                      style={{ background: T.surface, border: "1.5px solid transparent", borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }}
+                      style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }}
                     />
                     {resultsSearch && (
                       <button onClick={() => setResultsSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
