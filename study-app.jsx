@@ -3430,7 +3430,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
                   <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
-                  <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>Quick</span>
+                  <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>Quick Mode</span>
                 </div>
                 <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", paddingLeft: "calc(22px + 0.65rem)", lineHeight: 1.3 }}>
                   {QUICK_OPTIONS.length > 0 ? "A handful of random questions with feedback" : "Need at least 3 questions for this mode"}
