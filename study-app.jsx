@@ -190,7 +190,7 @@ function GhostButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...glassPress()}
       className={`button button-outline button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, color: T.text, borderColor: T.border, WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, color: T.text, borderColor: T.border, textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -201,7 +201,7 @@ function DangerButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...dangerPress()}
       className={`button button-fill button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, background: T.red, color: "#fff", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, background: T.red, color: "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -213,7 +213,7 @@ function PrimaryButton({ onClick, children, small, disabled, style: extraStyle }
     <button onClick={onClick} {...(disabled ? {} : surfacePress())}
       disabled={disabled}
       className={`button button-fill button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, background: disabled ? T.surface2 : T.accent, color: disabled ? T.muted : "#fff", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, background: disabled ? T.surface2 : T.accent, color: disabled ? T.muted : "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -224,7 +224,7 @@ function SuccessButton({ onClick, children, small, style: extraStyle }) {
   return (
     <button onClick={onClick} {...glassPress()}
       className={`button button-fill button-round${small ? ' button-small' : ''}`}
-      style={{ fontFamily: FF_SANS, background: T.green, color: "#fff", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      style={{ fontFamily: FF_SANS, background: T.green, color: "#fff", textTransform: "none", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -366,6 +366,7 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
         fontFamily: FF_SANS, fontSize: "0.95rem",
         WebkitTapHighlightColor: "transparent",
         height: "auto", minHeight: "64px",
+        textTransform: "none", whiteSpace: "normal",
         ...(active ? { background: T.accent, color: "#fff" } : { background: T.surface, color: T.text }),
         ...extraStyle,
       }}>
