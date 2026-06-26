@@ -410,7 +410,7 @@ function EditorTagChip({ tag, onRemove }) {
       display: "flex", alignItems: "center", gap: "0.35rem",
       padding: "0.38rem 0.9rem", borderRadius: "99px", border: "none", cursor: "pointer",
       fontFamily: FF_MONO, fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em",
-      background: color, color: "#fff",
+      background: color, color: "#fff", height: "auto",
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>
       {tag}
@@ -1487,7 +1487,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                         display: "flex", alignItems: "center", gap: "0.35rem",
                         background: "none", border: "none", cursor: "pointer", padding: 0,
                         color: isCor ? T.green : T.muted, fontSize: "0.72rem",
-                        fontFamily: FF_SANS,
+                        fontFamily: FF_SANS, height: "auto",
                       }}>
                         <span style={{
                           width: "16px", height: "16px", flexShrink: 0,
@@ -1553,7 +1553,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                           display: "flex", alignItems: "center", gap: "0.35rem",
                           background: "none", border: "none", cursor: "pointer", padding: 0,
                           color: dd.correct === oi ? T.green : T.muted, fontSize: "0.72rem",
-                          fontFamily: FF_SANS,
+                          fontFamily: FF_SANS, height: "auto",
                         }}>
                           <span style={{
                             width: "16px", height: "16px", flexShrink: 0,
@@ -1842,7 +1842,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
             style={{
               display: "flex", alignItems: "center", gap: "0.35rem",
               padding: "0.3rem 0.85rem", borderRadius: "99px", cursor: "pointer",
-              fontFamily: FF_SANS, fontSize: "0.8rem",
+              fontFamily: FF_SANS, fontSize: "0.8rem", height: "auto",
               background: "transparent",
               border: "1px dashed " + T.border2,
               color: T.muted,
