@@ -6431,19 +6431,20 @@ function App() {
                     setSavedFlash(true);
                     setTimeout(() => setSavedFlash(false), 4000);
                   }}
+                  className={`button button-raised button-round${editCanSave && !savedFlash ? ' button-outline' : ''}`}
                   style={{
-                    ...btn(savedFlash ? "ghost" : editCanSave ? "primary" : "disabled", true), borderRadius: "99px",
                     height: "36px", padding: "0 1rem", fontSize: "0.85rem",
                     flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem",
                     minWidth: "80px", width: "90px",
+                    fontFamily: FF_SANS, textTransform: "none",
                     transition: "background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.2s ease",
                     position: "relative", overflow: "hidden",
                     cursor: savedFlash ? "default" : editCanSave ? "pointer" : "default",
-                    ...(savedFlash ? {
-                      background: T.green,
-                      color: "#fff",
-                      border: "1px solid " + T.green + "cc",
-                    } : {}),
+                    ...(savedFlash
+                      ? { background: T.green, color: "#fff", border: "none" }
+                      : editCanSave
+                        ? { background: T.surface, color: T.accent, borderColor: T.accent }
+                        : { background: T.surface2, color: T.muted, border: "none" }),
                   }}>
                   {/* Shimmer sweep on save */}
                   {savedFlash && (
@@ -6612,16 +6613,18 @@ function App() {
                   {/* Sticky filter button */}
                   <div style={{ position: "relative", flexShrink: 0 }}>
                     {resultsFilter !== "all" ? (
-                      <div style={{ borderRadius: "99px", padding: "2px", background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`, display: "inline-flex" }}>
-                        <button onClick={e => {
-                          const rect = e.currentTarget.closest("div").getBoundingClientRect();
-                          setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-                          setResultsFilterOpen(o => !o);
-                        }} {...surfacePress()} style={{ background: T.mode === "light" ? T.surface : "#181614", border: "none", borderRadius: "99px", height: "34px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem", cursor: "pointer", color: T.accent, WebkitTapHighlightColor: "transparent", fontFamily: FF_SANS }}>
-                          <FilterIcon size={13} />
-                          <span style={{ fontSize: "0.85rem" }}>{resultsFilter === "correct" ? "Correct" : "Incorrect"}</span>
-                        </button>
-                      </div>
+                      <button onClick={e => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+                        setResultsFilterOpen(o => !o);
+                      }} {...surfacePress()}
+                        className="button button-raised button-outline button-round"
+                        style={{ height: "38px", padding: "0 14px", gap: "0.35rem", display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: FF_SANS, textTransform: "none", WebkitTapHighlightColor: "transparent",
+                          background: T.surface, borderColor: T.accent, color: T.accent, fontSize: "0.9rem" }}>
+                        <FilterIcon size={13} />
+                        <span style={{ fontSize: "0.85rem" }}>{resultsFilter === "correct" ? "Correct" : "Incorrect"}</span>
+                      </button>
                     ) : (
                       <button {...glassPress()} onClick={e => {
                         const rect = e.currentTarget.parentElement.getBoundingClientRect();
