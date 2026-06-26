@@ -6423,13 +6423,13 @@ function App() {
                   onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
                   onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
                   style={{ flex: 1, position: "relative", height: "38px", padding: 0, display: "flex", alignItems: "center", cursor: "text", background: T.surface, border: "1.5px solid transparent", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
-                  <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.4, pointerEvents: "none" }}
-                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  <svg style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", opacity: 0.45, pointerEvents: "none" }}
+                    width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                   </svg>
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.4rem", paddingRight: "0.9rem", boxSizing: "border-box" }} />
+                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }} />
                   {editSearch && (
                     <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
                       background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
