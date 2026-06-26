@@ -368,7 +368,7 @@ function OptionButton({ onClick, children, active = false, disabled = false, sty
         WebkitTapHighlightColor: "transparent",
         height: "auto", minHeight: "44px",
         textTransform: "none", whiteSpace: "normal",
-        ...(active ? { background: T.accent, color: "#fff" } : { background: T.surface, color: T.text }),
+        ...(active ? { background: T.accent, color: "#fff" } : { background: T.mode === "dark" ? T.surface2 : T.surface, color: T.text }),
         ...extraStyle,
       }}>
       {children}
