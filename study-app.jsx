@@ -231,8 +231,11 @@ function SuccessButton({ onClick, children, small, style: extraStyle }) {
 function ModalCard({ children, maxWidth = 420, pad = "1.75rem", scroll = false, style: extraStyle }) {
   return (
     <div style={{
-      background: T.surface, border: "1px solid " + T.border2,
-      borderRadius: "20px",
+      background: T.mode === "light" ? "#fff" : T.surface, border: "none",
+      borderRadius: "16px",
+      boxShadow: T.mode === "light"
+        ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
+        : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
       width: "100%", maxWidth,
       display: "flex", flexDirection: "column",
       overflow: "hidden",
@@ -1222,17 +1225,15 @@ const menuPopupStyle = (extra = {}) => ({
 });
 
 const card = (extra = {}) => ({
-  background: T.mode === "light"
-    ? "rgba(255,255,255,1)"
-    : "rgba(36,32,54,1)",
-  border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.07)") + "",
-  borderRadius: "20px",
+  background: T.mode === "light" ? "#fff" : "rgba(36,32,54,1)",
+  borderRadius: "16px",
+  border: "none",
   padding: "1.25rem",
   position: "relative",
   isolation: "isolate",
   boxShadow: T.mode === "light"
-    ? "0px 4px 12px rgba(0,0,0,0.12), 0px 2px 4px rgba(0,0,0,0.08)"
-    : "0px 4px 12px rgba(0,0,0,0.35), 0px 2px 4px rgba(0,0,0,0.25)",
+    ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
+    : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
   ...extra,
 });
 
