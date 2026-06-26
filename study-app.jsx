@@ -2946,23 +2946,28 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           const isCurrent  = i === idx;
           const isAnswered = res !== undefined;
           const isCorrectQ = isAnswered && res.correct;
-          let colorOverride = {};
-          if (!isCurrent && isAnswered) {
-            if (examMode)        colorOverride = glassyBtn(true);
-            else if (isCorrectQ) colorOverride = glassyBtn(true, T.green);
-            else                 colorOverride = glassyBtn(true, T.red);
-          }
+          const bubbleClass = isCurrent
+            ? 'button button-fill button-round'
+            : isAnswered ? 'button button-tonal button-round' : 'button button-outline button-round';
+          const bubbleColor = isCurrent
+            ? { background: T.accent, color: "#fff" }
+            : isAnswered
+              ? (examMode
+                  ? { background: T.accent + "25", color: T.accent }
+                  : isCorrectQ
+                    ? { background: T.green + "25", color: T.green }
+                    : { background: T.red + "25", color: T.red })
+              : { color: T.text, borderColor: T.border };
           return (
-            <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)} style={{
-              ...glassyBtn(isCurrent),
-              ...colorOverride,
-              width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
-              fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600,
-              cursor: isCurrent ? "default" : "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              position: "relative", transition: "all 0.15s", overflow: "visible",
-              boxShadow: T.mode === "light" ? "inset 0 1.5px 0 rgba(255,255,255,0.55)" : "inset 0 1.5px 0 rgba(255,255,255,0.2)",
-            }}>
+            <button key={i} data-active={isCurrent ? "true" : "false"} onClick={() => handleBubbleClick(i)}
+              className={bubbleClass}
+              style={{
+                ...bubbleColor,
+                width: "40px", height: "40px", flexShrink: 0,
+                fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600, textTransform: "none",
+                cursor: isCurrent ? "default" : "pointer",
+                position: "relative", transition: "all 0.15s", overflow: "visible",
+              }}>
               {i + 1}
               {isAnswered && (
                 <span style={{ position: "absolute", top: "-4px", right: "-4px", width: "16px", height: "16px", borderRadius: "50%", background: examMode ? T.accent : isCorrectQ ? T.green : T.red, color: "#fff", fontSize: "0.6rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", border: "1.5px solid " + T.surface }}>
