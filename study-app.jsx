@@ -7050,18 +7050,6 @@ function App() {
       )}
 
       {/* Header bottom border — starts after the concave corner arc */}
-      {showSidebar && (
-        <div style={{
-          position: "fixed",
-          top: "47px",
-          left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + 18 + "px",
-          right: 0,
-          height: "1px",
-          background: ST.border,
-          zIndex: 100,
-          pointerEvents: "none",
-          transition: "left 0.25s ease",
-        }} />
       )}
 
 
