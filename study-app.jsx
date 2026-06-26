@@ -6416,9 +6416,9 @@ function App() {
                   </svg>
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
-                    onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; }}
-                    onBlur={e => { e.target.style.border = "1px solid " + T.border; }}
-                    style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s", boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)" }} />
+                    onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
+                    onBlur={e => { e.target.style.border = "1.5px solid transparent"; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
+                    style={{ background: T.surface, border: "1.5px solid transparent", borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }} />
                   {editSearch && (
                     <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
                       background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
@@ -6561,9 +6561,9 @@ function App() {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search sets, questions, history…"
-                    onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; }}
-                    onBlur={e => { e.target.style.border = "1px solid " + T.border; }}
-                    style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s", boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)" }}
+                    onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
+                    onBlur={e => { e.target.style.border = "1.5px solid transparent"; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
+                    style={{ background: T.surface, border: "1.5px solid transparent", borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }}
                   />
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
@@ -6600,9 +6600,9 @@ function App() {
                       value={resultsSearch}
                       onChange={e => setResultsSearch(e.target.value)}
                       placeholder="Search questions…"
-                      onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; }}
-                      onBlur={e => { e.target.style.border = "1px solid " + T.border; }}
-                      style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s", boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)" }}
+                      onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
+                      onBlur={e => { e.target.style.border = "1.5px solid transparent"; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
+                      style={{ background: T.surface, border: "1.5px solid transparent", borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }}
                     />
                     {resultsSearch && (
                       <button onClick={() => setResultsSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
