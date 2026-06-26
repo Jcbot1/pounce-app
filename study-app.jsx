@@ -6491,10 +6491,9 @@ function App() {
                     const rect = e.currentTarget.parentElement.getBoundingClientRect();
                     setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                     setEditKebabOpen(o => !o);
-                  }} className={`button button-round ${editKebabOpen ? 'button-tonal' : 'button-raised'}`}
-                  style={{ width: "36px", height: "36px", flexShrink: 0, padding: 0, transition: "background 0.2s, box-shadow 0.2s",
-                    ...(editKebabOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
-                    <DotsVerticalIcon color={editKebabOpen ? T.accent : T.muted} />
+                  }} className="button button-round button-raised"
+                  style={{ width: "36px", height: "36px", flexShrink: 0, padding: 0, background: T.surface, color: T.text }}>
+                    <DotsVerticalIcon color={T.muted} />
                   </button>
                   {editKebabOpen && (
                     <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
@@ -6691,10 +6690,9 @@ function App() {
                       const rect = e.currentTarget.parentElement.getBoundingClientRect();
                       setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
                       setResultsKebabOpen(o => !o);
-                    }} className={`button button-round ${resultsKebabOpen ? 'button-tonal' : 'button-raised'}`}
-                    style={{ width: "38px", height: "38px", flexShrink: 0, padding: 0, transition: "background 0.2s, box-shadow 0.2s",
-                      ...(resultsKebabOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
-                      <DotsVerticalIcon color={resultsKebabOpen ? T.accent : T.muted} />
+                    }} className="button button-round button-raised"
+                    style={{ width: "38px", height: "38px", flexShrink: 0, padding: 0, background: T.surface, color: T.text }}>
+                      <DotsVerticalIcon color={T.muted} />
                     </button>
                     {resultsKebabOpen && (
                         <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
