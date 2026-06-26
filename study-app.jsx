@@ -507,9 +507,12 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
           </div>
         </>
       )}
-      <button ref={btnRef} onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }} style={{
-        ...glassyBtn(hintOpen), width: "36px", height: "36px", transition: "background 0.2s, box-shadow 0.2s",
-      }}>
+      <button ref={btnRef} onClick={e => { e.stopPropagation(); setHintOpen(o => !o); }}
+        className={`button button-round ${hintOpen ? 'button-tonal' : 'button-raised'}`}
+        style={{
+          width: "36px", height: "36px", transition: "background 0.2s, box-shadow 0.2s",
+          ...(hintOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }),
+        }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill={hintOpen ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M9 18h6M10 21h4M12 2a7 7 0 0 1 4 12.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26A7 7 0 0 1 12 2z" />
         </svg>
@@ -2994,9 +2997,12 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
             {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
             <span style={{ flex: 1 }} />
             <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
-            <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))} {...primaryPress()} style={{
-              ...glassyBtn(!!flagged[idx]), width: "36px", height: "36px",
-            }}>
+            <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))} {...primaryPress()}
+              className={`button button-round ${flagged[idx] ? 'button-tonal' : 'button-raised'}`}
+              style={{
+                width: "36px", height: "36px",
+                ...(flagged[idx] ? { background: "#f59e0b25", color: "#f59e0b" } : { background: T.surface, color: T.text }),
+              }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
                 <line x1="4" y1="22" x2="4" y2="15"/>
@@ -3013,7 +3019,11 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           {/* Flag button */}
           <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))}
             {...primaryPress()}
-            style={{ ...glassyBtn(!!flagged[idx]), width: "36px", height: "36px" }}>
+            className={`button button-round ${flagged[idx] ? 'button-tonal' : 'button-raised'}`}
+            style={{
+              width: "36px", height: "36px",
+              ...(flagged[idx] ? { background: "#f59e0b25", color: "#f59e0b" } : { background: T.surface, color: T.text }),
+            }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
               <line x1="4" y1="22" x2="4" y2="15"/>
@@ -3091,13 +3101,15 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         zIndex: 101, display: "flex", gap: "0.5rem", alignItems: "center",
       }}>
         {/* Scroll button */}
-        <GlassButton onClick={handleScrollBtn} style={{ transition: "transform 0.3s ease" }}>
+        <button onClick={handleScrollBtn}
+          className="button button-raised button-round"
+          style={{ width: "44px", height: "44px", background: T.surface, color: T.text, transition: "transform 0.3s ease" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" {...IC5}
             style={{ transform: atBottom ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s ease" }}>
             <line x1="12" y1="5" x2="12" y2="19"/>
             <polyline points="19 12 12 19 5 12"/>
           </svg>
-        </GlassButton>
+        </button>
       </div>
 
       <div ref={bottomRef} style={{ height: "1px" }} />
