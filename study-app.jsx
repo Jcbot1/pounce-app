@@ -185,31 +185,12 @@ function GlassButton({ onClick, onPointerDown, children, size = 44, style: extra
   );
 }
 
-// Layout props that belong on the wrapper div, not the inner button
-const WRAPPER_PROPS = new Set(['flex', 'flexShrink', 'flexGrow', 'width', 'minWidth', 'maxWidth', 'height',
-  'alignSelf', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight', 'margin']);
-
-function splitStyle(extraStyle = {}) {
-  const wrapperStyle = {}, innerStyle = {};
-  for (const [k, v] of Object.entries(extraStyle)) {
-    if (WRAPPER_PROPS.has(k)) wrapperStyle[k] = v;
-    else innerStyle[k] = v;
-  }
-  return { wrapperStyle, innerStyle };
-}
-
 // ── Ghost Button ───────────────────────────────────────────────────────────
 function GhostButton({ onClick, children, small, style: extraStyle }) {
   return (
-    <button onClick={onClick} {...glassPress()} style={{
-      ...glassyBtn(false),
-      height: small ? "38px" : "44px",
-      padding: small ? "0 1rem" : "0 1.25rem",
-      fontSize: small ? "0.87rem" : "0.9rem",
-      fontFamily: FF_SANS, fontWeight: 500,
-      WebkitTapHighlightColor: "transparent",
-      ...extraStyle,
-    }}>
+    <button onClick={onClick} {...glassPress()}
+      className={`button button-outline button-round${small ? ' button-small' : ''}`}
+      style={{ fontFamily: FF_SANS, color: T.text, borderColor: T.border, WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -218,15 +199,9 @@ function GhostButton({ onClick, children, small, style: extraStyle }) {
 // ── Danger Button ──────────────────────────────────────────────────────────
 function DangerButton({ onClick, children, small, style: extraStyle }) {
   return (
-    <button onClick={onClick} {...dangerPress()} style={{
-      ...glassyBtn(true, T.red),
-      height: small ? "38px" : "44px",
-      padding: small ? "0 1rem" : "0 1.25rem",
-      fontSize: small ? "0.87rem" : "0.9rem",
-      fontFamily: FF_SANS, fontWeight: 600,
-      WebkitTapHighlightColor: "transparent",
-      ...extraStyle,
-    }}>
+    <button onClick={onClick} {...dangerPress()}
+      className={`button button-fill button-round${small ? ' button-small' : ''}`}
+      style={{ fontFamily: FF_SANS, background: T.red, color: "#fff", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -234,34 +209,22 @@ function DangerButton({ onClick, children, small, style: extraStyle }) {
 
 // ── Primary Button ─────────────────────────────────────────────────────────
 function PrimaryButton({ onClick, children, small, disabled, style: extraStyle }) {
-  const b = btn(disabled ? "disabled" : "primary", small);
-  const { wrapperStyle, innerStyle } = splitStyle(extraStyle);
-  const canHover = window.matchMedia("(hover: hover)").matches;
   return (
-    <div
-      onMouseEnter={(!disabled && canHover) ? e => { e.currentTarget.style.filter = "brightness(0.92)"; } : undefined}
-      onMouseLeave={(!disabled && canHover) ? e => { e.currentTarget.style.filter = ""; } : undefined}
-      style={{ background: b.background, border: b.border, borderRadius: "99px", display: "inline-flex", ...wrapperStyle }}>
-      <button onClick={onClick} {...(disabled ? {} : surfacePress())}
-        style={{ ...b, background: "transparent", border: "none", borderRadius: "99px", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", ...innerStyle }}>
-        {children}
-      </button>
-    </div>
+    <button onClick={onClick} {...(disabled ? {} : surfacePress())}
+      disabled={disabled}
+      className={`button button-fill button-round${small ? ' button-small' : ''}`}
+      style={{ fontFamily: FF_SANS, background: disabled ? T.surface2 : T.accent, color: disabled ? T.muted : "#fff", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
+      {children}
+    </button>
   );
 }
 
 // ── Success Button ─────────────────────────────────────────────────────────
 function SuccessButton({ onClick, children, small, style: extraStyle }) {
   return (
-    <button onClick={onClick} {...glassPress()} style={{
-      ...glassyBtn(true, T.green),
-      height: small ? "38px" : "44px",
-      padding: small ? "0 1rem" : "0 1.25rem",
-      fontSize: small ? "0.87rem" : "0.9rem",
-      fontFamily: FF_SANS, fontWeight: 600,
-      WebkitTapHighlightColor: "transparent",
-      ...extraStyle,
-    }}>
+    <button onClick={onClick} {...glassPress()}
+      className={`button button-fill button-round${small ? ' button-small' : ''}`}
+      style={{ fontFamily: FF_SANS, background: T.green, color: "#fff", WebkitTapHighlightColor: "transparent", ...extraStyle }}>
       {children}
     </button>
   );
@@ -1164,16 +1127,16 @@ const glassyBtn = (active = false, color = null) => {
 
 const inp = (extra = {}) => ({
   background: T.surface,
-  border: "1px solid " + T.border + "",
-  borderRadius: "12px",
+  border: "1.5px solid " + T.border,
+  borderRadius: "10px",
   color: T.text,
   fontFamily: FF_SANS,
   fontSize: "1rem",
-  padding: "0.65rem 0.9rem",
+  padding: "0.7rem 1rem",
   width: "100%",
   outline: "none",
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
+  transition: "border-color 0.2s, box-shadow 0.2s",
+  WebkitAppearance: "none",
   ...extra,
 });
 
