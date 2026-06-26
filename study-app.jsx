@@ -356,16 +356,19 @@ function AnswerButton({ onClick, children, bg, border, color, shadow, submitted,
 // Session picker mode/count/timer option buttons
 function OptionButton({ onClick, children, active = false, disabled = false, style: extraStyle }) {
   return (
-    <button onClick={onClick} {...glassPress()} style={{
-      ...glassyBtn(active),
-      padding: "1rem 1.4rem", textAlign: "left",
-      display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "1rem",
-      cursor: disabled ? "not-allowed" : "pointer",
-      width: "100%", opacity: disabled ? 0.45 : 1,
-      transition: "opacity 0.15s", fontFamily: FF_SANS, fontSize: "0.95rem",
-      WebkitTapHighlightColor: "transparent",
-      ...extraStyle,
-    }}>
+    <button onClick={onClick} {...glassPress()}
+      className={`button button-raised button-round${active ? ' button-fill' : ''}`}
+      style={{
+        padding: "1rem 1.4rem", textAlign: "left",
+        display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "1rem",
+        cursor: disabled ? "not-allowed" : "pointer",
+        width: "100%", opacity: disabled ? 0.45 : 1,
+        fontFamily: FF_SANS, fontSize: "0.95rem",
+        WebkitTapHighlightColor: "transparent",
+        height: "auto", minHeight: "64px",
+        ...(active ? { background: T.accent, color: "#fff" } : { background: T.surface, color: T.text }),
+        ...extraStyle,
+      }}>
       {children}
     </button>
   );
