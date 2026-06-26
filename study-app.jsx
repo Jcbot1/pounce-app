@@ -5583,11 +5583,13 @@ function ThemePicker({ theme, onSetTheme }) {
     { id: "system", svg: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> },
   ];
   return (
-    <div style={{ display: "flex", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)", borderRadius: "99px", padding: "0.2rem", gap: "0.1rem" }}>
+    <div className="segmented segmented-raised">
       {opts.map(opt => {
         const active = theme === opt.id || (opt.id === "system" && theme?.startsWith("system"));
         return (
-          <button key={opt.id} onClick={() => onSetTheme(opt.id)} style={{ flex: 1, height: "26px", borderRadius: "99px", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: active ? (T.mode === "light" ? "#fff" : "#3d3558") : "transparent", color: active ? T.accent : T.muted, transition: "background 0.18s, color 0.18s" }}>
+          <button key={opt.id} className={"button" + (active ? " button-active" : "")}
+            onClick={() => onSetTheme(opt.id)}
+            style={{ color: active ? T.accent : T.muted }}>
             {opt.svg}
           </button>
         );
