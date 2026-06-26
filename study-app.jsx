@@ -6857,10 +6857,6 @@ function App() {
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
-          {/* Sidebar border — starts below header height so it looks like one piece */}
-          <div style={{ position: "fixed", top: "66px", bottom: 0, width: "1px", background: ST.border,
-            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
-            transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
           <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? 0 : "1.5rem", height: sidebarCollapsed ? "48px" : "185px", display: "flex", alignItems: sidebarCollapsed ? "center" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
