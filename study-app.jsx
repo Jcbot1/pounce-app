@@ -141,23 +141,19 @@ function FabMenuButton({ onClick, children, color, jsonBtn = false, bare = false
     </button>
   );
   return (
-    <div style={{
-      background: T.surface, border: "1px solid " + T.border,
-      borderRadius: "99px", overflow: "hidden",
-      boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
-      display: "inline-flex",
-    }}>
-      <button onClick={onClick} {...surfacePress()} style={{
-        background: "transparent", border: "none", cursor: "pointer",
-        height: "44px",
-        ...(jsonBtn
-          ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FF_MONO, fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
-          : { paddingLeft: "1.1rem", paddingRight: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: color || T.text, whiteSpace: "nowrap" }
-        ),
-      }}>
+    <>
+      <button onClick={onClick} {...surfacePress()}
+        className="button button-raised button-round"
+        style={{
+          background: T.surface, color: color || T.text,
+          fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500,
+          textTransform: "none", whiteSpace: "nowrap",
+          padding: "0 1.1rem", height: "44px", width: "auto",
+          display: "inline-flex", alignItems: "center", gap: "0.5rem",
+        }}>
         {children}
       </button>
-    </div>
+    </>
   );
 }
 
