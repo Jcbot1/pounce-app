@@ -318,7 +318,7 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
   return (
     <div style={{ padding: "1.2rem 1.25rem", borderBottom: noBorder ? "none" : "1px solid " + T.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-        <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: "0.25rem", lineHeight: 1, display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2 }}>{label}</p>
@@ -3414,7 +3414,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             {back && (
               <button onClick={back}
                 {...surfacePress()}
-                style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted, cursor: "pointer", padding: "0.25rem", lineHeight: 1, display: "flex", alignItems: "center" }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg></button>
+                style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg></button>
             )}
             <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.1em" }}>
               {stepLabel}
