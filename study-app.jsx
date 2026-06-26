@@ -3919,7 +3919,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
 
         {/* Row 1: Set name */}
-        <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
+        <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)", margin: 0 }}>
           {s.name}
         </p>
 
@@ -4564,7 +4564,7 @@ function HistoryCard({ session, onView }) {
     <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
         <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
-          overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)" }}>
+          overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)", margin: 0 }}>
           {session.setName}
         </p>
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
