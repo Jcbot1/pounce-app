@@ -407,10 +407,10 @@ function EditorTagChip({ tag, onRemove }) {
   const color = tagColor(tag);
   return (
     <button onClick={onRemove} {...primaryPress()} style={{
-      display: "flex", alignItems: "center", gap: "0.35rem",
+      display: "inline-flex", alignItems: "center", gap: "0.35rem",
       padding: "0.38rem 0.9rem", borderRadius: "99px", border: "none", cursor: "pointer",
       fontFamily: FF_MONO, fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em",
-      background: color, color: "#fff", height: "auto",
+      background: color, color: "#fff", height: "auto", width: "auto",
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>
       {tag}
@@ -1840,9 +1840,9 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
           <button onClick={() => setAddingTag(true)}
             {...primaryPress()}
             style={{
-              display: "flex", alignItems: "center", gap: "0.35rem",
+              display: "inline-flex", alignItems: "center", gap: "0.35rem",
               padding: "0.3rem 0.85rem", borderRadius: "99px", cursor: "pointer",
-              fontFamily: FF_SANS, fontSize: "0.8rem", height: "auto",
+              fontFamily: FF_SANS, fontSize: "0.8rem", height: "auto", width: "auto",
               background: "transparent",
               border: "1px dashed " + T.border2,
               color: T.muted,
