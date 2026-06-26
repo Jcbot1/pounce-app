@@ -3492,25 +3492,17 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
             }}>
               {/* Stepper */}
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.1rem" }}>CUSTOM TIME</p>
-              <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-                <button onClick={() => setCustomMin(m => Math.max(5, m - 5))}
-                  {...surfacePress()}
-                  className="button button-outline button-round"
-                  style={{ color: T.text, borderColor: T.border, width: "44px", height: "44px", fontSize: "1.4rem", padding: 0, flexShrink: 0 }}>
-                  −
-                </button>
-                <div style={{ textAlign: "center", minWidth: "80px" }}>
-                  <p style={{ fontFamily: FF_MONO, fontSize: "2.5rem", fontWeight: 700, color: T.text, lineHeight: 1 }}>{customMin}</p>
-                  <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted, marginTop: "0.25rem" }}>minutes</p>
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted }}>CUSTOM TIME</p>
+              <div className="stepper stepper-large stepper-round stepper-raised">
+                <div className="stepper-button-minus" onClick={() => setCustomMin(m => Math.max(5, m - 5))} />
+                <div className="stepper-input-wrap">
+                  <input type="number" min="5" max="240" step="5" value={customMin}
+                    onChange={e => setCustomMin(Math.min(240, Math.max(5, Number(e.target.value))))}
+                    style={{ fontFamily: FF_MONO }} />
                 </div>
-                <button onClick={() => setCustomMin(m => Math.min(240, m + 5))}
-                  {...surfacePress()}
-                  className="button button-outline button-round"
-                  style={{ color: T.text, borderColor: T.border, width: "44px", height: "44px", fontSize: "1.4rem", padding: 0, flexShrink: 0 }}>
-                  +
-                </button>
+                <div className="stepper-button-plus" onClick={() => setCustomMin(m => Math.min(240, m + 5))} />
               </div>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted }}>minutes</p>
               {/* Quick picks */}
               <div style={{ display: "flex", gap: "0.5rem", width: "100%" }}>
                 {TIMER_OPTIONS.map(min => (
