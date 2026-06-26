@@ -1920,7 +1920,8 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
         display: "flex", alignItems: "center", gap: "0.75rem",
         background: T.mode === "light" ? "#ede8e0" : "#181614",
         borderRadius: "99px",
-        padding: "0.4rem 0.4rem 0.4rem 1.2rem",
+        padding: "0 0.4rem 0 1.2rem",
+        minHeight: "60px",
         boxShadow: T.mode === "light"
           ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
           : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
