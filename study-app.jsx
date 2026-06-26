@@ -6279,14 +6279,14 @@ function App() {
             ? "transparent"
             : (scrolled || screen === "results" || screen === "historyResults" || editingSetName)
               ? T.mode === "light"
-                ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,1) 60%, rgba(247,245,242,0) 100%)`
-                : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,1) 60%, rgba(15,9,5,0) 100%)`
+                ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,0.72) 60%, rgba(247,245,242,0) 100%)`
+                : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,0.72) 60%, rgba(15,9,5,0) 100%)`
               : "transparent",
           transition: (editingSetName || showSidebar || sidebarJustLeft) ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
         }}>
           
-          {showSidebar && (
+          {(showSidebar || scrolled || screen === "results" || screen === "historyResults" || editingSetName) && (
             <div style={{
               position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
               backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
