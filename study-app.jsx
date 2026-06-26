@@ -6266,7 +6266,7 @@ function App() {
             ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), ${T.bg}`
             : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), ${T.bg}`)
           : (bgStyle === "dots" || bgStyle === "grid") ? "transparent" : T.bg,
-        marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + "px" : SIDEBAR_WIDTH + "px") : 0,
+        marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 + "px" : SIDEBAR_WIDTH + 16 + "px") : 0,
         paddingTop: showSidebar ? "48px" : 0,
         borderTopLeftRadius: 0,
         boxShadow: "none",
@@ -6276,8 +6276,9 @@ function App() {
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
           ...(showSidebar ? {
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-            left: 0, right: 0,
+            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : SIDEBAR_WIDTH + 16) + "px", right: 0,
             height: "48px",
+            transition: "left 0.25s ease",
           } : {}),
           background: showSidebar
             ? "transparent"
@@ -6849,18 +6850,18 @@ function App() {
 
       {showSidebar && (
         <div style={{
-          position: "fixed", left: 0, top: 0, bottom: 0,
+          position: "fixed", left: "8px", top: "8px", bottom: "8px",
           width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
           transition: "width 0.25s ease",
           background: ST.surface,
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          borderRadius: "16px",
+          boxShadow: ST.mode === "light"
+            ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
+            : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
-          {/* Sidebar border */}
-          <div style={{ position: "fixed", top: 0, bottom: 0, width: "1px", background: ST.border,
-            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) - 1 + "px",
-            transition: "left 0.25s ease", zIndex: 201, pointerEvents: "none" }} />
           {/* Logo */}
           <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? 0 : "1.5rem", height: sidebarCollapsed ? "48px" : "185px", display: "flex", alignItems: sidebarCollapsed ? "center" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
@@ -7028,7 +7029,7 @@ function App() {
       {recentTooltip && (
         <div style={{
           position: "fixed",
-          left: SIDEBAR_WIDTH + 10 + "px",
+          left: SIDEBAR_WIDTH + 26 + "px",
           top: recentTooltip.y + "px",
           transform: "translateY(-50%)",
           background: T.mode === "light" ? T.surface : T.surface2,
