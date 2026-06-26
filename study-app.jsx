@@ -3518,7 +3518,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             </div>
 
             {/* Start button outside the card */}
-            <PrimaryButton onClick={() => onStart(null, "exam", customMin)} style={{ width: "100%", justifyContent: "center" }}>
+            <PrimaryButton onClick={() => onStart(null, "exam", customMin)} style={{ width: "100%", justifyContent: "center", height: "52px", fontSize: "1rem" }}>
               Start
             </PrimaryButton>
 
