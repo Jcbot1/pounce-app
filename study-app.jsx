@@ -6417,8 +6417,8 @@ function App() {
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
                     onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
-                    onBlur={e => { e.target.style.border = "1.5px solid transparent"; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
-                    style={{ background: T.surface, border: "1.5px solid transparent", borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }} />
+                    onBlur={e => { e.target.style.border = "1px solid " + T.border; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
+                    style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }} />
                   {editSearch && (
                     <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
                       background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
@@ -6563,8 +6563,8 @@ function App() {
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search sets, questions, history…"
                     onFocus={e => { e.target.style.border = "1.5px solid " + T.accent; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 0 3px " + T.accent + "25"; }}
-                    onBlur={e => { e.target.style.border = "1.5px solid transparent"; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
-                    style={{ background: T.surface, border: "1.5px solid transparent", borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }}
+                    onBlur={e => { e.target.style.border = "1px solid " + T.border; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)"; }}
+                    style={{ background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", width: "100%", paddingLeft: "2.1rem", paddingRight: "0.9rem", height: "38px", boxSizing: "border-box", display: "block", textAlign: "left", outline: "none", transition: "border-color 0.2s, box-shadow 0.2s", boxShadow: "0 2px 8px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)" }}
                   />
                   {searchQuery && (
                     <button onClick={() => setSearchQuery("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
