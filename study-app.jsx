@@ -315,7 +315,7 @@ function HamburgerMenuItem({ onClick, children, right, color, danger = false, st
 // ── Hamburger Section Header ───────────────────────────────────────────────
 function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
   return (
-    <div style={{ padding: "1.2rem 1.25rem", borderBottom: noBorder ? "none" : "1px solid " + T.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div style={{ padding: "0.6rem 0.75rem 0.6rem 0.4rem", borderBottom: noBorder ? "none" : "1px solid " + T.border, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
