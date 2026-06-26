@@ -6422,7 +6422,7 @@ function App() {
                 <div className="button button-raised button-round"
                   onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
                   onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                  style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.65rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
+                  style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.65rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", outline: "none", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6606,7 +6606,7 @@ function App() {
                   <div className="button button-raised button-round"
                     onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
                     onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                    style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.65rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
+                    style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.65rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", outline: "none", overflow: "hidden", textTransform: "none", whiteSpace: "normal", transition: "border-color 0.2s" }}>
                     <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
                       width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
