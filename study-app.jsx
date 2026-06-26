@@ -1885,26 +1885,22 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
 // ── GradientBorderButton — hollow button with gradient border ──────────────
 function GradientBorderButton({ onClick, children, size, style: extraStyle, disabled = false }) {
   return (
-    <div style={{
-      borderRadius: "99px", padding: "2px",
-      background: `linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%)`,
-      boxShadow: "0 4px 20px " + T.accent + "30",
-      opacity: disabled ? 0.5 : 1,
-      display: "inline-flex",
-      ...(size ? { width: size, height: size } : {}),
-    }}>
-      <button onClick={disabled ? undefined : onClick} style={{
-        width: "100%", height: "100%", borderRadius: "99px",
-        background: T.mode === "light" ? T.surface : "#181614",
-        border: "none", cursor: disabled ? "default" : "pointer",
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
-        fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.muted2,
+    <button onClick={disabled ? undefined : onClick}
+      className="button button-round"
+      style={{
+        background: `linear-gradient(${T.surface}, ${T.surface}) padding-box, linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%) border-box`,
+        border: "2px solid transparent",
+        color: T.muted2, fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem",
+        textTransform: "none",
+        display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+        cursor: disabled ? "default" : "pointer", opacity: disabled ? 0.5 : 1,
+        boxShadow: `0 4px 20px ${T.accent}30`,
         WebkitTapHighlightColor: "transparent",
+        ...(size ? { width: size, height: size } : {}),
         ...extraStyle,
       }}>
-        {children}
-      </button>
-    </div>
+      {children}
+    </button>
   );
 }
 
@@ -3104,7 +3100,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         {q.type === "flashcard" && !isSubmitted ? (
           <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted, fontStyle: "italic" }}>Tap card to flip</span>
         ) : !examMode && !isSubmitted ? (
-          <PrimaryButton onClick={handleSubmit} disabled={!canSubmit()} style={{ justifyContent: "center", minWidth: "150px" }}>Submit answer</PrimaryButton>
+          <GradientBorderButton onClick={handleSubmit} disabled={!canSubmit()} style={{ justifyContent: "center", minWidth: "150px" }}>Submit answer</GradientBorderButton>
         ) : !allAnswered ? (
           <PrimaryButton onClick={goNextUnanswered} style={{ justifyContent: "center", minWidth: "150px" }}>Next unanswered →</PrimaryButton>
         ) : (
