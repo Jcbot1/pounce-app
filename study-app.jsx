@@ -6429,7 +6429,7 @@ function App() {
                   </svg>
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }} />
+                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.4rem", paddingRight: "0.9rem", boxSizing: "border-box" }} />
                   {editSearch && (
                     <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
                       background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
