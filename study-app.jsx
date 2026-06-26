@@ -7049,8 +7049,6 @@ function App() {
         </div>
       )}
 
-      {/* Header bottom border — starts after the concave corner arc */}
-      )}
 
 
     </div>
