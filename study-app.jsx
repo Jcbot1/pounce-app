@@ -2952,11 +2952,35 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {/* Question card — flashcard has its own layout */}
       {q.type === "flashcard" ? (
         <div ref={topRef} style={{ scrollMarginTop: "80px", marginBottom: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem" }}>
             {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
             <span style={{ flex: 1 }} />
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
+              <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))} {...primaryPress()}
+                className={`button button-round ${flagged[idx] ? 'button-tonal' : 'button-raised'}`}
+                style={{
+                  width: "36px", height: "36px",
+                  ...(flagged[idx] ? { background: "#f59e0b25", color: "#f59e0b" } : { background: T.surface, color: T.text }),
+                }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                  <line x1="4" y1="22" x2="4" y2="15"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <ReviewFlashcard q={q} onGrade={handleFlashcardGrade} submitted={isSubmitted} results={pastResult} />
+        </div>
+      ) : (
+      <div ref={topRef} style={{ ...card({ marginBottom: "1rem" }), scrollMarginTop: "80px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem" }}>
+          {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
+          <span style={{ flex: 1 }} />
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
             <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
-            <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))} {...primaryPress()}
+            <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))}
+              {...primaryPress()}
               className={`button button-round ${flagged[idx] ? 'button-tonal' : 'button-raised'}`}
               style={{
                 width: "36px", height: "36px",
@@ -2968,29 +2992,6 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               </svg>
             </button>
           </div>
-          <ReviewFlashcard q={q} onGrade={handleFlashcardGrade} submitted={isSubmitted} results={pastResult} />
-        </div>
-      ) : (
-      <div ref={topRef} style={{ ...card({ marginBottom: "1rem" }), position: "relative", scrollMarginTop: "80px" }}>
-        {/* Hint button — top right of card */}
-        <div style={{ position: "absolute", top: "0.75rem", right: "0.75rem", display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
-          {/* Flag button */}
-          <button onClick={() => setFlagged(prev => ({ ...prev, [idx]: !prev[idx] }))}
-            {...primaryPress()}
-            className={`button button-round ${flagged[idx] ? 'button-tonal' : 'button-raised'}`}
-            style={{
-              width: "36px", height: "36px",
-              ...(flagged[idx] ? { background: "#f59e0b25", color: "#f59e0b" } : { background: T.surface, color: T.text }),
-            }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill={flagged[idx] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-              <line x1="4" y1="22" x2="4" y2="15"/>
-            </svg>
-          </button>
-        </div>
-        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.9rem", flexWrap: "wrap", paddingRight: "5rem" }}>
-          {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
         </div>
         <p style={{ fontFamily: FF_SANS, fontSize: "1rem", color: T.text, lineHeight: 1.65, marginBottom: "1.25rem" }}>
           {renderText(q.question)}
