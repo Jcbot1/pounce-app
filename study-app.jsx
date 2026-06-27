@@ -6295,11 +6295,11 @@ function App() {
                     value={searchQuery}
                     onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") setHomeTab("search"); }}
                     placeholder="Search…"
-                    style={{ background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", color: ST.text, fontFamily: FF_SANS, fontSize: "16px", padding: "0.45rem 0.9rem", width: "100%", paddingLeft: "2.1rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", height: "38px", boxSizing: "border-box", outline: "none" }}
+                    style={{ background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", color: ST.text, fontFamily: FF_SANS, fontSize: "16px", padding: "0.45rem 0.9rem", width: "100%", paddingLeft: "2.1rem", paddingRight: "2rem", paddingTop: "0.45rem", paddingBottom: "0.45rem", height: "38px", boxSizing: "border-box", outline: "none" }}
                   />
                   {searchQuery && (
                     <button onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
-                      background: "none", border: "none", cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
+                      background: "none", border: "none", cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
                   )}
                 </div>
               </div>
@@ -6347,8 +6347,8 @@ function App() {
                     placeholder="Search questions…"
                     style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }} />
                   {editSearch && (
-                    <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
-                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
+                    <button onClick={() => setEditSearch("")} style={{ flexShrink: 0,
+                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
                   )}
                 </div>
                 <button
@@ -6494,8 +6494,8 @@ function App() {
                     style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }}
                   />
                   {searchQuery && (
-                    <button onClick={() => setSearchQuery("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
-                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
+                    <button onClick={() => setSearchQuery("")} style={{ flexShrink: 0,
+                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
                   )}
                 </div>
               </div>
@@ -6534,8 +6534,8 @@ function App() {
                       style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
                     />
                     {resultsSearch && (
-                      <button onClick={() => setResultsSearch("")} style={{ position: "absolute", right: "0.65rem", top: "50%", transform: "translateY(-50%)",
-                        background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: 0 }}>✕</button>
+                      <button onClick={() => setResultsSearch("")} style={{ flexShrink: 0,
+                        background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
                     )}
                   </div>
                   {/* Sticky filter button */}
