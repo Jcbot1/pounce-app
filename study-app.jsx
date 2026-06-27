@@ -3877,7 +3877,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
               <path d={iconDef.path} />
             </svg>
           ) : (
-            <svg width="34" height="34" viewBox="0 0 100 100" fill={T.accent}>
+            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" stroke={T.accent} strokeWidth="5">
               <ellipse cx="50" cy="68" rx="22" ry="18"/>
               <ellipse cx="22" cy="46" rx="11" ry="13" transform="rotate(-15 22 46)"/>
               <ellipse cx="42" cy="32" rx="11" ry="13" transform="rotate(-5 42 32)"/>
