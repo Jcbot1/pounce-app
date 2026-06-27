@@ -4505,18 +4505,14 @@ function HistoryCard({ session, onView }) {
   return (
     <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+        <span style={{ fontSize: "0.68rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted }}>
+          {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
+        </span>
         <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
           overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)", margin: 0 }}>
           {session.setName}
         </p>
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
-          <span style={{
-            display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
-            background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
-          }}>
-            {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
-          </span>
           {session.mode && (
             <Tag
               label={session.mode === "quick" ? "QUICK " + session.total : session.mode === "exam" ? "EXAM" : "REVIEW"}
