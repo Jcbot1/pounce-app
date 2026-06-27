@@ -4739,6 +4739,7 @@ function QuickQuestion({ sets }) {
 // ════════════════════════════════════════════════════════════════════════
 
 function Dashboard({ history, sets, onStudy, onViewHistory }) {
+  const canHover = window.matchMedia("(hover: hover)").matches;
   const totalSessions  = history.length;
   const totalQuestions = history.reduce((sum, s) => sum + s.total, 0);
   const totalCorrect   = history.reduce((sum, s) => sum + s.score, 0);
@@ -4845,8 +4846,8 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
               ...card({ cursor: "pointer", transition: "background 0.15s",
                 borderColor: lastSession.score / lastSession.total >= 0.7 ? T.green + "44" : T.red + "44" }),
             }}
-            onMouseEnter={e => e.currentTarget.style.background = T.mode === "light" ? "rgba(255,255,255,1)" : "rgba(35,30,52,0.95)"}
-            onMouseLeave={e => e.currentTarget.style.background = T.mode === "light" ? T.surface : "rgba(28,24,42,1)"}>
+            onMouseEnter={canHover ? e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(248,248,250,1)" : "rgba(42,38,60,1)"; } : undefined}
+            onMouseLeave={canHover ? e => { e.currentTarget.style.background = T.mode === "light" ? "#fff" : "rgba(36,32,54,1)"; } : undefined}>
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <div style={{ width: "56px", height: "56px", borderRadius: "50%", flexShrink: 0,
                 border: "3px solid " + lastSession.score / lastSession.total >= 0.7 ? T.green : T.red,
