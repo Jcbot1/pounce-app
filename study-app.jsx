@@ -6285,7 +6285,7 @@ function App() {
           <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", height: showSidebar ? "48px" : undefined, padding: showSidebar ? "0 1rem" : editingSetName && !(screen === "edit" && (isDesktop || isTablet || titleBarVisible)) ? "0.5rem 1rem 1.75rem" : "0.5rem 1rem", display: "flex", position: "relative", zIndex: 1 }}>
 
-            <div style={{ width: "44px", flexShrink: 0, display: "flex", alignItems: "center" }}>
+            <div style={{ width: (!showSidebar && screen === "home") ? "0" : "44px", flexShrink: 0, display: "flex", alignItems: "center" }}>
             {(screen === "edit" || screen === "review" || screen === "results" || screen === "historyResults") ? (
               <GlassButton onClick={() => { document.dispatchEvent(new CustomEvent("studi-back")); }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
