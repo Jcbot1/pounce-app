@@ -3857,12 +3857,12 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
       <div style={{ display: "flex", gap: "0.85rem", alignItems: "center" }}>
 
         {/* Icon square */}
-        <div style={{
+        <div className="card card-raised" style={{
           width: "64px", height: "64px", flexShrink: 0,
           borderRadius: "14px",
           background: T.accent + "18",
-          boxShadow: `0 2px 8px ${T.accent}30, 0 1px 2px ${T.accent}18`,
           display: "flex", alignItems: "center", justifyContent: "center",
+          margin: 0, padding: 0,
         }}>
           <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
             stroke={T.accent}
