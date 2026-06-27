@@ -2624,6 +2624,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
     return () => el.removeEventListener("wheel", handler);
   }, []);
   const topRef         = useRef(null);
+  const topSentinelRef = useRef(null);
   const answersRef     = useRef(null);
   const explanationRef = useRef(null);
   const bottomRef      = useRef(null);
@@ -2674,7 +2675,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
   }, []);
 
   useEffect(() => {
-    const el = topRef.current;
+    const el = topSentinelRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(([entry]) => setAtTop(entry.isIntersecting), { threshold: 0 });
     obs.observe(el);
@@ -2833,6 +2834,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
 
   return (
     <div>
+      <div ref={topSentinelRef} style={{ height: "1px" }} />
       {confirmBack && (
         <ConfirmDialog
           title="Leave this session?"
