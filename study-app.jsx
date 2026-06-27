@@ -606,20 +606,13 @@ DELETEME*/
 // ── PounceLogo — mascot icon + wordmark ─────────────────────────────────────
 function PounceLogo({ height = 28, theme, stacked = false }) {
   const t = theme || T;
-  const gradId = "cngrad" + height;
   const iconW = stacked ? height * 2.5 : height * 1.1;
   const iconH = stacked ? Math.round(iconW * 348 / 411) : iconW;
   return (
     <div style={{ display: "flex", flexDirection: stacked ? "column" : "row", alignItems: "center", gap: stacked ? "0.15rem" : "0.4rem" }}>
       <MascotMonoIcon width={iconW} height={iconH} color={t.accent} />
       <svg height={height} viewBox="0 0 154 52" style={{ overflow: "visible", display: "block" }} xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={t.accent}/>
-            <stop offset="100%" stopColor={t.gradient2}/>
-          </linearGradient>
-        </defs>
-        <text x="0" y="42" fontFamily={FF_SERIF} fontSize="44" fontWeight="600" fill={`url(#${gradId})`} letterSpacing="0.5">pounce</text>
+        <text x="0" y="42" fontFamily={FF_SERIF} fontSize="44" fontWeight="600" fill={t.accent} letterSpacing="0.5">pounce</text>
       </svg>
     </div>
   );
