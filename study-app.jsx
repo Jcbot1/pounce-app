@@ -3198,64 +3198,18 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         />
       )}
 
-      <div style={{ ...card({ marginBottom: "1.5rem", borderColor: passed ? T.green + "55" : T.red + "55" }) }}>
-        {/* Score row */}
-        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>
-          <div style={{ width: "80px", height: "80px", borderRadius: "50%", flexShrink: 0,
-            border: "3px solid " + passed ? T.green : T.red,
-            background: passed
-              ? (T.mode === "light" ? T.green + "18" : "#052e16")
-              : (T.mode === "light" ? T.red   + "18" : "#2d0a0a"),
-            display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <AnimatedPct target={pct} color={passed ? T.green : T.red} />
-          </div>
-          <div>
-            <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text, marginBottom: "0.2rem" }}>
-              {passed ? "Pass ✓" : "Almost there"}
-            </p>
-            <p style={{ color: T.muted2, fontFamily: FF_SANS, fontSize: "0.9rem" }}>
-              {score} of {results.length} correct · {set.name}
-            </p>
-            {isHistoryView && historyDate && (
-              <p style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem", marginTop: "0.2rem" }}>
-                {new Date(historyDate).toLocaleDateString(undefined, { dateStyle: "full" })}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Topic breakdown inline */}
-        <TopicSummaryInline results={results} questions={questions} />
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-        <Label style={{ marginBottom: 0 }}>QUESTION REVIEW — click to expand</Label>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "1rem" }}>
         <div style={{ position: "relative", flexShrink: 0 }}>
-          {resultsFilter !== "all" ? (
-            <button onClick={e => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-              setFilterOpen(o => !o);
-            }} {...surfacePress()}
-              className="button button-raised button-outline button-round"
-              style={{ height: "34px", padding: "0 12px", gap: "0.35rem", display: "flex", alignItems: "center", justifyContent: "center",
-                fontFamily: FF_SANS, textTransform: "none", WebkitTapHighlightColor: "transparent",
-                background: T.surface, borderColor: T.accent, color: T.accent, fontSize: "0.85rem" }}>
-              <FilterIcon size={12} />
-              <span style={{ fontSize: "0.8rem" }}>{resultsFilter === "correct" ? "Correct" : "Incorrect"}</span>
-            </button>
-          ) : (
-            <button {...glassPress()} onClick={e => {
-              const rect = e.currentTarget.parentElement.getBoundingClientRect();
-              setFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-              setFilterOpen(o => !o);
-            }} className={`button button-round ${filterOpen ? 'button-tonal' : 'button-raised'}`}
-            style={{ height: "34px", flexShrink: 0, gap: "0.35rem", paddingLeft: "0.85rem", paddingRight: "0.85rem", fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.85rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
-              ...(filterOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
-              <FilterIcon size={12} />
-              <span style={{ fontSize: "0.8rem" }}>All</span>
-            </button>
-          )}
+          <button {...glassPress()} onClick={e => {
+            const rect = e.currentTarget.parentElement.getBoundingClientRect();
+            setFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+            setFilterOpen(o => !o);
+          }} className={`button button-round ${(filterOpen || resultsFilter !== "all") ? 'button-tonal' : 'button-raised'}`}
+          style={{ gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
+            ...((filterOpen || resultsFilter !== "all") ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
+            <FilterIcon size={13} />
+            <span style={{ fontSize: "0.85rem" }}>{resultsFilter === "correct" ? "Correct" : resultsFilter === "incorrect" ? "Incorrect" : "All"}</span>
+          </button>
           {filterOpen && (
             <>
               <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setFilterOpen(false)} />
@@ -3291,6 +3245,38 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
           )}
         </div>
       </div>
+
+      <div style={{ ...card({ marginBottom: "1.5rem", borderColor: passed ? T.green + "55" : T.red + "55" }) }}>
+        {/* Score row */}
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>
+          <div style={{ width: "80px", height: "80px", borderRadius: "50%", flexShrink: 0,
+            border: "3px solid " + passed ? T.green : T.red,
+            background: passed
+              ? (T.mode === "light" ? T.green + "18" : "#052e16")
+              : (T.mode === "light" ? T.red   + "18" : "#2d0a0a"),
+            display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <AnimatedPct target={pct} color={passed ? T.green : T.red} />
+          </div>
+          <div>
+            <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text, marginBottom: "0.2rem" }}>
+              {passed ? "Pass ✓" : "Almost there"}
+            </p>
+            <p style={{ color: T.muted2, fontFamily: FF_SANS, fontSize: "0.9rem" }}>
+              {score} of {results.length} correct · {set.name}
+            </p>
+            {isHistoryView && historyDate && (
+              <p style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem", marginTop: "0.2rem" }}>
+                {new Date(historyDate).toLocaleDateString(undefined, { dateStyle: "full" })}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Topic breakdown inline */}
+        <TopicSummaryInline results={results} questions={questions} />
+      </div>
+
+      <Label style={{ marginBottom: "0.75rem" }}>QUESTION REVIEW — click to expand</Label>
       {results.filter(r => {
         if (resultsFilter === "correct") return r.correct;
         if (resultsFilter === "incorrect") return !r.correct;
