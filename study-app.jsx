@@ -2321,7 +2321,8 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                     if (isOpen) { setOpenId(null); }
                     else {
                       const r = e.currentTarget.getBoundingClientRect();
-                      setOpenUpward(window.innerHeight - r.bottom < 200);
+                      const arrowClearance = 132; // bottom: 5.5rem (88px) + height 44px
+                      setOpenUpward(window.innerHeight - r.bottom < arrowClearance + 150);
                       setOpenId(dd.id);
                     }
                   }
