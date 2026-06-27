@@ -4922,7 +4922,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
   return (
     <>
       <div style={{
-        position: "fixed", bottom: "1.5rem", left: 0, right: 0,
+        position: "fixed", bottom: "21px", left: 0, right: 0,
         zIndex: disabled ? 90 : 100,
         display: "flex",
         justifyContent: "center",
@@ -4945,7 +4945,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         borderRadius: "99px",
-        padding: "0 0.25rem", gap: "0", height: "60px",
+        padding: "0 0.25rem", gap: "0", height: "62px",
         border: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.12)"),
         boxShadow: pillShadow, pointerEvents: "all",
         position: "relative",
@@ -5391,7 +5391,7 @@ function HomeFAB({ homeTab, onCreate, disabled }) {
         .hfab-out { animation: homeFabOut 0.25s ease-in forwards; pointer-events: none; }
       `}</style>
       <div className={animating ? "hfab-out" : "hfab-in"}>
-        <GradientBorderButton onClick={() => onCreate()} size="60px">
+        <GradientBorderButton onClick={() => onCreate()} size="62px">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
             <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
