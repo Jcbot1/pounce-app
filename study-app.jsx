@@ -3455,7 +3455,6 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
               boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.06)" : "0 2px 12px rgba(0,0,0,0.18)",
             }}>
               {/* Stepper */}
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.12em", color: T.muted }}>CUSTOM TIME</p>
               <div className="stepper stepper-large stepper-round stepper-raised"
                 style={{ "--f7-theme-color": T.accent, background: T.mode === "light" ? "#fff" : T.surface2 }}>
                 <div className="stepper-button-minus" onClick={() => setCustomMin(m => Math.max(5, m - 5))} />
