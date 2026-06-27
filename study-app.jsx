@@ -3876,19 +3876,19 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
             {s.name}
           </p>
-          {(s.tags && s.tags.length > 0) && (
-            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
-              {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
-            </div>
-          )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
             fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
             background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
             alignSelf: "flex-start",
           }}>
-            {s.questions.length} Q
+            {s.questions.length} questions
           </span>
+          {(s.tags && s.tags.length > 0) && (
+            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+              {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
+            </div>
+          )}
         </div>
 
       </div>
