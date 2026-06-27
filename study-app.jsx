@@ -4025,7 +4025,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         transition: collapsed ? "height 0.3s ease, overflow 0s 0s" : "height 0.3s ease, overflow 0s 0.3s",
       }}>
         <div ref={contentRef}>
-          <div style={{ paddingLeft: cardColumns > 1 ? 0 : "1rem", borderLeft: cardColumns > 1 ? "none" : "2px solid " + T.accent + "44" }}>
+          <div style={{ paddingLeft: cardColumns > 1 ? 0 : "1rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
               {tagSets.map(s => (
                 <SetCard key={s.id} s={s} allTags={allTags}
