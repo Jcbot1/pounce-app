@@ -3697,9 +3697,6 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.92rem", color: T.text, lineHeight: 1.2 }}>
                 {profileName}
               </p>
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>
-                Edit profile
-              </p>
             </div>
           </button>
           )}
