@@ -4504,15 +4504,15 @@ function HistoryCard({ session, onView }) {
 
   return (
     <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
           overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)", margin: 0 }}>
           {session.setName}
         </p>
-        <span style={{ fontSize: "0.68rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted }}>
+        <span style={{ fontSize: "0.68rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted, marginTop: "0.1rem" }}>
           {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
         </span>
-        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.4rem" }}>
           {session.mode && (
             <Tag
               label={session.mode === "quick" ? "QUICK " + session.total : session.mode === "exam" ? "EXAM" : "REVIEW"}
