@@ -3556,7 +3556,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet, reviewResults, reviewQs, historySession, onRequestRetry, onRetryMissed, onRequestDeleteResults, onStudyFromHistory }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet, reviewResults, reviewQs, historySession, onRequestRetry, onRetryMissed, onRequestDeleteResults, onStudyFromHistory, editCanSave = false }) {
   const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
   const inEdit = screen === "edit";
   const inResults = screen === "results" || screen === "historyResults";
@@ -3570,21 +3570,8 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
   const [section, setSection] = useState(null); // null | "appearance" | "color"
   const navRef = useRef(null);
   const importRef = useRef(null);
-  const [renamingActiveSet,    setRenamingActiveSet]    = useState(false);
-  const [renameActiveSetVal,   setRenameActiveSetVal]   = useState("");
-  const renameActiveSetRef = useRef(null);
-  const [tagPickerActiveSetOpen,  setTagPickerActiveSetOpen]  = useState(false);
   const [iconPickerActiveSetOpen, setIconPickerActiveSetOpen] = useState(false);
   const [confirmDeleteActiveSet,  setConfirmDeleteActiveSet]  = useState(false);
-
-  useEffect(() => {
-    if (!renamingActiveSet || !renameActiveSetRef.current) return;
-    const el = renameActiveSetRef.current;
-    el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
-    el.focus({ preventScroll: true });
-    el.setSelectionRange(el.value.length, el.value.length);
-  }, [renamingActiveSet]);
 
   useEffect(() => {
     if (!open || sidebarMode) return;
@@ -3596,21 +3583,9 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
   }, [open, sidebarMode]);
 
   useEffect(() => {
-    function handle() { if (activeSet) { setRenameActiveSetVal(activeSet.name); setRenamingActiveSet(true); } }
-    document.addEventListener("studi-edit-rename", handle);
-    return () => document.removeEventListener("studi-edit-rename", handle);
-  }, [activeSet]);
-
-  useEffect(() => {
     function handle() { setIconPickerActiveSetOpen(true); }
     document.addEventListener("studi-edit-icon", handle);
     return () => document.removeEventListener("studi-edit-icon", handle);
-  }, []);
-
-  useEffect(() => {
-    function handle() { setTagPickerActiveSetOpen(true); }
-    document.addEventListener("studi-edit-tags", handle);
-    return () => document.removeEventListener("studi-edit-tags", handle);
   }, []);
 
   useEffect(() => {
@@ -3658,32 +3633,6 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
     <div ref={navRef} style={{ position: "relative" }}>
       {showProfile && <ProfileModal name={profileName} iconId={profileIconId} bg={profileBg} iconColor={profileIColor} onSave={onSaveProfile} onClose={() => setShowProfile(false)} />}
 
-      {renamingActiveSet && activeSet && (
-        <Modal onClose={() => setRenamingActiveSet(false)}>
-          <ModalCard pad="1.5rem" maxWidth={360}>
-            <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>RENAME SET</p>
-            <textarea
-              ref={renameActiveSetRef}
-              value={renameActiveSetVal}
-              onChange={e => { setRenameActiveSetVal(e.target.value); e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }}
-              onKeyDown={e => {
-                if (e.key === "Enter") { e.preventDefault(); if (renameActiveSetVal.trim()) { onRenameActiveSet(activeSet.id, renameActiveSetVal.trim()); document.dispatchEvent(new CustomEvent("studi-setname", { detail: renameActiveSetVal.trim() })); setRenamingActiveSet(false); } }
-                if (e.key === "Escape") setRenamingActiveSet(false);
-              }}
-              rows={1}
-              maxLength={160}
-              style={{ ...inp(), borderRadius: "12px", fontSize: "1rem", resize: "none", overflow: "hidden", lineHeight: 1.4 }}
-            />
-            <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-              <GhostButton onClick={() => setRenamingActiveSet(false)} small>Cancel</GhostButton>
-              <PrimaryButton onClick={() => { if (renameActiveSetVal.trim()) { onRenameActiveSet(activeSet.id, renameActiveSetVal.trim()); document.dispatchEvent(new CustomEvent("studi-setname", { detail: renameActiveSetVal.trim() })); setRenamingActiveSet(false); } }} small>Rename</PrimaryButton>
-            </div>
-          </ModalCard>
-        </Modal>
-      )}
-      {tagPickerActiveSetOpen && activeSet && (
-        <TagPicker set={activeSet} allTags={allTags || []} onSetTags={onSetActiveSetTags} onClose={() => setTagPickerActiveSetOpen(false)} />
-      )}
       {iconPickerActiveSetOpen && activeSet && (
         <IconPickerModal
           currentIcon={activeSet.icon || null}
@@ -3736,22 +3685,16 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           {/* ── Edit page menu ── */}
           {section === null && inEdit && (
             <>
+              <HamburgerMenuItem onClick={() => { if (!editCanSave) return; close(); document.dispatchEvent(new CustomEvent("studi-save")); }} color={editCanSave ? T.accent : T.muted}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span>Save</span>
+                </span>
+              </HamburgerMenuItem>
               <HamburgerMenuItem onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-icon")); }}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
                   <span>Icon</span>
-                </span>
-              </HamburgerMenuItem>
-              <HamburgerMenuItem onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-tags")); }}>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                  <span>Tags</span>
-                </span>
-              </HamburgerMenuItem>
-              <HamburgerMenuItem onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-rename")); }}>
-                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                  <span>Rename set</span>
                 </span>
               </HamburgerMenuItem>
               <HamburgerMenuItem onClick={() => { exportActiveSetFn(); close(); }}>
@@ -5918,7 +5861,6 @@ function App() {
     }
   }, [editingSetName]);
   const [editSearch, setEditSearch] = useState("");
-  const [savedFlash, setSavedFlash] = useState(false);
   const [editCanSave, setEditCanSave] = useState(false);
   const [editQuestionCount, setEditQuestionCount] = useState(0);
   const [setsSearch, setSetsSearch]    = useState("");
@@ -6434,72 +6376,12 @@ function App() {
               onRequestRetry={() => setResultsConfirmRetry(true)}
               onRetryMissed={handleRetryMissed}
               onRequestDeleteResults={() => setResultsDeleteConfirm(true)}
-              onStudyFromHistory={() => { const set = sets.find(s => s.name === historySession?.setName); if (set) setPendingStudySet(set); else showToast("Original set not found."); }} />}
+              onStudyFromHistory={() => { const set = sets.find(s => s.name === historySession?.setName); if (set) setPendingStudySet(set); else showToast("Original set not found."); }}
+              editCanSave={editCanSave} />}
             </div>
           </div>
           </div>
 
-          {screen === "edit" && (
-            <div style={{
-              display: "grid",
-              gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
-              transition: "grid-template-rows 0.3s ease",
-            }}>
-            <div style={{ minHeight: 0, overflow: "hidden", display: "flex", justifyContent: "center" }}>
-              <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.75rem",
-                padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem" }}>
-                <button
-                  onClick={() => {
-                    if (!editCanSave || savedFlash) return;
-                    document.dispatchEvent(new CustomEvent("studi-save"));
-                    setSavedFlash(true);
-                    setTimeout(() => setSavedFlash(false), 4000);
-                  }}
-                  className={`button button-raised button-round${editCanSave && !savedFlash ? ' button-outline' : ''}`}
-                  style={{
-                    height: "36px", padding: "0 1rem", fontSize: "0.85rem",
-                    flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "0.35rem",
-                    minWidth: "80px", width: "90px",
-                    fontFamily: FF_SANS, textTransform: "none",
-                    transition: "background 0.3s ease, color 0.3s ease, border-color 0.3s ease, opacity 0.2s ease",
-                    position: "relative", overflow: "hidden",
-                    cursor: savedFlash ? "default" : editCanSave ? "pointer" : "default",
-                    ...(savedFlash
-                      ? { background: T.green, color: "#fff", border: "none" }
-                      : editCanSave
-                        ? { background: T.surface, color: T.accent, borderColor: T.accent }
-                        : { background: T.surface2, color: T.muted, border: "none" }),
-                  }}>
-                  {/* Shimmer sweep on save */}
-                  {savedFlash && (
-                    <span className="save-shimmer" style={{
-                      position: "absolute", inset: 0,
-                      background: "linear-gradient(90deg, transparent 0%, rgba(34,197,94,0.25) 50%, transparent 100%)",
-                      pointerEvents: "none",
-                    }} />
-                  )}
-                  {savedFlash ? (
-                    <>
-                      <span className="check-pop" style={{ display: "inline-flex" }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                      </span>
-                      <span className="saved-text">Saved</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}>
-                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
-                      </svg>
-                      Save
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-            </div>
-          )}
           {screen === "home" && homeTab === "search" && !showSidebar && (
             <div style={{
               display: "grid",
