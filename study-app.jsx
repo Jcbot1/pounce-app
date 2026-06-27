@@ -3456,7 +3456,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
             }}>
               {/* Stepper */}
               <div className="stepper stepper-large stepper-round stepper-raised"
-                style={{ "--f7-theme-color": T.accent, background: T.mode === "light" ? "#fff" : T.surface2 }}>
+                style={{ "--f7-theme-color": T.accent, background: T.mode === "light" ? "#fff" : T.surface2, "--f7-stepper-height": "56px", "--f7-stepper-button-width": "72px", "--f7-stepper-large-height": "56px", "--f7-stepper-large-button-width": "72px" }}>
                 <div className="stepper-button-minus" onClick={() => setCustomMin(m => Math.max(5, m - 5))} />
                 <div className="stepper-input-wrap">
                   <input type="text" inputMode="numeric" value={customMin}
