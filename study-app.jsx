@@ -6779,7 +6779,7 @@ function App() {
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Logo */}
-          <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? 0 : "1.5rem", height: sidebarCollapsed ? "48px" : "185px", display: "flex", alignItems: sidebarCollapsed ? "center" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? "1.25rem" : "1.5rem", height: sidebarCollapsed ? "72px" : "185px", display: "flex", alignItems: sidebarCollapsed ? "flex-start" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
               <MascotMonoIcon width={36} height={36} color={ST.accent} />
             ) : (
