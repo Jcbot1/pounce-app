@@ -6285,7 +6285,7 @@ function App() {
               <PounceLogo height={24} />
             ) : screen === "home" ? (
               <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem" }}>
-                <div style={{ display: "flex", alignItems: "center", background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", height: "38px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box" }}>
+                <div style={{ position: "relative", display: "flex", alignItems: "center", background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", height: "38px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none", marginRight: "0.5rem" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={ST.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6295,10 +6295,10 @@ function App() {
                     value={searchQuery}
                     onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") setHomeTab("search"); }}
                     placeholder="Search…"
-                    style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: ST.text, fontFamily: FF_SANS, fontSize: "16px", height: "100%", padding: 0 }}
+                    style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: ST.text, fontFamily: FF_SANS, fontSize: "16px", height: "38px", padding: 0, boxSizing: "border-box" }}
                   />
                   {searchQuery && (
-                    <button onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem" }}>✕</button>
+                    <span onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                   )}
                 </div>
               </div>
@@ -6337,16 +6337,16 @@ function App() {
                 <div
                   onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
                   onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                  style={{ flex: 1, minWidth: 0, height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
+                  style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                   </svg>
                   <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
                     placeholder="Search questions…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }} />
+                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "38px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }} />
                   {editSearch && (
-                    <button onClick={() => setEditSearch("")} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem" }}>✕</button>
+                    <span onClick={() => setEditSearch("")} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                   )}
                 </div>
                 <button
@@ -6479,7 +6479,7 @@ function App() {
                 <div
                   onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
                   onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                  style={{ flex: 1, maxWidth: showSidebar ? "600px" : "100%", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", overflow: "hidden", transition: "border-color 0.2s" }}>
+                  style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", overflow: "hidden", transition: "border-color 0.2s" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.6, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6489,10 +6489,10 @@ function App() {
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search sets, questions, history…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
+                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "38px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
                   />
                   {searchQuery && (
-                    <button onClick={() => setSearchQuery("")} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem" }}>✕</button>
+                    <span onClick={() => setSearchQuery("")} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                   )}
                 </div>
               </div>
@@ -6519,7 +6519,7 @@ function App() {
                   <div
                     onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
                     onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                    style={{ flex: 1, minWidth: 0, height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
+                    style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
                     <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
                       width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6528,10 +6528,10 @@ function App() {
                       value={resultsSearch}
                       onChange={e => setResultsSearch(e.target.value)}
                       placeholder="Search questions…"
-                      style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
+                      style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "38px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
                     />
                     {resultsSearch && (
-                      <button onClick={() => setResultsSearch("")} style={{ flexShrink: 0, background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem" }}>✕</button>
+                      <span onClick={() => setResultsSearch("")} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                     )}
                   </div>
                   {/* Sticky filter button */}
