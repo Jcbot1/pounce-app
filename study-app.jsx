@@ -3856,7 +3856,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
       <div style={{ display: "flex", gap: "0.85rem", alignItems: "center" }}>
 
-        {/* Icon square */}
+        {/* Icon square — always centered via parent alignItems */}
         <div className="card card-raised" style={{
           width: "64px", height: "64px", flexShrink: 0,
           borderRadius: "14px",
@@ -3871,16 +3871,18 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           </svg>
         </div>
 
-        {/* Right content */}
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-          <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
-            {s.name}
-          </p>
-          <span style={{ fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted }}>
-            {s.questions.length} Questions
-          </span>
+        {/* Right content — name top, tags bottom */}
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "64px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+            <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
+              {s.name}
+            </p>
+            <span style={{ fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted }}>
+              {s.questions.length} Questions
+            </span>
+          </div>
           {(s.tags && s.tags.length > 0) && (
-            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginTop: "0.4rem" }}>
               {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
             </div>
           )}
