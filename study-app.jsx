@@ -2629,6 +2629,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
   const bottomRef      = useRef(null);
   const [atBottom, setAtBottom] = useState(false);
   const atBottomRef = useRef(false);
+  const [atTop, setAtTop] = useState(true);
   const [flagged,  setFlagged]  = useState({});
 
   // Timer
@@ -2668,6 +2669,14 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       atBottomRef.current = entry.isIntersecting;
       setAtBottom(entry.isIntersecting);
     }, { threshold: 0 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = topRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => setAtTop(entry.isIntersecting), { threshold: 0 });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -3054,7 +3063,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       )}
 
       {/* Floating action buttons — scroll only */}
-      <div style={{
+      {!(atTop && atBottom) && <div style={{
         position: "fixed", bottom: "5.5rem", left: "50%",
         transform: "translateX(-50%)",
         zIndex: 101, display: "flex", gap: "0.5rem", alignItems: "center",
@@ -3069,7 +3078,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
             <polyline points="19 12 12 19 5 12"/>
           </svg>
         </button>
-      </div>
+      </div>}
 
       <div ref={bottomRef} style={{ height: "1px" }} />
 
