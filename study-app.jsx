@@ -3556,8 +3556,15 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet, reviewResults, reviewQs, historySession, onRequestRetry, onRetryMissed, onRequestDeleteResults, onStudyFromHistory }) {
   const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
+  const inEdit = screen === "edit";
+  const inResults = screen === "results" || screen === "historyResults";
+  const isHist = screen === "historyResults";
+  const resultsMissed = (reviewResults && reviewQs)
+    ? reviewQs.filter(q => { const r = reviewResults.find(rv => rv.qId === q.id); return r && !r.correct; })
+    : [];
+  const hasMissed = resultsMissed.length > 0 && !isHist;
   const [showProfile, setShowProfile] = useState(false);
   const [open,    setOpen]    = useState(false);
   const [section, setSection] = useState(null); // null | "appearance" | "color"
@@ -3623,7 +3630,29 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
 
   function close() { if (!sidebarMode) { setOpen(false); setSection(null); } }
 
+  function exportActiveSetFn() {
+    if (!activeSet) return;
+    const json = JSON.stringify([activeSet], null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (activeSet.name || "set").replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
 
+  function exportResultsFn() {
+    const sess = isHist
+      ? historySession
+      : (reviewResults && reviewQs ? { results: reviewResults, questions: reviewQs, setName: activeSet?.name, date: new Date().toISOString() } : null);
+    if (!sess) return;
+    const json = JSON.stringify(sess, null, 2);
+    const a = document.createElement("a");
+    a.href = "data:application/json;charset=utf-8," + encodeURIComponent(json);
+    a.download = (sess.setName || "results").replace(/\s+/g, "-").toLowerCase() + "-results.json";
+    a.click();
+  }
 
   return (
     <div ref={navRef} style={{ position: "relative" }}>
@@ -3685,7 +3714,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
         <div style={sidebarMode ? { paddingBottom: "1rem" } : { ...menuPopupStyle({ position: "absolute", right: 0, top: "calc(100% + 8px)", zIndex: 500, minWidth: "260px" }) }} className={sidebarMode ? "" : "menu-open"}>
 
           {/* ── Profile row ── */}
-          {section === null && (
+          {section === null && !inEdit && !inResults && (
           <button onClick={() => { close(); setShowProfile(true); }} style={{
             display: "flex", alignItems: "center", gap: "0.85rem",
             width: "100%", background: "transparent", border: "none",
@@ -3704,8 +3733,86 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           </button>
           )}
 
+          {/* ── Edit page menu ── */}
+          {section === null && inEdit && (
+            <>
+              <HamburgerMenuItem onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-icon")); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                  <span>Icon</span>
+                </span>
+              </HamburgerMenuItem>
+              <HamburgerMenuItem onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-tags")); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  <span>Tags</span>
+                </span>
+              </HamburgerMenuItem>
+              <HamburgerMenuItem onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-rename")); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                  <span>Rename set</span>
+                </span>
+              </HamburgerMenuItem>
+              <HamburgerMenuItem onClick={() => { exportActiveSetFn(); close(); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>Export set</span>
+                </span>
+              </HamburgerMenuItem>
+              <HamburgerMenuItem danger onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-delete")); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <TrashIcon size={15} />
+                  <span>Delete set</span>
+                </span>
+              </HamburgerMenuItem>
+            </>
+          )}
+
+          {/* ── Results page menu ── */}
+          {section === null && inResults && (
+            <>
+              {!isHist && (
+                <HamburgerMenuItem onClick={() => { close(); onRequestRetry?.(); }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    <span>Retry</span>
+                  </span>
+                </HamburgerMenuItem>
+              )}
+              {hasMissed && (
+                <HamburgerMenuItem onClick={() => { close(); onRetryMissed?.(resultsMissed); }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <span>Retry missed</span>
+                  </span>
+                </HamburgerMenuItem>
+              )}
+              {isHist && (
+                <HamburgerMenuItem onClick={() => { close(); onStudyFromHistory?.(); }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>Study set</span>
+                  </span>
+                </HamburgerMenuItem>
+              )}
+              <HamburgerMenuItem onClick={() => { exportResultsFn(); close(); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>Export</span>
+                </span>
+              </HamburgerMenuItem>
+              <HamburgerMenuItem danger onClick={() => { close(); onRequestDeleteResults?.(); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <TrashIcon size={15} />
+                  <span>Delete</span>
+                </span>
+              </HamburgerMenuItem>
+            </>
+          )}
+
           {/* ── Main menu ── */}
-          {section === null && (
+          {section === null && !inEdit && !inResults && (
             <>
               <HamburgerMenuItem onClick={() => setSection("appearance")} right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
@@ -3773,7 +3880,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           )}
 
           {/* Version */}
-          {section === null && (
+          {section === null && !inEdit && !inResults && (
             <p style={{ fontFamily: FF_MONO, fontSize: "0.6rem", letterSpacing: "0.1em",
               color: T.muted, textAlign: "center", padding: "0.6rem 1.25rem",
                }}>
@@ -6322,7 +6429,12 @@ function App() {
               onRenameActiveSet={(id, name) => { handleRename(id, name); setActiveSet(s => s && s.id === id ? { ...s, name } : s); }}
               onSetActiveSetTags={(id, tags) => { handleSetTags(id, tags); setActiveSet(s => s && s.id === id ? { ...s, tags } : s); document.dispatchEvent(new CustomEvent("studi-settags", { detail: tags })); }}
               onSetActiveSetIcon={(id, icon) => { handleSetIcon(id, icon); setActiveSet(s => s && s.id === id ? { ...s, icon } : s); document.dispatchEvent(new CustomEvent("studi-seticon", { detail: icon })); }}
-              onDeleteActiveSet={(id) => { handleDelete(id); setScreen("home"); }} />}
+              onDeleteActiveSet={(id) => { handleDelete(id); setScreen("home"); }}
+              reviewResults={reviewResults} reviewQs={reviewQs} historySession={historySession}
+              onRequestRetry={() => setResultsConfirmRetry(true)}
+              onRetryMissed={handleRetryMissed}
+              onRequestDeleteResults={() => setResultsDeleteConfirm(true)}
+              onStudyFromHistory={() => { const set = sets.find(s => s.name === historySession?.setName); if (set) setPendingStudySet(set); else showToast("Original set not found."); }} />}
             </div>
           </div>
           </div>
@@ -6334,23 +6446,8 @@ function App() {
               transition: "grid-template-rows 0.3s ease",
             }}>
             <div style={{ minHeight: 0, overflow: "hidden", display: "flex", justifyContent: "center" }}>
-              <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.75rem",
+              <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.75rem",
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem" }}>
-                <div
-                  onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
-                  onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                  style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
-                  <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
-                    width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
-                  </svg>
-                  <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
-                    placeholder="Search questions…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "38px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }} />
-                  {editSearch && (
-                    <span onClick={() => setEditSearch("")} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
-                  )}
-                </div>
                 <button
                   onClick={() => {
                     if (!editCanSave || savedFlash) return;
@@ -6399,70 +6496,6 @@ function App() {
                     </>
                   )}
                 </button>
-
-                {/* Edit-page kebab */}
-                <div ref={editKebabRef} style={{ position: "relative", flexShrink: 0 }}>
-                  <button {...glassPress()} onClick={e => {
-                    const rect = e.currentTarget.parentElement.getBoundingClientRect();
-                    setEditKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-                    setEditKebabOpen(o => !o);
-                  }} className="button button-round button-raised"
-                  style={{ width: "36px", height: "36px", flexShrink: 0, padding: 0, background: T.surface, color: T.text }}>
-                    <DotsVerticalIcon color={T.muted} />
-                  </button>
-                  {editKebabOpen && (
-                    <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: editKebabPos.top, right: editKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
-                        <KebabMenuItem onClick={() => {
-                          setEditKebabOpen(false);
-                          document.dispatchEvent(new CustomEvent("studi-edit-icon"));
-                        }}>
-                          <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-                          </span>Icon
-                        </KebabMenuItem>
-                        <KebabMenuItem onClick={() => {
-                          setEditKebabOpen(false);
-                          document.dispatchEvent(new CustomEvent("studi-edit-tags"));
-                        }}>
-                          <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                          </span>Tags
-                        </KebabMenuItem>
-                        <KebabMenuItem onClick={() => {
-                          setEditKebabOpen(false);
-                          document.dispatchEvent(new CustomEvent("studi-edit-rename"));
-                        }}>
-                          <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
-                          </span>Rename set
-                        </KebabMenuItem>
-                        <KebabMenuItem onClick={() => {
-                          setEditKebabOpen(false);
-                          if (!activeSet) return;
-                          const json = JSON.stringify([activeSet], null, 2);
-                          const blob = new Blob([json], { type: "application/json" });
-                          const url = URL.createObjectURL(blob);
-                          const a = document.createElement("a");
-                          a.href = url;
-                          a.download = (activeSet.name || "set").replace(/[^a-z0-9]/gi, "-").toLowerCase() + ".json";
-                          a.click();
-                          setTimeout(() => URL.revokeObjectURL(url), 1000);
-                        }}>
-                          <span style={{ color: T.muted, display: "inline-flex" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                          </span>Export set
-                        </KebabMenuItem>
-                        <KebabMenuItem danger color={T.red} onClick={() => {
-                          setEditKebabOpen(false);
-                          document.dispatchEvent(new CustomEvent("studi-edit-delete"));
-                        }}>
-                          <span style={{ display: "inline-flex" }}>
-                            <TrashIcon />
-                          </span>Delete set
-                        </KebabMenuItem>
-                      </div>
-                  )}
-                </div>
               </div>
             </div>
             </div>
@@ -6501,41 +6534,17 @@ function App() {
             </div>
             </div>
           )}
-          {(screen === "results" || screen === "historyResults") && (() => {
-            const isHist = screen === "historyResults";
-            const res = isHist ? historySession?.results : reviewResults;
-            const qs  = isHist ? historySession?.questions : reviewQs;
-            const missed = (res && qs) ? qs.filter(q => { const r = res.find(r => r.qId === q.id); return r && !r.correct; }) : [];
-            const hasMissed = missed.length > 0 && !isHist;
-            return (
+          {(screen === "results" || screen === "historyResults") && (
               <div style={{
                 display: "grid",
                 gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
                 transition: "grid-template-rows 0.3s ease",
               }}>
                 <div style={{ minHeight: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.5rem",
+                  <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem",
                     padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
                     transition: "padding 0.3s ease",
                   }}>
-                  <div
-                    onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
-                    onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                    style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
-                    <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
-                      width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
-                    </svg>
-                    <input
-                      value={resultsSearch}
-                      onChange={e => setResultsSearch(e.target.value)}
-                      placeholder="Search questions…"
-                      style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "38px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
-                    />
-                    {resultsSearch && (
-                      <span onClick={() => setResultsSearch("")} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
-                    )}
-                  </div>
                   {/* Sticky filter button */}
                   <div style={{ position: "relative", flexShrink: 0 }}>
                     {resultsFilter !== "all" ? (
@@ -6597,66 +6606,10 @@ function App() {
                       </>
                     )}
                   </div>
-                  {/* Kebab options button */}
-                  <div ref={resultsKebabRef} style={{ position: "relative", flexShrink: 0 }}>
-                    <button {...glassPress()} onClick={e => {
-                      const rect = e.currentTarget.parentElement.getBoundingClientRect();
-                      setResultsKebabPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-                      setResultsKebabOpen(o => !o);
-                    }} className="button button-round button-raised"
-                    style={{ width: "38px", height: "38px", flexShrink: 0, padding: 0, background: T.surface, color: T.text }}>
-                      <DotsVerticalIcon color={T.muted} />
-                    </button>
-                    {resultsKebabOpen && (
-                        <div className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: resultsKebabPos.top, right: resultsKebabPos.right, zIndex: 9999, minWidth: "180px" }) }}>
-                          {!isHist && (
-                            <KebabMenuItem onClick={() => { setResultsKebabOpen(false); setResultsConfirmRetry(true); }}>
-                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
-                              Retry
-                            </KebabMenuItem>
-                          )}
-                          {hasMissed && (
-                            <KebabMenuItem onClick={() => { setResultsKebabOpen(false); handleRetryMissed(missed); }}>
-                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
-                              Retry missed
-                            </KebabMenuItem>
-                          )}
-                          {isHist && (
-                            <KebabMenuItem onClick={() => {
-                              setResultsKebabOpen(false);
-                              const set = sets.find(s => s.name === historySession?.setName);
-                              if (set) setPendingStudySet(set);
-                              else showToast("Original set not found.");
-                            }}>
-                              <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
-                              Study set
-                            </KebabMenuItem>
-                          )}
-                          <KebabMenuItem onClick={() => {
-                            setResultsKebabOpen(false);
-                            const sess = isHist ? historySession : (reviewResults && reviewQs ? { results: reviewResults, questions: reviewQs, setName: activeSet?.name, date: new Date().toISOString() } : null);
-                            if (!sess) return;
-                            const json = JSON.stringify(sess, null, 2);
-                            const a = document.createElement("a");
-                            a.href = "data:application/json;charset=utf-8," + encodeURIComponent(json);
-                            a.download = (sess.setName || "results").replace(/\s+/g, "-").toLowerCase() + "-results.json";
-                            a.click();
-                          }}>
-                            <span style={{ color: T.muted, display: "inline-flex" }}><svg width="15" height="15" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
-                            Export
-                          </KebabMenuItem>
-                          <KebabMenuItem danger color={T.red} onClick={() => { setResultsKebabOpen(false); setResultsDeleteConfirm(true); }}>
-                            <span style={{ display: "inline-flex" }}><TrashIcon /></span>
-                            Delete
-                          </KebabMenuItem>
-                        </div>
-                    )}
-                  </div>
                   </div>
                 </div>
               </div>
-            );
-          })()}
+          )}
         </div>
 
         
