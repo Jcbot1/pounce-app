@@ -6343,13 +6343,15 @@ function App() {
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                   </svg>
-                  <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
-                    placeholder="Search questions…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }} />
-                  {editSearch && (
-                    <button onClick={() => setEditSearch("")} style={{ flexShrink: 0,
-                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
-                  )}
+                  <div style={{ position: "relative", flex: 1, minWidth: 0, alignSelf: "stretch", display: "flex", alignItems: "center" }}>
+                    <input value={editSearch} onChange={e => setEditSearch(e.target.value)}
+                      placeholder="Search questions…"
+                      style={{ background: "transparent", border: "none", outline: "none", width: "100%", height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, paddingRight: editSearch ? "1.25rem" : 0, boxSizing: "border-box" }} />
+                    {editSearch && (
+                      <button onClick={() => setEditSearch("")} style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)",
+                        background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
+                    )}
+                  </div>
                 </div>
                 <button
                   onClick={() => {
@@ -6486,17 +6488,19 @@ function App() {
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                   </svg>
-                  <input
-                    ref={searchInputRef}
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search sets, questions, history…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: "0.9rem", boxSizing: "border-box" }}
-                  />
-                  {searchQuery && (
-                    <button onClick={() => setSearchQuery("")} style={{ flexShrink: 0,
-                      background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
-                  )}
+                  <div style={{ position: "relative", flex: 1, height: "100%", display: "flex", alignItems: "center" }}>
+                    <input
+                      ref={searchInputRef}
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      placeholder="Search sets, questions, history…"
+                      style={{ background: "transparent", border: "none", outline: "none", width: "100%", height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", paddingLeft: "2.1rem", paddingRight: searchQuery ? "1.5rem" : "0.9rem", boxSizing: "border-box" }}
+                    />
+                    {searchQuery && (
+                      <button onClick={() => setSearchQuery("")} style={{ position: "absolute", right: "0.4rem", top: "50%", transform: "translateY(-50%)",
+                        background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -6527,16 +6531,18 @@ function App() {
                       width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                     </svg>
-                    <input
-                      value={resultsSearch}
-                      onChange={e => setResultsSearch(e.target.value)}
-                      placeholder="Search questions…"
-                      style={{ background: "transparent", border: "none", outline: "none", flex: 1, minWidth: 0, height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
-                    />
-                    {resultsSearch && (
-                      <button onClick={() => setResultsSearch("")} style={{ flexShrink: 0,
-                        background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
-                    )}
+                    <div style={{ position: "relative", flex: 1, minWidth: 0, alignSelf: "stretch", display: "flex", alignItems: "center" }}>
+                      <input
+                        value={resultsSearch}
+                        onChange={e => setResultsSearch(e.target.value)}
+                        placeholder="Search questions…"
+                        style={{ background: "transparent", border: "none", outline: "none", width: "100%", height: "100%", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, paddingRight: resultsSearch ? "1.25rem" : 0, boxSizing: "border-box" }}
+                      />
+                      {resultsSearch && (
+                        <button onClick={() => setResultsSearch("")} style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)",
+                          background: "none", border: "none", cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.1rem" }}>✕</button>
+                      )}
+                    </div>
                   </div>
                   {/* Sticky filter button */}
                   <div style={{ position: "relative", flexShrink: 0 }}>
