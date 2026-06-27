@@ -3854,7 +3854,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
-      <div style={{ display: "flex", gap: "0.85rem", alignItems: "flex-start" }}>
+      <div style={{ display: "flex", gap: "0.85rem", alignItems: "center" }}>
 
         {/* Icon square */}
         <div style={{
