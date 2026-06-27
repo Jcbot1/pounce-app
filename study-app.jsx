@@ -6355,7 +6355,28 @@ function App() {
                 Results
               </span>
             ) : !showSidebar ? (
-              <PounceLogo height={24} />
+              <button
+                onClick={() => { setHomeTab("search"); setTimeout(() => searchInputRef.current?.focus(), 50); }}
+                style={{
+                  display: "flex", alignItems: "center", gap: "0.5rem",
+                  background: T.surface, border: "none", borderRadius: "99px",
+                  height: "36px", paddingLeft: "0.75rem", paddingRight: "0.75rem",
+                  width: "100%", cursor: "pointer", textAlign: "left",
+                  boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)",
+                  WebkitTapHighlightColor: "transparent",
+                }}>
+                <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none" }}
+                  width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+                </svg>
+                <span style={{ flex: 1, fontFamily: FF_SANS, fontSize: "0.9rem", color: searchQuery ? T.text : T.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {searchQuery || "Search…"}
+                </span>
+                {searchQuery && (
+                  <span onClick={e => { e.stopPropagation(); setSearchQuery(""); setHomeTab("sets"); }}
+                    style={{ flexShrink: 0, color: T.muted, fontSize: "1rem", lineHeight: 1, display: "inline-flex", alignItems: "center", padding: "0 0.1rem" }}>✕</span>
+                )}
+              </button>
             ) : screen === "home" ? (
               <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem" }}>
                 <div style={{ position: "relative", display: "flex", alignItems: "center", background: ST.surface, border: "1px solid transparent", borderRadius: "99px", height: "38px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", boxShadow: "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" }}>
