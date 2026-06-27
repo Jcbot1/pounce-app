@@ -3860,14 +3860,12 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         <div style={{
           width: "64px", height: "64px", flexShrink: 0,
           borderRadius: "14px",
-          background: T.mode === "light" ? "#f0ede8" : T.surface2,
-          boxShadow: T.mode === "light"
-            ? "0 2px 8px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)"
-            : "0 2px 8px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.18)",
+          background: T.accent + "18",
+          boxShadow: `0 2px 8px ${T.accent}30, 0 1px 2px ${T.accent}18`,
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
-            stroke={iconDef ? T.muted2 : T.muted}
+            stroke={T.accent}
             strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
           </svg>
