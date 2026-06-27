@@ -6185,7 +6185,7 @@ function App() {
         boxShadow: "none",
         transition: "margin-left 0.25s ease" }}>
         
-        <div style={{
+        <div key={showSidebar ? "fixed" : T.mode} style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
           ...(showSidebar ? {
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : SIDEBAR_WIDTH + 16) + "px", right: 0,
