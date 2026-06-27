@@ -3854,38 +3854,37 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
-      <div style={{ display: "flex", gap: "0.85rem", alignItems: "stretch" }}>
+      <div style={{ display: "flex", gap: "0.85rem" }}>
 
-        {/* Icon square wrapper — stretches to full card height, centers icon within */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <div style={{
-            width: "64px", height: "64px",
-            borderRadius: "14px",
-            background: T.accent + "18",
-            boxShadow: T.mode === "light"
-              ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
-              : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
-              stroke={T.accent}
-              strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
-            </svg>
-          </div>
+        {/* Icon square — self-centered */}
+        <div style={{
+          alignSelf: "center", flexShrink: 0,
+          width: "64px", height: "64px",
+          borderRadius: "14px",
+          background: T.accent + "18",
+          boxShadow: T.mode === "light"
+            ? "0 1px 4px rgba(0,0,0,0.10), 0 3px 8px rgba(0,0,0,0.08)"
+            : "0 1px 4px rgba(0,0,0,0.30), 0 3px 8px rgba(0,0,0,0.22)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
+            stroke={T.accent}
+            strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
+          </svg>
         </div>
 
         {/* Right content — name top, tags bottom */}
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", minHeight: "64px" }}>
           <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
             {s.name}
           </p>
           <span style={{ fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
             {s.questions.length} Questions
           </span>
-          <div style={{ flex: 1 }} />
+          <div style={{ flex: 1, minHeight: "0.4rem" }} />
           {(s.tags && s.tags.length > 0) && (
-            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginTop: "0.4rem" }}>
+            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
               {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
             </div>
           )}
