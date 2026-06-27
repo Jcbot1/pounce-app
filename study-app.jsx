@@ -612,7 +612,7 @@ function PounceLogo({ height = 28, theme, stacked = false }) {
     <div style={{ display: "flex", flexDirection: stacked ? "column" : "row", alignItems: "center", gap: stacked ? "0.15rem" : "0.4rem" }}>
       <MascotMonoIcon width={iconW} height={iconH} color={t.accent} />
       <svg height={height} viewBox="0 0 154 52" style={{ overflow: "visible", display: "block" }} xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="42" fontFamily={FF_SERIF} fontSize="44" fontWeight="600" fill={t.accent} letterSpacing="0.5">pounce</text>
+        <text x="0" y="42" fontFamily={FF_SERIF} fontSize="44" fontWeight="600" fill={t.accent} letterSpacing="0.5">Pounce</text>
       </svg>
     </div>
   );
