@@ -2834,7 +2834,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
 
   return (
     <div>
-      <div ref={topSentinelRef} style={{ height: "1px" }} />
+      <div ref={topSentinelRef} style={{ height: "1px", scrollMarginTop: "200px" }} />
       {confirmBack && (
         <ConfirmDialog
           title="Leave this session?"
