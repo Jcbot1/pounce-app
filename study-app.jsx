@@ -3499,9 +3499,9 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
         )}
 
         {step === "mode" && (
-          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-            {onEdit && <GhostButton onClick={() => { onClose(); onEdit(); }} small>Edit set</GhostButton>}
-            <GhostButton onClick={onClose} small>Cancel</GhostButton>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            {onEdit && <GhostButton onClick={() => { onClose(); onEdit(); }} style={{ flex: 1 }}>Edit set</GhostButton>}
+            <GhostButton onClick={onClose} style={{ flex: 1 }}>Cancel</GhostButton>
           </div>
         )}
       </ModalCard>
