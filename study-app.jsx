@@ -1722,8 +1722,9 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
 
   const invalidQuestions = draft.questions.map((q, i) => ({ i, valid: validateQuestion(q) })).filter(q => !q.valid);
   const canSave = draft.questions.length > 0 && invalidQuestions.length === 0;
+  const isDirty = JSON.stringify(draft) !== savedDraftRef.current;
 
-  useEffect(() => { onCanSaveChange?.(canSave); onQuestionCountChange?.(draft.questions.length); }, [canSave, draft.questions.length]);
+  useEffect(() => { onCanSaveChange?.(canSave && isDirty); onQuestionCountChange?.(draft.questions.length); }, [canSave, isDirty, draft.questions.length]);
 
   useEffect(() => {
     function handler(e) { setDraft(d => ({ ...d, name: e.detail })); }
