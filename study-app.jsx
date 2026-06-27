@@ -3854,33 +3854,36 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
-      <div style={{ display: "flex", gap: "0.85rem", alignItems: "center" }}>
+      <div style={{ display: "flex", gap: "0.85rem", alignItems: "stretch" }}>
 
-        {/* Icon square — always centered via parent alignItems */}
-        <div className="card card-raised" style={{
-          width: "64px", height: "64px", flexShrink: 0,
-          borderRadius: "14px",
-          background: T.accent + "18",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          margin: 0, padding: 0,
-        }}>
-          <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
-            stroke={T.accent}
-            strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
-          </svg>
+        {/* Icon square wrapper — stretches to full card height, centers icon within */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{
+            width: "64px", height: "64px",
+            borderRadius: "14px",
+            background: T.accent + "18",
+            boxShadow: T.mode === "light"
+              ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
+              : "0px 10px 20px rgba(0,0,0,0.45), 0px 6px 6px rgba(0,0,0,0.4)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
+              stroke={T.accent}
+              strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
+            </svg>
+          </div>
         </div>
 
         {/* Right content — name top, tags bottom */}
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "64px" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-            <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
-              {s.name}
-            </p>
-            <span style={{ fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted }}>
-              {s.questions.length} Questions
-            </span>
-          </div>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+          <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
+            {s.name}
+          </p>
+          <span style={{ fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
+            {s.questions.length} Questions
+          </span>
+          <div style={{ flex: 1 }} />
           {(s.tags && s.tags.length > 0) && (
             <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginTop: "0.4rem" }}>
               {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
