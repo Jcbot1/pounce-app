@@ -5539,7 +5539,7 @@ function ThemePicker({ theme, onSetTheme }) {
         return (
           <button key={opt.id} className={"button" + (active ? " button-active" : "")}
             onClick={() => onSetTheme(opt.id)}
-            style={{ color: active ? T.accent : T.muted }}>
+            style={{ color: active ? T.accent : T.muted, background: active ? T.accent + "22" : undefined }}>
             {opt.svg}
           </button>
         );
