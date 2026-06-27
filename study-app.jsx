@@ -3872,11 +3872,19 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
             : "0 1px 4px rgba(0,0,0,0.30), 0 3px 8px rgba(0,0,0,0.22)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          <svg width="42" height="42" viewBox="0 0 24 24" fill="none"
-            stroke={T.accent}
-            strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
-          </svg>
+          {iconDef ? (
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d={iconDef.path} />
+            </svg>
+          ) : (
+            <svg width="34" height="34" viewBox="0 0 100 100" fill={T.accent}>
+              <ellipse cx="50" cy="68" rx="22" ry="18"/>
+              <ellipse cx="22" cy="46" rx="11" ry="13" transform="rotate(-15 22 46)"/>
+              <ellipse cx="42" cy="32" rx="11" ry="13" transform="rotate(-5 42 32)"/>
+              <ellipse cx="63" cy="32" rx="11" ry="13" transform="rotate(5 63 32)"/>
+              <ellipse cx="80" cy="46" rx="11" ry="13" transform="rotate(15 80 46)"/>
+            </svg>
+          )}
         </div>
 
         {/* Right content — name top, tags bottom */}
