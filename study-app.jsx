@@ -3849,48 +3849,48 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
 
 // ── Set card ──────────────────────────────────────────────────────────────────
 function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession }) {
-  const types = [...new Set(s.questions.map(q => q.type))];
   const canStudy = s.questions.length > 0;
+  const iconDef = s.icon ? SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon) : null;
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
-      {/* Watermark icon */}
-      {s.icon && (() => {
-        const iconDef = SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon);
-        return iconDef ? (
-          <div style={{ position: "absolute", bottom: "-8px", right: "-8px", pointerEvents: "none", transform: "rotate(15deg)" }}>
-            <svg width="110" height="110" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.07 }}>
-              <path d={iconDef.path} />
-            </svg>
-          </div>
-        ) : null;
-      })()}
+      <div style={{ display: "flex", gap: "0.85rem", alignItems: "flex-start" }}>
 
-      {/* Name + meta — full width */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+        {/* Icon square */}
+        <div style={{
+          width: "64px", height: "64px", flexShrink: 0,
+          borderRadius: "14px",
+          background: T.mode === "light" ? "#f0ede8" : T.surface2,
+          boxShadow: T.mode === "light"
+            ? "0 2px 8px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)"
+            : "0 2px 8px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.18)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+            stroke={iconDef ? T.muted2 : T.muted}
+            strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d={iconDef ? iconDef.path : "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"} />
+          </svg>
+        </div>
 
-        {/* Row 1: Set name */}
-        <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, minHeight: "calc(0.95rem * 1.4 * 3)", margin: 0 }}>
-          {s.name}
-        </p>
-
-        {/* Row 2: Tags */}
-        {(s.tags && s.tags.length > 0) && (
-          <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap", marginTop: "0.25rem" }}>
-            {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
-          </div>
-        )}
-
-        {/* Row 3: Question count + type bubbles */}
-        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center" }}>
+        {/* Right content */}
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+          <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
+            {s.name}
+          </p>
+          {(s.tags && s.tags.length > 0) && (
+            <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+              {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
+            </div>
+          )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
             fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
             background: T.muted + "18", color: T.muted, border: "1px solid " + T.muted + "33",
+            alignSelf: "flex-start",
           }}>
             {s.questions.length} Q
           </span>
-          {types.map(t => <Tag key={t} label={TYPE_META[t].label} color={TYPE_META[t].color} />)}
         </div>
 
       </div>
