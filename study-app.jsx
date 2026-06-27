@@ -4708,8 +4708,8 @@ function QuickQuestion({ sets }) {
         </div>
         {isMulti && !submitted && (
           <div style={{ marginTop: "0.75rem", display: "flex", justifyContent: "flex-end" }}>
-            <PrimaryButton onClick={() => setSubmitted(true)} small
-              style={{ padding: "0.4rem 1rem", fontSize: "0.8rem",
+            <PrimaryButton onClick={() => setSubmitted(true)}
+              style={{ width: "auto", padding: "0 1.25rem",
                 opacity: selected.length === q.selectCount ? 1 : 0.4,
                 pointerEvents: selected.length === q.selectCount ? "auto" : "none" }}>
               Submit
