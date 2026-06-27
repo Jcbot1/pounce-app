@@ -6361,7 +6361,7 @@ function App() {
                 Results
               </span>
             ) : !showSidebar ? (
-              <div style={{ position: "relative", display: "flex", alignItems: "center", background: T.surface, border: "1px solid transparent", borderRadius: "99px", height: "36px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", width: "100%", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)" }}>
+              <div style={{ position: "relative", display: "flex", alignItems: "center", background: T.surface, border: "1px solid transparent", borderRadius: "99px", height: "44px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", width: "100%", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)" }}>
                 <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none", marginRight: "0.5rem" }}
                   width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6372,7 +6372,7 @@ function App() {
                   onFocus={() => setHomeTab("search")}
                   onChange={e => { setSearchQuery(e.target.value); setHomeTab("search"); }}
                   placeholder="Search…"
-                  style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: T.text, fontFamily: FF_SANS, fontSize: "16px", height: "36px", padding: 0, boxSizing: "border-box" }}
+                  style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: T.text, fontFamily: FF_SANS, fontSize: "16px", height: "44px", padding: 0, boxSizing: "border-box" }}
                 />
                 {searchQuery && (
                   <span onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ flexShrink: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
