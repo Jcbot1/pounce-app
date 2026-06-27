@@ -2684,7 +2684,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
 
   function handleScrollBtn() {
     if (atBottomRef.current) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      topSentinelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
     const HEADER = 80;
