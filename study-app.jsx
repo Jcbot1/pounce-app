@@ -6335,7 +6335,9 @@ function App() {
               <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", gap: "0.75rem",
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem" }}>
                 <div
-                  style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden" }}>
+                  onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
+                  onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
+                  style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6475,7 +6477,9 @@ function App() {
                 padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
                 <div
-                  style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", overflow: "hidden" }}>
+                  onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
+                  onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
+                  style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", overflow: "hidden", transition: "border-color 0.2s" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.6, pointerEvents: "none" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6513,7 +6517,9 @@ function App() {
                     transition: "padding 0.3s ease",
                   }}>
                   <div
-                    style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden" }}>
+                    onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
+                    onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
+                    style={{ flex: 1, minWidth: 0, position: "relative", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", outline: "none", overflow: "hidden", transition: "border-color 0.2s" }}>
                     <svg style={{ flexShrink: 0, opacity: 0.45, pointerEvents: "none" }}
                       width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
