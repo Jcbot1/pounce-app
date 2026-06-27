@@ -6185,30 +6185,31 @@ function App() {
         boxShadow: "none",
         transition: "margin-left 0.25s ease" }}>
         
-        <div key={showSidebar ? "fixed" : T.mode} style={{
+        <div style={{
           position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
           ...(showSidebar ? {
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : SIDEBAR_WIDTH + 16) + "px", right: 0,
             height: "48px",
             transition: "left 0.25s ease",
           } : {}),
-          background: showSidebar
-            ? "transparent"
-            : T.mode === "light"
-                ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,0.72) 60%, rgba(247,245,242,0) 100%)`
-                : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,0.72) 60%, rgba(15,9,5,0) 100%)`,
-          transition: (editingSetName || showSidebar || sidebarJustLeft) ? "none" : "background 0.3s ease",
           display: "flex", flexDirection: "column",
         }}>
 
-          {(
-            <div style={{
-              position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-              backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-              WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
-              maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
-            }} />
-          )}
+          {/* gradient bg — keyed so it remounts on theme change, forcing repaint without resetting child state */}
+          <div key={T.mode} style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+            background: showSidebar
+              ? "transparent"
+              : T.mode === "light"
+                  ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,0.72) 60%, rgba(247,245,242,0) 100%)`
+                  : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,0.72) 60%, rgba(15,9,5,0) 100%)`,
+          }} />
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+            backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
+          }} />
           <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", height: showSidebar ? "48px" : undefined, padding: showSidebar ? "0 1rem" : editingSetName && !(screen === "edit" && (isDesktop || isTablet || titleBarVisible)) ? "0.5rem 1rem 1.75rem" : "0.5rem 1rem", display: "flex", position: "relative", zIndex: 1 }}>
 
