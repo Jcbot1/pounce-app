@@ -2953,7 +2953,6 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {q.type === "flashcard" ? (
         <div ref={topRef} style={{ scrollMarginTop: "80px", marginBottom: "1rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem", flexWrap: "wrap" }}>
-            <Tag label={meta.label} color={meta.color} />
             {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
             <span style={{ flex: 1 }} />
             <HintButton hint={q.hint} hintOpen={hintOpen} setHintOpen={setHintOpen} examMode={examMode} renderText={renderText} />
@@ -2991,7 +2990,6 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           </button>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.9rem", flexWrap: "wrap", paddingRight: "5rem" }}>
-          <Tag label={meta.label} color={meta.color} />
           {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
         </div>
         <p style={{ fontFamily: FF_SANS, fontSize: "1rem", color: T.text, lineHeight: 1.65, marginBottom: "1.25rem" }}>
