@@ -3698,11 +3698,15 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
 
       {!sidebarMode && (
         <GlassButton onClick={() => { setOpen(o => !o); if (open) setSection(null); }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.muted2} strokeWidth="2" strokeLinecap="round">
-            <line x1="4" y1="6" x2="20" y2="6"/>
-            <line x1="4" y1="12" x2="20" y2="12"/>
-            <line x1="4" y1="18" x2="20" y2="18"/>
-          </svg>
+          {(!inEdit && !inResults) ? (
+            <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={32} />
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.muted2} strokeWidth="2" strokeLinecap="round">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+            </svg>
+          )}
         </GlassButton>
       )}
 
