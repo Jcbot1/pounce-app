@@ -3401,36 +3401,36 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
         {step === "mode" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             <OptionButton onClick={() => { if (QUICK_OPTIONS.length > 0) { setMode("review"); setStep("review-count"); } }} disabled={QUICK_OPTIONS.length === 0}>
-              <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", width: "100%" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                   <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>Quick Mode</span>
+                  <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", lineHeight: 1.3 }}>
+                    {QUICK_OPTIONS.length > 0 ? "A handful of random questions with feedback" : "Need at least 3 questions for this mode"}
+                  </span>
                 </div>
-                <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", paddingLeft: "calc(22px + 0.65rem)", lineHeight: 1.3 }}>
-                  {QUICK_OPTIONS.length > 0 ? "A handful of random questions with feedback" : "Need at least 3 questions for this mode"}
-                </span>
               </div>
             </OptionButton>
             <OptionButton onClick={() => onStart(null, "review", null)}>
-              <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", width: "100%" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                   <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>Review Mode</span>
+                  <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", lineHeight: 1.3 }}>
+                    All {count} questions, answers as you go
+                  </span>
                 </div>
-                <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", paddingLeft: "calc(22px + 0.65rem)", lineHeight: 1.3 }}>
-                  All {count} questions, answers as you go
-                </span>
               </div>
             </OptionButton>
             <OptionButton onClick={() => { setMode("exam"); setStep("exam-timer"); }}>
-              <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", width: "100%" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                   <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>Exam Mode</span>
+                  <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", lineHeight: 1.3 }}>
+                    Timed, no feedback until the end
+                  </span>
                 </div>
-                <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", paddingLeft: "calc(22px + 0.65rem)", lineHeight: 1.3 }}>
-                  Timed, no feedback until the end
-                </span>
               </div>
             </OptionButton>
           </div>
@@ -3441,14 +3441,14 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {QUICK_OPTIONS.map(n => (
               <OptionButton key={n} onClick={() => onStart(n, "review", null)}>
-                <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem", width: "100%" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
                     <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>{n} questions</span>
+                    <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", lineHeight: 1.3 }}>
+                      Random selection
+                    </span>
                   </div>
-                  <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", paddingLeft: "calc(22px + 0.65rem)", lineHeight: 1.3 }}>
-                    Random selection
-                  </span>
                 </div>
               </OptionButton>
             ))}
