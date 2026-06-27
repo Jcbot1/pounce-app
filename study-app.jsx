@@ -4982,7 +4982,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
             <button key={t.id} onClick={() => { setHomeTab(t.id); if (t.id === "search" && onSearchTab) onSearchTab(); if (t.id === "sets" && onSetsTab) onSetsTab(); if (t.id !== "search" && onClearSearch) onClearSearch(); }} style={{
               display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center",
-              flex: "1 1 0", width: 0, alignSelf: "stretch",
+              flex: "1 1 0", minWidth: 0, alignSelf: "stretch",
               padding: 0,
               borderRadius: "99px",
               background: "transparent",
@@ -4992,7 +4992,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
               gap: "0.2rem",
             }}>
               <span style={{
-                display: "inline-flex", position: "relative",
+                display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
                 color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
                 transition: "color 0.2s",
               }}>
@@ -5014,7 +5014,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
               </span>
               <span style={{
                 fontSize: "0.72rem", fontFamily: FF_SANS, fontWeight: 500,
-                lineHeight: 1,
+                lineHeight: 1, textAlign: "center",
                 color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
                 transition: "color 0.2s",
               }}>
