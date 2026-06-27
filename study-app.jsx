@@ -6355,28 +6355,23 @@ function App() {
                 Results
               </span>
             ) : !showSidebar ? (
-              <button
-                onClick={() => { setHomeTab("search"); setTimeout(() => searchInputRef.current?.focus(), 50); }}
-                style={{
-                  display: "flex", alignItems: "center", gap: "0.5rem",
-                  background: T.surface, border: "none", borderRadius: "99px",
-                  height: "36px", paddingLeft: "0.75rem", paddingRight: "0.75rem",
-                  width: "100%", cursor: "pointer", textAlign: "left",
-                  boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)",
-                  WebkitTapHighlightColor: "transparent",
-                }}>
-                <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none" }}
+              <div style={{ position: "relative", display: "flex", alignItems: "center", background: T.surface, border: "1px solid transparent", borderRadius: "99px", height: "36px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", width: "100%", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)" }}>
+                <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none", marginRight: "0.5rem" }}
                   width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
                 </svg>
-                <span style={{ flex: 1, fontFamily: FF_SANS, fontSize: "0.9rem", color: searchQuery ? T.text : T.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {searchQuery || "Search…"}
-                </span>
+                <input
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onFocus={() => setHomeTab("search")}
+                  onChange={e => { setSearchQuery(e.target.value); setHomeTab("search"); }}
+                  placeholder="Search…"
+                  style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: T.text, fontFamily: FF_SANS, fontSize: "16px", height: "36px", padding: 0, boxSizing: "border-box" }}
+                />
                 {searchQuery && (
-                  <span onClick={e => { e.stopPropagation(); setSearchQuery(""); setHomeTab("sets"); }}
-                    style={{ flexShrink: 0, color: T.muted, fontSize: "1rem", lineHeight: 1, display: "inline-flex", alignItems: "center", padding: "0 0.1rem" }}>✕</span>
+                  <span onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ flexShrink: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                 )}
-              </button>
+              </div>
             ) : screen === "home" ? (
               <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem" }}>
                 <div style={{ position: "relative", display: "flex", alignItems: "center", background: ST.surface, border: "1px solid transparent", borderRadius: "99px", height: "38px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", boxShadow: "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" }}>
@@ -6425,40 +6420,6 @@ function App() {
           </div>
           </div>
 
-          {screen === "home" && homeTab === "search" && !showSidebar && (
-            <div style={{
-              display: "grid",
-              gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
-              opacity: (isDesktop || isTablet || titleBarVisible) ? 1 : 0,
-              transition: "grid-template-rows 0.3s ease, opacity 0.3s ease",
-            }}>
-            <div style={{ minHeight: 0, overflow: "hidden" }}>
-              <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : "720px",
-                padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
-                display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                <div
-                  onFocusCapture={e => { e.currentTarget.style.borderColor = T.accent; }}
-                  onBlurCapture={e => { e.currentTarget.style.borderColor = "transparent"; }}
-                  style={{ flex: 1, position: "relative", maxWidth: showSidebar ? "600px" : "100%", height: "38px", padding: "0 0.5rem 0 0.75rem", display: "flex", alignItems: "center", gap: "0.4rem", cursor: "text", background: T.surface, border: "1.5px solid transparent", borderRadius: "19px", boxShadow: T.mode === "light" ? "0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06)" : "0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2)", overflow: "hidden", transition: "border-color 0.2s" }}>
-                  <svg style={{ flexShrink: 0, opacity: 0.6, pointerEvents: "none" }}
-                    width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
-                  </svg>
-                  <input
-                    ref={searchInputRef}
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Search sets, questions, history…"
-                    style={{ background: "transparent", border: "none", outline: "none", flex: 1, height: "38px", color: T.text, fontFamily: FF_SANS, fontSize: "16px", padding: 0, boxSizing: "border-box" }}
-                  />
-                  {searchQuery && (
-                    <span onClick={() => setSearchQuery("")} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
-                  )}
-                </div>
-              </div>
-            </div>
-            </div>
-          )}
         </div>
 
         
