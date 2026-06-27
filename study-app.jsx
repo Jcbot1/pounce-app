@@ -3138,12 +3138,15 @@ function AnimatedPct({ target, color }) {
   );
 }
 
-function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, resultsFilter = "all", resultsSearch = "" }) {
+function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry }) {
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
   const passed = pct >= 70;
   const [expanded,     setExpanded]     = useState(null);
   const [saved,        setSaved]        = useState(false);
+  const [resultsFilter, setResultsFilter] = useState("all");
+  const [filterOpen,   setFilterOpen]   = useState(false);
+  const [filterPos,    setFilterPos]    = useState({ top: 0, right: 0 });
 
   useEffect(() => {
     function handler() { onBack(); }
@@ -3225,15 +3228,73 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         <TopicSummaryInline results={results} questions={questions} />
       </div>
 
-      <Label style={{ marginBottom: "0.75rem" }}>QUESTION REVIEW — click to expand</Label>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+        <Label style={{ marginBottom: 0 }}>QUESTION REVIEW — click to expand</Label>
+        <div style={{ position: "relative", flexShrink: 0 }}>
+          {resultsFilter !== "all" ? (
+            <button onClick={e => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+              setFilterOpen(o => !o);
+            }} {...surfacePress()}
+              className="button button-raised button-outline button-round"
+              style={{ height: "34px", padding: "0 12px", gap: "0.35rem", display: "flex", alignItems: "center", justifyContent: "center",
+                fontFamily: FF_SANS, textTransform: "none", WebkitTapHighlightColor: "transparent",
+                background: T.surface, borderColor: T.accent, color: T.accent, fontSize: "0.85rem" }}>
+              <FilterIcon size={12} />
+              <span style={{ fontSize: "0.8rem" }}>{resultsFilter === "correct" ? "Correct" : "Incorrect"}</span>
+            </button>
+          ) : (
+            <button {...glassPress()} onClick={e => {
+              const rect = e.currentTarget.parentElement.getBoundingClientRect();
+              setFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+              setFilterOpen(o => !o);
+            }} className={`button button-round ${filterOpen ? 'button-tonal' : 'button-raised'}`}
+            style={{ height: "34px", flexShrink: 0, gap: "0.35rem", paddingLeft: "0.85rem", paddingRight: "0.85rem", fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.85rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
+              ...(filterOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
+              <FilterIcon size={12} />
+              <span style={{ fontSize: "0.8rem" }}>All</span>
+            </button>
+          )}
+          {filterOpen && (
+            <>
+              <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setFilterOpen(false)} />
+              <div className="menu-open" style={{
+                position: "fixed", top: filterPos.top, right: filterPos.right, zIndex: 9999,
+                background: T.mode === "light" ? "#ffffff" : "#1e1630",
+                border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"),
+                borderRadius: "16px", overflow: "hidden",
+                boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)",
+                minWidth: "160px",
+              }}>
+                {[
+                  { id: "all", label: "All" },
+                  { id: "incorrect", label: "Incorrect only" },
+                  { id: "correct", label: "Correct only" },
+                ].map(opt => (
+                  <button key={opt.id} {...surfacePress()} onClick={() => { setResultsFilter(opt.id); setFilterOpen(false); }}
+                    style={{
+                      display: "block", width: "100%", textAlign: "left",
+                      background: resultsFilter === opt.id ? T.accent + "18" : "transparent",
+                      border: "none", padding: "0.85rem 1.1rem",
+                      fontFamily: FF_SANS, fontSize: "0.92rem",
+                      color: resultsFilter === opt.id ? T.accent : T.text, cursor: "pointer",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = resultsFilter === opt.id ? T.accent + "18" : "transparent"; }}>
+                    {opt.label}
+                    {resultsFilter === opt.id && <span style={{ float: "right" }}>&#10003;</span>}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
       {results.filter(r => {
         if (resultsFilter === "correct") return r.correct;
         if (resultsFilter === "incorrect") return !r.correct;
         return true;
-      }).filter(r => {
-        if (!resultsSearch.trim()) return true;
-        const q = questions.find(q => q.id === r.qId);
-        return q?.question?.toLowerCase().includes(resultsSearch.toLowerCase());
       }).map((r, i) => {
         const q = questions.find(q => q.id === r.qId);
         if (!q) return null;
@@ -5894,31 +5955,8 @@ function App() {
   const [resultsExportModal, setResultsExportModal] = useState(false);
   const searchInputRef = useRef(null);
   const [resultsConfirmRetry, setResultsConfirmRetry] = useState(false);
-  const [resultsFilter, setResultsFilter] = useState("all");
-  const [resultsFilterOpen, setResultsFilterOpen] = useState(false);
-  const [resultsKebabOpen, setResultsKebabOpen] = useState(false);
-  const [resultsKebabPos, setResultsKebabPos] = useState({ top: 0, right: 0 });
-  const resultsKebabRef = useRef(null);
-  const [editKebabOpen, setEditKebabOpen] = useState(false);
-  const [editKebabPos, setEditKebabPos] = useState({ top: 0, right: 0 });
-  const editKebabRef = useRef(null);
   const [resultsDeleteConfirm, setResultsDeleteConfirm] = useState(false);
   const [lastSavedSessionId, setLastSavedSessionId] = useState(null);
-  const [resultsSearch, setResultsSearch] = useState("");
-
-  useEffect(() => {
-    if (!resultsKebabOpen) return;
-    function handle(e) { if (resultsKebabRef.current && !resultsKebabRef.current.contains(e.target)) setResultsKebabOpen(false); }
-    document.addEventListener("pointerdown", handle);
-    return () => document.removeEventListener("pointerdown", handle);
-  }, [resultsKebabOpen]);
-
-  useEffect(() => {
-    if (!editKebabOpen) return;
-    function handle(e) { if (editKebabRef.current && !editKebabRef.current.contains(e.target)) setEditKebabOpen(false); }
-    document.addEventListener("pointerdown", handle);
-    return () => document.removeEventListener("pointerdown", handle);
-  }, [editKebabOpen]);
 
   const [showWelcome, setShowWelcome]  = useState(() => {
     return localStorage.getItem("studi_welcomed") !== "true";
@@ -6190,8 +6228,6 @@ function App() {
               setLastSavedSessionId(null);
             }
             setScreen("home");
-            setResultsFilter("all");
-            setResultsSearch("");
           }}
           onCancel={() => setResultsDeleteConfirm(false)}
         />
@@ -6416,82 +6452,6 @@ function App() {
             </div>
             </div>
           )}
-          {(screen === "results" || screen === "historyResults") && (
-              <div style={{
-                display: "grid",
-                gridTemplateRows: (isDesktop || isTablet || titleBarVisible) ? "1fr" : "0fr",
-                transition: "grid-template-rows 0.3s ease",
-              }}>
-                <div style={{ minHeight: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem",
-                    padding: titleBarVisible ? "1rem 1rem 1.25rem" : "1rem 1rem 1rem",
-                    transition: "padding 0.3s ease",
-                  }}>
-                  {/* Sticky filter button */}
-                  <div style={{ position: "relative", flexShrink: 0 }}>
-                    {resultsFilter !== "all" ? (
-                      <button onClick={e => {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-                        setResultsFilterOpen(o => !o);
-                      }} {...surfacePress()}
-                        className="button button-raised button-outline button-round"
-                        style={{ height: "38px", padding: "0 14px", gap: "0.35rem", display: "flex", alignItems: "center", justifyContent: "center",
-                          fontFamily: FF_SANS, textTransform: "none", WebkitTapHighlightColor: "transparent",
-                          background: T.surface, borderColor: T.accent, color: T.accent, fontSize: "0.9rem" }}>
-                        <FilterIcon size={13} />
-                        <span style={{ fontSize: "0.85rem" }}>{resultsFilter === "correct" ? "Correct" : "Incorrect"}</span>
-                      </button>
-                    ) : (
-                      <button {...glassPress()} onClick={e => {
-                        const rect = e.currentTarget.parentElement.getBoundingClientRect();
-                        setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-                        setResultsFilterOpen(o => !o);
-                      }} className={`button button-round ${resultsFilterOpen ? 'button-tonal' : 'button-raised'}`}
-                      style={{ height: "38px", flexShrink: 0, gap: "0.35rem", paddingLeft: "1rem", paddingRight: "1rem", fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
-                        ...(resultsFilterOpen ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
-                        <FilterIcon size={13} />
-                        <span style={{ fontSize: "0.85rem" }}>All</span>
-                      </button>
-                    )}
-                    {resultsFilterOpen && (
-                      <>
-                      <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setResultsFilterOpen(false)} />
-                      <div className="menu-open" style={{
-                        position: "fixed", top: setsFilterPos.top, right: setsFilterPos.right, zIndex: 9999,
-                        background: T.mode === "light" ? "#ffffff" : "#1e1630",
-                        border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"),
-                        borderRadius: "16px", overflow: "hidden",
-                        boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)",
-                        minWidth: "160px",
-                      }}>
-                        {[
-                          { id: "all", label: "All" },
-                          { id: "incorrect", label: "Incorrect only" },
-                          { id: "correct", label: "Correct only" },
-                        ].map(opt => (
-                          <button key={opt.id} {...surfacePress()} onClick={() => { setResultsFilter(opt.id); setResultsFilterOpen(false); }}
-                            style={{
-                              display: "block", width: "100%", textAlign: "left",
-                              background: resultsFilter === opt.id ? T.accent + "18" : "transparent",
-                              border: "none", padding: "0.85rem 1.1rem",
-                              fontFamily: FF_SANS, fontSize: "0.92rem",
-                              color: resultsFilter === opt.id ? T.accent : T.text, cursor: "pointer",
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
-                            onMouseLeave={e => { e.currentTarget.style.background = resultsFilter === opt.id ? T.accent + "18" : "transparent"; }}>
-                            {opt.label}
-                            {resultsFilter === opt.id && <span style={{ float: "right" }}>&#10003;</span>}
-                          </button>
-                        ))}
-                      </div>
-                      </>
-                    )}
-                  </div>
-                  </div>
-                </div>
-              </div>
-          )}
         </div>
 
         
@@ -6541,12 +6501,11 @@ function App() {
             )}
             {screen === "results" && reviewResults && (
               <ResultsScreen results={reviewResults} questions={reviewQs}
-                set={activeSet} onRestart={handleRestart} onBack={() => { setScreen("home"); setResultsFilter("all"); setResultsSearch(""); }}
+                set={activeSet} onRestart={handleRestart} onBack={() => setScreen("home")}
                 onSaveToHistory={handleSaveToHistory} questionLimit={questionLimit} examMode={examMode}
                 onRetryMissed={handleRetryMissed}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
-                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
-                resultsFilter={resultsFilter} resultsSearch={resultsSearch} />
+                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)} />
             )}
             {screen === "historyResults" && historySession && (
               <ResultsScreen
@@ -6554,14 +6513,13 @@ function App() {
                 questions={historySession.questions}
                 set={{ name: historySession.setName, id: historySession.setId }}
                 onRestart={null}
-                onBack={() => { setScreen("home"); setResultsFilter("all"); setResultsSearch(""); }}
+                onBack={() => setScreen("home")}
                 onSaveToHistory={null}
                 questionLimit={historySession.total}
                 isHistoryView={true}
                 historyDate={historySession.date}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
-                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
-                resultsFilter={resultsFilter} resultsSearch={resultsSearch} />
+                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)} />
             )}
           </div>
         </div>
