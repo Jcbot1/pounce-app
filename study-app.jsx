@@ -6724,12 +6724,12 @@ function App() {
             {/* Bottom row — expanded only */}
             {!sidebarCollapsed && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.15rem", display: "flex", alignItems: "center", borderRadius: "8px", flexShrink: 0 }}
+              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", width: "32px", height: "32px", borderRadius: "8px", flexShrink: 0 }}
                 onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}>
                 <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={28} />
               </button>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted, marginLeft: "auto", marginRight: "auto" }}>{`v${APP_VERSION}`}</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted, flex: 1, textAlign: "center" }}>{`v${APP_VERSION}`}</span>
               <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: 0, borderRadius: "99px", flexShrink: 0 }} title="Collapse sidebar">
                 <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
