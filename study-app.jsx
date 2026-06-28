@@ -5535,7 +5535,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
       <div style={{ flexShrink: 0, pointerEvents: "all" }}>
         <GradientBorderButton onClick={e => {
           const r = e.currentTarget.getBoundingClientRect();
-          setMenuPos({ right: window.innerWidth - r.right, bottom: window.innerHeight - r.top + 10 });
+          setMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 10 });
           setOpen(o => !o);
         }} size="62px">
           <span style={{
