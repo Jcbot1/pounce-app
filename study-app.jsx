@@ -4254,7 +4254,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
             <div style={{ marginBottom: "1.25rem" }}>
               {allTags.length > 0 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
-                  <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted, fontWeight: 600 }}>UNTAGGED</span>
+                  <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Untagged</span>
                   <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
                 </div>
               )}
@@ -4309,7 +4309,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
         <div>
           {recentSets.length > 0 && (
             <div style={{ marginBottom: "1.5rem" }}>
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+              <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
                 Recent Sets
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4319,7 +4319,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           )}
           {recentHistory.length > 0 && (
             <div>
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+              <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
                 Recent Sessions
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4348,7 +4348,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {/* Sets results */}
       {matchedSets.length > 0 && (
         <div style={{ marginBottom: "1.5rem" }}>
-          <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+          <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
             Sets · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4360,8 +4360,8 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {/* History results */}
       {matchedHistory.length > 0 && (
         <div>
-          <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
-            HISTORY · {matchedHistory.length}
+          <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
+            History · {matchedHistory.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
             {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} />)}
@@ -4410,7 +4410,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Your Sets</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                   <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }}
                     className={`button button-round ${(!!setsActiveTag || setsFilterOpen) ? 'button-tonal' : 'button-raised'}`}
@@ -4466,7 +4466,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Recent</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }}
                   className={`button button-round ${(historySortOpen || historySortBy !== "date-desc") ? 'button-tonal' : 'button-raised'}`}
@@ -4780,7 +4780,7 @@ function QuickQuestion({ sets }) {
   return (
     <div>
       <div style={{ marginBottom: "0.6rem" }}>
-        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>Quick Question</p>
+        <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Quick Question</p>
       </div>
       <div style={card({})}>
         {isMulti && (
@@ -4920,7 +4920,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   );
 
   const sectionLabel = (text) => (
-    <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.6rem" }}>
+    <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
       {text}
     </p>
   );
@@ -6296,7 +6296,7 @@ function App() {
         <Modal onClose={() => { setAllTagsModalOpen(false); setModalOpen(false); }}>
           <ModalCard pad="1.5rem" maxWidth={480} scroll>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>All Tags</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>All Tags</span>
               <button onClick={() => { setAllTagsModalOpen(false); setModalOpen(false); }} {...surfacePress()}
                 style={{ background: "none", border: "none", borderRadius: "99px", cursor: "pointer", color: T.muted, fontSize: "1.2rem", lineHeight: 1, padding: "0.25rem" }}>✕</button>
             </div>
