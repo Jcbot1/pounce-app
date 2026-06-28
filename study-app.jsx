@@ -1634,7 +1634,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
   );
 }
 
-function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQuestionCountChange, editSearch = "", showSidebar = false, isDesktop = false }) {
+function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQuestionCountChange, editSearch = "", showSidebar = false, isDesktop = false, sidebarWidth = 0 }) {
   const [draft, setDraft]         = useState(() => JSON.parse(JSON.stringify(set)));
   const [confirmBack, setConfirmBack] = useState(false);
   const [newTag, setNewTag]       = useState("");
@@ -1856,7 +1856,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
       )}
 
       {/* Editor FAB */}
-      <EditorFab onAddQuestion={addQ} draft={draft} onAddGenerated={qs => setDraft(d => ({ ...d, questions: [...d.questions, ...qs] }))} showSidebar={isDesktop} isDesktop={isDesktop} questionCount={draft.questions.length} />
+      <EditorFab onAddQuestion={addQ} draft={draft} onAddGenerated={qs => setDraft(d => ({ ...d, questions: [...d.questions, ...qs] }))} showSidebar={isDesktop} isDesktop={isDesktop} questionCount={draft.questions.length} sidebarWidth={showSidebar ? sidebarWidth : 0} />
     </div>
   );
 }
@@ -1916,7 +1916,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
   );
 }
 
-function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, isDesktop = false, questionCount = 0 }) {
+function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, isDesktop = false, questionCount = 0, sidebarWidth = 0 }) {
   const [open, setOpen] = useState(false);
   const [showAI, setShowAI] = useState(false);
   const [menuCenter, setMenuCenter] = useState(null);
@@ -1963,7 +1963,7 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
         )}
 
         {/* FAB pill */}
-        <BottomPill left={`${questionCount} ${questionCount === 1 ? "question" : "questions"}`}>
+        <BottomPill left={`${questionCount} ${questionCount === 1 ? "question" : "questions"}`} sidebarOffset={sidebarWidth}>
           <GradientBorderButton onClick={e => { const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(o => !o); }} style={{ height: "46px", padding: "0 1.7rem" }}>
             <span style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center",
@@ -6536,7 +6536,7 @@ function App() {
               />
             )}
             {screen === "edit" && activeSet && (
-              <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} showSidebar={showSidebar} isDesktop={!isMobile} />
+              <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} showSidebar={showSidebar} isDesktop={!isMobile} sidebarWidth={sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH} />
             )}
             {screen === "review" && activeSet && (
               <ReviewMode set={activeSet} questionLimit={questionLimit} examMode={examMode} timerMinutes={timerMinutes} onFinish={handleFinish} onBack={() => setScreen("home")} />
