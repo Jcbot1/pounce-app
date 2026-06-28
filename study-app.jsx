@@ -6724,9 +6724,7 @@ function App() {
             {/* Bottom row — expanded only */}
             {!sidebarCollapsed && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", width: "32px", height: "32px", borderRadius: "8px", flexShrink: 0 }}
-                onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
-                onMouseLeave={e => e.currentTarget.style.background = "none"}>
+              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", width: "32px", height: "32px", borderRadius: "8px", flexShrink: 0 }}>
                 <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={28} />
               </button>
               <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted, flex: 1, textAlign: "center" }}>{`v${APP_VERSION}`}</span>
@@ -6781,7 +6779,6 @@ function App() {
                 padding: "0.65rem 1rem",
                 display: "flex", alignItems: "center", gap: "0.75rem",
                 width: "100%", textAlign: "left",
-                borderBottom: "1px solid " + ST.border,
                 borderRadius: "8px 8px 0 0",
               }}
                 onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
