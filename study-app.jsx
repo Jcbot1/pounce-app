@@ -5054,7 +5054,10 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, fa
         alignItems: "center",
         pointerEvents: "none",
         padding: "0 1rem",
-        transition: "opacity 0.2s ease",
+        transform: homeTab === "search" ? "translateY(120px)" : "translateY(0)",
+        transition: homeTab === "search"
+          ? "opacity 0.2s ease, transform 0.28s ease-in"
+          : "opacity 0.2s ease, transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1)",
         opacity: disabled ? 0.4 : 1,
       }}>
       {/* Pill + FAB wrapper */}
