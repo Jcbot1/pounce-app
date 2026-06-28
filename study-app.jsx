@@ -1875,7 +1875,7 @@ function GradientBorderButton({ onClick, children, size, style: extraStyle, disa
         cursor: disabled ? "default" : "pointer", opacity: disabled ? 0.5 : 1,
         boxShadow: `0 4px 20px ${T.accent}30`,
         WebkitTapHighlightColor: "transparent",
-        ...(size ? { width: size, height: size } : {}),
+        ...(size ? { width: size, height: size, borderRadius: "50%" } : {}),
         ...extraStyle,
       }}>
       {children}
