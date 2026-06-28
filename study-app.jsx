@@ -5058,10 +5058,13 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
         opacity: disabled ? 0.4 : 1,
       }}>
       {/* Pill + FAB wrapper */}
-      <div style={{ display: "flex", alignItems: "center", width: "100%", gap: "0.5rem" }}>
+      <div style={{ position: "relative", width: "100%",
+        transform: fabVisible ? "translateX(calc(-62px - 0.5rem))" : "translateX(0)",
+        transition: "transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1)",
+      }}>
       {/* Tab pill */}
       <div style={{
-        flex: 1,
+        width: "100%",
         display: "flex", alignItems: "center",
         background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(143,139,152,0.20)",
         backdropFilter: "blur(20px)",
@@ -5504,7 +5507,7 @@ function HomeFAB({ homeTab, onCreate, disabled }) {
   if (disabled || !visible) return null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", flexShrink: 0, pointerEvents: "all" }}>
+    <div style={{ position: "fixed", right: "1rem", bottom: "21px", pointerEvents: "all" }}>
       <style>{`
         @keyframes homeFabIn  { 0% { transform: translateY(80px) scale(0.5); opacity: 0; } 60% { transform: translateY(-8px) scale(1.08); opacity: 1; } 80% { transform: translateY(4px) scale(0.96); } 100% { transform: translateY(0) scale(1); opacity: 1; } }
         @keyframes homeFabOut { 0% { transform: translateY(0) scale(1); opacity: 1; } 30% { transform: translateY(-6px) scale(1.05); } 100% { transform: translateY(80px) scale(0.5); opacity: 0; } }
