@@ -5517,10 +5517,13 @@ function HomeFAB({ onCreate, onImport, disabled }) {
           ].map(({ label, onClick, icon, gradient }) => (
             <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
               <button onClick={onClick} {...surfacePress()} style={{
-                background: T.surface, border: "1px solid " + T.border, borderRadius: "99px",
-                padding: "0.45rem 1rem", fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 500,
+                background: T.mode === "light" ? T.surface : T.surface2,
+                border: "1px solid " + T.border, borderRadius: "8px",
+                padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
                 color: T.text, cursor: "pointer", whiteSpace: "nowrap",
-                boxShadow: T.mode === "light" ? "0 2px 8px rgba(0,0,0,0.1)" : "0 2px 8px rgba(0,0,0,0.3)",
+                boxShadow: T.mode === "light"
+                  ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                  : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
               }}>{label}</button>
               {gradient
                 ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
