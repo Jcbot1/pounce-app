@@ -4372,7 +4372,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
   );
 }
 
-function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy, onDelete, history, onImportHistory, onDeleteHistory, onViewHistory, tab, setTab, onModalChange, externalSearch, externalActiveTag, externalFilterOpen, onSetFilterOpen, onSetActiveTag, externalHistorySearch, externalHistorySortBy, searchInputRef, searchQuery, cardColumns = 1, setsActiveTag, setSetsActiveTag, setsFilterOpen, setSetsFilterOpen, setsFilterPos, setSetsFilterPos, historySortBy, setHistorySortBy, historySortOpen, setHistorySortOpen, historySortPos, setHistorySortPos, allTagsModalOpen, setAllTagsModalOpen, setModalOpen, allTags, showSidebar = false }) {
+function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy, onDelete, history, onImportHistory, onDeleteHistory, onViewHistory, tab, setTab, onModalChange, externalSearch, externalActiveTag, externalFilterOpen, onSetFilterOpen, onSetActiveTag, externalHistorySearch, externalHistorySortBy, searchInputRef, searchQuery, cardColumns = 1, setsActiveTag, setSetsActiveTag, setsFilterOpen, setSetsFilterOpen, setsFilterPos, setSetsFilterPos, historySortBy, setHistorySortBy, historySortOpen, setHistorySortOpen, historySortPos, setHistorySortPos, allTagsModalOpen, setAllTagsModalOpen, setModalOpen, allTags, showSidebar = false, profileName = "" }) {
   const [exportingSet, setExportingSet] = useState(null);
   const [pickingSet,   setPickingSet]   = useState(null);
 
@@ -4380,6 +4380,15 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
   // All unique tags across all sets
   const untaggedSets = sets.filter(s => !s.tags || s.tags.length === 0);
+
+  const welcomeText = (() => {
+    const h = new Date().getHours();
+    const name = profileName && profileName !== "Profile" ? `, ${profileName}` : "";
+    if (h < 12) return `Good morning${name}.`;
+    if (h < 17) return `Good afternoon${name}.`;
+    if (h < 21) return `Good evening${name}.`;
+    return `Studying late${name}?`;
+  })();
 
   return (
     <div>
@@ -4392,6 +4401,19 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
           onEdit={() => { setPickingSet(null); onEdit(pickingSet); }}
         />
       )}
+
+      {/* ── WELCOME BANNER ── */}
+      <div style={{
+        borderRadius: "16px",
+        padding: "1.4rem 1.75rem",
+        marginBottom: "1.75rem",
+        background: `linear-gradient(120deg, ${T.accent}cc 0%, ${T.accent}77 100%)`,
+        backdropFilter: "blur(12px)",
+      }}>
+        <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0, lineHeight: 1.3 }}>
+          {welcomeText}
+        </p>
+      </div>
 
       {/* ── HOME TAB ── */}
       {tab === "home" && (
@@ -6532,6 +6554,7 @@ function App() {
                 setModalOpen={setModalOpen}
                 allTags={allTags}
                 showSidebar={showSidebar}
+                profileName={profileName}
               />
             )}
             {screen === "edit" && activeSet && (
