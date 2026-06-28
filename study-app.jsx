@@ -5491,7 +5491,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
 
 function HomeFAB({ onCreate, onImport, disabled }) {
   const [open, setOpen] = useState(false);
-  const [btnCenter, setBtnCenter] = useState(null);
+  const [menuPos, setMenuPos] = useState(null);
   const fileRef = useRef(null);
   if (disabled) return null;
   return (
@@ -5499,14 +5499,14 @@ function HomeFAB({ onCreate, onImport, disabled }) {
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
         onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
       {open && <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={() => setOpen(false)} />}
-      {open && (
+      {open && menuPos && (
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.4rem",
           alignItems: "center",
           animation: "menuIn 0.2s ease forwards",
           position: "fixed",
-          bottom: "calc(21px + 62px + 10px)",
-          left: btnCenter !== null ? btnCenter + "px" : "50%",
+          bottom: menuPos.bottom + "px",
+          left: menuPos.left + "px",
           transform: "translateX(-50%)",
           zIndex: 110, width: 0, overflow: "visible",
         }}>
@@ -5521,7 +5521,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
       <div style={{ flexShrink: 0, pointerEvents: "all" }}>
         <GradientBorderButton onClick={e => {
           const r = e.currentTarget.getBoundingClientRect();
-          setBtnCenter(r.left + r.width / 2);
+          setMenuPos({ left: r.left + r.width / 2, bottom: window.innerHeight - r.top + 10 });
           setOpen(o => !o);
         }} size="62px">
           <span style={{
