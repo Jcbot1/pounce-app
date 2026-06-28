@@ -7,7 +7,6 @@ const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = Reac
 const APP_VERSION = "1.0.1";
 
 const FF_SANS  = "'DM Sans', sans-serif";
-const FF_SANS  = "'DM Mono', monospace";
 const FF_SERIF = "'Fraunces', serif";
 
 const IC  = { fill: "none", stroke: "currentColor", strokeWidth: 2,   strokeLinecap: "round", strokeLinejoin: "round" };
