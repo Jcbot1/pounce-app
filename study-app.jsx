@@ -5502,13 +5502,12 @@ function HomeFAB({ onCreate, onImport, disabled }) {
       {open && menuPos && (
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.4rem",
-          alignItems: "center",
+          alignItems: "flex-end",
           animation: "menuIn 0.2s ease forwards",
           position: "fixed",
           bottom: menuPos.bottom + "px",
-          left: menuPos.left + "px",
-          transform: "translateX(-50%)",
-          zIndex: 110, width: 0, overflow: "visible",
+          right: menuPos.right + "px",
+          zIndex: 110,
         }}>
           <FabMenuButton onClick={() => { onCreate(); setOpen(false); }} color={T.accent}>
             Create
@@ -5521,7 +5520,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
       <div style={{ flexShrink: 0, pointerEvents: "all" }}>
         <GradientBorderButton onClick={e => {
           const r = e.currentTarget.getBoundingClientRect();
-          setMenuPos({ left: r.left + r.width / 2, bottom: window.innerHeight - r.top + 10 });
+          setMenuPos({ right: window.innerWidth - r.right, bottom: window.innerHeight - r.top + 10 });
           setOpen(o => !o);
         }} size="62px">
           <span style={{
