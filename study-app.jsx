@@ -4311,7 +4311,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           {recentSets.length > 0 && (
             <div style={{ marginBottom: "1.5rem" }}>
               <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
-                RECENT SETS
+                Recent Sets
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
                 {recentSets.map(s => <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} />)}
@@ -4321,7 +4321,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           {recentHistory.length > 0 && (
             <div>
               <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
-                RECENT SESSIONS
+                Recent Sessions
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
                 {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} />)}
@@ -4350,7 +4350,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {matchedSets.length > 0 && (
         <div style={{ marginBottom: "1.5rem" }}>
           <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
-            SETS · {matchedSets.length}
+            Sets · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
             {matchedSets.map(s => <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} />)}
@@ -4411,7 +4411,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>YOUR SETS</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Your Sets</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                   <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }}
                     className={`button button-round ${(!!setsActiveTag || setsFilterOpen) ? 'button-tonal' : 'button-raised'}`}
@@ -4467,7 +4467,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>RECENT</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Recent</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }}
                   className={`button button-round ${(historySortOpen || historySortBy !== "date-desc") ? 'button-tonal' : 'button-raised'}`}
@@ -4781,7 +4781,7 @@ function QuickQuestion({ sets }) {
   return (
     <div>
       <div style={{ marginBottom: "0.6rem" }}>
-        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>QUICK QUESTION</p>
+        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>Quick Question</p>
       </div>
       <div style={card({})}>
         {isMulti && (
@@ -4945,20 +4945,20 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
       {/* Stats row */}
       <div className="card-fade-up" style={{ animationDelay: "0ms" }}>
-        {sectionLabel("OVERVIEW")}
+        {sectionLabel("Overview")}
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-          {statCard("SESSIONS",  totalSessions,  null, T.accent)}
-          {statCard("QUESTIONS", totalQuestions, null, T.accent)}
-          {statCard("AVG SCORE", avgScore != null ? avgScore + "%" : "—", null,
+          {statCard("Sessions",  totalSessions,  null, T.accent)}
+          {statCard("Questions", totalQuestions, null, T.accent)}
+          {statCard("Avg Score", avgScore != null ? avgScore + "%" : "—", null,
             avgScore >= 70 ? T.green : avgScore != null ? T.red : T.muted)}
-          {statCard("STREAK", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "study today!", T.purple)}
+          {statCard("Streak", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "study today!", T.purple)}
         </div>
       </div>
 
       {/* Last session */}
       {lastSession && (
         <div className="card-fade-up" style={{ animationDelay: "150ms" }}>
-          {sectionLabel("LAST SESSION")}
+          {sectionLabel("Last Session")}
           <div
             onClick={() => onViewHistory(lastSession)}
             style={{
@@ -4997,7 +4997,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
       {/* Weak topics */}
       {weakTopics.length > 0 && (
         <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
-          {sectionLabel("WEAK TOPICS")}
+          {sectionLabel("Weak Topics")}
           <div style={card({})}>
             {weakTopics.map((t, i) => (
               <div key={t.topic} style={{ marginBottom: i < weakTopics.length - 1 ? "1rem" : 0 }}>
@@ -6297,7 +6297,7 @@ function App() {
         <Modal onClose={() => { setAllTagsModalOpen(false); setModalOpen(false); }}>
           <ModalCard pad="1.5rem" maxWidth={480} scroll>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>ALL TAGS</span>
+              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>All Tags</span>
               <button onClick={() => { setAllTagsModalOpen(false); setModalOpen(false); }} {...surfacePress()}
                 style={{ background: "none", border: "none", borderRadius: "99px", cursor: "pointer", color: T.muted, fontSize: "1.2rem", lineHeight: 1, padding: "0.25rem" }}>✕</button>
             </div>
@@ -6658,7 +6658,7 @@ function App() {
           {/* Recent — sets and history mixed, hidden when collapsed */}
           {!sidebarCollapsed && (sets.length > 0 || history.length > 0) && (
             <div style={{ flex: 1, overflow: "hidden", padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>RECENT</p>
+              <p style={{ fontFamily: FF_MONO, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, meta: s.questions?.length ?? 0 })),
