@@ -5037,7 +5037,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   );
 }
 
-function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, onSetsTab, fabSlot }) {
+function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, fabSlot }) {
   const pillBg     = T.mode === "light" ? "#e2e8f0" : "#1e1630";
 
   const pillShadow = T.mode === "light"
@@ -5058,13 +5058,10 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
         opacity: disabled ? 0.4 : 1,
       }}>
       {/* Pill + FAB wrapper */}
-      <div style={{ position: "relative", width: "100%",
-        transform: fabVisible ? "translateX(calc(-62px - 0.5rem))" : "translateX(0)",
-        transition: "transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1)",
-      }}>
+      <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
       {/* Tab pill */}
       <div style={{
-        width: "100%",
+        width: "225px",
         display: "flex", alignItems: "center",
         background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(143,139,152,0.20)",
         backdropFilter: "blur(20px)",
@@ -5489,39 +5486,16 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
 // NAVIGATION & FAB
 // ════════════════════════════════════════════════════════════════════════
 
-function HomeFAB({ homeTab, onCreate, disabled }) {
-  const [visible, setVisible] = useState(homeTab === "sets");
-  const [animating, setAnimating] = useState(false);
-
-  useEffect(() => {
-    if (homeTab === "sets") {
-      setVisible(true);
-      setAnimating(false);
-    } else {
-      setAnimating(true);
-      const t = setTimeout(() => { setVisible(false); setAnimating(false); }, 280);
-      return () => clearTimeout(t);
-    }
-  }, [homeTab]);
-
-  if (disabled || !visible) return null;
-
+function HomeFAB({ onCreate, disabled }) {
+  if (disabled) return null;
   return (
-    <div style={{ position: "fixed", right: "1rem", bottom: "21px", pointerEvents: "all" }}>
-      <style>{`
-        @keyframes homeFabIn  { 0% { transform: translateY(80px) scale(0.5); opacity: 0; } 60% { transform: translateY(-8px) scale(1.08); opacity: 1; } 80% { transform: translateY(4px) scale(0.96); } 100% { transform: translateY(0) scale(1); opacity: 1; } }
-        @keyframes homeFabOut { 0% { transform: translateY(0) scale(1); opacity: 1; } 30% { transform: translateY(-6px) scale(1.05); } 100% { transform: translateY(80px) scale(0.5); opacity: 0; } }
-        .hfab-in  { animation: homeFabIn  0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .hfab-out { animation: homeFabOut 0.25s ease-in forwards; pointer-events: none; }
-      `}</style>
-      <div className={animating ? "hfab-out" : "hfab-in"}>
-        <GradientBorderButton onClick={() => onCreate()} size="62px">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-            <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-          </svg>
-        </GradientBorderButton>
-      </div>
+    <div style={{ position: "absolute", left: "calc(100% + 0.5rem)", bottom: 0, pointerEvents: "all" }}>
+      <GradientBorderButton onClick={() => onCreate()} size="62px">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
+          <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
+        </svg>
+      </GradientBorderButton>
     </div>
   );
 }
@@ -6518,11 +6492,9 @@ function App() {
               homeTab={homeTab} setHomeTab={setHomeTab}
               history={history}
               disabled={modalOpen}
-              fabVisible={homeTab === "sets"}
               onSetsTab={() => setSetsSearch("")}
               fabSlot={
                 <HomeFAB
-                  homeTab={homeTab}
                   onCreate={handleCreate}
                   disabled={modalOpen}
                 />
