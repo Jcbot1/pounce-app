@@ -3604,7 +3604,7 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   );
 }
 
-function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet, reviewResults, reviewQs, historySession, onRequestRetry, onRetryMissed, onRequestDeleteResults, onStudyFromHistory, editCanSave = false }) {
+function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgStyle, sets, history, onClearAll, screen, profileName, profileIconId, profileBg, profileIColor, onSaveProfile, onRequestClear, sidebarMode = false, forceMobile = false, onToggleForceMobile, onSmartImport, activeSet, allTags, onRenameActiveSet, onSetActiveSetTags, onSetActiveSetIcon, onDeleteActiveSet, reviewResults, reviewQs, historySession, onRequestRetry, onRetryMissed, onRequestDeleteResults, onStudyFromHistory, editCanSave = false, inSearch = false, onDismissSearch }) {
   const inSession = screen === "review" || screen === "edit" || screen === "results" || screen === "historyResults";
   const inEdit = screen === "edit";
   const inResults = screen === "results" || screen === "historyResults";
@@ -3698,7 +3698,13 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
       )}
 
       {!sidebarMode && (
-        (!inEdit && !inResults) ? (
+        (!inEdit && !inResults && inSearch) ? (
+          <GlassButton onClick={() => { onDismissSearch?.(); }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </GlassButton>
+        ) : (!inEdit && !inResults) ? (
           <div onClick={() => { setOpen(o => !o); if (open) setSection(null); }} style={{ cursor: "pointer", flexShrink: 0, WebkitTapHighlightColor: "transparent" }}>
             <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={44} />
           </div>
@@ -5901,6 +5907,7 @@ function App() {
   const showSidebar  = !isMobile && screen !== "review" && screen !== "edit" && screen !== "results" && screen !== "historyResults";
   const cardColumns  = isDesktop ? 3 : isTablet ? 2 : 1;
   const [homeTab, setHomeTab]          = useState("home");
+  const prevHomeTabRef = useRef("home");
   const [editingSetName, setEditingSetName] = useState(false);
   const prevShowSidebarRef = useRef(showSidebar);
   const sidebarJustLeft = prevShowSidebarRef.current && !showSidebar;
@@ -6378,13 +6385,13 @@ function App() {
                 <input
                   ref={searchInputRef}
                   value={searchQuery}
-                  onFocus={() => setHomeTab("search")}
-                  onChange={e => { setSearchQuery(e.target.value); setHomeTab("search"); }}
+                  onFocus={() => { if (homeTab !== "search") { prevHomeTabRef.current = homeTab; } setHomeTab("search"); }}
+                  onChange={e => { setSearchQuery(e.target.value); if (homeTab !== "search") { prevHomeTabRef.current = homeTab; setHomeTab("search"); } }}
                   placeholder="Search…"
                   style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: T.text, fontFamily: FF_SANS, fontSize: "16px", height: "44px", padding: 0, boxSizing: "border-box" }}
                 />
                 {searchQuery && (
-                  <span onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ flexShrink: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
+                  <span onClick={() => { setSearchQuery(""); setHomeTab(prevHomeTabRef.current || "home"); searchInputRef.current?.blur(); }} style={{ flexShrink: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                 )}
               </div>
             ) : screen === "home" ? (
@@ -6430,7 +6437,9 @@ function App() {
               onRetryMissed={handleRetryMissed}
               onRequestDeleteResults={() => setResultsDeleteConfirm(true)}
               onStudyFromHistory={() => { const set = sets.find(s => s.name === historySession?.setName); if (set) setPendingStudySet(set); else showToast("Original set not found."); }}
-              editCanSave={editCanSave} />}
+              editCanSave={editCanSave}
+              inSearch={homeTab === "search"}
+              onDismissSearch={() => { setSearchQuery(""); setHomeTab(prevHomeTabRef.current || "home"); searchInputRef.current?.blur(); }} />}
             </div>
           </div>
           </div>
