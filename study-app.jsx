@@ -6503,7 +6503,12 @@ function App() {
             {screen === "home" && homeTab === "home" && (() => {
               const h = new Date().getHours();
               const name = profileName ? `, ${profileName}` : "";
-              const text = h < 12 ? `Good morning${name}.` : h < 17 ? `Good afternoon${name}.` : h < 21 ? `Good evening${name}.` : `Studying late${name}?`;
+              const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+              const morning   = [`Good morning${name}.`, `Rise and shine${name}!`, `Morning${name}. Ready to learn?`, `Early start${name}. Nice.`, `Morning${name} — let's make it count.`, `Coffee in hand${name}? Let's go.`];
+              const afternoon = [`Good afternoon${name}.`, `Afternoon${name}. Keep it going.`, `Hey${name}, afternoon grind?`, `Midday check-in${name}.`];
+              const evening   = [`Good evening${name}.`, `Evening${name}. One more session?`, `Hey${name}, evening wind-down?`, `Evening${name}. Let's finish strong.`];
+              const late      = [`Studying late${name}?`, `Burning the midnight oil${name}?`, `Night owl mode${name}.`, `Up late${name}? Let's make it worth it.`];
+              const text = h < 12 ? pick(morning) : h < 17 ? pick(afternoon) : h < 21 ? pick(evening) : pick(late);
               return (
                 <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
                   <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>{text}</p>
