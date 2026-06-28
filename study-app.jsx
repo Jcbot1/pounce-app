@@ -4403,14 +4403,8 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       )}
 
       {/* ── WELCOME BANNER ── */}
-      <div style={{
-        borderRadius: "16px",
-        padding: "1.4rem 1.75rem",
-        marginBottom: "1.75rem",
-        background: `linear-gradient(120deg, ${T.accent}cc 0%, ${T.accent}77 100%)`,
-        backdropFilter: "blur(12px)",
-      }}>
-        <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: "#fff", margin: 0, lineHeight: 1.3 }}>
+      <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+        <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>
           {welcomeText}
         </p>
       </div>
