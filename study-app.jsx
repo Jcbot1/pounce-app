@@ -6390,9 +6390,6 @@ function App() {
                   placeholder="Search…"
                   style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: T.text, fontFamily: FF_SANS, fontSize: "16px", height: "44px", padding: 0, boxSizing: "border-box" }}
                 />
-                {searchQuery && (
-                  <span onClick={() => { setSearchQuery(""); setHomeTab(prevHomeTabRef.current || "home"); searchInputRef.current?.blur(); }} style={{ flexShrink: 0, cursor: "pointer", color: T.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
-                )}
               </div>
             ) : screen === "home" ? (
               <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem" }}>
