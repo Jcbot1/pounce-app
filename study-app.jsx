@@ -3771,7 +3771,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
                   <span>Export set</span>
                 </span>
               </HamburgerMenuItem>
-              <HamburgerMenuItem danger onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-delete")); }}>
+              <HamburgerMenuItem danger color={T.red} onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-delete")); }}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                   <TrashIcon size={15} />
                   <span>Delete set</span>
@@ -3813,7 +3813,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
                   <span>Export</span>
                 </span>
               </HamburgerMenuItem>
-              <HamburgerMenuItem danger onClick={() => { close(); onRequestDeleteResults?.(); }}>
+              <HamburgerMenuItem danger color={T.red} onClick={() => { close(); onRequestDeleteResults?.(); }}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                   <TrashIcon size={15} />
                   <span>Delete</span>
