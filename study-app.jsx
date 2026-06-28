@@ -4402,16 +4402,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         />
       )}
 
-      {/* ── WELCOME BANNER ── */}
-      <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-        <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>
-          {welcomeText}
-        </p>
-      </div>
-
       {/* ── HOME TAB ── */}
       {tab === "home" && (
         <div style={{ marginTop: "11px" }}>
+          <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+            <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>
+              {welcomeText}
+            </p>
+          </div>
           <Dashboard
             history={history}
             sets={sets}
