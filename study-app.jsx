@@ -5501,7 +5501,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
       {open && <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={() => setOpen(false)} />}
       {open && menuPos && (
         <div style={{
-          display: "flex", flexDirection: "column", gap: "0.4rem",
+          display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
           animation: "menuIn 0.2s ease forwards",
           position: "fixed",
@@ -5509,12 +5509,24 @@ function HomeFAB({ onCreate, onImport, disabled }) {
           right: menuPos.right + "px",
           zIndex: 110,
         }}>
-          <FabMenuButton onClick={() => { onCreate(); setOpen(false); }} color={T.accent}>
-            Create
-          </FabMenuButton>
-          <FabMenuButton onClick={() => { fileRef.current?.click(); setOpen(false); }}>
-            Import
-          </FabMenuButton>
+          {[
+            { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
+              icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
+            { label: "Import", onClick: () => { fileRef.current?.click(); setOpen(false); }, gradient: false,
+              icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
+          ].map(({ label, onClick, icon, gradient }) => (
+            <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+              <button onClick={onClick} {...surfacePress()} style={{
+                background: T.surface, border: "1px solid " + T.border, borderRadius: "99px",
+                padding: "0.45rem 1rem", fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 500,
+                color: T.text, cursor: "pointer", whiteSpace: "nowrap",
+                boxShadow: T.mode === "light" ? "0 2px 8px rgba(0,0,0,0.1)" : "0 2px 8px rgba(0,0,0,0.3)",
+              }}>{label}</button>
+              {gradient
+                ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
+                : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
+            </div>
+          ))}
         </div>
       )}
       <div style={{ flexShrink: 0, pointerEvents: "all" }}>
