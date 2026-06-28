@@ -5493,12 +5493,17 @@ function HomeFAB({ onCreate, onImport, disabled }) {
   const [open, setOpen] = useState(false);
   const [menuPos, setMenuPos] = useState(null);
   const fileRef = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [open]);
   if (disabled) return null;
   return (
     <>
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
         onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
-      {open && <div style={{ position: "fixed", inset: 0, zIndex: 109, pointerEvents: "all" }} onPointerDown={() => setOpen(false)} />}
       {open && menuPos && (
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.5rem",
@@ -5508,7 +5513,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
           bottom: menuPos.bottom + "px",
           right: menuPos.right + "px",
           zIndex: 110, pointerEvents: "all",
-        }}>
+        }} onPointerDown={e => e.stopPropagation()}>
           {[
             { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
               icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
@@ -5532,7 +5537,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
           ))}
         </div>
       )}
-      <div style={{ flexShrink: 0, pointerEvents: "all" }}>
+      <div style={{ flexShrink: 0, pointerEvents: "all" }} onPointerDown={e => e.stopPropagation()}>
         <GradientBorderButton onClick={e => {
           const r = e.currentTarget.getBoundingClientRect();
           setMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 10 });
