@@ -4381,15 +4381,6 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // All unique tags across all sets
   const untaggedSets = sets.filter(s => !s.tags || s.tags.length === 0);
 
-  const welcomeText = (() => {
-    const h = new Date().getHours();
-    const name = profileName ? `, ${profileName}` : "";
-    if (h < 12) return `Good morning${name}.`;
-    if (h < 17) return `Good afternoon${name}.`;
-    if (h < 21) return `Good evening${name}.`;
-    return `Studying late${name}?`;
-  })();
-
   return (
     <div>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
@@ -4405,11 +4396,6 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       {/* ── HOME TAB ── */}
       {tab === "home" && (
         <div style={{ marginTop: "11px" }}>
-          <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-            <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>
-              {welcomeText}
-            </p>
-          </div>
           <Dashboard
             history={history}
             sets={sets}
@@ -6514,6 +6500,16 @@ function App() {
           padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : (screen === "review" || screen === "edit") ? "1.5rem 0 7rem" : "1.5rem 0 4rem",
         }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", padding: "0 1rem" }}>
+            {screen === "home" && homeTab === "home" && (() => {
+              const h = new Date().getHours();
+              const name = profileName ? `, ${profileName}` : "";
+              const text = h < 12 ? `Good morning${name}.` : h < 17 ? `Good afternoon${name}.` : h < 21 ? `Good evening${name}.` : `Studying late${name}?`;
+              return (
+                <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+                  <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>{text}</p>
+                </div>
+              );
+            })()}
             {screen === "home" && (
               <Home
                 sets={sets}
