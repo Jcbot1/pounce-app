@@ -5037,7 +5037,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   );
 }
 
-function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, onSearchTab, onSetsTab, onClearSearch, fabSlot }) {
+function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, onSetsTab, fabSlot }) {
   const pillBg     = T.mode === "light" ? "#e2e8f0" : "#1e1630";
 
   const pillShadow = T.mode === "light"
@@ -5064,7 +5064,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
       }}>
       {/* Tab pill */}
       <div style={{
-        width: "290px",
+        width: "225px",
         display: "flex", alignItems: "center",
         background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(143,139,152,0.20)",
         backdropFilter: "blur(20px)",
@@ -5079,8 +5079,9 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
         <div style={{
           position: "absolute",
           top: "0.25rem", bottom: "0.25rem",
-          left: homeTab === "home" ? "0.25rem" : homeTab === "sets" ? "calc(25% + 0.06rem)" : homeTab === "history" ? "calc(50% - 0.06rem)" : "calc(75% - 0.25rem)",
-          width: "calc(25% - 0.17rem)",
+          left: homeTab === "home" ? "0.25rem" : homeTab === "sets" ? "calc(33.33% + 0.06rem)" : homeTab === "history" ? "calc(66.67% - 0.06rem)" : "-100%",
+          width: "calc(33.33% - 0.17rem)",
+          opacity: homeTab === "search" ? 0 : 1,
           borderRadius: "99px",
           background: T.mode === "light" ? "rgba(140,150,165,0.45)" : "rgba(0,0,0,0.55)",
           boxShadow: T.mode === "light"
@@ -5099,12 +5100,10 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, fabVisible, o
           { id: "history", label: "History",
             badge: (history?.length || 0) > 0 ? history.length : null,
             svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> },
-          { id: "search",  label: "Search",
-            svg: <svg width="22" height="22" viewBox="1 1 22 22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg> },
         ].map(t => {
           const active = homeTab === t.id;
           return (
-            <button key={t.id} onClick={() => { setHomeTab(t.id); if (t.id === "search" && onSearchTab) onSearchTab(); if (t.id === "sets" && onSetsTab) onSetsTab(); if (t.id !== "search" && onClearSearch) onClearSearch(); }} style={{
+            <button key={t.id} onClick={() => { setHomeTab(t.id); if (t.id === "sets" && onSetsTab) onSetsTab(); }} style={{
               display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center",
               flex: "1 1 0", minWidth: 0, alignSelf: "stretch",
@@ -6520,9 +6519,7 @@ function App() {
               history={history}
               disabled={modalOpen}
               fabVisible={homeTab === "sets"}
-              onSearchTab={() => setTimeout(() => searchInputRef.current?.focus(), 50)}
               onSetsTab={() => setSetsSearch("")}
-              onClearSearch={() => setSearchQuery("")}
               fabSlot={
                 <HomeFAB
                   homeTab={homeTab}
