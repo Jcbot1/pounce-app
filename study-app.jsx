@@ -7,7 +7,7 @@ const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = Reac
 const APP_VERSION = "1.0.1";
 
 const FF_SANS  = "'DM Sans', sans-serif";
-const FF_MONO  = "'DM Mono', monospace";
+const FF_SANS  = "'DM Mono', monospace";
 const FF_SERIF = "'Fraunces', serif";
 
 const IC  = { fill: "none", stroke: "currentColor", strokeWidth: 2,   strokeLinecap: "round", strokeLinejoin: "round" };
@@ -109,7 +109,7 @@ function Modal({ onClose, children, zIndex = 1000 }) {
 
 // ── FAB menu button styles ─────────────────────────────────────────────────
 const fabMenuBtn     = () => ({ background: "transparent", border: "none", height: "44px", paddingLeft: "1.1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text, whiteSpace: "nowrap" });
-const fabMenuJsonBtn = () => ({ background: "transparent", border: "none", height: "44px", width: "44px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontFamily: FF_MONO, fontSize: "0.8rem", lineHeight: 1, textAlign: "center", color: T.muted, flexShrink: 0 });
+const fabMenuJsonBtn = () => ({ background: "transparent", border: "none", height: "44px", width: "44px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontFamily: FF_SANS, fontSize: "0.8rem", lineHeight: 1, textAlign: "center", color: T.muted, flexShrink: 0 });
 const fabMenuWrap    = () => ({ display: "flex", alignItems: "center", background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)" });
 
 // ── Icon Button ────────────────────────────────────────────────────────────
@@ -133,7 +133,7 @@ function FabMenuButton({ onClick, children, color, jsonBtn = false, bare = false
       background: "transparent", border: "none", cursor: "pointer",
       height: "44px",
       ...(jsonBtn
-        ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FF_MONO, fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
+        ? { width: "44px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FF_SANS, fontSize: "0.8rem", color: color || T.muted, flexShrink: 0 }
         : { paddingLeft: "1.1rem", paddingRight: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: color || T.text, whiteSpace: "nowrap" }
       ),
     }}>
@@ -320,7 +320,7 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2 }}>{label}</p>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2 }}>{label}</p>
       </div>
       {right && <div>{right}</div>}
     </div>
@@ -393,7 +393,7 @@ function TagChip({ tag }) {
   return (
     <span style={{
       display: "inline-block", padding: "0.15rem 0.55rem", borderRadius: "99px",
-      fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
+      fontSize: "0.63rem", fontFamily: FF_SANS, letterSpacing: "0.1em",
       background: color, color: "#fff", fontWeight: 600,
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>{tag}</span>
@@ -408,7 +408,7 @@ function EditorTagChip({ tag, onRemove }) {
     <button onClick={onRemove} {...primaryPress()} style={{
       display: "inline-flex", alignItems: "center", gap: "0.35rem",
       padding: "0.38rem 0.9rem", borderRadius: "99px", border: "none", cursor: "pointer",
-      fontFamily: FF_MONO, fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em",
+      fontFamily: FF_SANS, fontSize: "0.78rem", fontWeight: 600, letterSpacing: "0.08em",
       background: color, color: "#fff", height: "auto", width: "auto",
       textShadow: "0 1px 2px rgba(0,0,0,0.2)",
     }}>
@@ -501,7 +501,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
             width: "min(360px, calc(100vw - 2rem))", zIndex: 10,
             maxHeight: "60vh", overflowY: "auto", WebkitOverflowScrolling: "touch",
           }}>
-            <p style={{ color: T.muted, fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HINT</p>
+            <p style={{ color: T.muted, fontSize: "0.63rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HINT</p>
             <p style={{ color: T.text, fontSize: "0.9rem", fontFamily: FF_SANS, lineHeight: 1.6 }}>{renderText(hint)}</p>
           </div>
         </>
@@ -1142,7 +1142,7 @@ function SnapTextarea({ style, maxLength, ...props }) {
       {maxLength && (
         <span style={{
           position: "absolute", bottom: "0.65rem", right: "0.65rem",
-          fontFamily: FF_MONO, fontSize: "0.6rem",
+          fontFamily: FF_SANS, fontSize: "0.6rem",
           color: len >= maxLength ? T.red : len >= maxLength * 0.85 ? "#f59e0b" : T.muted,
           pointerEvents: "none", lineHeight: 1,
         }}>{len}/{maxLength}</span>
@@ -1180,7 +1180,7 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
       {maxLength && (
         <span style={{
           position: "absolute", bottom: "0.65rem", right: "0.65rem",
-          fontFamily: FF_MONO, fontSize: "0.6rem",
+          fontFamily: FF_SANS, fontSize: "0.6rem",
           color: len >= maxLength ? T.red : len >= maxLength * 0.85 ? "#f59e0b" : T.muted,
           pointerEvents: "none", lineHeight: 1,
         }}>{len}/{maxLength}</span>
@@ -1254,7 +1254,7 @@ const primaryPress = () => ({
   onPointerLeave:e => { _afterPress(e.currentTarget, '', 'press-primary'); },
 });
 const Label = ({ children, style, required }) => (
-  <p style={{ fontFamily: FF_MONO, fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.4rem", ...style }}>
+  <p style={{ fontFamily: FF_SANS, fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.4rem", ...style }}>
     {required && <span style={{ color: T.red, marginRight: "0.2em" }}>*</span>}
     {children}
   </p>
@@ -1278,7 +1278,7 @@ function Tag({ label, color }) {
   return (
     <span style={{
       display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-      fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em",
+      fontSize: "0.63rem", fontFamily: FF_SANS, letterSpacing: "0.1em",
       background: color + "22", color, border: "1px solid " + color + "44",
       maxWidth: "100%", minWidth: 0, verticalAlign: "middle",
     }}>
@@ -1499,7 +1499,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                 <div key={dd.id} style={{ marginBottom: "0.75rem", padding: "0.75rem", border: "1px solid " + T.border, borderRadius: "12px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
-                      <span style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem" }}>ROW {di + 1}</span>
+                      <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>ROW {di + 1}</span>
                       {q.dropdowns.length > 1 && (
                         <IconButton variant="danger" size={26} onClick={() => removeDD(di)}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                       )}
@@ -1564,7 +1564,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               {q.pairs.map((pair, pi) => (
                 <div key={pair.id} style={{ marginBottom: "1rem", padding: "0.75rem", background: T.surface2, borderRadius: "12px", border: "1px solid " + T.border }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                    <span style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
+                    <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
                     {q.pairs.length > 2 && (
                       <IconButton variant="danger" size={26} onClick={() => set("pairs", q.pairs.filter((_, i) => i !== pi))}><svg width="10" height="10" viewBox="0 0 24 24" {...IC5}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></IconButton>
                     )}
@@ -1828,7 +1828,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
 
       {draft.questions.length === 0 && (
         <div style={{ textAlign: "center", padding: "3rem 0", color: T.muted,
-          fontFamily: FF_MONO, fontSize: "0.78rem", letterSpacing: "0.08em" }}>
+          fontFamily: FF_SANS, fontSize: "0.78rem", letterSpacing: "0.08em" }}>
           NO QUESTIONS YET
         </div>
       )}
@@ -1906,7 +1906,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
       }}>
         {left && (
           <span style={{ color: T.mode === "light" ? T.muted2 : "#64748b", fontSize: "0.72rem",
-            fontFamily: FF_MONO, letterSpacing: "0.05em", flexShrink: 0 }}>
+            fontFamily: FF_SANS, letterSpacing: "0.05em", flexShrink: 0 }}>
             {left}
           </span>
         )}
@@ -2064,7 +2064,7 @@ Rules:
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
             </svg>
-            <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.accent }}>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.accent }}>
               AI QUESTION GENERATOR
             </p>
           </div>
@@ -2102,7 +2102,7 @@ Rules:
                     style={{
                       display: "inline-flex", alignItems: "center", gap: "0.4rem",
                       padding: "0.5rem 1rem", borderRadius: "99px",
-                      fontFamily: FF_MONO, fontSize: "0.74rem",
+                      fontFamily: FF_SANS, fontSize: "0.74rem",
                       fontWeight: 500, letterSpacing: "0.07em", cursor: "pointer",
                       minHeight: "38px", transition: "opacity 0.15s",
                       background: types[key] ? (TYPE_META[key]?.color || T.accent) + "22" : T.surface2,
@@ -2126,7 +2126,7 @@ Rules:
                   style={{ width: "36px", height: "36px", borderRadius: "99px", border: "none",
                     background: T.surface2, color: T.text, fontSize: "1.2rem", cursor: "pointer",
                     display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                <span style={{ fontFamily: FF_MONO, fontSize: "1.5rem", fontWeight: 700, color: T.text, minWidth: "2rem", textAlign: "center" }}>{count}</span>
+                <span style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, minWidth: "2rem", textAlign: "center" }}>{count}</span>
                 <button onClick={() => setCount(c => Math.min(20, c + 1))}
                   {...surfacePress()}
                   onPointerUp={e => { const el = e.currentTarget; setTimeout(() => { el.style.transition = "background 0.3s ease"; el.style.background = T.surface2; }, 150); }}
@@ -2162,8 +2162,8 @@ Rules:
               {preview.map((q, i) => (
                 <div key={q.id} style={{ ...card({ padding: "0.9rem 1rem" }) }}>
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.4rem" }}>
-                    <span style={{ fontFamily: FF_MONO, fontSize: "0.6rem", color: T.muted }}>Q{i + 1}</span>
-                    <span style={{ fontFamily: FF_MONO, fontSize: "0.6rem",
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.6rem", color: T.muted }}>Q{i + 1}</span>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.6rem",
                       color: TYPE_META[q.type]?.color || "#0ea5e9",
                       background: (TYPE_META[q.type]?.color || "#0ea5e9") + "18",
                       padding: "0.1rem 0.4rem", borderRadius: "4px" }}>
@@ -2230,7 +2230,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
   const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "45";
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
-      <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
+      <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
         CHOOSE {q.selectCount} · {selected.length}/{q.selectCount} selected
       </p>
       {q.options.map((opt, i) => {
@@ -2249,7 +2249,7 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
         return (
           <AnswerButton key={i} onClick={() => !submitted && onToggle(i)} bg={bg} color={color} submitted={submitted} label={null}>
             <span style={{ minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "4px",
-              display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontFamily: FF_MONO, fontWeight: 600,
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontFamily: FF_SANS, fontWeight: 600,
               flexShrink: 0, marginTop: "2px", background: isSel && !submitted ? T.accent + "33" : "transparent" }}>
               {isSel && !submitted ? "✓" : label}
             </span>
@@ -2326,7 +2326,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   background: triggerBg, color: triggerColor,
                   border: (hasVal && !submitted) ? "1.5px solid " + T.accent + "44" : "1px solid " + triggerBorder,
                   borderRadius: "6px", padding: "0.45rem 0.6rem",
-                  fontFamily: FF_MONO, fontSize: "0.8rem",
+                  fontFamily: FF_SANS, fontSize: "0.8rem",
                   cursor: submitted ? "default" : "pointer",
                   textAlign: "left", whiteSpace: "normal", wordBreak: "break-word",
                 }}>
@@ -2358,7 +2358,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                         display: "block", width: "100%", textAlign: "left",
                         background: val === oi ? T.accent + "18" : "transparent",
                         border: "none", padding: "0.65rem 0.9rem",
-                        fontFamily: FF_MONO, fontSize: "0.8rem",
+                        fontFamily: FF_SANS, fontSize: "0.8rem",
                         color: val === oi ? T.accent : T.text,
                         cursor: "pointer", lineHeight: 1.5, whiteSpace: "normal", wordBreak: "break-word",
                       }}
@@ -2370,7 +2370,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                 </div>
               )}
               {isWrong && (
-                <span style={{ fontSize: "0.65rem", color: T.green, fontFamily: FF_MONO, marginTop: "3px", display: "block" }}>
+                <span style={{ fontSize: "0.65rem", color: T.green, fontFamily: FF_SANS, marginTop: "3px", display: "block" }}>
                   ✓ {renderText(dd.options[dd.correct])}
                 </span>
               )}
@@ -2456,7 +2456,7 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
                 <div style={{ height: "1px", background: T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)", margin: "0.5rem 0 1rem" }} />
               )}
               <div style={{ background: T.surface2, border: "1px solid #0ea5e9", borderRadius: "12px", padding: "0.75rem 1rem", marginBottom: "0.5rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: "#0ea5e9", marginBottom: "0.4rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: "#0ea5e9", marginBottom: "0.4rem" }}>
                   MATCH THIS TERM
                 </p>
                 <p style={{ fontFamily: FF_SANS, fontSize: "1rem", fontWeight: 500, color: T.text, whiteSpace: "pre-wrap" }}>
@@ -2842,9 +2842,9 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {/* Bubble navigator */}
       {timerMinutes ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
-          <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
+          <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span style={{ fontFamily: FF_MONO, fontSize: "0.78rem", fontWeight: 600, color: timerColor, transition: "color 0.5s", letterSpacing: "0.05em" }}>{formatTime(secsLeft)}</span>
+            <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", fontWeight: 600, color: timerColor, transition: "color 0.5s", letterSpacing: "0.05em" }}>{formatTime(secsLeft)}</span>
             <button onClick={() => setPaused(true)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.1rem" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
             </button>
@@ -2852,7 +2852,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         </div>
       ) : (
         <div style={{ marginBottom: "0.35rem" }}>
-          <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
+          <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
         </div>
       )}
 
@@ -2860,7 +2860,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {paused && (
         <Modal onClose={() => setPaused(false)} zIndex={1100}>
           <ModalCard style={{ maxWidth: "340px", width: "100%", textAlign: "center" }}>
-            <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "1rem" }}>EXAM PAUSED</p>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "1rem" }}>EXAM PAUSED</p>
             <p style={{ fontFamily: FF_SERIF, fontSize: "1.5rem", fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>{formatTime(secsLeft)}</p>
             <p style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: T.muted, marginBottom: "1.5rem" }}>remaining</p>
             <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginBottom: "1.75rem" }}>
@@ -2871,7 +2871,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               ].map(({ label, value, color }) => (
                 <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
                   <span style={{ fontFamily: FF_SERIF, fontSize: "1.75rem", fontWeight: 600, color }}>{value}</span>
-                  <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>{label.toUpperCase()}</span>
+                  <span style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>{label.toUpperCase()}</span>
                 </div>
               ))}
             </div>
@@ -2935,7 +2935,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               style={{
                 ...bubbleColor,
                 width: "40px", height: "40px", flexShrink: 0,
-                fontFamily: FF_MONO, fontSize: "0.72rem", fontWeight: 600, textTransform: "none",
+                fontFamily: FF_SANS, fontSize: "0.72rem", fontWeight: 600, textTransform: "none",
                 cursor: isCurrent ? "default" : "pointer",
                 position: "relative", transition: "all 0.15s", overflow: "visible",
               }}>
@@ -3053,7 +3053,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         }}>
           <div style={{ width: "3px", background: T.accent, flexShrink: 0 }} />
           <div style={{ padding: "0.9rem 1rem" }}>
-            <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
+            <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
             <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>{renderText(q.explanation)}</p>
           </div>
         </div>
@@ -3133,7 +3133,7 @@ function AnimatedPct({ target, color }) {
     requestAnimationFrame(step);
   }, [target]);
   return (
-    <span style={{ fontFamily: FF_MONO, fontSize: "1.5rem", fontWeight: 700, color }}>
+    <span style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color }}>
       {display}%
     </span>
   );
@@ -3266,7 +3266,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
               {score} of {results.length} correct · {set.name}
             </p>
             {isHistoryView && historyDate && (
-              <p style={{ color: T.muted, fontFamily: FF_MONO, fontSize: "0.72rem", marginTop: "0.2rem" }}>
+              <p style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem", marginTop: "0.2rem" }}>
                 {new Date(historyDate).toLocaleDateString(undefined, { dateStyle: "full" })}
               </p>
             )}
@@ -3296,7 +3296,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 <span style={{ fontSize: "0.9rem", color: r.correct ? T.green : T.red, flexShrink: 0 }}>
                   {r.correct ? "✓" : "✗"}
                 </span>
-                <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", color: T.muted, flexShrink: 0 }}>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted, flexShrink: 0 }}>
                   Q{i + 1}
                 </span>
                 <Tag label={TYPE_META[q.type].label} color={TYPE_META[q.type].color} />
@@ -3336,7 +3336,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 {q.explanation && (
                   <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "6px",
                     borderLeft: "3px solid " + T.accent }}>
-                    <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: FF_MONO, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
+                    <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
                       EXPLANATION
                     </p>
                     <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.55 }}>{renderText(q.explanation)}</p>
@@ -3384,7 +3384,7 @@ function ExportModal({ set, onClose }) {
         </div>
         <textarea ref={textareaRef} readOnly value={text}
           style={{ ...inp(), flex: 1, minHeight: "180px",
-            fontFamily: FF_MONO, fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
+            fontFamily: FF_SANS, fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
           <PrimaryButton onClick={handleCopy} small>{copyLabel}</PrimaryButton>
           <GhostButton onClick={onClose} small>Close</GhostButton>
@@ -3428,7 +3428,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 {...surfacePress()}
                 style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg></button>
             )}
-            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.1em" }}>
+            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.1em" }}>
               {stepLabel}
             </p>
           </div>
@@ -3513,7 +3513,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 <div className="stepper-input-wrap">
                   <input type="text" inputMode="numeric" value={customMin}
                     onChange={e => { const v = parseInt(e.target.value); if (!isNaN(v)) setCustomMin(Math.min(240, Math.max(5, v))); }}
-                    style={{ fontFamily: FF_MONO, textAlign: "center", color: T.text }} />
+                    style={{ fontFamily: FF_SANS, textAlign: "center", color: T.text }} />
                 </div>
                 <div className="stepper-button-plus" onClick={() => setCustomMin(m => Math.min(240, m + 5))} />
               </div>
@@ -3523,7 +3523,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 {TIMER_OPTIONS.map(min => (
                   <button key={min} onClick={() => setCustomMin(min)} {...surfacePress()}
                     className={`button button-round${customMin === min ? ' button-fill' : ' button-outline'}`}
-                    style={{ flex: 1, height: "44px", fontFamily: FF_MONO, fontSize: "0.85rem", fontWeight: 600,
+                    style={{ flex: 1, height: "44px", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 600,
                       ...(customMin === min ? { background: T.accent, color: "#fff" } : { color: T.text, borderColor: T.border }) }}>
                     {min}m
                   </button>
@@ -3871,17 +3871,17 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
 
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
                 </div>
 
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}>
                   <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} large />
                 </div>
@@ -3892,7 +3892,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
 
           {/* Version */}
           {section === null && !inEdit && !inResults && (
-            <p style={{ fontFamily: FF_MONO, fontSize: "0.6rem", letterSpacing: "0.1em",
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.6rem", letterSpacing: "0.1em",
               color: T.muted, textAlign: "center", padding: "0.6rem 1.25rem",
                }}>
               {`POUNCE v${APP_VERSION}`}
@@ -3928,7 +3928,7 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
         onClick={e => e.stopPropagation()}>
         <div style={{ padding: "1.1rem 1.25rem 0.75rem",
            }}>
-          <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2, marginBottom: "0.25rem" }}>TAGS</p>
+          <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2, marginBottom: "0.25rem" }}>TAGS</p>
           <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.text,
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{set.name}</p>
         </div>
@@ -4010,7 +4010,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: canStudy ? T.text : T.muted, fontSize: "0.95rem", lineHeight: 1.4, margin: 0 }}>
             {s.name}
           </p>
-          <span style={{ fontSize: "0.72rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
+          <span style={{ fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
             {s.questions.length} Questions
           </span>
           <div style={{ flex: 1, minHeight: "0.4rem" }} />
@@ -4030,7 +4030,7 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
   return (
     <Modal onClose={onClose}>
       <ModalCard pad="1.25rem" maxWidth={380} scroll>
-        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>SET ICON</p>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>SET ICON</p>
 
         {/* No icon option */}
         <div
@@ -4055,7 +4055,7 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
         {/* Categories */}
         {SET_ICONS.map(cat => (
           <div key={cat.category} style={{ marginBottom: "1.25rem" }}>
-            <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>{cat.category.toUpperCase()}</p>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>{cat.category.toUpperCase()}</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.5rem" }}>
               {cat.icons.map(icon => {
                 const active = currentIcon === icon.id;
@@ -4131,11 +4131,11 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
     <div style={{ marginBottom: "1.25rem" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem", cursor: "pointer" }}
         onClick={() => setCollapsed(c => !c)}>
-        <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em",
+        <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em",
           color: T.accent, fontWeight: 600, flex: 1 }}>
           {tag.toUpperCase()}
         </span>
-        <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO }}>
+        <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>
           {tagSets.length} set{tagSets.length !== 1 ? "s" : ""}
         </span>
         <span style={{ color: T.muted, display: "flex", marginLeft: "0.25rem", transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>
@@ -4255,8 +4255,8 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
             <div style={{ marginBottom: "1.25rem" }}>
               {allTags.length > 0 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
-                  <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted, fontWeight: 600 }}>UNTAGGED</span>
-                  <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_MONO }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
+                  <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted, fontWeight: 600 }}>UNTAGGED</span>
+                  <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
                 </div>
               )}
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4310,7 +4310,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
         <div>
           {recentSets.length > 0 && (
             <div style={{ marginBottom: "1.5rem" }}>
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
                 Recent Sets
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4320,7 +4320,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           )}
           {recentHistory.length > 0 && (
             <div>
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
                 Recent Sessions
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4349,7 +4349,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {/* Sets results */}
       {matchedSets.length > 0 && (
         <div style={{ marginBottom: "1.5rem" }}>
-          <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+          <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
             Sets · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4361,7 +4361,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
       {/* History results */}
       {matchedHistory.length > 0 && (
         <div>
-          <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
+          <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, marginBottom: "0.75rem" }}>
             HISTORY · {matchedHistory.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
@@ -4411,7 +4411,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Your Sets</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Your Sets</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                   <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }}
                     className={`button button-round ${(!!setsActiveTag || setsFilterOpen) ? 'button-tonal' : 'button-raised'}`}
@@ -4467,7 +4467,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         <>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Recent</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted, fontWeight: 500 }}>Recent</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }}
                   className={`button button-round ${(historySortOpen || historySortBy !== "date-desc") ? 'button-tonal' : 'button-raised'}`}
@@ -4543,7 +4543,7 @@ function TopicBar({ topic, correct, total }) {
       <div style={{ marginBottom: "0.35rem" }}>
         <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", fontWeight: 500, color: T.text,
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.15rem" }}>{topic}</p>
-        <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", color, fontWeight: 600 }}>
+        <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color, fontWeight: 600 }}>
           {correct}/{total} · {pct}%
         </span>
       </div>
@@ -4619,7 +4619,7 @@ function ExportResultsModal({ session, onClose }) {
         </div>
         <textarea ref={textareaRef} readOnly value={text}
           style={{ ...inp(), flex: 1, minHeight: "180px",
-            fontFamily: FF_MONO, fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
+            fontFamily: FF_SANS, fontSize: "1rem", lineHeight: 1.5, color: T.muted2 }} />
         <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
           <PrimaryButton onClick={handleCopy} small>{copyLabel}</PrimaryButton>
           <GhostButton onClick={onClose} small>Close</GhostButton>
@@ -4640,7 +4640,7 @@ function HistoryCard({ session, onView }) {
           overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, margin: 0 }}>
           {session.setName}
         </p>
-        <span style={{ fontSize: "0.68rem", fontFamily: FF_MONO, letterSpacing: "0.05em", color: T.muted, marginTop: "0.1rem" }}>
+        <span style={{ fontSize: "0.68rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.1rem" }}>
           {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
         </span>
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.4rem" }}>
@@ -4652,7 +4652,7 @@ function HistoryCard({ session, onView }) {
           )}
           <span style={{
             display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: FF_MONO, letterSpacing: "0.1em", fontWeight: 600,
+            fontSize: "0.63rem", fontFamily: FF_SANS, letterSpacing: "0.1em", fontWeight: 600,
             background: (passed ? T.green : T.red) + "18", color: passed ? T.green : T.red,
             border: "1px solid " + (passed ? T.green : T.red) + "44",
           }}>
@@ -4781,7 +4781,7 @@ function QuickQuestion({ sets }) {
   return (
     <div>
       <div style={{ marginBottom: "0.6rem" }}>
-        <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>Quick Question</p>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted }}>Quick Question</p>
       </div>
       <div style={card({})}>
         {isMulti && (
@@ -4814,7 +4814,7 @@ function QuickQuestion({ sets }) {
                   <span style={{
                     minWidth: "20px", height: "20px", border: "1px solid currentColor", borderRadius: "4px",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "0.65rem", fontFamily: FF_MONO, fontWeight: 600,
+                    fontSize: "0.65rem", fontFamily: FF_SANS, fontWeight: 600,
                     flexShrink: 0, marginTop: "2px", background: isSelected && !submitted ? T.accent + "33" : "transparent",
                   }}>
                     {isSelected && !submitted ? "✓" : label}
@@ -4910,10 +4910,10 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
-      <p style={{ fontFamily: FF_MONO, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: "0.3rem" }}>
+      <p style={{ fontFamily: FF_SANS, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: "0.3rem" }}>
         {value !== undefined && value !== null ? value : "—"}
       </p>
-      <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, margin: 0, marginBottom: sub ? "0.15rem" : 0 }}>
+      <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, margin: 0, marginBottom: sub ? "0.15rem" : 0 }}>
         {label}
       </p>
       {sub && <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted2, margin: 0 }}>{sub}</p>}
@@ -4921,7 +4921,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   );
 
   const sectionLabel = (text) => (
-    <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.6rem" }}>
+    <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.6rem" }}>
       {text}
     </p>
   );
@@ -4974,7 +4974,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                   ? T.mode === "light" ? T.green + "18" : "#052e16"
                   : T.mode === "light" ? T.red + "18" : "#2d0a0a",
                 display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontFamily: FF_MONO, fontWeight: 700, fontSize: "1rem",
+                <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1rem",
                   color: lastSession.score / lastSession.total >= 0.7 ? T.green : T.red }}>
                   {Math.round((lastSession.score / lastSession.total) * 100)}%
                 </span>
@@ -4984,7 +4984,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                   overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.2rem" }}>
                   {lastSession.setName}
                 </p>
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.72rem", color: T.muted }}>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>
                   {new Date(lastSession.date).toLocaleDateString(undefined, { dateStyle: "medium" })} · {lastSession.score}/{lastSession.total} correct
                 </p>
               </div>
@@ -5004,11 +5004,11 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
                   <div style={{ minWidth: 0, flex: 1 }}>
                     <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text }}>{t.topic}</span>
-                    <span style={{ fontFamily: FF_MONO, fontSize: "0.62rem", color: T.muted, marginLeft: "0.5rem" }}>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: T.muted, marginLeft: "0.5rem" }}>
                       {t.setNames.join(", ")}
                     </span>
                   </div>
-                  <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem",
+                  <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem",
                     color: t.pct >= 40 ? T.accent : T.red, fontWeight: 600, flexShrink: 0, marginLeft: "0.5rem" }}>
                     {t.pct}%
                   </span>
@@ -6297,7 +6297,7 @@ function App() {
         <Modal onClose={() => { setAllTagsModalOpen(false); setModalOpen(false); }}>
           <ModalCard pad="1.5rem" maxWidth={480} scroll>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>All Tags</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.08em", color: T.muted }}>All Tags</span>
               <button onClick={() => { setAllTagsModalOpen(false); setModalOpen(false); }} {...surfacePress()}
                 style={{ background: "none", border: "none", borderRadius: "99px", cursor: "pointer", color: T.muted, fontSize: "1.2rem", lineHeight: 1, padding: "0.25rem" }}>✕</button>
             </div>
@@ -6646,7 +6646,7 @@ function App() {
                     <>
                       {tab.label}
                       {tab.id === "history" && (history?.length ?? 0) > 0 && (
-                        <span style={{ marginLeft: "auto", background: ST.accent + "22", color: ST.accent, fontFamily: FF_MONO, fontSize: "0.65rem", fontWeight: 600, padding: "0.1rem 0.4rem", borderRadius: "99px" }}>{history.length}</span>
+                        <span style={{ marginLeft: "auto", background: ST.accent + "22", color: ST.accent, fontFamily: FF_SANS, fontSize: "0.65rem", fontWeight: 600, padding: "0.1rem 0.4rem", borderRadius: "99px" }}>{history.length}</span>
                       )}
                     </>
                   )}
@@ -6658,7 +6658,7 @@ function App() {
           {/* Recent — sets and history mixed, hidden when collapsed */}
           {!sidebarCollapsed && (sets.length > 0 || history.length > 0) && (
             <div style={{ flex: 1, overflow: "hidden", padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
-              <p style={{ fontFamily: FF_MONO, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, meta: s.questions?.length ?? 0 })),
@@ -6681,7 +6681,7 @@ function App() {
                       </svg>
                     )}
                     <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{item.name}</span>
-                    <span style={{ fontFamily: FF_MONO, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.meta}</span>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.meta}</span>
                   </button>
                 ))}
               </div>
@@ -6727,7 +6727,7 @@ function App() {
               <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center", justifyContent: "center", width: "32px", height: "32px", borderRadius: "8px", flexShrink: 0 }}>
                 <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={28} />
               </button>
-              <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted, flex: 1, textAlign: "center" }}>{`v${APP_VERSION}`}</span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted, flex: 1, textAlign: "center" }}>{`v${APP_VERSION}`}</span>
               <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: 0, borderRadius: "99px", flexShrink: 0 }} title="Collapse sidebar">
                 <svg width="16" height="16" viewBox="0 0 24 24" {...IC}>
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -6804,12 +6804,12 @@ function App() {
             <>
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
 
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
-                <p style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}><BackgroundPicker bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle} /></div>
               </div>
             </>
