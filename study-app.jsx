@@ -5498,7 +5498,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
     <>
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
         onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
-      {open && <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={() => setOpen(false)} />}
+      {open && <div style={{ position: "fixed", inset: 0, zIndex: 109, pointerEvents: "all" }} onPointerDown={() => setOpen(false)} />}
       {open && menuPos && (
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.5rem",
@@ -5507,7 +5507,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
           position: "fixed",
           bottom: menuPos.bottom + "px",
           right: menuPos.right + "px",
-          zIndex: 110,
+          zIndex: 110, pointerEvents: "all",
         }}>
           {[
             { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
