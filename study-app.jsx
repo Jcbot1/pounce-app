@@ -4383,7 +4383,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
   const welcomeText = (() => {
     const h = new Date().getHours();
-    const name = profileName && profileName !== "Profile" ? `, ${profileName}` : "";
+    const name = profileName ? `, ${profileName}` : "";
     if (h < 12) return `Good morning${name}.`;
     if (h < 17) return `Good afternoon${name}.`;
     if (h < 21) return `Good evening${name}.`;
