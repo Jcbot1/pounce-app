@@ -5936,7 +5936,7 @@ function App() {
   const [screen, setScreen]            = useState("home");
   const isTablet     = windowWidth >= BREAKPOINT_TABLET && windowWidth < BREAKPOINT_DESKTOP;
   const isDesktop    = windowWidth >= BREAKPOINT_DESKTOP;
-  const showSidebar  = !isMobile && screen !== "review" && screen !== "edit" && screen !== "results" && screen !== "historyResults";
+  const showSidebar  = !isMobile && screen !== "review";
   const cardColumns  = isDesktop ? 3 : isTablet ? 2 : 1;
   const [homeTab, setHomeTab]          = useState("home");
   const prevHomeTabRef = useRef("home");
