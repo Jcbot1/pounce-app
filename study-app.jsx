@@ -5489,17 +5489,54 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
 // NAVIGATION & FAB
 // ════════════════════════════════════════════════════════════════════════
 
-function HomeFAB({ onCreate, disabled }) {
+function HomeFAB({ onCreate, onImport, disabled }) {
+  const [open, setOpen] = useState(false);
+  const [btnCenter, setBtnCenter] = useState(null);
+  const fileRef = useRef(null);
   if (disabled) return null;
   return (
-    <div style={{ flexShrink: 0, pointerEvents: "all" }}>
-      <GradientBorderButton onClick={() => onCreate()} size="62px">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-          <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-        </svg>
-      </GradientBorderButton>
-    </div>
+    <>
+      <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
+        onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
+      {open && <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={() => setOpen(false)} />}
+      {open && (
+        <div style={{
+          display: "flex", flexDirection: "column", gap: "0.4rem",
+          alignItems: "center",
+          animation: "menuIn 0.2s ease forwards",
+          position: "fixed",
+          bottom: "calc(21px + 62px + 10px)",
+          left: btnCenter !== null ? btnCenter + "px" : "50%",
+          transform: "translateX(-50%)",
+          zIndex: 110, width: 0, overflow: "visible",
+        }}>
+          <FabMenuButton onClick={() => { onCreate(); setOpen(false); }} color={T.accent}>
+            Create
+          </FabMenuButton>
+          <FabMenuButton onClick={() => { fileRef.current?.click(); setOpen(false); }}>
+            Import
+          </FabMenuButton>
+        </div>
+      )}
+      <div style={{ flexShrink: 0, pointerEvents: "all" }}>
+        <GradientBorderButton onClick={e => {
+          const r = e.currentTarget.getBoundingClientRect();
+          setBtnCenter(r.left + r.width / 2);
+          setOpen(o => !o);
+        }} size="62px">
+          <span style={{
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            transform: open ? "rotate(45deg)" : "rotate(0deg)",
+            transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          }}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
+              <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
+            </svg>
+          </span>
+        </GradientBorderButton>
+      </div>
+    </>
   );
 }
 
@@ -6089,6 +6126,27 @@ function App() {
       return [...prev, ...sessions.filter(s => !existingIds.has(s.id))];
     });
   }
+  function handleSmartImport(f) {
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        const inc = Array.isArray(parsed) ? parsed : [parsed];
+        const isHist = inc.every(s => s && s.setName && Array.isArray(s.results));
+        if (isHist) {
+          const v = inc.filter(validateSession);
+          if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); }
+          else showToast("No valid history found.");
+        } else {
+          const v = inc.filter(validateSet);
+          if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); }
+          else showToast("No valid sets found.");
+        }
+      } catch { showToast("Could not read file — invalid JSON."); }
+    };
+    r.readAsText(f);
+  }
   function handleDeleteHistory(id) {
     setHistory(prev => prev.filter(s => s.id !== id));
   }
@@ -6398,7 +6456,7 @@ function App() {
               onSaveProfile={handleSaveProfile}
               onRequestClear={() => setShowClearConfirm(true)}
               forceMobile={isMobile} onToggleForceMobile={() => setForceMobile(f => f === true ? false : true)}
-              onSmartImport={f => { if (!f) return; const r = new FileReader(); r.onload = ev => { try { const parsed = JSON.parse(ev.target.result); const inc = Array.isArray(parsed) ? parsed : [parsed]; const isHist = inc.every(s => s && s.setName && Array.isArray(s.results)); if (isHist) { const v = inc.filter(validateSession); if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); } else showToast("No valid history found."); } else { const v = inc.filter(validateSet); if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); } else showToast("No valid sets found."); } } catch { showToast("Could not read file — invalid JSON."); } }; r.readAsText(f); }}
+              onSmartImport={handleSmartImport}
               activeSet={activeSet}
               allTags={allTags}
               onRenameActiveSet={(id, name) => { handleRename(id, name); setActiveSet(s => s && s.id === id ? { ...s, name } : s); }}
@@ -6499,6 +6557,7 @@ function App() {
               fabSlot={
                 <HomeFAB
                   onCreate={handleCreate}
+                  onImport={handleSmartImport}
                   disabled={modalOpen}
                 />
               }
