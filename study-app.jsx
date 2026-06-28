@@ -6700,11 +6700,11 @@ function App() {
             padding: "1.5rem 0.75rem 0.6rem",
             display: "flex", flexDirection: "column", gap: "0.25rem",
           }}>
-            {/* When collapsed: profile above toggle above cog */}
+            {/* When collapsed: profile icon (opens settings) above toggle */}
             {sidebarCollapsed && (
               <>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.1rem" }}>
-                  <button onClick={() => setSidebarProfileOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", display: "flex", alignItems: "center", borderRadius: "8px" }}
+                  <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", display: "flex", alignItems: "center", borderRadius: "8px" }}
                     onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
                     onMouseLeave={e => e.currentTarget.style.background = "none"}>
                     <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={30} />
@@ -6721,30 +6721,13 @@ function App() {
                 </div>
               </>
             )}
-            {/* Profile — expanded only */}
-            {!sidebarCollapsed && (
-              <button onClick={() => setSidebarProfileOpen(true)} style={{
-                background: "none", border: "none", cursor: "pointer", padding: "0.4rem 0.25rem",
-                display: "flex", alignItems: "center", gap: "0.6rem", borderRadius: "12px",
-                width: "100%",
-              }}
-                onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
-                onMouseLeave={e => e.currentTarget.style.background = "none"}>
-                <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={24} />
-                <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500, color: ST.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {profileName || "Profile"}
-                </span>
-              </button>
-            )}
-
-            {/* Bottom row */}
+            {/* Bottom row — expanded only */}
             {!sidebarCollapsed && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: 0, borderRadius: "99px", flexShrink: 0 }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" {...IC}>
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
+              <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.15rem", display: "flex", alignItems: "center", borderRadius: "8px", flexShrink: 0 }}
+                onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
+                onMouseLeave={e => e.currentTarget.style.background = "none"}>
+                <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={28} />
               </button>
               <span style={{ fontFamily: FF_MONO, fontSize: "0.65rem", letterSpacing: "0.08em", color: ST.muted }}>{`v${APP_VERSION}`}</span>
               <button onClick={() => setSidebarCollapsed(c => !c)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: 0, borderRadius: "99px", flexShrink: 0 }} title="Collapse sidebar">
@@ -6755,17 +6738,6 @@ function App() {
                 </svg>
               </button>
             </div>
-            )}
-            {/* Collapsed: just the cog */}
-            {sidebarCollapsed && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <button ref={sidebarCogRef} onClick={() => setSidebarAppearanceOpen(o => !o)} style={{ background: "none", border: "none", cursor: "pointer", color: ST.muted, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", padding: 0, borderRadius: "99px", flexShrink: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" {...IC}>
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                  </svg>
-                </button>
-              </div>
             )}
           </div>
         </div>
@@ -6804,7 +6776,21 @@ function App() {
 
           {sidebarSection === null && (
             <>
-              <HamburgerSectionHeader label="SETTINGS" onBack={() => setSidebarAppearanceOpen(false)} noBorder />
+              <button onClick={() => { setSidebarAppearanceOpen(false); setSidebarProfileOpen(true); }} style={{
+                background: "none", border: "none", cursor: "pointer",
+                padding: "0.65rem 1rem",
+                display: "flex", alignItems: "center", gap: "0.75rem",
+                width: "100%", textAlign: "left",
+                borderBottom: "1px solid " + ST.border,
+                borderRadius: "8px 8px 0 0",
+              }}
+                onMouseEnter={e => e.currentTarget.style.background = ST.surface2}
+                onMouseLeave={e => e.currentTarget.style.background = "none"}>
+                <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={32} />
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 600, color: ST.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {profileName || "Profile"}
+                </span>
+              </button>
 
               <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
               <div style={{ padding: "0.25rem 0.5rem" }}>
