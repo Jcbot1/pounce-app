@@ -5058,10 +5058,10 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, fa
         opacity: disabled ? 0.4 : 1,
       }}>
       {/* Pill + FAB wrapper */}
-      <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+      <div style={{ width: "100%", display: "flex", alignItems: "center", gap: "0.5rem" }}>
       {/* Tab pill */}
       <div style={{
-        width: "225px",
+        flex: 1,
         display: "flex", alignItems: "center",
         background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(143,139,152,0.20)",
         backdropFilter: "blur(20px)",
@@ -5489,7 +5489,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
 function HomeFAB({ onCreate, disabled }) {
   if (disabled) return null;
   return (
-    <div style={{ position: "absolute", left: "calc(100% + 0.5rem)", bottom: 0, pointerEvents: "all" }}>
+    <div style={{ flexShrink: 0, pointerEvents: "all" }}>
       <GradientBorderButton onClick={() => onCreate()} size="62px">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
