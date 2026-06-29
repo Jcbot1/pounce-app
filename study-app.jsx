@@ -4412,22 +4412,6 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
     }
   }, [tab]);
 
-  // Clip off-screen panels at the viewport level so card shadows inside the
-  // parent's 1rem padding zone are never cut off (overflow on the container
-  // itself would clip shadows that fall in that padding zone).
-  useEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
-    const prevHtml = html.style.overflowX;
-    const prevBody = body.style.overflowX;
-    html.style.overflowX = "hidden";
-    body.style.overflowX = "hidden";
-    return () => {
-      html.style.overflowX = prevHtml;
-      body.style.overflowX = prevBody;
-    };
-  }, []);
-
   // Touch event listeners — must use imperative addEventListener for passive:false
   useEffect(() => {
     const container = containerRef.current;
@@ -4482,6 +4466,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
+    <div style={{ margin: "0 -1rem", overflow: "hidden" }}>
     <div ref={containerRef} style={{ width: "100%" }}>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
       {pickingSet && (
@@ -4500,14 +4485,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         alignItems: "flex-start",
       }}>
         {/* HOME panel */}
-        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0 }}>
+        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
           <div style={{ marginTop: "11px" }}>
             <Dashboard history={history} sets={sets} onStudy={onStudy} onViewHistory={onViewHistory} />
           </div>
         </div>
 
         {/* SETS panel */}
-        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0 }}>
+        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
@@ -4561,7 +4546,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         </div>
 
         {/* HISTORY panel */}
-        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0 }}>
+        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
@@ -4623,6 +4608,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
           cardColumns={cardColumns}
         />
       )}
+    </div>
     </div>
   );
 }
