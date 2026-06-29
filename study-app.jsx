@@ -4017,7 +4017,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           <div style={{ flex: 1, minHeight: "0.4rem" }} />
           {(s.tags && s.tags.length > 0) && (
             <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
-              {s.tags.slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
+              {[...s.tags].sort((a, b) => a.localeCompare(b)).slice(0, 5).map(tag => <TagChip key={tag} tag={tag} />)}
             </div>
           )}
         </div>
