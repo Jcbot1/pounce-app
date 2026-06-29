@@ -4593,23 +4593,25 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
       {/* ── SEARCH TAB (not in slider) ── */}
       {tab === "search" && (
-        <SearchScreen
-          sets={sets}
-          history={history}
-          allTags={allTags}
-          onEdit={onEdit}
-          onStudy={s => setPickingSet(s)}
-          onViewHistory={onViewHistory}
-          onDelete={onDelete}
-          onDeleteHistory={onDeleteHistory}
-          onSetTags={onSetTags}
-          onSetIcon={onSetIcon}
-          onRename={onRename}
-          onExport={setExportingSet}
-          inputRef={searchInputRef}
-          query={searchQuery}
-          cardColumns={cardColumns}
-        />
+        <div style={{ padding: "0 1rem" }}>
+          <SearchScreen
+            sets={sets}
+            history={history}
+            allTags={allTags}
+            onEdit={onEdit}
+            onStudy={s => setPickingSet(s)}
+            onViewHistory={onViewHistory}
+            onDelete={onDelete}
+            onDeleteHistory={onDeleteHistory}
+            onSetTags={onSetTags}
+            onSetIcon={onSetIcon}
+            onRename={onRename}
+            onExport={setExportingSet}
+            inputRef={searchInputRef}
+            query={searchQuery}
+            cardColumns={cardColumns}
+          />
+        </div>
       )}
     </div>
     </div>
