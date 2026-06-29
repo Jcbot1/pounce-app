@@ -4405,12 +4405,15 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   }, []);
 
   // Animate to correct position when tab changes from outside (pill taps, etc.)
+  const isFirstTabRender = useRef(true);
   useEffect(() => {
     tabRef.current = tab;
     if (tab !== "search") {
       lastRealTabRef.current = tab;
       setTrackX(TAB_ORDER.indexOf(tab), 0, true);
+      if (!isFirstTabRender.current) window.scrollTo({ top: 0, behavior: "instant" });
     }
+    isFirstTabRender.current = false;
   }, [tab]);
 
   // Keep page height = active panel height so off-screen panels don't add scroll space
