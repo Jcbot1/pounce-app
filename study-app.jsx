@@ -4412,6 +4412,22 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
     }
   }, [tab]);
 
+  // Clip off-screen panels at the viewport level so card shadows inside the
+  // parent's 1rem padding zone are never cut off (overflow on the container
+  // itself would clip shadows that fall in that padding zone).
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtml = html.style.overflowX;
+    const prevBody = body.style.overflowX;
+    html.style.overflowX = "hidden";
+    body.style.overflowX = "hidden";
+    return () => {
+      html.style.overflowX = prevHtml;
+      body.style.overflowX = prevBody;
+    };
+  }, []);
+
   // Touch event listeners — must use imperative addEventListener for passive:false
   useEffect(() => {
     const container = containerRef.current;
@@ -4466,7 +4482,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <div ref={containerRef} style={{ overflowX: "clip", overflowClipMargin: "12px", width: "100%" }}>
+    <div ref={containerRef} style={{ width: "100%" }}>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
       {pickingSet && (
         <SessionPicker
