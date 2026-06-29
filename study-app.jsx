@@ -4380,11 +4380,93 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
   useEffect(() => { if (onModalChange) onModalChange(!!pickingSet); }, [pickingSet]);
 
-  // All unique tags across all sets
   const untaggedSets = sets.filter(s => !s.tags || s.tags.length === 0);
 
+  // ── Swipe / sliding track ─────────────────────────────────────────────────
+  const TAB_ORDER = ["home", "sets", "history"];
+  const trackRef       = useRef(null);
+  const containerRef   = useRef(null);
+  const tabRef         = useRef(tab);
+  const lastRealTabRef = useRef(tab !== "search" ? tab : "home");
+  const swipeRef       = useRef({ startX: 0, startY: 0, axis: null });
+
+  function setTrackX(idx, extraPx, animated) {
+    const el = trackRef.current;
+    if (!el) return;
+    const base = -(idx / TAB_ORDER.length) * 100;
+    el.style.transition = animated ? "transform 0.32s cubic-bezier(0.25, 1, 0.5, 1)" : "none";
+    el.style.transform  = extraPx ? `translateX(calc(${base}% + ${extraPx}px))` : `translateX(${base}%)`;
+  }
+
+  // Set initial position before first paint to avoid flash
+  React.useLayoutEffect(() => {
+    setTrackX(TAB_ORDER.indexOf(lastRealTabRef.current), 0, false);
+  }, []);
+
+  // Animate to correct position when tab changes from outside (pill taps, etc.)
+  useEffect(() => {
+    tabRef.current = tab;
+    if (tab !== "search") {
+      lastRealTabRef.current = tab;
+      setTrackX(TAB_ORDER.indexOf(tab), 0, true);
+    }
+  }, [tab]);
+
+  // Touch event listeners — must use imperative addEventListener for passive:false
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    function onTouchStart(e) {
+      if (tabRef.current === "search") return;
+      const t = e.touches[0];
+      swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null };
+    }
+
+    function onTouchMove(e) {
+      if (tabRef.current === "search") return;
+      const t  = e.touches[0];
+      const dx = t.clientX - swipeRef.current.startX;
+      const dy = t.clientY - swipeRef.current.startY;
+      if (swipeRef.current.axis === null) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        swipeRef.current.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      }
+      if (swipeRef.current.axis !== "x") return;
+      e.preventDefault();
+      const idx = TAB_ORDER.indexOf(lastRealTabRef.current);
+      let clamped = dx;
+      if (idx === 0 && dx > 0)                       clamped = dx * 0.25;
+      if (idx === TAB_ORDER.length - 1 && dx < 0)    clamped = dx * 0.25;
+      setTrackX(idx, clamped, false);
+    }
+
+    function onTouchEnd(e) {
+      if (swipeRef.current.axis !== "x") { swipeRef.current.axis = null; return; }
+      const t      = e.changedTouches[0];
+      const dx     = t.clientX - swipeRef.current.startX;
+      const idx    = TAB_ORDER.indexOf(lastRealTabRef.current);
+      let newIdx   = idx;
+      if (dx < -50 && idx < TAB_ORDER.length - 1) newIdx = idx + 1;
+      else if (dx > 50 && idx > 0)                newIdx = idx - 1;
+      setTrackX(newIdx, 0, true);
+      if (newIdx !== idx) setTab(TAB_ORDER[newIdx]);
+      swipeRef.current.axis = null;
+    }
+
+    container.addEventListener("touchstart", onTouchStart, { passive: true });
+    container.addEventListener("touchmove",  onTouchMove,  { passive: false });
+    container.addEventListener("touchend",   onTouchEnd,   { passive: true });
+    return () => {
+      container.removeEventListener("touchstart", onTouchStart);
+      container.removeEventListener("touchmove",  onTouchMove);
+      container.removeEventListener("touchend",   onTouchEnd);
+    };
+  }, []);
+  // ─────────────────────────────────────────────────────────────────────────
+
   return (
-    <div>
+    <div ref={containerRef} style={{ overflow: "hidden", width: "100%" }}>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
       {pickingSet && (
         <SessionPicker
@@ -4395,33 +4477,33 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         />
       )}
 
-      {/* ── HOME TAB ── */}
-      {tab === "home" && (
-        <div style={{ marginTop: "11px" }}>
-          <Dashboard
-            history={history}
-            sets={sets}
-            onStudy={onStudy}
-            onViewHistory={onViewHistory}
-          />
+      {/* ── Sliding track (home / sets / history) ── */}
+      <div ref={trackRef} style={{
+        display: tab === "search" ? "none" : "flex",
+        width: `${TAB_ORDER.length * 100}%`,
+        alignItems: "flex-start",
+      }}>
+        {/* HOME panel */}
+        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0 }}>
+          <div style={{ marginTop: "11px" }}>
+            <Dashboard history={history} sets={sets} onStudy={onStudy} onViewHistory={onViewHistory} />
+          </div>
         </div>
-      )}
 
-      {/* ── SETS TAB ── */}
-      {tab === "sets" && (
-        <>
+        {/* SETS panel */}
+        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0 }}>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
-                  <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }}
-                    className={`button button-round ${(!!setsActiveTag || setsFilterOpen) ? 'button-tonal' : 'button-raised'}`}
-                    style={{ gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
-                      ...((!!setsActiveTag || setsFilterOpen) ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
-                    <FilterIcon size={13} />
-                    <span style={{ fontSize: "0.85rem" }}>{setsActiveTag ? (setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag) : "All"}</span>
-                  </button>
-                {setsFilterOpen && (
+                <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setSetsFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setSetsFilterOpen(o => !o); }}
+                  className={`button button-round ${(!!setsActiveTag || setsFilterOpen) ? "button-tonal" : "button-raised"}`}
+                  style={{ gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
+                    ...((!!setsActiveTag || setsFilterOpen) ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
+                  <FilterIcon size={13} />
+                  <span style={{ fontSize: "0.85rem" }}>{setsActiveTag ? (setsActiveTag === "__untagged__" ? "Untagged" : setsActiveTag) : "All"}</span>
+                </button>
+                {setsFilterOpen && ReactDOM.createPortal(
                   <>
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setSetsFilterOpen(false)} />
                     <div className="menu-open" style={{ position: "fixed", top: setsFilterPos.top, right: setsFilterPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "16px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "160px" }}>
@@ -4440,44 +4522,42 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                         </button>
                       )}
                     </div>
-                  </>
+                  </>,
+                  document.body
                 )}
               </div>
             </div>
           )}
           <SetsTab
-          sets={sets} allTags={allTags} untaggedSets={untaggedSets}
-          onEdit={onEdit} onExport={setExportingSet}
-          onStudy={s => setPickingSet(s)} onDelete={onDelete}
-          onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
-          externalSearch={externalSearch}
-          externalActiveTag={externalActiveTag}
-          externalFilterOpen={externalFilterOpen}
-          onSetFilterOpen={onSetFilterOpen}
-          onSetActiveTag={onSetActiveTag}
-          cardColumns={cardColumns}
-          onCreate={tag => onCreate(tag)}
-          history={history}
-        />
+            sets={sets} allTags={allTags} untaggedSets={untaggedSets}
+            onEdit={onEdit} onExport={setExportingSet}
+            onStudy={s => setPickingSet(s)} onDelete={onDelete}
+            onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
+            externalSearch={externalSearch}
+            externalActiveTag={externalActiveTag}
+            externalFilterOpen={externalFilterOpen}
+            onSetFilterOpen={onSetFilterOpen}
+            onSetActiveTag={onSetActiveTag}
+            cardColumns={cardColumns}
+            onCreate={tag => onCreate(tag)}
+            history={history}
+          />
+        </div>
 
-        </>
-      )}
-
-      {/* ── HISTORY TAB ── */}
-      {tab === "history" && (
-        <>
+        {/* HISTORY panel */}
+        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0 }}>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
               <div style={{ position: "relative", flexShrink: 0 }}>
                 <button {...glassPress()} onClick={e => { const rect = e.currentTarget.parentElement.getBoundingClientRect(); setHistorySortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right }); setHistorySortOpen(o => !o); }}
-                  className={`button button-round ${(historySortOpen || historySortBy !== "date-desc") ? 'button-tonal' : 'button-raised'}`}
+                  className={`button button-round ${(historySortOpen || historySortBy !== "date-desc") ? "button-tonal" : "button-raised"}`}
                   style={{ gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
                     ...((historySortOpen || historySortBy !== "date-desc") ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" {...IC}><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
                   <span style={{ fontSize: "0.9rem" }}>{{ "date-desc": "Newest", "date-asc": "Oldest", "score-desc": "Score ↓", "score-asc": "Score ↑" }[historySortBy] || "Sort"}</span>
                 </button>
-                {historySortOpen && (
+                {historySortOpen && ReactDOM.createPortal(
                   <>
                     <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setHistorySortOpen(false)} />
                     <div className="menu-open" style={{ position: "fixed", top: historySortPos.top, right: historySortPos.right, zIndex: 9999, background: T.mode === "light" ? "#ffffff" : "#1e1630", border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"), borderRadius: "16px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)", minWidth: "180px" }}>
@@ -4489,24 +4569,25 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
                         </button>
                       ))}
                     </div>
-                  </>
+                  </>,
+                  document.body
                 )}
               </div>
             </div>
           )}
           <ResultsHistoryView
-          history={history}
-          onImport={onImportHistory}
-          onDelete={onDeleteHistory}
-          onView={onViewHistory}
-          externalSearch={externalHistorySearch}
-          externalSortBy={externalHistorySortBy}
-          cardColumns={cardColumns}
-        />
-        </>
-      )}
+            history={history}
+            onImport={onImportHistory}
+            onDelete={onDeleteHistory}
+            onView={onViewHistory}
+            externalSearch={externalHistorySearch}
+            externalSortBy={externalHistorySortBy}
+            cardColumns={cardColumns}
+          />
+        </div>
+      </div>
 
-      {/* ── SEARCH TAB ── */}
+      {/* ── SEARCH TAB (not in slider) ── */}
       {tab === "search" && (
         <SearchScreen
           sets={sets}
