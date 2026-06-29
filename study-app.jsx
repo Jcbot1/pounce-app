@@ -4170,12 +4170,15 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
               display: "grid",
               gridTemplateRows: "repeat(2, auto)",
               gridAutoFlow: "column",
-              gridAutoColumns: "260px",
+              gridAutoColumns: "calc(100vw - 3.5rem)",
               columnGap: "0.75rem",
               overflowX: "auto",
               scrollbarWidth: "none",
+              paddingLeft: "1rem",
+              paddingRight: "0.75rem",
               paddingBottom: "0.5rem",
-              paddingRight: "1rem",
+              marginLeft: "-1rem",
+              marginRight: "-1rem",
             }}
           >
             {tagSets.map(s => (
@@ -4292,12 +4295,15 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                   display: "grid",
                   gridTemplateRows: "repeat(2, auto)",
                   gridAutoFlow: "column",
-                  gridAutoColumns: "260px",
+                  gridAutoColumns: "calc(100vw - 3.5rem)",
                   columnGap: "0.75rem",
                   overflowX: "auto",
                   scrollbarWidth: "none",
+                  paddingLeft: "1rem",
+                  paddingRight: "0.75rem",
                   paddingBottom: "0.5rem",
-                  paddingRight: "1rem",
+                  marginLeft: "-1rem",
+                  marginRight: "-1rem",
                 }}
               >
                 {untaggedSets.map(s => {
