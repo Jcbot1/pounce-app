@@ -3298,7 +3298,6 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted, flexShrink: 0 }}>
                   Q{i + 1}
                 </span>
-                <Tag label={TYPE_META[q.type].label} color={TYPE_META[q.type].color} />
                 {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
                 <span style={{ flex: 1 }} />
                 <span style={{ color: T.muted, display: "flex", flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC}><polyline points="6 9 12 15 18 9"/></svg></span>
@@ -4980,7 +4979,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
-                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", marginBottom: "0.2rem" }}>
+                  marginBottom: "0.2rem" }}>
                   {lastSession.setName}
                 </p>
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>
@@ -5037,6 +5036,9 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 }
 
 function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, fabSlot }) {
+  const [lastRealTab, setLastRealTab] = React.useState(homeTab !== "search" ? homeTab : "home");
+  React.useEffect(() => { if (homeTab !== "search") setLastRealTab(homeTab); }, [homeTab]);
+
   const pillBg     = T.mode === "light" ? "#e2e8f0" : "#1e1630";
 
   const pillShadow = T.mode === "light"
@@ -5078,7 +5080,8 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, fa
         <div style={{
           position: "absolute",
           top: "0.25rem", bottom: "0.25rem",
-          left: homeTab === "home" ? "0.25rem" : homeTab === "sets" ? "calc(33.33% + 0.06rem)" : homeTab === "history" ? "calc(66.67% - 0.06rem)" : "-100%",
+          left: homeTab === "home" ? "0.25rem" : homeTab === "sets" ? "calc(33.33% + 0.06rem)" : homeTab === "history" ? "calc(66.67% - 0.06rem)" :
+            lastRealTab === "home" ? "0.25rem" : lastRealTab === "sets" ? "calc(33.33% + 0.06rem)" : "calc(66.67% - 0.06rem)",
           width: "calc(33.33% - 0.17rem)",
           opacity: homeTab === "search" ? 0 : 1,
           borderRadius: "99px",
