@@ -4420,11 +4420,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
     function onTouchStart(e) {
       if (tabRef.current === "search") return;
       const t = e.touches[0];
-      swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null };
+      const EDGE = 60;
+      const fromEdge = t.clientX < EDGE || t.clientX > window.innerWidth - EDGE;
+      swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null, fromEdge };
     }
 
     function onTouchMove(e) {
       if (tabRef.current === "search") return;
+      if (!swipeRef.current.fromEdge) return;
       const t  = e.touches[0];
       const dx = t.clientX - swipeRef.current.startX;
       const dy = t.clientY - swipeRef.current.startY;
