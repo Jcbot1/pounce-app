@@ -244,7 +244,7 @@ function ModalCard({ children, maxWidth = 420, pad = "1.75rem", scroll = false, 
       onClick={e => e.stopPropagation()}>
       <div style={{
         padding: pad,
-        display: "flex", flexDirection: "column", gap: "1rem",
+        display: "flex", flexDirection: "column", gap: "1.25rem",
         ...(scroll ? { overflowY: "auto", maxHeight: "80vh" } : {}),
       }}>
         {children}
@@ -269,7 +269,7 @@ function KebabMenuItem({ onClick, children, color, danger = false }) {
       style={{
         display: "flex", alignItems: "center", gap: "0.6rem",
         width: "100%", textAlign: "left", background: "transparent",
-        border: "none", padding: "0.85rem 1.1rem",
+        border: "none", padding: "0.95rem 1.1rem",
         fontFamily: FF_SANS, fontSize: "0.9rem",
         color: color || T.text, cursor: "pointer",
       }}>
@@ -302,7 +302,7 @@ function HamburgerMenuItem({ onClick, children, right, color, danger = false, st
       style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
         width: "100%", textAlign: "left", background: "transparent", border: "none",
-        padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem",
+        padding: "1rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem",
         color: color || T.text, cursor: "pointer", ...extraStyle,
       }}>
       {children}
@@ -333,7 +333,7 @@ function AnswerButton({ onClick, children, bg, color, submitted, label, style: e
     <button onClick={onClick}
       className="button button-raised"
       style={{
-        background: bg, color, borderRadius: "12px", padding: "1rem 1.1rem",
+        background: bg, color, borderRadius: "12px", padding: "1.1rem 1.25rem",
         textAlign: "left", cursor: submitted ? "default" : "pointer",
         fontFamily: FF_SANS, fontSize: "0.93rem", lineHeight: 1.5,
         display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.7rem",
@@ -2924,7 +2924,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         style={{
         display: "flex", gap: "0.35rem", overflowX: "auto", overflowY: "visible",
         paddingBottom: "0.5rem", paddingTop: "0.5rem", paddingLeft: "0.35rem",
-        marginBottom: "1.25rem", scrollbarWidth: "none", cursor: "grab",
+        marginBottom: "1.5rem", scrollbarWidth: "none", cursor: "grab",
         maskImage: `linear-gradient(to right, ${bubbleAtStart ? "black" : "transparent"} 0%, black 10%, black 88%, ${bubbleAtEnd ? "black" : "transparent"} 100%)`,
         WebkitMaskImage: `linear-gradient(to right, ${bubbleAtStart ? "black" : "transparent"} 0%, black 10%, black 88%, ${bubbleAtEnd ? "black" : "transparent"} 100%)`,
       }}>
@@ -2974,7 +2974,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
 
       {/* Question card — flashcard has its own layout */}
       {q.type === "flashcard" ? (
-        <div ref={topRef} style={{ scrollMarginTop: "80px", marginBottom: "1rem" }}>
+        <div ref={topRef} style={{ scrollMarginTop: "80px", marginBottom: "1.25rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem" }}>
             {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
             <span style={{ flex: 1 }} />
@@ -2996,7 +2996,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           <ReviewFlashcard q={q} onGrade={handleFlashcardGrade} submitted={isSubmitted} results={pastResult} />
         </div>
       ) : (
-      <div ref={topRef} style={{ ...card({ marginBottom: "1rem" }), scrollMarginTop: "80px" }}>
+      <div ref={topRef} style={{ ...card({ marginBottom: "1.25rem" }), scrollMarginTop: "80px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.9rem" }}>
           {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
           <span style={{ flex: 1 }} />
@@ -4171,15 +4171,15 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
                 display: "grid",
                 gridTemplateRows: "repeat(2, auto)",
                 gridAutoFlow: "column",
-                gridAutoColumns: "calc(100vw - 3.5rem)",
+                gridAutoColumns: "calc(100vw - 3.75rem)",
                 columnGap: "0.75rem",
                 overflowX: "auto",
                 scrollbarWidth: "none",
-                paddingLeft: "1rem",
+                paddingLeft: "1.25rem",
                 paddingRight: "0.75rem",
                 paddingBottom: "0.5rem",
-                marginLeft: "-1rem",
-                marginRight: "-1rem",
+                marginLeft: "-1.25rem",
+                marginRight: "-1.25rem",
               }}
             >
               {tagSets.map(s => (
@@ -4309,15 +4309,15 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                     display: "grid",
                     gridTemplateRows: "repeat(2, auto)",
                     gridAutoFlow: "column",
-                    gridAutoColumns: "calc(100vw - 3.5rem)",
+                    gridAutoColumns: "calc(100vw - 3.75rem)",
                     columnGap: "0.75rem",
                     overflowX: "auto",
                     scrollbarWidth: "none",
-                    paddingLeft: "1rem",
+                    paddingLeft: "1.25rem",
                     paddingRight: "0.75rem",
                     paddingBottom: "0.5rem",
-                    marginLeft: "-1rem",
-                    marginRight: "-1rem",
+                    marginLeft: "-1.25rem",
+                    marginRight: "-1.25rem",
                   }}
                 >
                   {untaggedSets.map(s => {
@@ -4568,7 +4568,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ margin: "0 -1rem", overflow: "hidden" }}>
+    <div style={{ margin: "0 -1.25rem", overflow: "hidden" }}>
     <div ref={containerRef} style={{ width: "100%" }}>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
       {pickingSet && (
@@ -4587,14 +4587,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         alignItems: "flex-start",
       }}>
         {/* HOME panel */}
-        <div ref={panelRefs[0]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem 1rem" }}>
+        <div ref={panelRefs[0]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1.25rem 1.5rem" }}>
           <div style={{ marginTop: "11px" }}>
             <Dashboard history={history} sets={sets} onStudy={onStudy} onViewHistory={onViewHistory} />
           </div>
         </div>
 
         {/* SETS panel */}
-        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem 1rem" }}>
+        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1.25rem 1.5rem" }}>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
@@ -4648,7 +4648,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         </div>
 
         {/* HISTORY panel */}
-        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem 1rem" }}>
+        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1.25rem 1.5rem" }}>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
@@ -6718,7 +6718,7 @@ function App() {
         <div style={{ position: "relative", display: "flex", justifyContent: "center", flex: 1,
           padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : (screen === "review" || screen === "edit") ? "1.5rem 0 7rem" : "1.5rem 0 4rem",
         }}>
-          <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", padding: "0 1rem" }}>
+          <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", padding: "0 1.25rem" }}>
             {screen === "home" && homeTab === "home" && (() => {
               const h = new Date().getHours();
               const name = profileName ? `, ${profileName}` : "";
