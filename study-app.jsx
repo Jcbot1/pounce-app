@@ -6219,7 +6219,8 @@ function App() {
   function handleRename(setId, name) { setSets(prev => prev.map(s => s.id === setId ? { ...s, name } : s)); }
 
   function handleSave(updated) {
-    const stamped = { ...updated, updatedAt: new Date().toISOString() };
+    const stamped = { ...updated, updatedAt: new Date().toISOString(),
+      tags: updated.tags ? [...updated.tags].sort((a, b) => a.localeCompare(b)) : updated.tags };
     setSets(prev => {
       const exists = prev.find(s => s.id === stamped.id);
       if (exists) return prev.map(s => s.id === stamped.id ? stamped : s);
