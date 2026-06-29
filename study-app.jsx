@@ -1934,7 +1934,7 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
 
   function closeMenu() {
     setMenuClosing(true);
-    setTimeout(() => { setOpen(false); setMenuClosing(false); }, 310);
+    setTimeout(() => { setOpen(false); setMenuClosing(false); }, 260);
   }
 
   return (
@@ -1963,11 +1963,11 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
           }}>
             {types.map((t, idx) => {
               const n = types.length;
-              const openDelay  = (n - 1 - idx) * 45;
-              const closeDelay = idx * 38;
+              const openDelay  = (n - 1 - idx) * 35;
+              const closeDelay = idx * 28;
               const anim = menuClosing
-                ? `fabItemOut 0.15s ease-in ${closeDelay}ms both`
-                : `fabItemIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
+                ? `fabItemOut 0.13s ease-in ${closeDelay}ms both`
+                : `fabItemIn 0.20s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
               return (
                 <div key={t.type} style={{ animation: anim }}>
                   <FabMenuButton onClick={() => { onAddQuestion(t.type); closeMenu(); }} color={t.color}>
