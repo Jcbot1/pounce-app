@@ -1001,8 +1001,11 @@ function buildTheme(mode, accentKey) {
     muted:   "#88868a",
     muted2:  "#aeacb0",
   };
-  const scheme = ACCENT_SCHEMES[accentKey] || ACCENT_SCHEMES.purple;
-  const built = { ...base, ...scheme[mode === "light" ? "dark" : "light"], gradient2: scheme.gradient2 };
+  const baseKey   = accentKey.replace(/_pastel$/, "");
+  const pastelKey = baseKey + "_pastel";
+  const effectiveKey = mode === "dark" && ACCENT_SCHEMES[pastelKey] ? pastelKey : baseKey;
+  const scheme = ACCENT_SCHEMES[effectiveKey] || ACCENT_SCHEMES.purple;
+  const built = { ...base, ...scheme.dark, gradient2: scheme.gradient2 };
   // Convert accent hex to rgb string for use in rgba()
   const hex = built.accent.replace("#", "");
   built.accentRgb = [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)].join(",");
