@@ -4164,17 +4164,28 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         transition: collapsed ? "height 0.3s ease, overflow 0s 0s" : "height 0.3s ease, overflow 0s 0.3s",
       }}>
         <div ref={contentRef}>
-          <div>
-            <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
-              {tagSets.map(s => (
-                <SetCard key={s.id} s={s} allTags={allTags}
-                  onEdit={onEdit} onExport={onExport}
-                  onStudy={onStudy} onDelete={onDelete}
-                  onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
-                  lastSession={lastSession(s)} />
-              ))}
-              {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
-            </div>
+          <div
+            className="no-scrollbar"
+            style={{
+              display: "grid",
+              gridTemplateRows: "repeat(2, auto)",
+              gridAutoFlow: "column",
+              gridAutoColumns: "260px",
+              columnGap: "0.75rem",
+              overflowX: "auto",
+              scrollbarWidth: "none",
+              paddingBottom: "0.5rem",
+              paddingRight: "1rem",
+            }}
+          >
+            {tagSets.map(s => (
+              <SetCard key={s.id} s={s} allTags={allTags}
+                onEdit={onEdit} onExport={onExport}
+                onStudy={onStudy} onDelete={onDelete}
+                onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
+                lastSession={lastSession(s)} />
+            ))}
+            {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
           </div>
         </div>
       </div>
@@ -4275,7 +4286,20 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                   <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
                 </div>
               )}
-              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+              <div
+                className="no-scrollbar"
+                style={{
+                  display: "grid",
+                  gridTemplateRows: "repeat(2, auto)",
+                  gridAutoFlow: "column",
+                  gridAutoColumns: "260px",
+                  columnGap: "0.75rem",
+                  overflowX: "auto",
+                  scrollbarWidth: "none",
+                  paddingBottom: "0.5rem",
+                  paddingRight: "1rem",
+                }}
+              >
                 {untaggedSets.map(s => {
                   const ls = history.filter(h => h.setId === s.id || h.setName === s.name).sort((a,b) => new Date(b.date)-new Date(a.date))[0] || null;
                   return <SetCard key={s.id} s={s} allTags={allTags}
@@ -5392,6 +5416,8 @@ const STATIC_STYLES = `
   .press-glass-done     { transition: background 0.3s ease !important; }
 
   @keyframes sf-blur-fix { from { opacity: 0.9999; } to { opacity: 1; } }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 `;
 
 function DeleteAnimation({ onComplete }) {
