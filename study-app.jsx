@@ -1002,7 +1002,7 @@ function buildTheme(mode, accentKey) {
     muted2:  "#aeacb0",
   };
   const scheme = ACCENT_SCHEMES[accentKey] || ACCENT_SCHEMES.purple;
-  const built = { ...base, ...scheme[mode], gradient2: scheme.gradient2 };
+  const built = { ...base, ...scheme[mode === "light" ? "dark" : "light"], gradient2: scheme.gradient2 };
   // Convert accent hex to rgb string for use in rgba()
   const hex = built.accent.replace("#", "");
   built.accentRgb = [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)].join(",");
@@ -5834,8 +5834,8 @@ function BackgroundPicker({ bgStyle, onSetBgStyle, large = false }) {
 function ColorPicker({ accent, onSetAccent }) {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-      {Object.entries(ACCENT_SCHEMES).map(([key, scheme]) => (
-        <button key={key} onClick={() => onSetAccent(key)} title={scheme.label} style={{ width: "28px", height: "28px", borderRadius: "50%", background: scheme.swatch, border: accent === key ? "3px solid " + T.text : "3px solid transparent", cursor: "pointer" }} />
+      {Object.entries(ACCENT_SCHEMES).filter(([key]) => !key.endsWith("_pastel")).map(([key, scheme]) => (
+        <button key={key} onClick={() => onSetAccent(key)} title={scheme.label} style={{ width: "28px", height: "28px", borderRadius: "50%", background: scheme.swatch, border: (accent === key || accent === key + "_pastel") ? "3px solid " + T.text : "3px solid transparent", cursor: "pointer" }} />
       ))}
     </div>
   );
