@@ -4518,14 +4518,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         alignItems: "flex-start",
       }}>
         {/* HOME panel */}
-        <div ref={panelRefs[0]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
+        <div ref={panelRefs[0]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem 1rem" }}>
           <div style={{ marginTop: "11px" }}>
             <Dashboard history={history} sets={sets} onStudy={onStudy} onViewHistory={onViewHistory} />
           </div>
         </div>
 
         {/* SETS panel */}
-        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
+        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem 1rem" }}>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
@@ -4579,7 +4579,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         </div>
 
         {/* HISTORY panel */}
-        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
+        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem 1rem" }}>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
