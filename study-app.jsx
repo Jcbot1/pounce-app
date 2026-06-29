@@ -4466,7 +4466,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <div ref={containerRef} style={{ overflow: "hidden", width: "100%" }}>
+    <div ref={containerRef} style={{ overflowX: "clip", overflowClipMargin: "12px", width: "100%" }}>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
       {pickingSet && (
         <SessionPicker
