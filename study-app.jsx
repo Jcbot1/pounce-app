@@ -4952,7 +4952,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
           {statCard("Questions", totalQuestions, null, T.accent)}
           {statCard("Avg Score", avgScore != null ? avgScore + "%" : "—", null,
             avgScore >= 70 ? T.green : avgScore != null ? T.red : T.muted)}
-          {statCard("Streak", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "study today!", T.purple)}
+          {statCard("Streak", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "Study today to start your streak!", T.purple)}
         </div>
       </div>
 
