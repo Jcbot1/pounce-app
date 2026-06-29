@@ -4389,6 +4389,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   const tabRef         = useRef(tab);
   const lastRealTabRef = useRef(tab !== "search" ? tab : "home");
   const swipeRef       = useRef({ startX: 0, startY: 0, axis: null });
+  const panelRefs      = [useRef(null), useRef(null), useRef(null)];
 
   function setTrackX(idx, extraPx, animated) {
     const el = trackRef.current;
@@ -4410,6 +4411,27 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       lastRealTabRef.current = tab;
       setTrackX(TAB_ORDER.indexOf(tab), 0, true);
     }
+  }, [tab]);
+
+  // Keep page height = active panel height so off-screen panels don't add scroll space
+  React.useLayoutEffect(() => {
+    function sync() {
+      const idx = TAB_ORDER.indexOf(lastRealTabRef.current);
+      const panel = panelRefs[idx]?.current;
+      if (panel && containerRef.current) containerRef.current.style.height = panel.scrollHeight + "px";
+    }
+    sync();
+    const ro = new ResizeObserver(sync);
+    panelRefs.forEach(r => { if (r.current) ro.observe(r.current); });
+    return () => ro.disconnect();
+  }, []);
+
+  React.useLayoutEffect(() => {
+    const c = containerRef.current;
+    if (!c) return;
+    if (tab === "search") { c.style.height = ""; return; }
+    const panel = panelRefs[TAB_ORDER.indexOf(tab)]?.current;
+    if (panel) c.style.height = panel.scrollHeight + "px";
   }, [tab]);
 
   // Touch event listeners — must use imperative addEventListener for passive:false
@@ -4488,14 +4510,14 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         alignItems: "flex-start",
       }}>
         {/* HOME panel */}
-        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
+        <div ref={panelRefs[0]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
           <div style={{ marginTop: "11px" }}>
             <Dashboard history={history} sets={sets} onStudy={onStudy} onViewHistory={onViewHistory} />
           </div>
         </div>
 
         {/* SETS panel */}
-        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
+        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
@@ -4549,7 +4571,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         </div>
 
         {/* HISTORY panel */}
-        <div style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
+        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1rem" }}>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
