@@ -4533,7 +4533,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 // ── Topic performance bar ──────────────────────────────────────────────────
 function TopicBar({ topic, correct, total }) {
   const pct = Math.round((correct / total) * 100);
-  const color = pct >= 70 ? T.green : pct >= 40 ? "#f59e0b" : T.red;
+  const color = pct >= 75 ? T.green : pct >= 60 ? "#f59e0b" : T.red;
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
     const t = setTimeout(() => setAnimPct(pct), 50);
@@ -4951,7 +4951,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
           {statCard("Sessions",  totalSessions,  null, T.accent)}
           {statCard("Questions", totalQuestions, null, T.accent)}
           {statCard("Avg Score", avgScore != null ? avgScore + "%" : "—", null,
-            avgScore >= 70 ? T.green : avgScore != null ? T.red : T.muted)}
+            avgScore >= 75 ? T.green : avgScore >= 60 ? "#f59e0b" : avgScore != null ? T.red : T.muted)}
           {statCard("Streak", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "Study today to start your streak!", T.purple)}
         </div>
       </div>
@@ -5010,7 +5010,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                     </span>
                   </div>
                   <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem",
-                    color: t.pct >= 40 ? T.accent : T.red, fontWeight: 600, flexShrink: 0, marginLeft: "0.5rem" }}>
+                    color: t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red, fontWeight: 600, flexShrink: 0, marginLeft: "0.5rem" }}>
                     {t.pct}%
                   </span>
                 </div>
@@ -5019,7 +5019,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                   <div style={{
                     height: "100%",
                     width: t.pct + "%",
-                    background: t.pct >= 70 ? T.green : t.pct >= 40 ? "#f59e0b" : T.red,
+                    background: t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red,
                     borderRadius: "4px",
                   }} />
                 </div>
