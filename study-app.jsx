@@ -5187,6 +5187,15 @@ const STATIC_STYLES = `
     0%   { opacity: 1; transform: scale(1) translateY(0); }
     100% { opacity: 0; transform: scale(0.85) translateY(8px); }
   }
+  @keyframes fabItemIn {
+    0%   { opacity: 0; transform: translateY(18px) scale(0.68); }
+    65%  { opacity: 1; transform: translateY(-2px) scale(1.04); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes fabItemOut {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(14px) scale(0.68); }
+  }
   .menu-open     { animation: menuIn    0.22s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; transform-origin: top right; }
   .menu-open-up  { animation: menuInUp  0.22s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; transform-origin: bottom right; }
   .menu-open-up-left { animation: menuInUp 0.22s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; transform-origin: bottom left; }
@@ -5496,15 +5505,26 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
 
 function HomeFAB({ onCreate, onImport, disabled }) {
   const [open, setOpen] = useState(false);
+  const [menuClosing, setMenuClosing] = useState(false);
   const [menuPos, setMenuPos] = useState(null);
   const fileRef = useRef(null);
+  function closeMenu() {
+    setMenuClosing(true);
+    setTimeout(() => { setOpen(false); setMenuClosing(false); }, 290);
+  }
   useEffect(() => {
     if (!open) return;
-    const close = () => setOpen(false);
+    const close = () => closeMenu();
     document.addEventListener('pointerdown', close);
     return () => document.removeEventListener('pointerdown', close);
   }, [open]);
   if (disabled) return null;
+  const fabItems = [
+    { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
+      icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
+    { label: "Import", onClick: () => { fileRef.current?.click(); setOpen(false); }, gradient: false,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
+  ];
   return (
     <>
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
@@ -5513,40 +5533,43 @@ function HomeFAB({ onCreate, onImport, disabled }) {
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
-          animation: "menuIn 0.2s ease forwards",
           position: "fixed",
           bottom: menuPos.bottom + "px",
           right: menuPos.right + "px",
           zIndex: 110, pointerEvents: "all",
         }} onPointerDown={e => e.stopPropagation()}>
-          {[
-            { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
-              icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
-            { label: "Import", onClick: () => { fileRef.current?.click(); setOpen(false); }, gradient: false,
-              icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
-          ].map(({ label, onClick, icon, gradient }) => (
-            <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-              <button onClick={onClick} {...surfacePress()} style={{
-                background: T.mode === "light" ? T.surface : T.surface2,
-                border: "1px solid " + T.border, borderRadius: "8px",
-                padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
-                color: T.text, cursor: "pointer", whiteSpace: "nowrap",
-                boxShadow: T.mode === "light"
-                  ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-                  : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
-              }}>{label}</button>
-              {gradient
-                ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
-                : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
-            </div>
-          ))}
+          {fabItems.map(({ label, onClick, icon, gradient }, idx) => {
+            const n = fabItems.length;
+            const openDelay  = (n - 1 - idx) * 65;
+            const closeDelay = idx * 55;
+            const anim = menuClosing
+              ? `fabItemOut 0.18s ease-in ${closeDelay}ms both`
+              : `fabItemIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
+            return (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
+                <button onClick={onClick} {...surfacePress()} style={{
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border, borderRadius: "8px",
+                  padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
+                  color: T.text, cursor: "pointer", whiteSpace: "nowrap",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                }}>{label}</button>
+                {gradient
+                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
+                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
+              </div>
+            );
+          })}
         </div>
       )}
       <div style={{ flexShrink: 0, pointerEvents: "all" }} onPointerDown={e => e.stopPropagation()}>
         <GradientBorderButton onClick={e => {
+          if (open) { closeMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
           setMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 10 });
-          setOpen(o => !o);
+          setOpen(true);
         }} size="62px">
           <span style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center",
