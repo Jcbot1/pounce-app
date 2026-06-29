@@ -6150,7 +6150,7 @@ function App() {
   T = buildTheme(resolveTheme(theme), accent);
   ST = T;
 
-  const allTags = useMemo(() => [...new Set(sets.flatMap(s => s.tags || []))], [sets]);
+  const allTags = useMemo(() => [...new Set(sets.flatMap(s => s.tags || []))].sort((a, b) => a.localeCompare(b)), [sets]);
 
   function handleSetTheme(mode) {
     const saveMode = mode.startsWith("system") ? "system" : mode;
