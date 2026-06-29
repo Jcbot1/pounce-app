@@ -285,10 +285,6 @@ function FilterIcon({ size = 14, sw = 2.5 }) {
 function TrashIcon({ size = 15 }) {
   return <svg width={size} height={size} viewBox="0 0 24 24" {...IC}><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
 }
-function DotsVerticalIcon({ size = 16, color }) {
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill={color}><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>;
-}
-
 // ── Hamburger Menu Item ────────────────────────────────────────────────────
 function HamburgerMenuItem({ onClick, children, right, color, danger = false, style: extraStyle }) {
   const canHover = window.matchMedia("(hover: hover)").matches;
@@ -494,9 +490,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
             backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
             border: "1px solid " + T.accent + "22",
             borderRadius: "16px", padding: "0.9rem 1rem",
-            boxShadow: T.mode === "light"
-              ? "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)"
-              : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)",
+            boxShadow: menuShadow(),
             width: "min(360px, calc(100vw - 2rem))", zIndex: 10,
             maxHeight: "60vh", overflowY: "auto", WebkitOverflowScrolling: "touch",
           }}>
@@ -537,7 +531,7 @@ function MascotMonoIcon({ width = 40, height = 40, color }) {
     }} />
   );
 }
-/*DELETEME
+
       <path d="M0 0 C16.10564391 8.55053995 26.36665403 22.25283319 32.10546875 39.27734375 C36.08234872 54.68075207 34.317459 71.63276746 26.9375 85.8125 C24.74098097 89.25502646 22.37611667 92.53898748 19.9375 95.8125 C19.2775 96.8025 18.6175 97.7925 17.9375 98.8125 C17.2775 98.8125 16.6175 98.8125 15.9375 98.8125 C16.28683594 99.59753906 16.63617188 100.38257813 16.99609375 101.19140625 C19.40924196 106.76283908 21.52276847 111.72977091 21.9375 117.8125 C23.0925 117.565 24.2475 117.3175 25.4375 117.0625 C30.53656144 116.45097235 33.78906202 117.92445263 37.9375 120.8125 C47.30925985 128.3019825 54.66253771 141.13262692 56.22851562 153.02197266 C56.86800012 160.76522555 57.51590858 169.12150901 52.3515625 175.46875 C48.63640132 178.99917941 45.28862222 180.40664365 40.1171875 180.875 C33.12125331 180.67439974 27.82647066 177.58222747 22.9375 172.8125 C20.9375 169.8125 20.9375 169.8125 21.3125 167.3125 C21.51875 166.4875 21.725 165.6625 21.9375 164.8125 C21.9375 163.8225 21.9375 162.8325 21.9375 161.8125 C20.98488281 162.30621094 20.03226562 162.79992187 19.05078125 163.30859375 C17.78401829 163.95605037 16.51708199 164.60316794 15.25 165.25 C14.62416016 165.57548828 13.99832031 165.90097656 13.35351562 166.23632812 C4.93960785 170.50935982 -2.81998061 170.3969319 -12.0625 168.8125 C-15.73334256 167.20091058 -18.88944169 165.25388839 -22.0625 162.8125 C-22.0625 165.5408768 -21.52918859 168.12904063 -21.0625 170.8125 C-23.24571646 172.25687483 -25.43369246 173.69299052 -27.625 175.125 C-28.23408203 175.52912109 -28.84316406 175.93324219 -29.47070312 176.34960938 C-39.77535752 183.05581303 -39.77535752 183.05581303 -45 182.5 C-45.680625 182.273125 -46.36125 182.04625 -47.0625 181.8125 C-48.0525 177.3575 -48.0525 177.3575 -49.0625 172.8125 C-51.05526872 175.80165308 -52.05239973 178.37791734 -53.25 181.75 C-62.37016843 205.59461428 -82.16418352 223.04374482 -104.48828125 234.7109375 C-108.29034122 236.33791916 -111.91403409 237.37194042 -116.0625 236.8125 C-118.625 234.875 -118.625 234.875 -120.0625 232.8125 C-120.68125 234.235625 -120.68125 234.235625 -121.3125 235.6875 C-123.0625 238.8125 -123.0625 238.8125 -124.8125 240.1875 C-129.35829325 241.45022035 -132.97549088 241.22269212 -137.375 239.5625 C-140.09335171 237.79241051 -141.02258872 236.82824271 -142.0625 233.8125 C-142.7225 235.1325 -143.3825 236.4525 -144.0625 237.8125 C-147.91658804 238.37927765 -149.01223853 237.8489642 -152.25 235.5 C-155.76050619 232.14551631 -157.37712559 230.06201068 -157.5625 225.25 C-157.35927996 217.02556527 -152.59606213 211.20918794 -147.1875 205.375 C-137.9142635 196.62033265 -126.88543559 190.24452496 -115.90454102 183.89306641 C-95.27580942 172.30247327 -95.27580942 172.30247327 -81.0625 153.8125 C-81.0625 152.8225 -81.0625 151.8325 -81.0625 150.8125 C-81.76632812 151.49054688 -82.47015625 152.16859375 -83.1953125 152.8671875 C-97.28668333 166.23859666 -113.71734475 176.42650066 -130.0625 186.8125 C-130.92641357 187.3696167 -131.79032715 187.9267334 -132.68041992 188.50073242 C-137.94217411 191.79990958 -142.87186302 194.05968066 -148.875 195.625 C-149.96071289 195.92954102 -149.96071289 195.92954102 -151.06835938 196.24023438 C-174.31725706 202.67349099 -200.523301 199.7124524 -221.59765625 187.91015625 C-232.32425804 181.55397739 -239.20570521 174.44744213 -242.9375 162.375 C-244.7468967 154.7281449 -245.07182073 148.00716359 -242.0625 140.6875 C-241.14173867 138.24581414 -241.14173867 138.24581414 -241.0625 135.8125 C-242.61061124 133.33265515 -244.50641455 131.56072614 -246.59765625 129.51953125 C-256.56006145 118.57825264 -262.90260804 101.16986847 -263.30859375 86.43359375 C-263.0625 82.8125 -263.0625 82.8125 -261.0625 79.9375 C-255.06466833 75.6890359 -248.19082792 75.4497224 -241.0625 75.5 C-240.2387085 75.50418945 -239.41491699 75.50837891 -238.56616211 75.51269531 C-228.24875706 75.69922018 -218.56157884 77.24552158 -209.0625 81.375 C-201.69099955 84.03915641 -195.69521059 80.57012229 -188.97265625 77.60351562 C-179.90835167 73.84989256 -170.0376807 72.56364492 -160.31518555 73.08227539 C-153.31811978 73.571099 -153.31811978 73.571099 -146.796875 71.57421875 C-145.20819127 69.88230857 -145.20819127 69.88230857 -143.79296875 67.9375 C-135.66134212 57.95193592 -116.50542071 47.71656637 -103.984375 45.43359375 C-101.875 45.25 -101.875 45.25 -98.0625 45.8125 C-89.22174303 53.4476992 -87.29413495 66.89639147 -86.375 77.9375 C-85.86434209 86.84265723 -86.08845678 95.78518014 -87.7890625 104.5625 C-88.4201012 107.77662476 -88.4201012 107.77662476 -86.625 109.75 C-86.109375 110.100625 -85.59375 110.45125 -85.0625 110.8125 C-80.92201203 97.63585274 -80.74418844 86.51352373 -82.0625 72.8125 C-76.95802042 69.09048364 -71.9830464 66.92289657 -66 65.0625 C-64.99163086 64.74696167 -64.99163086 64.74696167 -63.96289062 64.42504883 C-48.19980247 59.71576846 -28.24744083 59.7661793 -13.3984375 67.63671875 C-11.33266163 68.85202603 -9.29033521 70.10899304 -7.28515625 71.421875 C-5.21689077 72.98930022 -5.21689077 72.98930022 -3.0625 72.8125 C1.03447347 62.93586752 1.1967988 54.25555401 -2.875 44.31640625 C-7.62786885 34.29473213 -15.17247139 30.28518444 -24.8125 25.3125 C-29.80679738 22.65198644 -33.19665325 20.72538014 -36.0625 15.8125 C-37.38954648 10.85819313 -37.27943332 7.44790603 -35.0625 2.8125 C-25.49611915 -8.94048219 -12.11286538 -5.6374342 0 0 Z M-150 153.8125 C-152.28780259 157.06801089 -152.28780259 157.06801089 -153.0625 160.8125 C-152.7325 161.4725 -152.4025 162.1325 -152.0625 162.8125 C-149.09493757 161.43470316 -146.66449817 159.78371074 -144.0625 157.8125 C-138.74486094 154.17271366 -133.37767484 153.43226335 -127.0625 152.8125 C-126.7325 151.4925 -126.4025 150.1725 -126.0625 148.8125 C-133.97493616 143.53754256 -144.06689796 147.13352228 -150 153.8125 Z M-217.75 158.3125 C-218.513125 159.1375 -219.27625 159.9625 -220.0625 160.8125 C-219.7325 161.4725 -219.4025 162.1325 -219.0625 162.8125 C-218.08410156 162.76029297 -218.08410156 162.76029297 -217.0859375 162.70703125 C-211.53985747 162.53525001 -207.90599536 162.81414573 -203.0625 165.8125 C-202.27875 166.204375 -201.495 166.59625 -200.6875 167 C-200.15125 167.268125 -199.615 167.53625 -199.0625 167.8125 C-198.18813582 166.07674351 -198.18813582 166.07674351 -198.0625 163.8125 C-199.66498309 160.68384255 -201.19207606 159.17090986 -204.453125 157.828125 C-211.54200862 155.25621241 -211.54200862 155.25621241 -217.75 158.3125 Z M-184.0625 167.8125 C-185.39143256 169.62791477 -185.39143256 169.62791477 -185.0625 171.8125 C-182.59268403 175.10558797 -181.09414623 176.62301396 -177 177.375 C-173.99772028 176.99717956 -173.99772028 176.99717956 -171.625 175.1875 C-169.78565857 172.85102041 -169.78565857 172.85102041 -170 169.6875 C-170.77895691 166.63942523 -170.77895691 166.63942523 -173.4375 165.4375 C-178.06537419 164.33562519 -180.2717459 165.01931277 -184.0625 167.8125 Z " fill="currentColor" transform="translate(388.0625,80.1875)"/>
       <path d="M0 0 C0.70056519 0.00126892 1.40113037 0.00253784 2.1229248 0.00384521 C28.95962338 0.09672436 54.74907566 5.72875743 80.1875 14.1875 C81.87746094 14.744375 81.87746094 14.744375 83.6015625 15.3125 C88.55291411 17.09777607 88.55291411 17.09777607 90.1875 18.1875 C90.5175 19.5075 90.8475 20.8275 91.1875 22.1875 C87.2275 23.6725 87.2275 23.6725 83.1875 25.1875 C85.1675 25.5175 87.1475 25.8475 89.1875 26.1875 C89.5175 30.1475 89.8475 34.1075 90.1875 38.1875 C91.28449219 38.50203125 92.38148438 38.8165625 93.51171875 39.140625 C94.96632468 39.5723145 96.42074199 40.00463991 97.875 40.4375 C98.59623047 40.64246094 99.31746094 40.84742188 100.06054688 41.05859375 C104.4993598 42.39631819 107.84951744 43.81085355 111.1875 47.1875 C111.875 50.6875 111.875 50.6875 111.1875 54.1875 C107.2025145 57.29948132 103.10981251 59.18544072 98.40234375 60.96484375 C97.06821251 61.47647316 95.7341497 61.98828103 94.40014648 62.50024414 C93.70380096 62.76451202 93.00745544 63.02877991 92.29000854 63.30105591 C63.0092403 74.44452971 33.91892853 87.08103536 6.97973633 103.1550293 C6.31482178 103.54086182 5.64990723 103.92669434 4.96484375 104.32421875 C4.40015381 104.66155029 3.83546387 104.99888184 3.25366211 105.34643555 C-2.25939313 107.59061318 -6.792449 107.27541697 -12.36328125 105.52734375 C-13.60585693 105.14860107 -14.84843262 104.7698584 -16.12866211 104.37963867 C-17.10535355 104.07248428 -17.10535355 104.07248428 -18.10177612 103.75912476 C-21.56500135 102.67367056 -25.04424348 101.64227911 -28.5234375 100.609375 C-29.22558884 100.40023972 -29.92774017 100.19110443 -30.65116882 99.97563171 C-54.9773785 92.78849073 -80.48805043 87.93382259 -105.8125 86.1875 C-106.56144531 86.1354541 -107.31039062 86.0834082 -108.08203125 86.02978516 C-116.96116717 85.49880056 -124.23760402 85.95789705 -132.39453125 89.99609375 C-140.40693565 93.94404745 -152.61206404 93.34519034 -161.1875 91.1875 C-167.03389036 89.10094344 -172.21468809 85.30455211 -176.8125 81.1875 C-176.8125 80.5275 -176.8125 79.8675 -176.8125 79.1875 C-186.58461701 76.50877267 -196.41455057 74.41420632 -206.375 72.5625 C-207.47303955 72.35665283 -208.5710791 72.15080566 -209.70239258 71.9387207 C-227.38869555 68.70959388 -244.90018738 67.46532813 -262.8269043 66.51025391 C-266.03480891 66.33721242 -269.24197372 66.15355745 -272.44921875 65.96875 C-273.4314592 65.91972534 -274.41369965 65.87070068 -275.42570496 65.82019043 C-276.33798355 65.76673462 -277.25026215 65.71327881 -278.19018555 65.65820312 C-278.98877487 65.61538208 -279.7873642 65.57256104 -280.6101532 65.52844238 C-284.32784722 64.95291111 -286.30715942 63.83224488 -288.625 60.875 C-289.8125 58.1875 -289.8125 58.1875 -289.8125 55.625 C-288.11921437 51.49761627 -285.33145083 49.89246761 -281.36328125 48.05078125 C-274.48135965 45.1875 -274.48135965 45.1875 -270.8125 45.1875 C-270.82410156 44.27226562 -270.83570313 43.35703125 -270.84765625 42.4140625 C-270.85667969 41.22554688 -270.86570312 40.03703125 -270.875 38.8125 C-270.88660156 37.62914062 -270.89820313 36.44578125 -270.91015625 35.2265625 C-270.8125 32.1875 -270.8125 32.1875 -269.8125 30.1875 C-267.16389573 29.59394386 -264.52052678 29.44540731 -261.8125 29.1875 C-263.10176992 28.82470544 -264.39403272 28.47253302 -265.6875 28.125 C-266.40679687 27.92777344 -267.12609375 27.73054688 -267.8671875 27.52734375 C-269.88523593 26.97617393 -269.88523593 26.97617393 -271.8125 28.1875 C-271.875 25.9375 -271.875 25.9375 -270.8125 23.1875 C-268.04495278 21.30977176 -264.94717696 20.30794388 -261.8125 19.1875 C-260.81605469 18.80851562 -259.81960938 18.42953125 -258.79296875 18.0390625 C-254.83285224 16.6179464 -250.84473993 15.38517173 -246.8125 14.1875 C-245.80751465 13.87828613 -244.8025293 13.56907227 -243.76708984 13.25048828 C-222.49301073 6.86043744 -222.49301073 6.86043744 -217.01171875 9.44921875 C-214.31620654 11.51183842 -212.12707899 13.71432948 -209.8125 16.1875 C-207.44499044 17.63145316 -207.44499044 17.63145316 -205 18.625 C-204.33355469 18.91246094 -203.66710937 19.19992187 -202.98046875 19.49609375 C-188.46376202 24.12574617 -171.23470128 21.25709647 -157.875 14.4375 C-154.11283866 12.26206245 -151.34161408 9.78606467 -148.3125 6.6875 C-145.87958797 4.43974764 -144.61561558 3.27493093 -141.30078125 2.9140625 C-131.53941015 4.36758053 -120.38273365 8.77674997 -113.8125 16.1875 C-112.5 18.5 -112.5 18.5 -111.8125 20.1875 C-111.1525 20.1875 -110.4925 20.1875 -109.8125 20.1875 C-112.92907343 29.84210247 -123.71946679 35.83232271 -131.8125 41.1875 C-126.65086577 38.49732623 -121.63160808 35.80984797 -116.87109375 32.45703125 C-106.4099063 25.19165991 -106.4099063 25.19165991 -101.8125 25.1796875 C-99.31736292 25.97843565 -97.1333765 26.98151184 -94.8125 28.1875 C-79.42911395 31.20923654 -63.73540018 28.01245107 -49.8125 21.1875 C-48.91273438 20.75695312 -48.01296875 20.32640625 -47.0859375 19.8828125 C-38.38184628 15.44297346 -30.57667426 9.44705767 -23.3046875 2.9453125 C-16.95877933 -1.53064154 -7.45799603 -0.01375209 0 0 Z M77.1875 25.1875 C77.5175 25.8475 77.8475 26.5075 78.1875 27.1875 C79.8375 27.1875 81.4875 27.1875 83.1875 27.1875 C80.3450146 25.61476432 80.3450146 25.61476432 77.1875 25.1875 Z M66.1875 28.1875 C66.1875 28.8475 66.1875 29.5075 66.1875 30.1875 C70.6425 29.6925 70.6425 29.6925 75.1875 29.1875 C70.68282187 26.8366068 70.68282187 26.8366068 66.1875 28.1875 Z M62.1875 29.1875 C61.5275 29.8475 60.8675 30.5075 60.1875 31.1875 C62.1675 31.1875 64.1475 31.1875 66.1875 31.1875 C65.8575 30.5275 65.5275 29.8675 65.1875 29.1875 C64.1975 29.1875 63.2075 29.1875 62.1875 29.1875 Z M50 33.625 C49.34580078 33.86798828 48.69160156 34.11097656 48.01757812 34.36132812 C46.40446714 34.9618293 44.7955565 35.57359203 43.1875 36.1875 C47.16995651 37.5149855 49.63539543 36.18657829 53.375 34.75 C54.02919922 34.50701172 54.68339844 34.26402344 55.35742188 34.01367188 C56.97053286 33.4131707 58.5794435 32.80140797 60.1875 32.1875 C56.20504349 30.8600145 53.73960457 32.18842171 50 33.625 Z M33.1875 40.1875 C32.5275 40.8475 31.8675 41.5075 31.1875 42.1875 C32.5075 41.8575 33.8275 41.5275 35.1875 41.1875 C34.5275 40.8575 33.8675 40.5275 33.1875 40.1875 Z M13.1875 50.1875 C12.8575 50.8475 12.5275 51.5075 12.1875 52.1875 C13.5075 51.5275 14.8275 50.8675 16.1875 50.1875 C15.1975 50.1875 14.2075 50.1875 13.1875 50.1875 Z " fill="currentColor" transform="translate(338.8125,295.8125)"/>
       <path d="M0 0 C9.3775041 4.74347978 19.31073858 7.79144674 29.3125 10.9375 C25.44514856 21.95945159 15.17294237 28.84266063 5.3125 34.25 C0.87709625 36.31025854 -3.76649945 37.85309176 -8.6875 37.9375 C-11.8125 36.0625 -11.8125 36.0625 -13.6875 33.9375 C-14.203125 34.7625 -14.71875 35.5875 -15.25 36.4375 C-17.6875 38.9375 -17.6875 38.9375 -21.125 39.4375 C-24.82680585 38.9179483 -26.75047402 38.20320576 -29.6875 35.9375 C-30.3475 34.9475 -31.0075 33.9575 -31.6875 32.9375 C-32.3475 33.9275 -33.0075 34.9175 -33.6875 35.9375 C-38.37964846 34.59688616 -41.19515047 32.05653567 -43.6875 27.9375 C-45.31205688 23.24433568 -44.71743148 20.3392111 -42.75 15.9375 C-37.04431982 5.67660377 -27.60737032 1.0705123 -16.796875 -2.7265625 C-10.13490357 -3.78754313 -5.96056679 -3.14989302 0 0 Z " fill="currentColor" transform="translate(168.6875,273.0625)"/>
@@ -599,9 +593,6 @@ function MascotMonoIcon({ width = 40, height = 40, color }) {
       <path d="M0 0 C0.66 0.66 1.32 1.32 2 2 C1.34 2 0.68 2 0 2 C0 1.34 0 0.68 0 0 Z " fill="currentColor" transform="translate(291,248)"/>
       <path d="M0 0 C0.33 0.66 0.66 1.32 1 2 C0.34 1.67 -0.32 1.34 -1 1 C-0.67 0.67 -0.34 0.34 0 0 Z " fill="currentColor" transform="translate(188,244)"/>
       <path d="M0 0 C0.66 0 1.32 0 2 0 C1.67 0.66 1.34 1.32 1 2 C0.67 1.34 0.34 0.68 0 0 Z " fill="currentColor" transform="translate(143,244)"/>
-      <path d="M0 0 C0.66 0.66 1.32 1.32 2 2 C1.34 2 0.68 2 0 2 C0 1.34 0 0.68 0 0 Z " fill="currentColor" transform="translate(410,188)"/>
-DELETEME*/
-
 // ── PounceLogo — mascot icon + wordmark ─────────────────────────────────────
 function PounceLogo({ height = 28, theme, stacked = false }) {
   const t = theme || T;
@@ -620,11 +611,6 @@ function PounceLogo({ height = 28, theme, stacked = false }) {
 function Mochi({ size = 100 }) {
   return <MascotMonoIcon width={size} height={size} color={T.accent} />;
 }
-
-
-const STU_MOODS = ["happy", "excited", "curious", "sleepy", "surprised"];
-function randomMood() { return STU_MOODS[Math.floor(Math.random() * STU_MOODS.length)]; }
-
 
 
 // ════════════════════════════════════════════════════════════════════════
@@ -1092,25 +1078,6 @@ const SET_ICONS = [
 
 
 
-// ── Design tokens (helpers use module-level T) ────────────────────────────────
-
-const btn = (variant = "primary", small = false) => ({
-  display: "inline-flex", alignItems: "center", gap: "0.4rem",
-  padding: small ? "0.5rem 1rem" : "0.65rem 1.4rem",
-  borderRadius: "12px",
-  fontFamily: FF_SANS,
-  fontSize: small ? "0.8rem" : "0.9rem",
-  fontWeight: 500,
-  cursor: "pointer", border: "none",
-  transition: "opacity 0.15s",
-  minHeight: small ? "38px" : "44px",
-  ...(variant === "primary"  && { background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box", border: "2px solid transparent", color: T.muted2, fontWeight: 600 }),
-  ...(variant === "purple"   && { background: "linear-gradient(" + T.surface + ", " + T.surface + ") padding-box, linear-gradient(135deg, " + T.accent + " 0%, " + T.gradient2 + " 100%) border-box", border: "2px solid transparent", color: T.muted2, fontWeight: 600 }),
-  ...(variant === "ghost"    && { background: T.mode === "light" ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.1)", border: "none", color: T.text, boxShadow: T.mode === "light" ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)" : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)" }),
-  ...(variant === "disabled" && { background: T.surface2,             color: T.muted, cursor: "not-allowed" }),
-});
-
-
 const inp = (extra = {}) => ({
   background: T.surface,
   border: "1.5px solid " + T.border,
@@ -1191,16 +1158,26 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
   );
 }
 
+const menuShadow    = () => T.mode === "light"
+  ? "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)"
+  : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)";
+
 const menuPopupStyle = (extra = {}) => ({
   background: T.mode === "light" ? "rgba(255,255,255,1)" : "rgba(30,26,46,1)",
   backdropFilter: "blur(40px)", WebkitBackdropFilter: "blur(40px)",
   border: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.08)"),
   borderRadius: "16px", overflow: "hidden",
-  boxShadow: T.mode === "light"
-    ? "0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)"
-    : "0 8px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)",
+  boxShadow: menuShadow(),
   ...extra,
 });
+
+const answerBgs = () => ({
+  sel: T.mode === "light" ? T.accent + "18" : T.accent + "45",
+  cor: T.mode === "light" ? T.green  + "18" : T.green  + "45",
+  wro: T.mode === "light" ? T.red    + "18" : T.red    + "45",
+});
+const corBgCard = () => T.mode === "light" ? T.green + "18" : "#052e16";
+const wroBgCard = () => T.mode === "light" ? T.red   + "18" : "#2d0a0a";
 
 const card = (extra = {}) => ({
   background: T.mode === "light" ? "#fff" : "rgba(36,32,54,1)",
@@ -1214,6 +1191,21 @@ const card = (extra = {}) => ({
     : "0 1px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)",
   ...extra,
 });
+
+const SET_CARD_SCROLL_GRID = {
+  display: "grid",
+  gridTemplateRows: "repeat(2, auto)",
+  gridAutoFlow: "column",
+  gridAutoColumns: "calc(100vw - 3.75rem)",
+  columnGap: "0.75rem",
+  overflowX: "auto",
+  scrollbarWidth: "none",
+  paddingLeft: "1.25rem",
+  paddingRight: "0.75rem",
+  paddingBottom: "0.5rem",
+  marginLeft: "-1.25rem",
+  marginRight: "-1.25rem",
+};
 
 // ════════════════════════════════════════════════════════════════════════
 // PRESS HANDLERS
@@ -1921,7 +1913,6 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
 function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, isDesktop = false, questionCount = 0, sidebarWidth = 0 }) {
   const [open, setOpen] = useState(false);
   const [menuClosing, setMenuClosing] = useState(false);
-  const [showAI, setShowAI] = useState(false);
   const [menuCenter, setMenuCenter] = useState(null);
 
   const types = [
@@ -1939,16 +1930,6 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
 
   return (
     <>
-      {/* AI Generate modal — commented out until backend proxy is set up
-      {showAI && (
-        <AIGenerateModal
-          setName={draft.name}
-          onAdd={qs => { onAddGenerated(qs); setShowAI(false); }}
-          onClose={() => setShowAI(false)}
-        />
-      )}
-      */}
-
       {/* Overlay to close */}
       {(open || menuClosing) && (
         <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={closeMenu} />
@@ -1999,223 +1980,12 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
   );
 }
 
-function AIGenerateModal({ setName, onAdd, onClose }) {
-  const [topic, setTopic]         = useState("");
-  const [source, setSource]       = useState("");
-  const [count, setCount]         = useState(5);
-  const [loading, setLoading]     = useState(false);
-  const [error, setError]         = useState("");
-  const [preview, setPreview]     = useState(null);
-  const [types, setTypes]         = useState({ single: true, multi: true, matching: false, dropdown: false });
-
-  async function handleGenerate() {
-    if (!topic.trim()) { setError("Please describe the topic."); return; }
-    setLoading(true); setError(""); setPreview(null);
-
-    const selectedTypes = Object.entries(types).filter(([,v]) => v).map(([k]) => k);
-    if (selectedTypes.length === 0) { setError("Select at least one question type."); setLoading(false); return; }
-
-    const typeDescriptions = {
-      single:   "single answer (one correct option from 4)",
-      multi:    "multi-select (multiple correct options from 4-5)",
-      matching: "matching (pairs of terms and matches, 3-5 pairs)",
-      dropdown: "fill-in-the-blank with dropdown",
-    };
-
-    const prompt = `Generate exactly ${count} study questions about: ${topic}${source ? "\n\nSource material:\n" + source : ""}
-
-Question types to use (mix them): ${selectedTypes.map(t => typeDescriptions[t]).join(", ")}
-
-Return ONLY a JSON array. No markdown, no explanation. Each question must follow this exact structure:
-
-For single/multi:
-{"id":"q1","type":"single","topic":"Topic Name","question":"Question text","options":["A","B","C","D"],"correct":[0],"hint":"Optional hint","explanation":"Why this is correct"}
-
-For multi: "correct" is an array of multiple indices, add "selectCount": 2
-
-For matching:
-{"id":"q1","type":"matching","topic":"Topic Name","question":"Match the following","pairs":[{"id":"p1","term":"Term","match":"Match"},{"id":"p2","term":"Term2","match":"Match2"}],"explanation":"Optional explanation"}
-
-For dropdown:
-{"id":"q1","type":"dropdown","topic":"Topic Name","question":"Question with blanks","dropdowns":[{"id":"d1","rowLabel":"Label","options":["A","B","C"],"correct":0}],"explanation":"Optional"}
-
-Rules:
-- Use unique IDs like q1, q2, q3 etc
-- For pairs use p1, p2 etc; for dropdowns use d1, d2 etc
-- Questions should be exam-quality, specific, and challenging
-- Include hints and explanations where helpful
-- Mix question types as requested`;
-
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 4000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-      const data = await response.json();
-      const text = data.content.map(b => b.text || "").join("");
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-      if (!Array.isArray(parsed) || parsed.length === 0) throw new Error("No questions returned");
-      // Give each question a fresh uid
-      const withIds = parsed.map(q => ({ ...q, id: uid() }));
-      setPreview(withIds);
-    } catch (e) {
-      setError("Something went wrong — please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <Modal onClose={onClose}>
-      <ModalCard pad="1.75rem" maxWidth={520} scroll>
-
-        {/* Header */}
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
-            </svg>
-            <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.accent }}>
-              AI QUESTION GENERATOR
-            </p>
-          </div>
-          <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted2 }}>
-            {setName ? "Adding to: " + setName : "Generating questions"}
-          </p>
-        </div>
-
-        {!preview ? (
-          <>
-            {/* Topic */}
-            <div>
-              <Label style={{ marginBottom: "0.4rem" }}>TOPIC OR DESCRIPTION</Label>
-              <textarea value={topic} onChange={e => setTopic(e.target.value)}
-                placeholder="e.g. Azure SQL Database pricing models, photosynthesis, French Revolution causes..."
-                rows={3}
-                style={{ ...inp(), lineHeight: 1.5, width: "100%" }} />
-            </div>
-
-            {/* Source material */}
-            <div>
-              <Label style={{ marginBottom: "0.4rem" }}>SOURCE MATERIAL (optional)</Label>
-              <textarea value={source} onChange={e => setSource(e.target.value)}
-                placeholder="Paste notes, documentation, or study material here..."
-                rows={4}
-                style={{ ...inp(), lineHeight: 1.5, width: "100%" }} />
-            </div>
-
-            {/* Question types */}
-            <div>
-              <Label style={{ marginBottom: "0.5rem" }}>QUESTION TYPES</Label>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {Object.entries({ single: "Single answer", multi: "Multi-select", matching: "Matching", dropdown: "Dropdown" }).map(([key, label]) => (
-                  <button key={key} onClick={() => setTypes(t => ({ ...t, [key]: !t[key] }))}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                      padding: "0.5rem 1rem", borderRadius: "99px",
-                      fontFamily: FF_SANS, fontSize: "0.74rem",
-                      fontWeight: 500, letterSpacing: "0.07em", cursor: "pointer",
-                      minHeight: "38px", transition: "opacity 0.15s",
-                      background: types[key] ? (TYPE_META[key]?.color || T.accent) + "22" : T.surface2,
-                      color: types[key] ? (TYPE_META[key]?.color || T.accent) : T.muted2,
-                      border: "1px solid " + (types[key] ? (TYPE_META[key]?.color || T.accent) : "transparent"),
-                    }}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Count stepper */}
-            <div>
-              <Label style={{ marginBottom: "0.5rem" }}>NUMBER OF QUESTIONS</Label>
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <button onClick={() => setCount(c => Math.max(1, c - 1))}
-                  {...surfacePress()}
-                  onPointerUp={e => { const el = e.currentTarget; setTimeout(() => { el.style.transition = "background 0.3s ease"; el.style.background = T.surface2; }, 150); }}
-                  onPointerLeave={e => { const el = e.currentTarget; setTimeout(() => { el.style.transition = "background 0.3s ease"; el.style.background = T.surface2; }, 150); }}
-                  style={{ width: "36px", height: "36px", borderRadius: "99px", border: "none",
-                    background: T.surface2, color: T.text, fontSize: "1.2rem", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                <span style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, minWidth: "2rem", textAlign: "center" }}>{count}</span>
-                <button onClick={() => setCount(c => Math.min(20, c + 1))}
-                  {...surfacePress()}
-                  onPointerUp={e => { const el = e.currentTarget; setTimeout(() => { el.style.transition = "background 0.3s ease"; el.style.background = T.surface2; }, 150); }}
-                  onPointerLeave={e => { const el = e.currentTarget; setTimeout(() => { el.style.transition = "background 0.3s ease"; el.style.background = T.surface2; }, 150); }}
-                  style={{ width: "36px", height: "36px", borderRadius: "99px", border: "none",
-                    background: T.surface2, color: T.text, fontSize: "1.2rem", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-                <span style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted }}>max 20</span>
-              </div>
-            </div>
-
-            {error && <p style={{ color: T.red, fontSize: "0.8rem", fontFamily: FF_SANS }}>{error}</p>}
-
-            <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-              <GhostButton onClick={onClose} small>Cancel</GhostButton>
-              <PrimaryButton onClick={handleGenerate} disabled={loading} style={{ minWidth: "120px", justifyContent: "center" }}>
-                {loading ? "Generating…" : "Generate ✨"}
-              </PrimaryButton>
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Preview */}
-            <div>
-              <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>
-                {preview.length} question{preview.length !== 1 ? "s" : ""} generated
-              </p>
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted2 }}>
-                Review them below, then add to your set.
-              </p>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", maxHeight: "40vh", overflowY: "auto" }}>
-              {preview.map((q, i) => (
-                <div key={q.id} style={{ ...card({ padding: "0.9rem 1rem" }) }}>
-                  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginBottom: "0.4rem" }}>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.6rem", color: T.muted }}>Q{i + 1}</span>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.6rem",
-                      color: TYPE_META[q.type]?.color || "#0ea5e9",
-                      background: (TYPE_META[q.type]?.color || "#0ea5e9") + "18",
-                      padding: "0.1rem 0.4rem", borderRadius: "4px" }}>
-                      {(TYPE_META[q.type]?.label || "MATCHING").toUpperCase()}
-                    </span>
-                    {q.topic && <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>{q.topic}</span>}
-                  </div>
-                  <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.text, lineHeight: 1.5 }}>{renderText(q.question)}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-              <GhostButton onClick={() => setPreview(null)} small>Regenerate</GhostButton>
-              <PrimaryButton onClick={() => onAdd(preview)} small style={{ minWidth: "130px", justifyContent: "center" }}>
-                Add to set ✓
-              </PrimaryButton>
-            </div>
-          </>
-        )}
-      </ModalCard>
-    </Modal>
-  );
-}
-
 // ════════════════════════════════════════════════════════════════════════
 // REVIEW MODE
 // ════════════════════════════════════════════════════════════════════════
 
-
-// ════════════════════════════════════════════════════════════════════════
-
 function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
-  const selBg   = T.mode === "light" ? T.accent + "18" : T.accent + "45";
-  const corBg   = T.mode === "light" ? T.green  + "18" : T.green  + "45";
-  const wroBg   = T.mode === "light" ? T.red    + "18" : T.red    + "45";
+  const { sel: selBg, cor: corBg, wro: wroBg } = answerBgs();
   const selColor = T.accent;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
@@ -2242,9 +2012,7 @@ function ReviewSingle({ q, selected, onSelect, submitted, examMode }) {
 }
 
 function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
-  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "45";
-  const corBg = T.mode === "light" ? T.green  + "18" : T.green  + "45";
-  const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "45";
+  const { sel: selBg, cor: corBg, wro: wroBg } = answerBgs();
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
       <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
@@ -2292,9 +2060,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
     return () => document.removeEventListener("pointerdown", handle);
   }, [openId]);
 
-  const selBg = T.mode === "light" ? T.accent + "18" : T.accent + "45";
-  const corBg = T.mode === "light" ? T.green  + "18" : T.green  + "45";
-  const wroBg = T.mode === "light" ? T.red    + "18" : T.red    + "45";
+  const { sel: selBg, cor: corBg, wro: wroBg } = answerBgs();
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
@@ -2427,9 +2193,7 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
             <div key={pair.id} style={{
               background: examMode
                 ? T.surface2
-                : isCorrect
-                  ? T.mode === "light" ? T.green + "18" : "#052e16"
-                  : T.mode === "light" ? T.red + "18" : "#2d0a0a",
+                : isCorrect ? corBgCard() : wroBgCard(),
               border: "1px solid " + (examMode ? T.border : isCorrect ? T.green : T.red),
               borderRadius: "12px", padding: "0.75rem 1rem",
             }}>
@@ -3269,9 +3033,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>
           <div style={{ width: "80px", height: "80px", borderRadius: "50%", flexShrink: 0,
             border: "3px solid " + passed ? T.green : T.red,
-            background: passed
-              ? (T.mode === "light" ? T.green + "18" : "#052e16")
-              : (T.mode === "light" ? T.red   + "18" : "#2d0a0a"),
+            background: passed ? corBgCard() : wroBgCard(),
             display: "flex", alignItems: "center", justifyContent: "center" }}>
             <AnimatedPct target={pct} color={passed ? T.green : T.red} />
           </div>
@@ -3303,8 +3065,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         const q = questions.find(q => q.id === r.qId);
         if (!q) return null;
         const open = expanded === i;
-        const corBg = T.mode === "light" ? T.green + "18" : "#052e16";
-        const wroBg = T.mode === "light" ? T.red   + "18" : "#2d0a0a";
+        const corBg = corBgCard(), wroBg = wroBgCard();
         return (
           <div key={i} style={card({ marginBottom: "0.6rem", borderColor: r.correct ? T.green + "44" : T.red + "44" })}>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", cursor: "pointer" }}
@@ -3657,15 +3418,6 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
     document.addEventListener("studi-edit-delete", handle);
     return () => document.removeEventListener("studi-edit-delete", handle);
   }, []);
-
-  function exportAll(data, filename) {
-    const json = JSON.stringify(data, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename; a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
 
   function close() { if (!sidebarMode) { setOpen(false); setSection(null); } }
 
@@ -4165,23 +3917,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
       }}>
         <div ref={contentRef}>
           {cardColumns === 1 ? (
-            <div
-              className="no-scrollbar"
-              style={{
-                display: "grid",
-                gridTemplateRows: "repeat(2, auto)",
-                gridAutoFlow: "column",
-                gridAutoColumns: "calc(100vw - 3.75rem)",
-                columnGap: "0.75rem",
-                overflowX: "auto",
-                scrollbarWidth: "none",
-                paddingLeft: "1.25rem",
-                paddingRight: "0.75rem",
-                paddingBottom: "0.5rem",
-                marginLeft: "-1.25rem",
-                marginRight: "-1.25rem",
-              }}
-            >
+            <div className="no-scrollbar" style={SET_CARD_SCROLL_GRID}>
               {tagSets.map(s => (
                 <SetCard key={s.id} s={s} allTags={allTags}
                   onEdit={onEdit} onExport={onExport}
@@ -4303,23 +4039,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                 </div>
               )}
               {cardColumns === 1 ? (
-                <div
-                  className="no-scrollbar"
-                  style={{
-                    display: "grid",
-                    gridTemplateRows: "repeat(2, auto)",
-                    gridAutoFlow: "column",
-                    gridAutoColumns: "calc(100vw - 3.75rem)",
-                    columnGap: "0.75rem",
-                    overflowX: "auto",
-                    scrollbarWidth: "none",
-                    paddingLeft: "1.25rem",
-                    paddingRight: "0.75rem",
-                    paddingBottom: "0.5rem",
-                    marginLeft: "-1.25rem",
-                    marginRight: "-1.25rem",
-                  }}
-                >
+                <div className="no-scrollbar" style={SET_CARD_SCROLL_GRID}>
                   {untaggedSets.map(s => {
                     const ls = history.filter(h => h.setId === s.id || h.setName === s.name).sort((a,b) => new Date(b.date)-new Date(a.date))[0] || null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
@@ -4862,13 +4582,6 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
   const sortBy = externalSortBy || "date-desc";
   const searchQ = (externalSearch || "").toLowerCase().trim();
 
-  const SORT_OPTIONS = [
-    { id: "date-desc",  label: "Newest first" },
-    { id: "date-asc",   label: "Oldest first" },
-    { id: "score-desc", label: "Score: high → low" },
-    { id: "score-asc",  label: "Score: low → high" },
-  ];
-
   const sorted = [...history].sort((a, b) => {
     if (sortBy === "date-desc")  return new Date(b.date) - new Date(a.date);
     if (sortBy === "date-asc")   return new Date(a.date) - new Date(b.date);
@@ -4878,7 +4591,7 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
     return 0;
   }).filter(s => !searchQ || s.setName.toLowerCase().includes(searchQ));
 
-  const currentSort = SORT_OPTIONS.find(o => o.id === sortBy);
+  const currentSort = HISTORY_SORT_OPTIONS.find(o => o.id === sortBy);
 
   return (
     <div>
@@ -4982,11 +4695,9 @@ function QuickQuestion({ sets }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
           {options.map(function(opt, i) {
+            const { sel: selBg, cor: corBg, wro: wroBg } = answerBgs();
             const isSelected = selected.includes(opt);
             const isCorrect  = correctLabels.includes(opt);
-            const selBg  = T.mode === "light" ? T.accent + "18" : T.accent + "45";
-            const corBg  = T.mode === "light" ? T.green  + "18" : T.green  + "45";
-            const wroBg  = T.mode === "light" ? T.red    + "18" : T.red    + "45";
             let bg = T.surface;
             let color = T.muted2;
             if (submitted) {
@@ -5158,9 +4869,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <div style={{ width: "56px", height: "56px", borderRadius: "50%", flexShrink: 0,
                 border: "3px solid " + lastSession.score / lastSession.total >= 0.7 ? T.green : T.red,
-                background: lastSession.score / lastSession.total >= 0.7
-                  ? T.mode === "light" ? T.green + "18" : "#052e16"
-                  : T.mode === "light" ? T.red + "18" : "#2d0a0a",
+                background: lastSession.score / lastSession.total >= 0.7 ? corBgCard() : wroBgCard(),
                 display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1rem",
                   color: lastSession.score / lastSession.total >= 0.7 ? T.green : T.red }}>
@@ -5834,56 +5543,6 @@ function ResultsFAB({ isHist, hasMissed, onRetry, onRetryMissed, onExport, onExp
           </svg>
         </span>
       </GradientBorderButton>
-    </div>
-  );
-}
-
-function ResultsChips({ isHist, hasMissed, onRetry, onRetryMissed, onExport, onStudySet }) {
-  const [atEnd, setAtEnd] = useState(false);
-  const [atStart, setAtStart] = useState(true);
-  const ref = useRef(null);
-
-  function checkScroll(el) {
-    setAtStart(el.scrollLeft <= 4);
-    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
-  }
-
-  useEffect(() => {
-    const el = ref.current;
-    if (el) checkScroll(el);
-  }, [isHist, hasMissed]);
-
-  const leftMask  = atStart  ? "black" : "transparent";
-  const rightMask = atEnd    ? "black" : "transparent";
-  const mask = `linear-gradient(to right, ${leftMask} 0%, black 12%, black 82%, ${rightMask} 100%)`;
-
-  return (
-    <div ref={ref}
-      onScroll={e => checkScroll(e.currentTarget)}
-      style={{
-        display: "flex", alignItems: "center", gap: "0.5rem",
-        overflowX: "auto", scrollbarWidth: "none", flex: 1,
-        paddingRight: "0.5rem",
-        maskImage: mask,
-        WebkitMaskImage: mask,
-      }}>
-      <style>{"div::-webkit-scrollbar { display: none; }"}</style>
-      {!isHist && (
-        <GhostButton onClick={onRetry} small style={{ height: "38px", paddingLeft: "1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap", flexShrink: 0 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-          </svg>
-          Retry
-        </GhostButton>
-      )}
-      {hasMissed && (
-        <GhostButton onClick={onRetryMissed} small style={{ height: "38px", paddingLeft: "1rem", paddingRight: "1rem", display: "flex", alignItems: "center", gap: "0.4rem", whiteSpace: "nowrap", flexShrink: 0 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
-          </svg>
-          Retry missed
-        </GhostButton>
-      )}
     </div>
   );
 }
