@@ -1920,6 +1920,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
 
 function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, isDesktop = false, questionCount = 0, sidebarWidth = 0 }) {
   const [open, setOpen] = useState(false);
+  const [menuClosing, setMenuClosing] = useState(false);
   const [showAI, setShowAI] = useState(false);
   const [menuCenter, setMenuCenter] = useState(null);
 
@@ -1930,6 +1931,11 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
     { type: "matching",  label: "Matching",        color: "#0ea5e9"                 },
     { type: "flashcard", label: "Flashcard",       color: TYPE_META.flashcard.color },
   ];
+
+  function closeMenu() {
+    setMenuClosing(true);
+    setTimeout(() => { setOpen(false); setMenuClosing(false); }, 420);
+  }
 
   return (
     <>
@@ -1944,29 +1950,38 @@ function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, 
       */}
 
       {/* Overlay to close */}
-      {open && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={() => setOpen(false)} />
+      {(open || menuClosing) && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={closeMenu} />
       )}
 
         {/* Menu items */}
-        {open && (
+        {(open || menuClosing) && (
           <div style={{
             display: "flex", flexDirection: "column", gap: "0.4rem",
             alignItems: "center",
-            animation: "menuIn 0.2s ease forwards",
             position: "fixed", bottom: "calc(1.5rem + 70px)", left: menuCenter !== null ? menuCenter + "px" : "50%", transform: "translateX(-50%)", zIndex: 110, width: 0, overflow: "visible",
           }}>
-            {types.map(t => (
-              <FabMenuButton key={t.type} onClick={() => { onAddQuestion(t.type); setOpen(false); }} color={t.color}>
-                + {t.label}
-              </FabMenuButton>
-            ))}
+            {types.map((t, idx) => {
+              const n = types.length;
+              const openDelay  = (n - 1 - idx) * 65;
+              const closeDelay = idx * 55;
+              const anim = menuClosing
+                ? `fabItemOut 0.18s ease-in ${closeDelay}ms both`
+                : `fabItemIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
+              return (
+                <div key={t.type} style={{ animation: anim }}>
+                  <FabMenuButton onClick={() => { onAddQuestion(t.type); closeMenu(); }} color={t.color}>
+                    + {t.label}
+                  </FabMenuButton>
+                </div>
+              );
+            })}
           </div>
         )}
 
         {/* FAB pill */}
         <BottomPill left={`${questionCount} ${questionCount === 1 ? "question" : "questions"}`} sidebarOffset={sidebarWidth}>
-          <GradientBorderButton onClick={e => { const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(o => !o); }} style={{ height: "46px", padding: "0 1.7rem" }}>
+          <GradientBorderButton onClick={e => { if (open) { closeMenu(); return; } const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(true); }} style={{ height: "46px", padding: "0 1.7rem" }}>
             <span style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center",
               transform: open ? "rotate(45deg)" : "rotate(0deg)",
