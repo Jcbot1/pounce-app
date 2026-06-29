@@ -4519,7 +4519,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
     function onTouchStart(e) {
       if (tabRef.current === "search") return;
       const t = e.touches[0];
-      const EDGE = 60;
+      const EDGE = 22;
       const fromEdge = t.clientX < EDGE || t.clientX > window.innerWidth - EDGE;
       swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null, fromEdge };
     }
