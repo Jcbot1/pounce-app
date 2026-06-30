@@ -1145,6 +1145,7 @@ const SET_CARD_SCROLL_GRID = {
   marginLeft: "-1.25rem",
   marginRight: "-1.25rem",
   scrollSnapType: "x mandatory",
+  scrollPaddingLeft: "1.25rem",
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -3866,6 +3867,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
                   lastSession={lastSession(s)} />
               ))}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
+              <div style={{ gridRow: "1 / 3", width: "0.5rem", flexShrink: 0 }} />
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
