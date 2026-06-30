@@ -4174,10 +4174,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
     isFirstTabRender.current = false;
   }, [tab]);
 
-  // Touch event listeners — must use imperative addEventListener for passive:false
+  // Touch event listeners on the root element so swipes work regardless of content height.
+  // passive:false on touchmove is required to call preventDefault for horizontal swipes.
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    const el = document.documentElement;
 
     function onTouchStart(e) {
       if (tabRef.current === "search") return;
@@ -4223,13 +4223,13 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       swipeRef.current.axis = null;
     }
 
-    container.addEventListener("touchstart", onTouchStart, { passive: true });
-    container.addEventListener("touchmove",  onTouchMove,  { passive: false });
-    container.addEventListener("touchend",   onTouchEnd,   { passive: true });
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove",  onTouchMove,  { passive: false });
+    el.addEventListener("touchend",   onTouchEnd,   { passive: true });
     return () => {
-      container.removeEventListener("touchstart", onTouchStart);
-      container.removeEventListener("touchmove",  onTouchMove);
-      container.removeEventListener("touchend",   onTouchEnd);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove",  onTouchMove);
+      el.removeEventListener("touchend",   onTouchEnd);
     };
   }, []);
   // ─────────────────────────────────────────────────────────────────────────
