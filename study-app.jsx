@@ -4183,11 +4183,11 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       if (tabRef.current === "search") return;
       const t = e.touches[0];
       const EDGE = 22;
-      // History panel has no horizontal scrollers, so allow swipe from anywhere.
-      // Other panels use a narrow edge zone to avoid conflicting with child scroll elements.
-      const fromEdge = tabRef.current === "history"
-        ? true
-        : (t.clientX < EDGE || t.clientX > window.innerWidth - EDGE);
+      // Home and history panels have no horizontal scrollers — allow swipe from anywhere.
+      // Sets panel keeps a narrow edge zone to avoid hijacking the horizontal card carousel.
+      const fromEdge = tabRef.current === "sets"
+        ? (t.clientX < EDGE || t.clientX > window.innerWidth - EDGE)
+        : true;
       swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null, fromEdge };
     }
 
