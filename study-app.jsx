@@ -4183,7 +4183,11 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       if (tabRef.current === "search") return;
       const t = e.touches[0];
       const EDGE = 22;
-      const fromEdge = t.clientX < EDGE || t.clientX > window.innerWidth - EDGE;
+      // History panel has no horizontal scrollers, so allow swipe from anywhere.
+      // Other panels use a narrow edge zone to avoid conflicting with child scroll elements.
+      const fromEdge = tabRef.current === "history"
+        ? true
+        : (t.clientX < EDGE || t.clientX > window.innerWidth - EDGE);
       swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null, fromEdge };
     }
 
