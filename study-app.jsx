@@ -1144,6 +1144,7 @@ const SET_CARD_SCROLL_GRID = {
   paddingBottom: "0.5rem",
   marginLeft: "-1.25rem",
   marginRight: "-1.25rem",
+  scrollSnapType: "x mandatory",
 };
 
 // ════════════════════════════════════════════════════════════════════════
@@ -3683,7 +3684,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const iconDef = s.icon ? SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon) : null;
 
   return (
-    <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6 }}>
+    <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6, scrollSnapAlign: "start" }}>
       <div style={{ display: "flex", gap: "0.85rem" }}>
 
         {/* Icon square — self-centered */}
