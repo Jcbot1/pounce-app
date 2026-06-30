@@ -3808,6 +3808,7 @@ function GhostCard({ onClick }) {
       marginBottom: "0.6rem",
       minHeight: "108px",
       transition: "border-color 0.2s, background 0.2s",
+      scrollSnapAlign: "start",
     }}
       onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent + "88"; e.currentTarget.style.background = T.accent + "0d"; }}
       onMouseLeave={e => { e.currentTarget.style.borderColor = T.accent + "44"; e.currentTarget.style.background = T.accent + "05"; }}
