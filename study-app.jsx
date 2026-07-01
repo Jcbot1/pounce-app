@@ -4797,7 +4797,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     ? [...history].sort(function(a, b) { return new Date(b.date) - new Date(a.date); })[0]
     : null;
 
-  // Weak topics — per-question accuracy per topic so quick quizzes don't skew counts
+  // Per-question topic accuracy — keyed by qId so quick-quiz repetition doesn't skew counts
   const qTopicMap = {};
   history.forEach(function(session) {
     if (!session.results || !session.questions) return;
@@ -4820,15 +4820,15 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     topicMap[q.topic].rates.push(q.correct / q.total);
     q.setNames.forEach(function(n) { if (topicMap[q.topic].setNames.indexOf(n) === -1) topicMap[q.topic].setNames.push(n); });
   });
-  const weakTopics = Object.entries(topicMap)
+  const allTopics = Object.entries(topicMap)
     .map(function(entry) {
       const topic = entry[0], d = entry[1];
       const pct = Math.round(d.rates.reduce(function(s, r) { return s + r; }, 0) / d.rates.length * 100);
       return { topic, pct, total: d.rates.length, setNames: d.setNames };
     })
-    .filter(function(t) { return t.pct < 70 && t.total >= 2; })
-    .sort(function(a, b) { return a.pct - b.pct; })
-    .slice(0, 5);
+    .sort(function(a, b) { return a.pct - b.pct; });
+
+  const [topicFilter, setTopicFilter] = useState("all");
 
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
@@ -4914,36 +4914,74 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
         </div>
       )}
 
-      {/* Weak topics */}
-      {weakTopics.length > 0 && (
+      {/* Topic breakdown */}
+      {allTopics.length > 0 && (
         <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
-          {sectionLabel("Weak Topics")}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+            <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, margin: 0 }}>Topics</p>
+            <div style={{ display: "flex", background: T.surface2, borderRadius: "99px", padding: "3px", gap: "2px", flexShrink: 0 }}>
+              {[{ id: "all", label: "All" }, { id: "needs-work", label: "Needs Work" }].map(function(opt) {
+                const active = topicFilter === opt.id;
+                return (
+                  <button key={opt.id} onClick={function() { setTopicFilter(opt.id); }}
+                    style={{
+                      padding: "0.2rem 0.7rem", borderRadius: "99px", border: "none", cursor: "pointer",
+                      fontFamily: FF_SANS, fontSize: "0.78rem", fontWeight: active ? 600 : 400,
+                      background: active ? (T.mode === "light" ? "#fff" : T.surface) : "transparent",
+                      color: active ? T.text : T.muted,
+                      boxShadow: active ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+                      transition: "all 0.15s", WebkitTapHighlightColor: "transparent",
+                    }}>
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div style={card({})}>
-            {weakTopics.map((t, i) => (
-              <div key={t.topic} style={{ marginBottom: i < weakTopics.length - 1 ? "1rem" : 0 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "0.35rem" }}>
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text }}>{t.topic}</span>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: T.muted, marginLeft: "0.5rem" }}>
-                      {t.setNames.join(", ")}
-                    </span>
+            {(function() {
+              const filtered = topicFilter === "needs-work"
+                ? allTopics.filter(function(t) { return t.pct < 75 && t.total >= 2; })
+                : allTopics;
+
+              if (filtered.length === 0) {
+                return (
+                  <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted, textAlign: "center", padding: "0.25rem 0" }}>
+                    No weak topics — great work!
+                  </p>
+                );
+              }
+
+              return filtered.map(function(t, i) {
+                const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+                return (
+                  <div key={t.topic} style={{ marginBottom: i < filtered.length - 1 ? "1.1rem" : 0 }}>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem", marginBottom: "0.3rem" }}>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text,
+                        flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {t.topic}
+                      </span>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.65rem", color: T.muted, flexShrink: 0 }}>
+                        {t.total}q
+                      </span>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color, fontWeight: 700,
+                        flexShrink: 0, minWidth: "2.6rem", textAlign: "right" }}>
+                        {t.pct}%
+                      </span>
+                    </div>
+                    <div style={{ height: "4px", borderRadius: "4px", overflow: "hidden",
+                      background: T.mode === "light" ? "rgba(0,0,0,0.09)" : "rgba(255,255,255,0.1)" }}>
+                      <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "4px",
+                        transition: "width 0.6s cubic-bezier(0.34,1.2,0.64,1)" }} />
+                    </div>
+                    <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: T.muted, marginTop: "0.3rem", lineHeight: 1.3 }}>
+                      {t.setNames.join(" · ")}
+                    </p>
                   </div>
-                  <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem",
-                    color: t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red, fontWeight: 600, flexShrink: 0, marginLeft: "0.5rem" }}>
-                    {t.pct}%
-                  </span>
-                </div>
-                <div style={{ height: "4px", borderRadius: "4px", overflow: "hidden",
-                  background: T.mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.12)" }}>
-                  <div style={{
-                    height: "100%",
-                    width: t.pct + "%",
-                    background: t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red,
-                    borderRadius: "4px",
-                  }} />
-                </div>
-              </div>
-            ))}
+                );
+              });
+            })()}
           </div>
         </div>
       )}
