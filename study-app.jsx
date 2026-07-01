@@ -6652,11 +6652,11 @@ function App() {
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
           {/* Logo */}
-          <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? "0.8rem" : "1rem", height: sidebarCollapsed ? "64px" : "92px", display: "flex", alignItems: sidebarCollapsed ? "flex-start" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ padding: "0 1.25rem", paddingTop: sidebarCollapsed ? "0.8rem" : "1.25rem", height: sidebarCollapsed ? "64px" : "138px", display: "flex", alignItems: sidebarCollapsed ? "flex-start" : "flex-start", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
               <MascotMonoIcon width={36} height={36} color={ST.accent} />
             ) : (
-              <PounceLogo height={22} stacked />
+              <PounceLogo height={33} stacked />
             )}
           </div>
           
