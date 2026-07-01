@@ -1700,7 +1700,14 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   }, [draft.tags]);
 
   useEffect(() => {
-    function handler(e) { setDraft(d => ({ ...d, icon: e.detail })); }
+    function handler(e) {
+      setDraft(d => {
+        const nd = { ...d, icon: e.detail };
+        onSave(nd);
+        savedDraftRef.current = JSON.stringify(nd);
+        return nd;
+      });
+    }
     document.addEventListener("studi-seticon", handler);
     return () => document.removeEventListener("studi-seticon", handler);
   }, []);
@@ -3492,7 +3499,11 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
       {iconPickerActiveSetOpen && activeSet && (
         <IconPickerModal
           currentIcon={activeSet.icon || null}
-          onSelect={iconId => { onSetActiveSetIcon && onSetActiveSetIcon(activeSet.id, iconId); setIconPickerActiveSetOpen(false); }}
+          onSelect={iconId => {
+            onSetActiveSetIcon && onSetActiveSetIcon(activeSet.id, iconId);
+            setIconPickerActiveSetOpen(false);
+            if (inEdit) { setSavedFlash(true); setTimeout(() => setSavedFlash(false), 2500); }
+          }}
           onClose={() => setIconPickerActiveSetOpen(false)}
         />
       )}
