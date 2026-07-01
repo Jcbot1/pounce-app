@@ -4908,12 +4908,21 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   const totalQuestions = history.reduce((sum, s) => sum + s.total, 0);
   const mastery        = computeMastery(history);
 
-  // Streak — count consecutive days going back from today
+  // Streak — count consecutive days going back from the most recent activity.
+  // A streak is still "alive" if the last session was today or yesterday; it
+  // only breaks once a full day passes with no activity.
   const streak = (() => {
     if (!totalSessions) return 0;
     const days = new Set(history.map(s => new Date(s.date).toDateString()));
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    let start;
+    if (days.has(today.toDateString())) start = today;
+    else if (days.has(yesterday.toDateString())) start = yesterday;
+    else return 0;
     let count = 0;
-    const d = new Date();
+    const d = new Date(start);
     while (days.has(d.toDateString())) {
       count++;
       d.setDate(d.getDate() - 1);
@@ -4987,7 +4996,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
           No sessions yet
         </p>
         <p style={{ fontFamily: FF_SANS, color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>
-          Complete a study session and save it from the results screen to start tracking your progress here.
+          Complete a study session to start tracking your progress.
         </p>
       </div>
     );
