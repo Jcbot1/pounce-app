@@ -1812,10 +1812,11 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
             {showHeaders && (
               <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", margin: "1.4rem 0 0.6rem" }}>
                 <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em",
-                  color: T.muted2, textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                  color: T.muted2, textTransform: "uppercase", whiteSpace: "nowrap",
+                  overflow: "hidden", textOverflow: "ellipsis", minWidth: 0, flexShrink: 1 }}>
                   {group.topic || "Untagged"}
                 </span>
-                <span style={{ flex: 1, height: "1px", background: T.border }} />
+                <span style={{ flex: "1 1 auto", minWidth: "12px", height: "1px", background: T.border }} />
                 <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", color: T.muted }}>{group.items.length}</span>
               </div>
             )}
