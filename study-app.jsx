@@ -3001,24 +3001,29 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         </div>
       </div>
 
-      <div style={{ ...card({ marginBottom: "1.5rem", borderColor: passed ? T.green + "55" : T.red + "55" }) }}>
+      <div style={{ ...card({ marginBottom: "1.5rem", padding: 0, overflow: "hidden", borderColor: passed ? T.green + "55" : T.red + "55" }) }}>
         {/* Score row */}
-        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>
-          <div style={{ width: "80px", height: "80px", borderRadius: "50%", flexShrink: 0,
-            border: "3px solid " + passed ? T.green : T.red,
+        <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", padding: "1.25rem 1.25rem 1rem" }}>
+          <div style={{ width: "88px", height: "88px", borderRadius: "50%", flexShrink: 0,
+            border: "3px solid " + (passed ? T.green : T.red),
             background: passed ? corBgCard() : wroBgCard(),
             display: "flex", alignItems: "center", justifyContent: "center" }}>
             <AnimatedPct target={pct} color={passed ? T.green : T.red} />
           </div>
-          <div>
-            <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text, marginBottom: "0.2rem" }}>
-              {passed ? "Pass ✓" : "Almost there"}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1.15rem",
+              color: passed ? T.green : T.red, marginBottom: "0.25rem" }}>
+              {passed ? "Pass ✓" : "Not yet"}
             </p>
-            <p style={{ color: T.muted2, fontFamily: FF_SANS, fontSize: "0.9rem" }}>
-              {score} of {results.length} correct · {set.name}
+            <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.9rem", color: T.text, marginBottom: "0.2rem" }}>
+              {score} of {results.length} correct
+            </p>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted2,
+              overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.4 }}>
+              {set.name}
             </p>
             {isHistoryView && historyDate && (
-              <p style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem", marginTop: "0.2rem" }}>
+              <p style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem", marginTop: "0.25rem" }}>
                 {new Date(historyDate).toLocaleDateString(undefined, { dateStyle: "full" })}
               </p>
             )}
@@ -3027,7 +3032,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
 
         {/* Prior attempts trend */}
         {priorSessions.length > 0 && (
-          <div style={{ borderTop: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)"), marginTop: "1.25rem", paddingTop: "1rem" }}>
+          <div style={{ borderTop: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)"), padding: "1rem 1.25rem" }}>
             <Label style={{ marginBottom: "0.65rem" }}>TREND FOR THIS SET</Label>
             <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-end", overflowX: "auto" }}>
               {priorSessions.map((s, i) => {
@@ -4505,13 +4510,33 @@ function TopicSummaryInline({ results, questions }) {
 
   if (topics.length === 0) return null;
 
+  const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
+  const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
+
   return (
-    <div style={{ marginTop: "2.5rem" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-        {topics.map(t => (
-          <TopicBar key={t.topic} topic={t.topic} correct={t.correct} total={t.total} />
-        ))}
-      </div>
+    <div style={{ borderTop: "1px solid " + divider }}>
+      {topics.map(function(t, i) {
+        const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+        return (
+          <div key={t.topic} style={{
+            padding: "0.85rem 1.25rem",
+            borderBottom: i < topics.length - 1 ? "1px solid " + divider : "none",
+          }}>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.5rem" }}>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
+                {t.topic}
+              </span>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 700, color, flexShrink: 0 }}>
+                {t.pct}%
+              </span>
+            </div>
+            <div style={{ height: "4px", borderRadius: "99px", background: trackBg, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "99px",
+                transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
