@@ -4829,8 +4829,6 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     })
     .sort(function(a, b) { return a.pct - b.pct; });
 
-  const [topicFilter, setTopicFilter] = useState("all");
-
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
       <p style={{ fontFamily: FF_SANS, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: "0.3rem" }}>
@@ -4918,73 +4916,35 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
       {/* Topic breakdown */}
       {allTopics.length > 0 && (
         <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-            <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, margin: 0 }}>Topics</p>
-            <div style={{ display: "flex", background: T.surface2, borderRadius: "99px", padding: "3px", gap: "2px", flexShrink: 0 }}>
-              {[{ id: "all", label: "All" }, { id: "needs-work", label: "Needs Work" }].map(function(opt) {
-                const active = topicFilter === opt.id;
-                return (
-                  <button key={opt.id} onClick={function() { setTopicFilter(opt.id); }}
-                    style={{
-                      padding: "0.2rem 0.7rem", borderRadius: "99px", border: "none", cursor: "pointer",
-                      fontFamily: FF_SANS, fontSize: "0.78rem", fontWeight: active ? 600 : 400,
-                      background: active ? (T.mode === "light" ? "#fff" : T.surface) : "transparent",
-                      color: active ? T.text : T.muted,
-                      boxShadow: active ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                      transition: "all 0.15s", WebkitTapHighlightColor: "transparent",
-                    }}>
-                    {opt.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
+          {sectionLabel("Topics")}
           <div style={card({ padding: 0, overflow: "hidden" })}>
-            {(function() {
-              const filtered = topicFilter === "needs-work"
-                ? allTopics.filter(function(t) { return t.pct < 75 && t.total >= 2; })
-                : allTopics;
-
-              if (filtered.length === 0) {
-                return (
-                  <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted, textAlign: "center", padding: "1.25rem" }}>
-                    No weak topics — great work!
-                  </p>
-                );
-              }
-
-              return filtered.map(function(t, i) {
-                const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
-                const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
-                const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
-                return (
-                  <div key={t.topic} style={{
-                    padding: "1rem 1.25rem",
-                    borderBottom: i < filtered.length - 1 ? "1px solid " + divider : "none",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.6rem" }}>
-                      <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
-                        {t.topic}
-                      </span>
-                      <span style={{
-                        fontFamily: FF_SANS, fontSize: "1rem", fontWeight: 700, color,
-                        flexShrink: 0, lineHeight: 1,
-                      }}>
-                        {t.pct}%
-                      </span>
-                    </div>
-                    <div style={{ height: "5px", borderRadius: "99px", background: trackBg, overflow: "hidden", marginBottom: "0.45rem" }}>
-                      <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "99px",
-                        transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
-                    </div>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", color: T.muted }}>
-                      {t.total} {t.total === 1 ? "question" : "questions"}
+            {allTopics.map(function(t, i) {
+              const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+              const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
+              const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
+              return (
+                <div key={t.topic} style={{
+                  padding: "1rem 1.25rem",
+                  borderBottom: i < allTopics.length - 1 ? "1px solid " + divider : "none",
+                }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.6rem" }}>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
+                      {t.topic}
+                    </span>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "1rem", fontWeight: 700, color, flexShrink: 0, lineHeight: 1 }}>
+                      {t.pct}%
                     </span>
                   </div>
-                );
-              });
-            })()}
+                  <div style={{ height: "5px", borderRadius: "99px", background: trackBg, overflow: "hidden", marginBottom: "0.45rem" }}>
+                    <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "99px",
+                      transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
+                  </div>
+                  <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", color: T.muted }}>
+                    {t.total} {t.total === 1 ? "question" : "questions"}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
