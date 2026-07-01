@@ -4664,6 +4664,42 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
 }
 
 // ── Quick Question widget ─────────────────────────────────────────────────────
+const QQ_STATE_KEY = "studi_qq_state";
+const QQ_HOUR_MS = 3600000;
+
+// Deterministic PRNG seeded by the hour bucket, so the same question (and
+// option order) is shown for the whole hour, and it rotates automatically on
+// the next hour without needing storage.
+function seededRandom(seed) {
+  let t = seed;
+  return function() {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function pickForHour(allQs, hourBucket) {
+  if (!allQs.length) return null;
+  const rand = seededRandom(hourBucket);
+  const item = allQs[Math.floor(rand() * allQs.length)];
+  const q = item.q;
+  const options = q.options ? [...q.options] : [];
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    const tmp = options[i]; options[i] = options[j]; options[j] = tmp;
+  }
+  return { q, options };
+}
+
+function formatCountdown(ms) {
+  const totalMin = Math.max(1, Math.ceil(ms / 60000));
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
 function QuickQuestion({ sets }) {
   const allQs = [];
   sets.forEach(function(s) {
@@ -4672,23 +4708,34 @@ function QuickQuestion({ sets }) {
     });
   });
 
-  function pickRandom() {
-    if (!allQs.length) return null;
-    const item = allQs[Math.floor(Math.random() * allQs.length)];
-    const q = item.q;
-    const options = q.options ? [...q.options] : [];
-    for (let i = options.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const tmp = options[i]; options[i] = options[j]; options[j] = tmp;
-    }
-    return { q, options };
-  }
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(id);
+  }, []);
 
-  const [current, setCurrent] = useState(() => pickRandom());
+  const hourBucket = Math.floor(now / QQ_HOUR_MS);
+  const current = useMemo(() => pickForHour(allQs, hourBucket), [hourBucket, allQs.length]);
+
   const [selected, setSelected] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
-  function next() { setCurrent(pickRandom()); setSelected([]); setSubmitted(false); }
+  // Load/reset answer state whenever the hourly question changes.
+  useEffect(() => {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(QQ_STATE_KEY) || "null"); } catch {}
+    if (saved && saved.hour === hourBucket) {
+      setSelected(saved.selected || []);
+      setSubmitted(!!saved.submitted);
+    } else {
+      setSelected([]);
+      setSubmitted(false);
+    }
+  }, [hourBucket]);
+
+  function saveState(sel, sub) {
+    try { localStorage.setItem(QQ_STATE_KEY, JSON.stringify({ hour: hourBucket, selected: sel, submitted: sub })); } catch {}
+  }
 
   if (!current) return null;
 
@@ -4709,7 +4756,13 @@ function QuickQuestion({ sets }) {
     } else {
       setSelected([opt]);
       setSubmitted(true);
+      saveState([opt], true);
     }
+  }
+
+  function submitMulti() {
+    setSubmitted(true);
+    saveState(selected, true);
   }
 
   return (
@@ -4759,7 +4812,7 @@ function QuickQuestion({ sets }) {
         </div>
         {isMulti && !submitted && (
           <div style={{ marginTop: "0.75rem", display: "flex", justifyContent: "flex-end" }}>
-            <PrimaryButton onClick={() => setSubmitted(true)}
+            <PrimaryButton onClick={submitMulti}
               style={{ width: "auto", padding: "0 1.25rem",
                 opacity: selected.length === q.selectCount ? 1 : 0.4,
                 pointerEvents: selected.length === q.selectCount ? "auto" : "none" }}>
@@ -4772,9 +4825,9 @@ function QuickQuestion({ sets }) {
             <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: isCorrectOverall ? T.green : T.red }}>
               {isCorrectOverall ? "\u2713 Correct!" : "\u2717 Incorrect"}
             </p>
-            <PrimaryButton onClick={next} style={{ width: "auto", padding: "0 1.25rem" }}>
-              Next →
-            </PrimaryButton>
+            <p style={{ fontFamily: FF_SANS, fontSize: "0.8rem", color: T.muted2 }}>
+              New question in {formatCountdown(QQ_HOUR_MS - (now % QQ_HOUR_MS))}
+            </p>
           </div>
         )}
       </div>
