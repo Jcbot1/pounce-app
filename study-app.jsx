@@ -3196,8 +3196,8 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
 
   const stepLabel = {
     "mode":         "STUDY SESSION",
-    "review-count": "REVIEW — HOW MANY?",
-    "exam-timer":   "EXAM MODE — TIME LIMIT",
+    "review-count": "Quick Mode",
+    "exam-timer":   "Exam Mode",
   }[step];
 
   const back = step === "review-count" || step === "exam-timer" ? () => setStep("mode") : null;
