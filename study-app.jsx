@@ -686,6 +686,24 @@ function saveSets(s) { lzSet(STORAGE_KEY, JSON.stringify(s)); }
 function loadHistory() { try { return JSON.parse(lzGet(HISTORY_KEY)) || []; } catch { return []; } }
 function saveHistory(h) { lzSet(HISTORY_KEY, JSON.stringify(h)); }
 
+// Average per-question accuracy across sessions. Each unique question ID counts once
+// regardless of how many sessions it appeared in, so quick quizzes don't skew the result.
+function computeMastery(sessions) {
+  const qMap = {};
+  sessions.forEach(s => {
+    if (!s.results) return;
+    s.results.forEach(r => {
+      if (!qMap[r.qId]) qMap[r.qId] = { correct: 0, total: 0 };
+      qMap[r.qId].total++;
+      if (r.correct) qMap[r.qId].correct++;
+    });
+  });
+  const vals = Object.values(qMap);
+  return vals.length
+    ? Math.round(vals.reduce((sum, q) => sum + q.correct / q.total, 0) / vals.length * 100)
+    : null;
+}
+
 function blankQuestion(type = "single") {
   const base = { id: uid(), type, topic: "", question: "", hint: "", explanation: "" };
   if (type === "single")   return { ...base, options: ["", "", ""], correct: [] };
@@ -3680,9 +3698,10 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
 }
 
 // ── Set card ──────────────────────────────────────────────────────────────────
-function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession }) {
+function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession, mastery }) {
   const canStudy = s.questions.length > 0;
   const iconDef = s.icon ? SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon) : null;
+  const masteryColor = mastery == null ? null : mastery >= 75 ? T.green : mastery >= 60 ? "#f59e0b" : T.red;
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6, scrollSnapAlign: "start" }}>
@@ -3731,6 +3750,13 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         </div>
 
       </div>
+      {mastery != null && (
+        <div style={{ margin: "0.75rem -1rem -1rem" }}>
+          <div style={{ height: "3px", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)" }}>
+            <div style={{ height: "100%", width: mastery + "%", background: masteryColor, transition: "width 0.4s ease" }} />
+          </div>
+        </div>
+      )}
     </AppCard>
   );
 }
@@ -3833,9 +3859,12 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
     }
   });
 
-  function lastSession(s) {
+  function setInfo(s) {
     const sessions = history.filter(h => h.setId === s.id || h.setName === s.name);
-    return sessions.length ? sessions.sort((a, b) => new Date(b.date) - new Date(a.date))[0] : null;
+    return {
+      lastSession: sessions.length ? [...sessions].sort((a, b) => new Date(b.date) - new Date(a.date))[0] : null,
+      mastery: computeMastery(sessions),
+    };
   }
   return (
     <div style={{ marginBottom: "1.25rem" }}>
@@ -3860,25 +3889,25 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
         <div ref={contentRef}>
           {cardColumns === 1 ? (
             <div className="no-scrollbar" style={SET_CARD_SCROLL_GRID}>
-              {tagSets.map(s => (
+              {tagSets.map(s => { const info = setInfo(s); return (
                 <SetCard key={s.id} s={s} allTags={allTags}
                   onEdit={onEdit} onExport={onExport}
                   onStudy={onStudy} onDelete={onDelete}
                   onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
-                  lastSession={lastSession(s)} />
-              ))}
+                  lastSession={info.lastSession} mastery={info.mastery} />
+              ); })}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
               <div style={{ gridRow: "1 / 3", width: "0.5rem", flexShrink: 0 }} />
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
-              {tagSets.map(s => (
+              {tagSets.map(s => { const info = setInfo(s); return (
                 <SetCard key={s.id} s={s} allTags={allTags}
                   onEdit={onEdit} onExport={onExport}
                   onStudy={onStudy} onDelete={onDelete}
                   onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
-                  lastSession={lastSession(s)} />
-              ))}
+                  lastSession={info.lastSession} mastery={info.mastery} />
+              ); })}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
             </div>
           )}
@@ -3960,9 +3989,10 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
       {isFiltered && (
         <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
           {filteredSets.map(s => {
-            const ls = history.filter(h => h.setId === s.id || h.setName === s.name).sort((a,b) => new Date(b.date)-new Date(a.date))[0] || null;
+            const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
+            const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
             return <SetCard key={s.id} s={s} allTags={allTags}
-              onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} />;
+              onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh)} />;
           })}
         </div>
       )}
@@ -3984,18 +4014,20 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
               {cardColumns === 1 ? (
                 <div className="no-scrollbar" style={SET_CARD_SCROLL_GRID}>
                   {untaggedSets.map(s => {
-                    const ls = history.filter(h => h.setId === s.id || h.setName === s.name).sort((a,b) => new Date(b.date)-new Date(a.date))[0] || null;
+                    const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
+                    const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
-                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} />;
+                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh)} />;
                   })}
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
                 </div>
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
                   {untaggedSets.map(s => {
-                    const ls = history.filter(h => h.setId === s.id || h.setName === s.name).sort((a,b) => new Date(b.date)-new Date(a.date))[0] || null;
+                    const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
+                    const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
-                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} />;
+                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh)} />;
                   })}
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
                 </div>
@@ -4047,7 +4079,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
                 Recent Sets
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-                {recentSets.map(s => <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} />)}
+                {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} />; })}
               </div>
             </div>
           )}
@@ -4086,7 +4118,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
             Sets · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-            {matchedSets.map(s => <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} />)}
+            {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} />; })}
           </div>
         </div>
       )}
@@ -4707,8 +4739,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   const canHover = window.matchMedia("(hover: hover)").matches;
   const totalSessions  = history.length;
   const totalQuestions = history.reduce((sum, s) => sum + s.total, 0);
-  const totalCorrect   = history.reduce((sum, s) => sum + s.score, 0);
-  const avgScore       = totalSessions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : null;
+  const mastery        = computeMastery(history);
 
   // Streak — count consecutive days going back from today
   const streak = (() => {
@@ -4728,8 +4759,8 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     ? [...history].sort(function(a, b) { return new Date(b.date) - new Date(a.date); })[0]
     : null;
 
-  // Weak topics — aggregate across all history sessions
-  const topicMap = {};
+  // Weak topics — per-question accuracy per topic so quick quizzes don't skew counts
+  const qTopicMap = {};
   history.forEach(function(session) {
     if (!session.results || !session.questions) return;
     session.results.forEach(function(r) {
@@ -4737,18 +4768,25 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
       if (!q) return;
       const topic = q.topic && q.topic.trim() ? q.topic.trim() : null;
       if (!topic) return;
-      if (!topicMap[topic]) topicMap[topic] = { correct: 0, total: 0, setNames: [] };
-      topicMap[topic].total++;
-      if (r.correct) topicMap[topic].correct++;
-      if (topicMap[topic].setNames.indexOf(session.setName) === -1) {
-        topicMap[topic].setNames.push(session.setName);
+      if (!qTopicMap[r.qId]) qTopicMap[r.qId] = { correct: 0, total: 0, topic, setNames: [] };
+      qTopicMap[r.qId].total++;
+      if (r.correct) qTopicMap[r.qId].correct++;
+      if (qTopicMap[r.qId].setNames.indexOf(session.setName) === -1) {
+        qTopicMap[r.qId].setNames.push(session.setName);
       }
     });
+  });
+  const topicMap = {};
+  Object.values(qTopicMap).forEach(function(q) {
+    if (!topicMap[q.topic]) topicMap[q.topic] = { rates: [], setNames: [] };
+    topicMap[q.topic].rates.push(q.correct / q.total);
+    q.setNames.forEach(function(n) { if (topicMap[q.topic].setNames.indexOf(n) === -1) topicMap[q.topic].setNames.push(n); });
   });
   const weakTopics = Object.entries(topicMap)
     .map(function(entry) {
       const topic = entry[0], d = entry[1];
-      return { topic, correct: d.correct, total: d.total, pct: Math.round((d.correct / d.total) * 100), setNames: d.setNames };
+      const pct = Math.round(d.rates.reduce(function(s, r) { return s + r; }, 0) / d.rates.length * 100);
+      return { topic, pct, total: d.rates.length, setNames: d.setNames };
     })
     .filter(function(t) { return t.pct < 70 && t.total >= 2; })
     .sort(function(a, b) { return a.pct - b.pct; })
@@ -4795,8 +4833,8 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
           {statCard("Sessions",  totalSessions,  null, T.accent)}
           {statCard("Questions", totalQuestions, null, T.accent)}
-          {statCard("Avg Score", avgScore != null ? avgScore + "%" : "—", null,
-            avgScore >= 75 ? T.green : avgScore >= 60 ? "#f59e0b" : avgScore != null ? T.red : T.muted)}
+          {statCard("Mastery", mastery != null ? mastery + "%" : "—", null,
+            mastery >= 75 ? T.green : mastery >= 60 ? "#f59e0b" : mastery != null ? T.red : T.muted)}
           {statCard("Streak", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "Study today to start your streak!", T.purple)}
         </div>
       </div>
