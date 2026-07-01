@@ -3060,7 +3060,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         <TopicSummaryInline results={results} questions={questions} />
       </div>
 
-      <Label style={{ marginBottom: "0.75rem" }}>QUESTION REVIEW — click to expand</Label>
+      <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>Question Review</p>
       {results.filter(r => {
         if (resultsFilter === "correct") return r.correct;
         if (resultsFilter === "incorrect") return !r.correct;
@@ -4507,7 +4507,6 @@ function TopicSummaryInline({ results, questions }) {
 
   return (
     <div style={{ marginTop: "2.5rem" }}>
-      <Label style={{ marginBottom: "0.75rem" }}>TOPIC BREAKDOWN</Label>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
         {topics.map(t => (
           <TopicBar key={t.topic} topic={t.topic} correct={t.correct} total={t.total} />
