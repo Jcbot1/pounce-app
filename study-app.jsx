@@ -315,7 +315,7 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <h2 style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1.1rem", color: T.text }}>{label}</h2>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted2 }}>{label}</p>
       </div>
       {right && <div>{right}</div>}
     </div>
