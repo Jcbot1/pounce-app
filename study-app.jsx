@@ -3795,13 +3795,6 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         </div>
 
       </div>
-      {mastery != null && (
-        <div style={{ margin: "0.75rem -1rem -1rem" }}>
-          <div style={{ height: "3px", background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)" }}>
-            <div style={{ height: "100%", width: mastery + "%", background: masteryColor, transition: "width 0.4s ease" }} />
-          </div>
-        </div>
-      )}
     </AppCard>
   );
 }
@@ -4780,115 +4773,6 @@ function QuickQuestion({ sets }) {
 
 // ════════════════════════════════════════════════════════════════════════
 
-function StudyCalendar({ history }) {
-  const WEEKS = 15;
-  const CELL  = 11;
-  const GAP   = 2;
-  const MONTH_ABBRS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-  function toYMD(d) {
-    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-  }
-
-  const todayYMD = toYMD(new Date());
-
-  const dateMap = {};
-  history.forEach(function(s) {
-    const ymd = toYMD(new Date(s.date));
-    dateMap[ymd] = (dateMap[ymd] || 0) + 1;
-  });
-
-  // Build WEEKS columns of 7 days (Mon–Sun), ending with the Sunday of the current week
-  const endDate = new Date();
-  const endDow  = endDate.getDay(); // 0=Sun
-  endDate.setDate(endDate.getDate() + (endDow === 0 ? 0 : 7 - endDow));
-
-  const startDate = new Date(endDate);
-  startDate.setDate(endDate.getDate() - WEEKS * 7 + 1);
-  const startDow = startDate.getDay();
-  startDate.setDate(startDate.getDate() - (startDow === 0 ? 6 : startDow - 1));
-
-  const weeks = [];
-  const cur = new Date(startDate);
-  for (let w = 0; w < WEEKS; w++) {
-    const week = [];
-    for (let d = 0; d < 7; d++) { week.push(toYMD(cur)); cur.setDate(cur.getDate() + 1); }
-    weeks.push(week);
-  }
-
-  const monthLabels = weeks.map(function(week, wi) {
-    const m = parseInt(week[0].split("-")[1], 10) - 1;
-    if (wi === 0) return MONTH_ABBRS[m];
-    const pm = parseInt(weeks[wi - 1][0].split("-")[1], 10) - 1;
-    return m !== pm ? MONTH_ABBRS[m] : null;
-  });
-
-  const DAY_LABELS = ["M", "T", "W", "T", "F", "S", "S"];
-  const emptyBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
-
-  return (
-    <div style={{ display: "flex", gap: "6px" }}>
-      {/* Day labels */}
-      <div style={{ display: "flex", flexDirection: "column", gap: GAP + "px", paddingTop: "18px", flexShrink: 0 }}>
-        {DAY_LABELS.map(function(l, i) {
-          return (
-            <div key={i} style={{ height: CELL + "px", display: "flex", alignItems: "center",
-              fontFamily: FF_SANS, fontSize: "0.55rem", color: T.muted, lineHeight: 1 }}>
-              {i % 2 === 1 ? l : ""}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Grid + month labels */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px", overflowX: "auto" }}>
-        {/* Month label row */}
-        <div style={{ display: "flex", gap: GAP + "px", height: "16px", position: "relative" }}>
-          {weeks.map(function(_, wi) {
-            return (
-              <div key={wi} style={{ width: CELL + "px", flexShrink: 0, position: "relative" }}>
-                {monthLabels[wi] && (
-                  <span style={{ position: "absolute", left: 0, top: 0, fontFamily: FF_SANS, fontSize: "0.55rem", color: T.muted, whiteSpace: "nowrap", lineHeight: 1 }}>
-                    {monthLabels[wi]}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Cell grid */}
-        <div style={{ display: "flex", gap: GAP + "px" }}>
-          {weeks.map(function(week, wi) {
-            return (
-              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: GAP + "px", flexShrink: 0 }}>
-                {week.map(function(ymd, di) {
-                  const isFuture = ymd > todayYMD;
-                  const isToday  = ymd === todayYMD;
-                  const count    = isFuture ? 0 : (dateMap[ymd] || 0);
-                  const bg = isFuture ? "transparent"
-                    : count === 0 ? emptyBg
-                    : count === 1 ? T.accent + "66"
-                    : T.accent;
-                  return (
-                    <div key={di} style={{
-                      width: CELL + "px", height: CELL + "px", borderRadius: "2px",
-                      background: bg,
-                      outline: isToday ? "1.5px solid " + T.accent : "none",
-                      outlineOffset: "1px",
-                      flexShrink: 0,
-                    }} />
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function Dashboard({ history, sets, onStudy, onViewHistory }) {
   const canHover = window.matchMedia("(hover: hover)").matches;
   const totalSessions  = history.length;
@@ -4993,17 +4877,9 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
         </div>
       </div>
 
-      {/* Study activity calendar */}
-      <div className="card-fade-up" style={{ animationDelay: "150ms" }}>
-        {sectionLabel("Study Activity")}
-        <div style={card({})}>
-          <StudyCalendar history={history} />
-        </div>
-      </div>
-
       {/* Last session */}
       {lastSession && (
-        <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
+        <div className="card-fade-up" style={{ animationDelay: "150ms" }}>
           {sectionLabel("Last Session")}
           <div
             onClick={() => onViewHistory(lastSession)}
@@ -5040,7 +4916,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
       {/* Weak topics */}
       {weakTopics.length > 0 && (
-        <div className="card-fade-up" style={{ animationDelay: "450ms" }}>
+        <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
           {sectionLabel("Weak Topics")}
           <div style={card({})}>
             {weakTopics.map((t, i) => (
@@ -5073,7 +4949,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
       )}
 
       {/* Quick Question */}
-      <div className="card-fade-up" style={{ animationDelay: "600ms" }}>
+      <div className="card-fade-up" style={{ animationDelay: "450ms" }}>
         <QuickQuestion sets={sets} />
       </div>
 
