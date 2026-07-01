@@ -732,6 +732,14 @@ function blankSet() {
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
+// Middle-ellipsis truncation — keeps the distinguishing tail of similarly-prefixed
+// names (e.g. "Review Mode Set 1 – AZ-305...") instead of chopping it off.
+function truncateMiddle(str, maxLen = 20, headLen = 12) {
+  if (!str || str.length <= maxLen) return str;
+  const tailLen = maxLen - headLen - 1;
+  return str.slice(0, headLen) + "…" + str.slice(str.length - tailLen);
+}
+
 // Returns { options: string[], originalIndices: number[] }
 // originalIndices[i] = the original index of the option now at position i
 function shuffleOptions(options) {
@@ -6704,29 +6712,28 @@ function App() {
               <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
-                  ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, meta: s.questions?.length ?? 0 })),
-                  ...[...history].map(h => ({ type: "history", id: h.id, name: h.setName, date: h.date || 0, meta: Math.round((h.score / h.total) * 100) + "%" })),
-                ].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => (
+                  ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, count: s.questions?.length ?? 0 })),
+                  ...[...history].map(h => ({ type: "history", id: h.id, name: h.setName, date: h.date || 0, pct: Math.round((h.score / h.total) * 100) })),
+                ].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => {
+                  const displayName = truncateMiddle(item.name);
+                  return (
                   <button key={item.type + item.id} onClick={() => {
                     if (item.type === "set") { setHomeTab("sets"); setScreen("home"); setSetsSearch(item.name); setSetsActiveTag(null); }
                     else { const session = history.find(h => h.id === item.id); if (session) { setHomeTab("history"); setScreen("home"); setHistorySearch(session.setName); } }
                   }}
                     style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
-                    onMouseEnter={e => { e.currentTarget.style.background = ST.surface2; const nameEl = e.currentTarget.querySelector('span'); if (nameEl && nameEl.scrollWidth > nameEl.clientWidth) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); } }}
+                    onMouseEnter={e => { e.currentTarget.style.background = ST.surface2; if (displayName !== item.name) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); } }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{displayName}</span>
                     {item.type === "set" ? (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ST.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-                      </svg>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.count} Q</span>
                     ) : (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ST.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M12 7v5l3 3"/>
-                      </svg>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", fontWeight: 600, flexShrink: 0,
+                        color: item.pct >= 75 ? T.green : item.pct >= 60 ? "#f59e0b" : T.red }}>{item.pct}%</span>
                     )}
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{item.name}</span>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.meta}</span>
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
