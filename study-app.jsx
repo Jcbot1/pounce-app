@@ -4939,7 +4939,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
             </div>
           </div>
 
-          <div style={card({})}>
+          <div style={card({ padding: 0, overflow: "hidden" })}>
             {(function() {
               const filtered = topicFilter === "needs-work"
                 ? allTopics.filter(function(t) { return t.pct < 75 && t.total >= 2; })
@@ -4947,7 +4947,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
               if (filtered.length === 0) {
                 return (
-                  <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted, textAlign: "center", padding: "0.25rem 0" }}>
+                  <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: T.muted, textAlign: "center", padding: "1.25rem" }}>
                     No weak topics — great work!
                   </p>
                 );
@@ -4955,29 +4955,31 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
               return filtered.map(function(t, i) {
                 const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+                const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
+                const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
                 return (
-                  <div key={t.topic} style={{ marginBottom: i < filtered.length - 1 ? "1.1rem" : 0 }}>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem", marginBottom: "0.3rem" }}>
-                      <span style={{ fontFamily: FF_SANS, fontSize: "0.9rem", fontWeight: 500, color: T.text,
-                        flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <div key={t.topic} style={{
+                    padding: "1rem 1.25rem",
+                    borderBottom: i < filtered.length - 1 ? "1px solid " + divider : "none",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.6rem" }}>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
                         {t.topic}
                       </span>
-                      <span style={{ fontFamily: FF_SANS, fontSize: "0.65rem", color: T.muted, flexShrink: 0 }}>
-                        {t.total}q
-                      </span>
-                      <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color, fontWeight: 700,
-                        flexShrink: 0, minWidth: "2.6rem", textAlign: "right" }}>
+                      <span style={{
+                        fontFamily: FF_SANS, fontSize: "1rem", fontWeight: 700, color,
+                        flexShrink: 0, lineHeight: 1,
+                      }}>
                         {t.pct}%
                       </span>
                     </div>
-                    <div style={{ height: "4px", borderRadius: "4px", overflow: "hidden",
-                      background: T.mode === "light" ? "rgba(0,0,0,0.09)" : "rgba(255,255,255,0.1)" }}>
-                      <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "4px",
-                        transition: "width 0.6s cubic-bezier(0.34,1.2,0.64,1)" }} />
+                    <div style={{ height: "5px", borderRadius: "99px", background: trackBg, overflow: "hidden", marginBottom: "0.45rem" }}>
+                      <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "99px",
+                        transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
                     </div>
-                    <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: T.muted, marginTop: "0.3rem", lineHeight: 1.3 }}>
-                      {t.setNames.join(" · ")}
-                    </p>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", color: T.muted }}>
+                      {t.total} {t.total === 1 ? "question" : "questions"}
+                    </span>
                   </div>
                 );
               });
