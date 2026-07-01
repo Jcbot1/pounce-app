@@ -330,7 +330,7 @@ function AnswerButton({ onClick, children, bg, color, submitted, label, style: e
       className="button button-raised"
       style={{
         background: bg, color, borderRadius: "12px", padding: "1.1rem 1.25rem",
-        textAlign: "left", cursor: submitted ? "default" : "pointer",
+        textAlign: "left", cursor: submitted ? "default" : "pointer", pointerEvents: submitted ? "none" : "auto",
         fontFamily: FF_SANS, fontSize: "0.93rem", lineHeight: 1.5,
         display: "flex", alignItems: "center", justifyContent: "flex-start", gap: "0.7rem",
         transition: "all 0.15s", whiteSpace: "pre-wrap", textTransform: "none",
