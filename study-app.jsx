@@ -4807,6 +4807,8 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   const lastSession = totalSessions > 0
     ? [...history].sort(function(a, b) { return new Date(b.date) - new Date(a.date); })[0]
     : null;
+  const lastPct = lastSession ? lastSession.score / lastSession.total : 0;
+  const lastPassed = lastPct >= 0.7;
 
   // Per-question topic accuracy — keyed by qId so quick-quiz repetition doesn't skew counts
   const qTopicMap = {};
@@ -4895,31 +4897,35 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
           <div
             onClick={() => onViewHistory(lastSession)}
             style={{
-              ...card({ cursor: "pointer", transition: "background 0.15s",
-                borderColor: lastSession.score / lastSession.total >= 0.7 ? T.green + "44" : T.red + "44" }),
+              ...card({ cursor: "pointer", transition: "background 0.15s", padding: 0, overflow: "hidden",
+                borderColor: lastPassed ? T.green + "55" : T.red + "55" }),
             }}
             onMouseEnter={canHover ? e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(248,248,250,1)" : "rgba(42,38,60,1)"; } : undefined}
             onMouseLeave={canHover ? e => { e.currentTarget.style.background = T.mode === "light" ? "#fff" : "rgba(36,32,54,1)"; } : undefined}>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <div style={{ width: "56px", height: "56px", borderRadius: "50%", flexShrink: 0,
-                border: "3px solid " + lastSession.score / lastSession.total >= 0.7 ? T.green : T.red,
-                background: lastSession.score / lastSession.total >= 0.7 ? corBgCard() : wroBgCard(),
+            <div style={{ display: "flex", alignItems: "center", gap: "1.1rem", padding: "1.1rem 1.25rem" }}>
+              <div style={{ width: "68px", height: "68px", borderRadius: "50%", flexShrink: 0,
+                border: "3px solid " + (lastPassed ? T.green : T.red),
+                background: lastPassed ? corBgCard() : wroBgCard(),
                 display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1rem",
-                  color: lastSession.score / lastSession.total >= 0.7 ? T.green : T.red }}>
-                  {Math.round((lastSession.score / lastSession.total) * 100)}%
+                <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1.05rem",
+                  color: lastPassed ? T.green : T.red }}>
+                  {Math.round(lastPct * 100)}%
                 </span>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
-                  marginBottom: "0.2rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1rem",
+                  color: lastPassed ? T.green : T.red, marginBottom: "0.2rem" }}>
+                  {lastPassed ? "Pass ✓" : "Not yet"}
+                </p>
+                <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.88rem", color: T.text,
+                  marginBottom: "0.15rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {lastSession.setName}
                 </p>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted }}>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted }}>
                   {new Date(lastSession.date).toLocaleDateString(undefined, { dateStyle: "medium" })} · {lastSession.score}/{lastSession.total} correct
                 </p>
               </div>
-              <span style={{ color: T.muted, fontSize: "0.8rem", flexShrink: 0 }}>›</span>
+              <span style={{ color: T.muted, fontSize: "1rem", flexShrink: 0 }}>›</span>
             </div>
           </div>
         </div>
