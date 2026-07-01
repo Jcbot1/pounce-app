@@ -2879,7 +2879,7 @@ function AnimatedPct({ target, color }) {
   );
 }
 
-function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry }) {
+function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, history }) {
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
   const passed = pct >= 70;
@@ -2888,6 +2888,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
   const [resultsFilter, setResultsFilter] = useState("all");
   const [filterOpen,   setFilterOpen]   = useState(false);
   const [filterPos,    setFilterPos]    = useState({ top: 0, right: 0 });
+  const autoSavedIdRef = useRef(null);
 
   useEffect(() => {
     function handler() { onBack(); }
@@ -2913,12 +2914,25 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
   // Auto-save when results screen first mounts
   useEffect(() => {
     if (!isHistoryView && !saved) {
-      onSaveToHistory(buildSession());
+      const s = buildSession();
+      autoSavedIdRef.current = s.id;
+      onSaveToHistory(s);
       setSaved(true);
     }
   }, []);
 
   const session = buildSession();
+
+  const priorSessions = (history || [])
+    .filter(h => {
+      const matchesSet = (set.id && h.setId === set.id) || h.setName === set.name;
+      if (!matchesSet) return false;
+      if (!isHistoryView && h.id === autoSavedIdRef.current) return false;
+      if (isHistoryView && historyDate && h.date === historyDate) return false;
+      return true;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(-5);
 
   const missedQuestions = questions.filter((q, i) => {
     const r = results.find(r => r.qId === q.id);
@@ -3010,6 +3024,37 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
             )}
           </div>
         </div>
+
+        {/* Prior attempts trend */}
+        {priorSessions.length > 0 && (
+          <div style={{ borderTop: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.07)"), marginTop: "1.25rem", paddingTop: "1rem" }}>
+            <Label style={{ marginBottom: "0.65rem" }}>TREND FOR THIS SET</Label>
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-end", overflowX: "auto" }}>
+              {priorSessions.map((s, i) => {
+                const p = Math.round(s.score / s.total * 100);
+                const col = p >= 75 ? T.green : p >= 60 ? "#f59e0b" : T.red;
+                return (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
+                    <div style={{ width: "38px", height: "38px", borderRadius: "50%",
+                      background: col + "1a", border: "2px solid " + col,
+                      display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.63rem", color: col }}>{p}%</span>
+                    </div>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", color: T.muted, textAlign: "center", lineHeight: 1.2 }}>
+                      {new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                    </span>
+                  </div>
+                );
+              })}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
+                <span style={{ color: T.muted, fontSize: "1rem", height: "38px", display: "flex", alignItems: "center", paddingBottom: "2px" }}>→</span>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", color: T.accent, fontWeight: 600 }}>
+                  {isHistoryView ? new Date(historyDate).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "today"}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Topic breakdown inline */}
         <TopicSummaryInline results={results} questions={questions} />
@@ -4735,6 +4780,115 @@ function QuickQuestion({ sets }) {
 
 // ════════════════════════════════════════════════════════════════════════
 
+function StudyCalendar({ history }) {
+  const WEEKS = 15;
+  const CELL  = 11;
+  const GAP   = 2;
+  const MONTH_ABBRS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function toYMD(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  const todayYMD = toYMD(new Date());
+
+  const dateMap = {};
+  history.forEach(function(s) {
+    const ymd = toYMD(new Date(s.date));
+    dateMap[ymd] = (dateMap[ymd] || 0) + 1;
+  });
+
+  // Build WEEKS columns of 7 days (Mon–Sun), ending with the Sunday of the current week
+  const endDate = new Date();
+  const endDow  = endDate.getDay(); // 0=Sun
+  endDate.setDate(endDate.getDate() + (endDow === 0 ? 0 : 7 - endDow));
+
+  const startDate = new Date(endDate);
+  startDate.setDate(endDate.getDate() - WEEKS * 7 + 1);
+  const startDow = startDate.getDay();
+  startDate.setDate(startDate.getDate() - (startDow === 0 ? 6 : startDow - 1));
+
+  const weeks = [];
+  const cur = new Date(startDate);
+  for (let w = 0; w < WEEKS; w++) {
+    const week = [];
+    for (let d = 0; d < 7; d++) { week.push(toYMD(cur)); cur.setDate(cur.getDate() + 1); }
+    weeks.push(week);
+  }
+
+  const monthLabels = weeks.map(function(week, wi) {
+    const m = parseInt(week[0].split("-")[1], 10) - 1;
+    if (wi === 0) return MONTH_ABBRS[m];
+    const pm = parseInt(weeks[wi - 1][0].split("-")[1], 10) - 1;
+    return m !== pm ? MONTH_ABBRS[m] : null;
+  });
+
+  const DAY_LABELS = ["M", "T", "W", "T", "F", "S", "S"];
+  const emptyBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
+
+  return (
+    <div style={{ display: "flex", gap: "6px" }}>
+      {/* Day labels */}
+      <div style={{ display: "flex", flexDirection: "column", gap: GAP + "px", paddingTop: "18px", flexShrink: 0 }}>
+        {DAY_LABELS.map(function(l, i) {
+          return (
+            <div key={i} style={{ height: CELL + "px", display: "flex", alignItems: "center",
+              fontFamily: FF_SANS, fontSize: "0.55rem", color: T.muted, lineHeight: 1 }}>
+              {i % 2 === 1 ? l : ""}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Grid + month labels */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "2px", overflowX: "auto" }}>
+        {/* Month label row */}
+        <div style={{ display: "flex", gap: GAP + "px", height: "16px", position: "relative" }}>
+          {weeks.map(function(_, wi) {
+            return (
+              <div key={wi} style={{ width: CELL + "px", flexShrink: 0, position: "relative" }}>
+                {monthLabels[wi] && (
+                  <span style={{ position: "absolute", left: 0, top: 0, fontFamily: FF_SANS, fontSize: "0.55rem", color: T.muted, whiteSpace: "nowrap", lineHeight: 1 }}>
+                    {monthLabels[wi]}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Cell grid */}
+        <div style={{ display: "flex", gap: GAP + "px" }}>
+          {weeks.map(function(week, wi) {
+            return (
+              <div key={wi} style={{ display: "flex", flexDirection: "column", gap: GAP + "px", flexShrink: 0 }}>
+                {week.map(function(ymd, di) {
+                  const isFuture = ymd > todayYMD;
+                  const isToday  = ymd === todayYMD;
+                  const count    = isFuture ? 0 : (dateMap[ymd] || 0);
+                  const bg = isFuture ? "transparent"
+                    : count === 0 ? emptyBg
+                    : count === 1 ? T.accent + "66"
+                    : T.accent;
+                  return (
+                    <div key={di} style={{
+                      width: CELL + "px", height: CELL + "px", borderRadius: "2px",
+                      background: bg,
+                      outline: isToday ? "1.5px solid " + T.accent : "none",
+                      outlineOffset: "1px",
+                      flexShrink: 0,
+                    }} />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Dashboard({ history, sets, onStudy, onViewHistory }) {
   const canHover = window.matchMedia("(hover: hover)").matches;
   const totalSessions  = history.length;
@@ -4839,9 +4993,17 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
         </div>
       </div>
 
+      {/* Study activity calendar */}
+      <div className="card-fade-up" style={{ animationDelay: "150ms" }}>
+        {sectionLabel("Study Activity")}
+        <div style={card({})}>
+          <StudyCalendar history={history} />
+        </div>
+      </div>
+
       {/* Last session */}
       {lastSession && (
-        <div className="card-fade-up" style={{ animationDelay: "150ms" }}>
+        <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
           {sectionLabel("Last Session")}
           <div
             onClick={() => onViewHistory(lastSession)}
@@ -4878,7 +5040,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
       {/* Weak topics */}
       {weakTopics.length > 0 && (
-        <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
+        <div className="card-fade-up" style={{ animationDelay: "450ms" }}>
           {sectionLabel("Weak Topics")}
           <div style={card({})}>
             {weakTopics.map((t, i) => (
@@ -4911,7 +5073,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
       )}
 
       {/* Quick Question */}
-      <div className="card-fade-up" style={{ animationDelay: "450ms" }}>
+      <div className="card-fade-up" style={{ animationDelay: "600ms" }}>
         <QuickQuestion sets={sets} />
       </div>
 
@@ -6425,7 +6587,8 @@ function App() {
                 onSaveToHistory={handleSaveToHistory} questionLimit={questionLimit} examMode={examMode}
                 onRetryMissed={handleRetryMissed}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
-                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)} />
+                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
+                history={history} />
             )}
             {screen === "historyResults" && historySession && (
               <ResultsScreen
@@ -6439,7 +6602,8 @@ function App() {
                 isHistoryView={true}
                 historyDate={historySession.date}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
-                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)} />
+                confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
+                history={history} />
             )}
           </div>
         </div>
