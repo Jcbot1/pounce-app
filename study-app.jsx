@@ -1446,7 +1446,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             <>
               <Label required style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS — each row is one line of the question</Label>
               {q.dropdowns.map((dd, di) => (
-                <div key={dd.id} style={{ marginBottom: "0.75rem", padding: "0.75rem", border: "1px solid " + T.border, borderRadius: "12px", background: T.surface2 }}>
+                <div key={dd.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", borderLeft: "3px solid #f59e0b55", borderRadius: "10px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
                       <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>ROW {di + 1}</span>
@@ -1513,7 +1513,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             <>
               <Label required style={{ marginBottom: "0.6rem" }}>PAIRS — enter each term and its correct match</Label>
               {q.pairs.map((pair, pi) => (
-                <div key={pair.id} style={{ marginBottom: "1rem", padding: "0.75rem", background: T.surface2, borderRadius: "12px", border: "1px solid " + T.border }}>
+                <div key={pair.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", background: T.surface2, borderRadius: "10px", borderLeft: "3px solid #0ea5e955" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                     <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
                     {q.pairs.length > 2 && (
@@ -1784,18 +1784,53 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
         </div>
       )}
 
-      {draft.questions
-        .map((q, i) => ({ q, i }))
-        .filter(({ q }) => !editSearch.trim() || q.question?.toLowerCase().includes(editSearch.toLowerCase()))
-        .map(({ q, i }) => (
-        <div key={q.id} id={"question-" + q.id}>
-          <QuestionEditor q={q}
-            onChange={nq => updateQ(i, nq)}
-            onDeleteRequest={() => setConfirmDeleteQ({ i, q })}
-            invalid={!validateQuestion(q)}
-            defaultOpen={q.id === newestId} />
-        </div>
-      ))}
+      {(() => {
+        const filtered = draft.questions
+          .map((q, i) => ({ q, i }))
+          .filter(({ q }) => !editSearch.trim() || q.question?.toLowerCase().includes(editSearch.toLowerCase()));
+
+        // Group by topic, preserving each question's relative order within its group.
+        const groups = [];
+        const groupByTopic = {};
+        filtered.forEach(item => {
+          const topic = (item.q.topic || "").trim();
+          if (!(topic in groupByTopic)) {
+            groupByTopic[topic] = { topic, items: [] };
+            groups.push(groupByTopic[topic]);
+          }
+          groupByTopic[topic].items.push(item);
+        });
+        groups.sort((a, b) => {
+          if (!a.topic && b.topic) return 1;
+          if (a.topic && !b.topic) return -1;
+          return a.topic.localeCompare(b.topic);
+        });
+        const showHeaders = groups.length > 1;
+
+        return groups.map(group => (
+          <div key={group.topic || " untagged"}>
+            {showHeaders && (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", margin: "1.4rem 0 0.6rem" }}>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em",
+                  color: T.muted2, textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                  {group.topic || "Untagged"}
+                </span>
+                <span style={{ flex: 1, height: "1px", background: T.border }} />
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.68rem", color: T.muted }}>{group.items.length}</span>
+              </div>
+            )}
+            {group.items.map(({ q, i }) => (
+              <div key={q.id} id={"question-" + q.id}>
+                <QuestionEditor q={q}
+                  onChange={nq => updateQ(i, nq)}
+                  onDeleteRequest={() => setConfirmDeleteQ({ i, q })}
+                  invalid={!validateQuestion(q)}
+                  defaultOpen={q.id === newestId} />
+              </div>
+            ))}
+          </div>
+        ));
+      })()}
 
       {confirmDeleteQ && (
         <ConfirmDialog
