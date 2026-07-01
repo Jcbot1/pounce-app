@@ -767,18 +767,10 @@ function buildShuffledQuestion(q) {
 
 // ── Confirm dialog ────────────────────────────────────────────────────────────
 function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onCancel, extraButton }) {
-  const headerLabel = confirmLabel === "Delete" ? "CONFIRM DELETE"
-    : confirmLabel === "Leave"  ? "CONFIRM LEAVE"
-    : confirmLabel === "Retry"  ? "CONFIRM RETRY"
-    : confirmLabel === "Yes, delete everything" ? "CONFIRM DELETE"
-    : "CONFIRM";
   return (
     <Modal onClose={onCancel}>
       <ModalCard pad="2.25rem" maxWidth={360}>
         <div>
-          <Label style={{ color: T.red, marginBottom: "0.4rem" }}>
-            {headerLabel}
-          </Label>
           <h3 style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.15rem", color: T.text, marginBottom: "0.4rem" }}>
             {title}
           </h3>
@@ -3353,7 +3345,6 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   return (
     <Modal onClose={onClose}>
       <ModalCard pad="2rem" maxWidth={340}>
-        <Label style={{ marginBottom: "1.25rem" }}>PROFILE</Label>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem" }}>
           <button onClick={randomIcon} {...surfacePress()} style={{
             width: "80px", height: "80px", borderRadius: "99px", background: draftBg,
@@ -3645,17 +3636,17 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <HamburgerSectionHeader label="Appearance" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Theme</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Color</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
                 </div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Background</p>
                 <div style={{ marginBottom: "0.25rem" }}>
                   <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} large />
                 </div>
@@ -6758,12 +6749,12 @@ function App() {
             <>
               <HamburgerSectionHeader label="Appearance" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Theme</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Color</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Background</p>
                 <div style={{ marginBottom: "0.25rem" }}><BackgroundPicker bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle} /></div>
               </div>
             </>
