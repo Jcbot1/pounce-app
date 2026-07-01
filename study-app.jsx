@@ -4218,6 +4218,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // Keep page height = active panel height so off-screen panels don't add scroll space
   React.useLayoutEffect(() => {
     function sync() {
+      if (tabRef.current === "search") return;
       const idx = TAB_ORDER.indexOf(lastRealTabRef.current);
       const panel = panelRefs[idx]?.current;
       if (panel && containerRef.current) containerRef.current.style.height = panel.scrollHeight + "px";
