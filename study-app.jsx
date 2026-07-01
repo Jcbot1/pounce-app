@@ -4310,9 +4310,10 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       if (tabRef.current === "search") return;
       const t = e.touches[0];
       const EDGE = 22;
-      // Home and history panels have no horizontal scrollers — allow swipe from anywhere.
-      // Sets panel keeps a narrow edge zone to avoid hijacking the horizontal card carousel.
-      const fromEdge = tabRef.current === "sets"
+      // Home has no horizontal scrollers — allow swipe from anywhere.
+      // Sets and History keep a narrow edge zone so horizontal scrollers/carousels
+      // and card gestures on those panels aren't hijacked by tab-swipe.
+      const fromEdge = tabRef.current !== "home"
         ? (t.clientX < EDGE || t.clientX > window.innerWidth - EDGE)
         : true;
       swipeRef.current = { startX: t.clientX, startY: t.clientY, axis: null, fromEdge };
