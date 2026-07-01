@@ -104,7 +104,11 @@
       "Bash(npm ls *)",
       "Bash(timeout 60 npx --yes playwright --version)",
       "Bash(npx babel *)",
-      "Bash(npx --yes esbuild study-app.jsx --loader=jsx --outfile=/dev/null)"
+      "Bash(npx --yes esbuild study-app.jsx --loader=jsx --outfile=/dev/null)",
+      "Bash(git show *)",
+      "Bash(cat)",
+      "Bash(echo written *)",
+      "Bash(cd C:/Users/CJ/AppData/Local/Temp/claude/C--Users-CJ-Documents-ClaudeCode-pounce-app/b6a24c56-4fe8-413a-9157-e6cc78591500/scratchpad)"
     ]
   }
 }
