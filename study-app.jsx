@@ -3385,7 +3385,7 @@ function SupportModal({ onClose }) {
   return (
     <Modal onClose={onClose}>
       <ModalCard pad="2rem" maxWidth={340}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "-0.4rem" }}>
           <div style={{
             width: "64px", height: "64px", borderRadius: "99px",
             background: "#FF5E5B22", border: "1px solid #FF5E5B44",
