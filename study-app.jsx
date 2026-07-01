@@ -5867,6 +5867,16 @@ function App() {
   const [accent, setAccentState]       = useState(() => localStorage.getItem(ACCENT_KEY) || "purple");
   const [bgStyle, setBgStyleState]     = useState(() => localStorage.getItem(BG_STYLE_KEY) || "gradient");
   const [profileName,  setProfileName]  = useState(() => localStorage.getItem(PROFILE_NAME_KEY) || "Profile");
+  const greeting = useMemo(() => {
+    const h = new Date().getHours();
+    const name = profileName ? `, ${profileName}` : "";
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const morning   = [`Good morning${name}.`, `Rise and shine${name}!`, `Morning${name}. Ready to learn?`, `Early start${name}. Nice.`, `Morning${name} — let's make it count.`, `Coffee in hand${name}? Let's go.`];
+    const afternoon = [`Good afternoon${name}.`, `Afternoon${name}. Keep it going.`, `Hey${name}, afternoon grind?`, `Midday check-in${name}.`];
+    const evening   = [`Good evening${name}.`, `Evening${name}. One more session?`, `Hey${name}, evening wind-down?`, `Evening${name}. Let's finish strong.`];
+    const late      = [`Studying late${name}?`, `Burning the midnight oil${name}?`, `Night owl mode${name}.`, `Up late${name}? Let's make it worth it.`];
+    return h < 12 ? pick(morning) : h < 17 ? pick(afternoon) : h < 21 ? pick(evening) : pick(late);
+  }, [profileName]);
   const [profileIconId, setProfileIconId] = useState(() => localStorage.getItem(PROFILE_ICON_KEY) || "grad");
   const [profileBg,    setProfileBg]    = useState(() => localStorage.getItem(PROFILE_BG_KEY) || "#1e3a5f");
   const [profileIColor,setProfileIColor]= useState(() => localStorage.getItem(PROFILE_ICOLOR_KEY) || "#60b4ff");
@@ -6441,21 +6451,11 @@ function App() {
           padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : (screen === "review" || screen === "edit") ? "1.5rem 0 7rem" : "1.5rem 0 4rem",
         }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", padding: "0 1.25rem" }}>
-            {screen === "home" && homeTab === "home" && (() => {
-              const h = new Date().getHours();
-              const name = profileName ? `, ${profileName}` : "";
-              const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-              const morning   = [`Good morning${name}.`, `Rise and shine${name}!`, `Morning${name}. Ready to learn?`, `Early start${name}. Nice.`, `Morning${name} — let's make it count.`, `Coffee in hand${name}? Let's go.`];
-              const afternoon = [`Good afternoon${name}.`, `Afternoon${name}. Keep it going.`, `Hey${name}, afternoon grind?`, `Midday check-in${name}.`];
-              const evening   = [`Good evening${name}.`, `Evening${name}. One more session?`, `Hey${name}, evening wind-down?`, `Evening${name}. Let's finish strong.`];
-              const late      = [`Studying late${name}?`, `Burning the midnight oil${name}?`, `Night owl mode${name}.`, `Up late${name}? Let's make it worth it.`];
-              const text = h < 12 ? pick(morning) : h < 17 ? pick(afternoon) : h < 21 ? pick(evening) : pick(late);
-              return (
-                <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-                  <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>{text}</p>
-                </div>
-              );
-            })()}
+            {screen === "home" && homeTab === "home" && (
+              <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+                <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, margin: 0, lineHeight: 1.3 }}>{greeting}</p>
+              </div>
+            )}
             {screen === "home" && (
               <Home
                 sets={sets}
