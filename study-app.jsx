@@ -3517,7 +3517,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           </div>
         ) : (inEdit && editCanSave) ? (
           <GlassButton onClick={() => { setOpen(o => !o); if (open) setSection(null); }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="save-pending" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
               <polyline points="17 21 17 13 7 13 7 21"/>
               <polyline points="7 3 7 8 15 8"/>
@@ -5259,6 +5259,12 @@ const STATIC_STYLES = `
     50%      { transform: translateY(-8px); }
   }
   .stu-bob { animation: stuBob 3s ease-in-out infinite; }
+
+  @keyframes savePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(1.12); }
+  }
+  .save-pending { animation: savePulse 1.8s ease-in-out infinite; transform-origin: center; }
 
   @keyframes cardFadeUp {
     from { opacity: 0; transform: translateY(16px); }
