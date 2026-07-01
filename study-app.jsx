@@ -1398,7 +1398,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                   <div key={i} style={{ marginBottom: "0.5rem",
                     background: T.surface2,
                     border: "1px solid " + T.border,
-                    borderRadius: "10px", overflow: "hidden",
+                    borderRadius: "12px", overflow: "hidden",
                   }}>
                     {/* Top bar — correct toggle + delete */}
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -1446,7 +1446,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             <>
               <Label required style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS</Label>
               {q.dropdowns.map((dd, di) => (
-                <div key={dd.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", borderRadius: "10px", background: T.surface2 }}>
+                <div key={dd.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
                       <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>ROW {di + 1}</span>
@@ -1463,7 +1463,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                     <div key={oi} style={{ marginBottom: "0.4rem",
                       background: T.surface,
                       border: "1px solid " + T.border,
-                      borderRadius: "10px", overflow: "hidden",
+                      borderRadius: "12px", overflow: "hidden",
                     }}>
                       {/* Top bar */}
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -1511,7 +1511,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             <>
               <Label required style={{ marginBottom: "0.6rem" }}>PAIRS</Label>
               {q.pairs.map((pair, pi) => (
-                <div key={pair.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", background: T.surface2, borderRadius: "10px" }}>
+                <div key={pair.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", background: T.surface2, borderRadius: "12px" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                     <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
                     {q.pairs.length > 2 && (
@@ -2099,7 +2099,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem",
                   background: triggerBg, color: triggerColor,
                   border: (hasVal && !submitted) ? "1.5px solid " + T.accent + "44" : "1px solid " + triggerBorder,
-                  borderRadius: "6px", padding: "0.45rem 0.6rem",
+                  borderRadius: "8px", padding: "0.45rem 0.6rem",
                   fontFamily: FF_SANS, fontSize: "0.8rem",
                   cursor: submitted ? "default" : "pointer",
                   textAlign: "left", whiteSpace: "normal", wordBreak: "break-word",
@@ -2122,7 +2122,7 @@ function ReviewDropdown({ q, selections, onSelect, submitted }) {
                   zIndex: 9999,
                   background: T.surface,
                   border: "1px solid " + T.border,
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   boxShadow: T.mode === "light" ? "0 8px 24px rgba(0,0,0,0.12)" : "0 8px 24px rgba(0,0,0,0.4)",
                   overflow: "hidden",
                 }}>
@@ -3149,7 +3149,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
 
                 {/* Explanation */}
                 {q.explanation && (
-                  <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "6px" }}>
+                  <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "12px" }}>
                     <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
                       EXPLANATION
                     </p>
@@ -3790,7 +3790,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         <div style={{
           alignSelf: "center", flexShrink: 0,
           width: "64px", height: "64px",
-          borderRadius: "14px",
+          borderRadius: "12px",
           background: iconBoxBg,
           boxShadow: T.mode === "light"
             ? "0 1px 4px rgba(0,0,0,0.10), 0 3px 8px rgba(0,0,0,0.08)"
