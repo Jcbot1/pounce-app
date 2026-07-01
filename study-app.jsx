@@ -4920,7 +4920,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
         <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
           {sectionLabel("Topics")}
           <div style={card({ padding: 0, overflow: "hidden" })}>
-            {(topicsExpanded ? allTopics : allTopics.slice(0, 5)).map(function(t, i, arr) {
+            {(topicsExpanded ? allTopics : allTopics.slice(0, 4)).map(function(t, i, arr) {
               const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
               const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
               const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
@@ -4947,7 +4947,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                 </div>
               );
             })}
-            {allTopics.length > 5 && (
+            {allTopics.length > 4 && (
               <button onClick={function() { setTopicsExpanded(function(e) { return !e; }); }}
                 style={{
                   display: "block", width: "100%", padding: "0.85rem 1.25rem",
