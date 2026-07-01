@@ -3801,8 +3801,6 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
   return (
     <Modal onClose={onClose}>
       <ModalCard pad="1.25rem" maxWidth={380} scroll>
-        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted }}>SET ICON</p>
-
         {/* No icon option */}
         <div
           onClick={() => { onSelect(null); onClose(); }}
