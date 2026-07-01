@@ -4843,11 +4843,11 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
-      <p style={{ fontFamily: FF_SANS, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: "0.3rem" }}>
-        {value !== undefined && value !== null ? value : "—"}
-      </p>
-      <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, margin: 0, marginBottom: sub ? "0.15rem" : 0 }}>
+      <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, margin: 0, marginBottom: "0.3rem" }}>
         {label}
+      </p>
+      <p style={{ fontFamily: FF_SANS, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: sub ? "0.2rem" : 0 }}>
+        {value !== undefined && value !== null ? value : "—"}
       </p>
       {sub && <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted2, margin: 0 }}>{sub}</p>}
     </div>
