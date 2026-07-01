@@ -1057,7 +1057,7 @@ function SnapTextarea({ style, maxLength, ...props }) {
     <div style={{ position: "relative", width: "100%", minWidth: 0 }}>
       <textarea ref={ref} maxLength={maxLength}
         style={{ ...style, resize: "none", overflow: "hidden", paddingBottom: maxLength ? "1.4rem" : "1.25rem" }} {...props} />
-      {maxLength && (
+      {maxLength && len >= maxLength * 0.8 && (
         <span style={{
           position: "absolute", bottom: "0.65rem", right: "0.65rem",
           fontFamily: FF_SANS, fontSize: "0.6rem",
@@ -1095,7 +1095,7 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
           ...(noBorder ? { border: "none", borderRadius: 0, background: "transparent", boxShadow: "none" } : {}),
         }}
       />
-      {maxLength && (
+      {maxLength && len >= maxLength * 0.8 && (
         <span style={{
           position: "absolute", bottom: "0.65rem", right: "0.65rem",
           fontFamily: FF_SANS, fontSize: "0.6rem",
@@ -1308,7 +1308,11 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
   const meta = TYPE_META[q.type];
 
   return (
-    <div style={card({ marginBottom: "0.75rem", borderColor: invalid ? T.red + "66" : undefined })}>
+    <div style={card({
+      marginBottom: "0.75rem",
+      borderLeft: "3px solid " + (invalid ? T.red : meta.color + "55"),
+      ...(!open ? { padding: "0.85rem 1rem" } : {}),
+    })}>
       {/* collapsed header */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", cursor: "pointer" }} onClick={() => setOpen(o => !o)}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -1389,16 +1393,17 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               {q.options.map((opt, i) => {
                 const isCor = q.correct.includes(i);
                 return (
-                  <div key={i} style={{ marginBottom: "0.75rem",
-                    background: T.mode === "light" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.04)",
-                    border: "1px solid " + (isCor ? T.green + "66" : T.border),
-                    borderRadius: "12px", overflow: "hidden",
+                  <div key={i} style={{ marginBottom: "0.5rem",
+                    background: T.surface2,
+                    border: "1px solid " + (isCor ? T.green + "66" : "transparent"),
+                    borderLeft: "3px solid " + (isCor ? T.green : T.border2),
+                    borderRadius: "10px", overflow: "hidden",
                     transition: "border-color 0.2s",
                   }}>
                     {/* Top bar — correct toggle + delete */}
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-                      padding: "0.5rem 0.75rem",
-                      
+                      padding: "0.45rem 0.7rem",
+
                       background: "transparent",
                     }}>
                       <button {...surfacePress()} onClick={() => toggleCorrect(i)} style={{
@@ -1455,16 +1460,17 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                   </div>
                   <Label required>OPTIONS — select the correct one</Label>
                   {dd.options.map((opt, oi) => (
-                    <div key={oi} style={{ marginBottom: "0.5rem",
-                      background: T.mode === "light" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.04)",
-                      border: "1px solid " + (dd.correct === oi ? T.green + "66" : T.border),
-                      borderRadius: "12px", overflow: "hidden",
+                    <div key={oi} style={{ marginBottom: "0.4rem",
+                      background: T.surface,
+                      border: "1px solid " + (dd.correct === oi ? T.green + "66" : "transparent"),
+                      borderLeft: "3px solid " + (dd.correct === oi ? T.green : T.border2),
+                      borderRadius: "10px", overflow: "hidden",
                       transition: "border-color 0.2s",
                     }}>
                       {/* Top bar */}
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-                        padding: "0.5rem 0.75rem",
-                        
+                        padding: "0.45rem 0.7rem",
+
                         background: "transparent",
                       }}>
                         <button onClick={() => setDDCor(di, oi)} style={{
