@@ -4829,6 +4829,8 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
     })
     .sort(function(a, b) { return a.pct - b.pct; });
 
+  const [topicsExpanded, setTopicsExpanded] = useState(false);
+
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
       <p style={{ fontFamily: FF_SANS, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: "0.3rem" }}>
@@ -4918,14 +4920,14 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
         <div className="card-fade-up" style={{ animationDelay: "300ms" }}>
           {sectionLabel("Topics")}
           <div style={card({ padding: 0, overflow: "hidden" })}>
-            {allTopics.map(function(t, i) {
+            {(topicsExpanded ? allTopics : allTopics.slice(0, 5)).map(function(t, i, arr) {
               const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
               const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
               const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
               return (
                 <div key={t.topic} style={{
                   padding: "1rem 1.25rem",
-                  borderBottom: i < allTopics.length - 1 ? "1px solid " + divider : "none",
+                  borderBottom: "1px solid " + divider,
                 }}>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.6rem" }}>
                     <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
@@ -4945,6 +4947,18 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                 </div>
               );
             })}
+            {allTopics.length > 5 && (
+              <button onClick={function() { setTopicsExpanded(function(e) { return !e; }); }}
+                style={{
+                  display: "block", width: "100%", padding: "0.85rem 1.25rem",
+                  background: "transparent", border: "none", cursor: "pointer",
+                  fontFamily: FF_SANS, fontSize: "0.8rem", fontWeight: 500,
+                  color: T.accent, textAlign: "center",
+                  WebkitTapHighlightColor: "transparent",
+                }}>
+                {topicsExpanded ? "Show less" : "Show all " + allTopics.length + " topics"}
+              </button>
+            )}
           </div>
         </div>
       )}
