@@ -1310,7 +1310,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
   return (
     <div style={card({
       marginBottom: "0.75rem",
-      borderLeft: "3px solid " + (invalid ? T.red : meta.color + "55"),
+      ...(invalid ? { border: "1.5px solid " + T.red + "66" } : {}),
       ...(!open ? { padding: "0.85rem 1rem" } : {}),
     })}>
       {/* collapsed header */}
@@ -1334,7 +1334,9 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             </IconButton>
           </div>
         </div>
-        <span style={{ color: q.question ? T.text : T.muted, fontSize: "0.87rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: FF_SANS, paddingRight: "1.5rem" }}>
+        <span style={{ color: q.question ? T.text : T.muted, fontSize: "0.87rem", lineHeight: 1.4,
+          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+          overflow: "hidden", textOverflow: "ellipsis", fontFamily: FF_SANS, paddingRight: "1.5rem" }}>
           {q.question || "Untitled question…"}
         </span>
       </div>
@@ -1395,10 +1397,8 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                 return (
                   <div key={i} style={{ marginBottom: "0.5rem",
                     background: T.surface2,
-                    border: "1px solid " + (isCor ? T.green + "66" : "transparent"),
-                    borderLeft: "3px solid " + (isCor ? T.green : T.border2),
+                    border: "1px solid " + T.border,
                     borderRadius: "10px", overflow: "hidden",
-                    transition: "border-color 0.2s",
                   }}>
                     {/* Top bar — correct toggle + delete */}
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -1446,7 +1446,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             <>
               <Label required style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS — each row is one line of the question</Label>
               {q.dropdowns.map((dd, di) => (
-                <div key={dd.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", borderLeft: "3px solid #f59e0b55", borderRadius: "10px", background: T.surface2 }}>
+                <div key={dd.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", borderRadius: "10px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
                       <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>ROW {di + 1}</span>
@@ -1462,10 +1462,8 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                   {dd.options.map((opt, oi) => (
                     <div key={oi} style={{ marginBottom: "0.4rem",
                       background: T.surface,
-                      border: "1px solid " + (dd.correct === oi ? T.green + "66" : "transparent"),
-                      borderLeft: "3px solid " + (dd.correct === oi ? T.green : T.border2),
+                      border: "1px solid " + T.border,
                       borderRadius: "10px", overflow: "hidden",
-                      transition: "border-color 0.2s",
                     }}>
                       {/* Top bar */}
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -1513,7 +1511,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             <>
               <Label required style={{ marginBottom: "0.6rem" }}>PAIRS — enter each term and its correct match</Label>
               {q.pairs.map((pair, pi) => (
-                <div key={pair.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", background: T.surface2, borderRadius: "10px", borderLeft: "3px solid #0ea5e955" }}>
+                <div key={pair.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", background: T.surface2, borderRadius: "10px" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                     <span style={{ color: T.muted, fontFamily: FF_SANS, fontSize: "0.72rem" }}>PAIR {pi + 1}</span>
                     {q.pairs.length > 2 && (
