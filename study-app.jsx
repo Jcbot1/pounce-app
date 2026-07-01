@@ -6380,7 +6380,7 @@ function App() {
                 Results
               </span>
             ) : !showSidebar ? (
-              <div style={{ position: "relative", display: "flex", alignItems: "center", background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", height: "44px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", width: "100%" }}>
+              <div style={{ position: "relative", display: "flex", alignItems: "center", background: T.surface, border: "none", borderRadius: "99px", height: "44px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box", width: "100%" }}>
                 <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none", marginRight: "0.5rem" }}
                   width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={T.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
@@ -6396,7 +6396,7 @@ function App() {
               </div>
             ) : screen === "home" ? (
               <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: "480px", padding: "0 1rem" }}>
-                <div style={{ position: "relative", display: "flex", alignItems: "center", background: ST.surface, border: "1px solid " + ST.border, borderRadius: "99px", height: "38px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box" }}>
+                <div style={{ position: "relative", display: "flex", alignItems: "center", background: ST.surface, border: "none", borderRadius: "99px", height: "38px", paddingLeft: "0.75rem", paddingRight: "0.5rem", boxSizing: "border-box" }}>
                   <svg style={{ flexShrink: 0, opacity: 0.5, pointerEvents: "none", marginRight: "0.5rem" }}
                     width="14" height="14" viewBox="1 1 22 22" fill="none" stroke={ST.text} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
