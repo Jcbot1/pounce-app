@@ -3195,7 +3195,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
   const TIMER_OPTIONS = [30, 60, 90, 120];
 
   const stepLabel = {
-    "mode":         "STUDY SESSION",
+    "mode":         "Study Session",
     "review-count": "Quick Mode",
     "exam-timer":   "Exam Mode",
   }[step];
@@ -3214,13 +3214,10 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 {...surfacePress()}
                 style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg></button>
             )}
-            <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.1em" }}>
-              {stepLabel}
-            </p>
+            <h2 style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.4rem", color: T.text }}>{stepLabel}</h2>
           </div>
-          <h2 style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text }}>{set.name}</h2>
-          <p style={{ color: T.muted2, fontSize: "0.8rem", fontFamily: FF_SANS, marginTop: "0.25rem" }}>
-            {count} question{count !== 1 ? "s" : ""} in this set
+          <p style={{ color: T.muted, fontSize: "0.82rem", fontFamily: FF_SANS }}>
+            {set.name} · {count} question{count !== 1 ? "s" : ""}
           </p>
         </div>
 
