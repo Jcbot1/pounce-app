@@ -3358,8 +3358,6 @@ function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
             </div>
           </button>
         </div>
-        <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted,
-          textAlign: "center", marginBottom: "1.25rem" }}>Tap to change</p>
         <input value={draftName} onChange={e => setDraftName(e.target.value)}
           placeholder="Your name" maxLength={15}
           style={{ ...inp({ width: "100%", marginBottom: "1.25rem", textAlign: "center",
