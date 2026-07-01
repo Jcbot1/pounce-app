@@ -3436,6 +3436,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
   const importRef = useRef(null);
   const [iconPickerActiveSetOpen, setIconPickerActiveSetOpen] = useState(false);
   const [confirmDeleteActiveSet,  setConfirmDeleteActiveSet]  = useState(false);
+  const [savedFlash, setSavedFlash] = useState(false);
 
   useEffect(() => {
     if (!open || sidebarMode) return;
@@ -3515,8 +3516,18 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           <div onClick={() => { setOpen(o => !o); if (open) setSection(null); }} style={{ cursor: "pointer", flexShrink: 0, WebkitTapHighlightColor: "transparent" }}>
             <ProfileIconDisplay iconId={profileIconId} bg={profileBg} iconColor={profileIColor} size={44} />
           </div>
+        ) : (inEdit && savedFlash) ? (
+          <GlassButton>
+            <svg className="check-pop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.green} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </GlassButton>
         ) : (inEdit && editCanSave) ? (
-          <GlassButton onClick={() => document.dispatchEvent(new CustomEvent("studi-save"))}>
+          <GlassButton onClick={() => {
+            document.dispatchEvent(new CustomEvent("studi-save"));
+            setSavedFlash(true);
+            setTimeout(() => setSavedFlash(false), 2500);
+          }}>
             <svg className="save-pending" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
               <polyline points="17 21 17 13 7 13 7 21"/>
@@ -5259,6 +5270,13 @@ const STATIC_STYLES = `
     50%      { opacity: 0.55; transform: scale(1.12); }
   }
   .save-pending { animation: savePulse 1.8s ease-in-out infinite; transform-origin: center; }
+
+  @keyframes checkPop {
+    0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
+    60%  { transform: scale(1.35) rotate(4deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  .check-pop { animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: center; }
 
   @keyframes cardFadeUp {
     from { opacity: 0; transform: translateY(16px); }
