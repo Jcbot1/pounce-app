@@ -3737,7 +3737,14 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
 function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession, mastery }) {
   const canStudy = s.questions.length > 0;
   const iconDef = s.icon ? SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon) : null;
-  const masteryColor = mastery == null ? null : mastery >= 75 ? T.green : mastery >= 60 ? "#f59e0b" : T.red;
+  // Same red/amber/green cutoffs used for the results % (T.red / "#f59e0b" / T.green),
+  // but drawn from the profile color bank for the deep-bg/bright-icon pairing.
+  const masteryPair = mastery == null ? null
+    : mastery >= 75 ? PROFILE_COLOR_PAIRS[2]  // deep green / mint
+    : mastery >= 60 ? PROFILE_COLOR_PAIRS[6]  // deep brown / gold
+    : PROFILE_COLOR_PAIRS[3];                 // deep red / coral
+  const iconBoxBg = masteryPair ? masteryPair.bg : T.accent + "18";
+  const iconStroke = masteryPair ? masteryPair.icon : T.accent;
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)} style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6, scrollSnapAlign: "start" }}>
@@ -3748,18 +3755,18 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           alignSelf: "center", flexShrink: 0,
           width: "64px", height: "64px",
           borderRadius: "14px",
-          background: T.accent + "18",
+          background: iconBoxBg,
           boxShadow: T.mode === "light"
             ? "0 1px 4px rgba(0,0,0,0.10), 0 3px 8px rgba(0,0,0,0.08)"
             : "0 1px 4px rgba(0,0,0,0.30), 0 3px 8px rgba(0,0,0,0.22)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           {iconDef ? (
-            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke={iconStroke} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d={iconDef.path} />
             </svg>
           ) : (
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" stroke={T.accent} strokeWidth="5">
+            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" stroke={iconStroke} strokeWidth="5">
               <ellipse cx="50" cy="68" rx="22" ry="18"/>
               <ellipse cx="22" cy="46" rx="11" ry="13" transform="rotate(-15 22 46)"/>
               <ellipse cx="42" cy="32" rx="11" ry="13" transform="rotate(-5 42 32)"/>
