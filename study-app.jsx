@@ -315,7 +315,7 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2 }}>{label}</p>
+        <h2 style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.3rem", color: T.text }}>{label}</h2>
       </div>
       {right && <div>{right}</div>}
     </div>
@@ -3642,7 +3642,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           )}
           {section === "appearance" && (
             <>
-              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
+              <HamburgerSectionHeader label="Appearance" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
@@ -6756,7 +6756,7 @@ function App() {
 
           {sidebarSection === "appearance" && (
             <>
-              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
+              <HamburgerSectionHeader label="Appearance" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>APP THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
