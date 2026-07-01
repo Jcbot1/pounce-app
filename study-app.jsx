@@ -5,7 +5,7 @@
 const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = React;
 
 const APP_VERSION = "1.0.1";
-const KOFI_URL = "https://ko-fi.com/yourname";
+const KOFI_URL = "https://ko-fi.com/jcbot1";
 
 const FF_SANS  = "'DM Sans', sans-serif";
 const FF_SERIF = "'Fraunces', serif";
@@ -3385,7 +3385,7 @@ function SupportModal({ onClose }) {
   return (
     <Modal onClose={onClose}>
       <ModalCard pad="2rem" maxWidth={340}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
           <div style={{
             width: "64px", height: "64px", borderRadius: "99px",
             background: "#FF5E5B22", border: "1px solid #FF5E5B44",
