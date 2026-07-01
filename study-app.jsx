@@ -2821,13 +2821,10 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           marginTop: "0.75rem", borderRadius: "16px", overflow: "hidden",
           background: T.surface, border: "1px solid " + T.border,
           boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
-          display: "flex", scrollMarginTop: "80px",
+          padding: "0.9rem 1rem", scrollMarginTop: "80px",
         }}>
-          <div style={{ width: "3px", background: T.accent, flexShrink: 0 }} />
-          <div style={{ padding: "0.9rem 1rem" }}>
-            <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
-            <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>{renderText(q.explanation)}</p>
-          </div>
+          <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
+          <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>{renderText(q.explanation)}</p>
         </div>
       )}
 
@@ -3152,8 +3149,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
 
                 {/* Explanation */}
                 {q.explanation && (
-                  <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "6px",
-                    borderLeft: "3px solid " + T.accent }}>
+                  <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "6px" }}>
                     <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
                       EXPLANATION
                     </p>
