@@ -6691,7 +6691,7 @@ function App() {
               return (
                 <button key={tab.id} onClick={() => { setHomeTab(tab.id); setScreen("home"); if (tab.id !== "search") setSearchQuery(""); if (tab.id === "sets") setSetsSearch(""); }}
                   title={sidebarCollapsed ? tab.label : undefined}
-                  style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? ST.accent + "18" : "transparent", color: active ? ST.accent : ST.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: active ? 600 : 400, transition: "background 0.15s" }}>
+                  style={{ display: "flex", alignItems: "center", justifyContent: sidebarCollapsed ? "center" : "flex-start", gap: "0.75rem", padding: "0.65rem 0.75rem", borderRadius: "12px", background: active ? ST.accent + "18" : "transparent", color: active ? ST.accent : ST.muted2, border: "none", cursor: "pointer", width: "100%", fontFamily: FF_SANS, fontSize: "1rem", fontWeight: active ? 600 : 500, transition: "background 0.15s" }}>
                   <span style={{ color: active ? ST.accent : ST.muted, flexShrink: 0, display: "flex", alignItems: "center" }}>{active ? tab.iconFilled : tab.icon}</span>
                   {!sidebarCollapsed && (
                     <>
@@ -6709,7 +6709,8 @@ function App() {
           {/* Recent — sets and history mixed, hidden when collapsed */}
           {!sidebarCollapsed && (sets.length > 0 || history.length > 0) && (
             <div style={{ flex: 1, overflow: "hidden", padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0.25rem 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
+              <div style={{ height: "1px", background: ST.border, margin: "0.4rem 0.5rem 0.75rem", flexShrink: 0 }} />
+              <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, count: s.questions?.length ?? 0 })),
@@ -6724,7 +6725,7 @@ function App() {
                     style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
                     onMouseEnter={e => { e.currentTarget.style.background = ST.surface2; if (displayName !== item.name) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: item.name, y: r.top + r.height / 2 }); } }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: ST.muted2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{displayName}</span>
+                    <span style={{ fontFamily: FF_SANS, fontSize: "0.8rem", fontWeight: 400, color: ST.muted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{displayName}</span>
                     {item.type === "set" ? (
                       <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.count} Q</span>
                     ) : (
