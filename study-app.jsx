@@ -1385,7 +1385,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                   </select>
                 </div>
               )}
-              <Label required>OPTIONS — click circle/checkbox to mark correct answer(s)
+              <Label required>OPTIONS
                 {q.type === "multi" && (
                   <span style={{ marginLeft: "0.5rem", color: q.correct.length === q.selectCount ? T.green : T.red }}>
                     ({q.correct.length}/{q.selectCount} marked)
@@ -1444,7 +1444,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* ── dropdown ── */}
           {q.type === "dropdown" && (
             <>
-              <Label required style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS — each row is one line of the question</Label>
+              <Label required style={{ marginBottom: "0.6rem" }}>DROPDOWN ROWS</Label>
               {q.dropdowns.map((dd, di) => (
                 <div key={dd.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", borderRadius: "10px", background: T.surface2 }}>
                   <div style={{ marginBottom: "0.75rem" }}>
@@ -1458,7 +1458,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                       placeholder="Label text shown before the dropdown (e.g. Storage Tier)"
                       rows={2} maxLength={1000} />
                   </div>
-                  <Label required>OPTIONS — select the correct one</Label>
+                  <Label required>OPTIONS</Label>
                   {dd.options.map((opt, oi) => (
                     <div key={oi} style={{ marginBottom: "0.4rem",
                       background: T.surface,
@@ -1509,7 +1509,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
 
           {q.type === "matching" && (
             <>
-              <Label required style={{ marginBottom: "0.6rem" }}>PAIRS — enter each term and its correct match</Label>
+              <Label required style={{ marginBottom: "0.6rem" }}>PAIRS</Label>
               {q.pairs.map((pair, pi) => (
                 <div key={pair.id} style={{ marginBottom: "0.6rem", padding: "0.65rem 0.75rem", background: T.surface2, borderRadius: "10px" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
@@ -1529,7 +1529,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               <GhostButton onClick={() => set("pairs", [...q.pairs, { id: uid(), term: "", match: "" }])} small style={{ color: "#0ea5e9" }}>+ Add pair</GhostButton>
 
               <Divider />
-              <Label style={{ marginBottom: "0.6rem" }}>DISTRACTORS — extra answers that don't match anything</Label>
+              <Label style={{ marginBottom: "0.6rem" }}>DISTRACTORS</Label>
               {(q.distractors || []).map((d, di) => (
                 <div key={di} style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
                   <SnapTextarea value={d} onChange={e => {
@@ -1549,11 +1549,11 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
           {/* ── flashcard ── */}
           {q.type === "flashcard" && (
             <>
-              <Label required style={{ marginBottom: "0.4rem" }}>FRONT (term, question, or concept)</Label>
+              <Label required style={{ marginBottom: "0.4rem" }}>FRONT</Label>
               <SnapTextarea value={q.question || ""} onChange={e => set("question", e.target.value)}
                 rows={2} placeholder="Term or concept…" maxLength={10000}
                 style={{ ...inp(), lineHeight: 1.6, marginBottom: "1rem" }} />
-              <Label required style={{ marginBottom: "0.4rem" }}>BACK (definition, answer, or explanation)</Label>
+              <Label required style={{ marginBottom: "0.4rem" }}>BACK</Label>
               <SnapTextarea value={q.back || ""} onChange={e => set("back", e.target.value)}
                 rows={2} placeholder="Definition or answer…" maxLength={10000}
                 style={{ ...inp(), lineHeight: 1.6 }} />
@@ -1564,7 +1564,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
 
           {/* hint */}
           <div style={{ marginBottom: "1rem" }}>
-            <Label>HINT (optional — accessible during the test)</Label>
+            <Label>HINT</Label>
             <SnapTextarea value={q.hint || ""} onChange={e => set("hint", e.target.value)}
               rows={2} placeholder="A nudge in the right direction…" maxLength={10000}
               style={{ ...inp(), lineHeight: 1.6 }} />
@@ -1572,7 +1572,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
 
           {/* explanation */}
           <div style={{ paddingBottom: "1rem" }}>
-            <Label>EXPLANATION (shown after answering)</Label>
+            <Label>EXPLANATION</Label>
             <SnapTextarea value={q.explanation || ""} onChange={e => set("explanation", e.target.value)}
               rows={3} placeholder="Why is this the correct answer?" maxLength={10000}
               style={{ ...inp(), lineHeight: 1.6 }} />
