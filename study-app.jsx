@@ -3205,7 +3205,7 @@ function ExportModal({ set, onClose }) {
       <ModalCard pad="1.5rem" maxWidth={600} scroll>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <Label style={{ marginBottom: "0.1rem" }}>EXPORT — "{set.name}"</Label>
+            <Label style={{ marginBottom: "0.1rem" }}>SAVE AS — "{set.name}"</Label>
             <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>
               Download or copy this JSON to restore later.
             </p>
@@ -3591,7 +3591,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <HamburgerMenuItem onClick={() => { exportActiveSetFn(); close(); }}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                  <span>Export set</span>
+                  <span>Save set as</span>
                 </span>
               </HamburgerMenuItem>
               <HamburgerMenuItem danger color={T.red} onClick={() => { close(); document.dispatchEvent(new CustomEvent("studi-edit-delete")); }}>
@@ -3633,7 +3633,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <HamburgerMenuItem onClick={() => { exportResultsFn(); close(); }}>
                 <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                  <span>Export</span>
+                  <span>Save as</span>
                 </span>
               </HamburgerMenuItem>
               <HamburgerMenuItem danger color={T.red} onClick={() => { close(); onRequestDeleteResults?.(); }}>
@@ -3665,19 +3665,19 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <button onClick={() => importRef.current?.click()}
                 {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span>Import</span>
+                <span>Load</span>
               </button>
 
               <button onClick={() => { exportAll(sets, "studi-sets.json"); close(); }}
                 {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1rem" }}>⊞</span>
-                <span>Export all sets</span>
+                <span>Save all sets as</span>
               </button>
 
               <button onClick={() => { exportAll(history, "studi-history.json"); close(); }}
                 {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1rem" }}>◷</span>
-                <span>Export all history</span>
+                <span>Save all history as</span>
               </button>
 
               <HamburgerMenuItem onClick={() => { close(); onRequestClear(); }} color={T.red} danger>
@@ -4610,7 +4610,7 @@ function ExportResultsModal({ session, onClose }) {
       <ModalCard pad="1.5rem" maxWidth={600} scroll>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <Label style={{ marginBottom: "0.1rem" }}>EXPORT RESULTS — "{session.setName}"</Label>
+            <Label style={{ marginBottom: "0.1rem" }}>SAVE RESULTS AS — "{session.setName}"</Label>
             <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>
               {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "full" })} · {session.score}/{session.total} correct
             </p>
@@ -5476,8 +5476,8 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
         const valid = incoming.filter(validateSet);
         if (valid.length === 0) {
           const looksLikeHistory = incoming.some(s => s && s.setName && Array.isArray(s.results));
-          if (looksLikeHistory) { showToast("This looks like history data. Import it from the History section instead."); return; }
-          showToast("No valid sets found. Make sure this file was exported from Pounce."); return;
+          if (looksLikeHistory) { showToast("This looks like history data. Load it from the History section instead."); return; }
+          showToast("No valid sets found. Make sure this file was saved from Pounce."); return;
         }
         onImportSets(valid); setSetsImported(true);
       } catch { showToast("Could not read file — invalid JSON."); }
@@ -5497,8 +5497,8 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
         const valid = incoming.filter(validateSession);
         if (valid.length === 0) {
           const looksLikeSets = incoming.some(s => s && s.name && Array.isArray(s.questions));
-          if (looksLikeSets) { showToast("This looks like a study set. Import it from the Sets section instead."); return; }
-          showToast("No valid history found. Make sure this file was exported from Pounce."); return;
+          if (looksLikeSets) { showToast("This looks like a study set. Load it from the Sets section instead."); return; }
+          showToast("No valid history found. Make sure this file was saved from Pounce."); return;
         }
         onImportHistory(valid); setHistImported(true);
       } catch { showToast("Could not read file — invalid JSON."); }
@@ -5536,13 +5536,13 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
           Welcome!
         </p>
         <p style={{ fontFamily: FF_SANS, fontSize: "0.9rem", color: localT.muted2, lineHeight: 1.6, marginBottom: "2rem" }}>
-          Get started by importing an existing study set, or create your first one from scratch.
+          Get started by loading an existing study set, or create your first one from scratch.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
           {/* Import sets — PrimaryButton (gradient border) + {} */}
           {setsImported ? (
             <div style={{ display: "flex", borderRadius: "99px", background: localT.green + "22", border: "1px solid " + localT.green, padding: "0.75rem 1.5rem", justifyContent: "center", fontFamily: FF_SANS, fontSize: "0.95rem", fontWeight: 600, color: localT.green }}>
-              ✓ Sets imported
+              ✓ Sets loaded
             </div>
           ) : (
             <div style={{ display: "flex", borderRadius: "99px", overflow: "hidden",
@@ -5553,14 +5553,14 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
                 style={{ flex: 1, background: "transparent", color: localT.muted2, border: "none",
                   padding: "0.75rem 1.5rem", fontFamily: FF_SANS, fontSize: "0.95rem",
                   fontWeight: 600, cursor: "pointer", textAlign: "center" }}>
-                ⊞ Import study sets
+                ⊞ Load study sets
               </button>
             </div>
           )}
           {/* Import history — GhostButton (grey surface) + {} */}
           {histImported ? (
             <div style={{ display: "flex", borderRadius: "99px", background: localT.green + "22", border: "1px solid " + localT.green, padding: "0.75rem 1.5rem", justifyContent: "center", fontFamily: FF_SANS, fontSize: "0.95rem", color: localT.green }}>
-              ✓ History imported
+              ✓ History loaded
             </div>
           ) : (
             <div style={{ display: "flex", borderRadius: "99px", overflow: "hidden", background: localT.surface2 }}>
@@ -5569,7 +5569,7 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
                 style={{ flex: 1, background: "transparent", color: localT.muted2, border: "none",
                   padding: "0.75rem 1.5rem", fontFamily: FF_SANS, fontSize: "0.95rem",
                   cursor: "pointer", textAlign: "center" }}>
-                ◷ Import history
+                ◷ Load history
               </button>
             </div>
           )}
@@ -5612,7 +5612,7 @@ function HomeFAB({ onCreate, onImport, disabled }) {
   const fabItems = [
     { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
       icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
-    { label: "Import", onClick: () => { fileRef.current?.click(); setOpen(false); }, gradient: false,
+    { label: "Load", onClick: () => { fileRef.current?.click(); setOpen(false); }, gradient: false,
       icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
   ];
   return (
@@ -5711,7 +5711,7 @@ function ResultsFAB({ isHist, hasMissed, onRetry, onRetryMissed, onExport, onExp
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                 </svg>
-                Export
+                Save as
               </button>
               <div style={{ width: "1px", alignSelf: "stretch", background: T.border }} />
               <button onClick={() => { closeMenu(); onExportJson(); }}
@@ -5978,12 +5978,12 @@ function App() {
           const valid = incoming.filter(validateSession);
           if (valid.length === 0) { showToast("No valid history found."); return; }
           handleImportHistory(valid);
-          showToast(`Imported ${valid.length} session${valid.length !== 1 ? "s" : ""}`);
+          showToast(`Loaded ${valid.length} session${valid.length !== 1 ? "s" : ""}`);
         } else {
           const valid = incoming.filter(validateSet);
           if (valid.length === 0) { showToast("No valid sets found."); return; }
           handleImport(valid);
-          showToast(`Imported ${valid.length} set${valid.length !== 1 ? "s" : ""}`);
+          showToast(`Loaded ${valid.length} set${valid.length !== 1 ? "s" : ""}`);
         }
       } catch { showToast("Could not read file — invalid JSON."); }
     };
@@ -6234,11 +6234,11 @@ function App() {
         const isHist = inc.every(s => s && s.setName && Array.isArray(s.results));
         if (isHist) {
           const v = inc.filter(validateSession);
-          if (v.length) { handleImportHistory(v); showToast(`Imported ${v.length} session${v.length !== 1 ? "s" : ""}`); }
+          if (v.length) { handleImportHistory(v); showToast(`Loaded ${v.length} session${v.length !== 1 ? "s" : ""}`); }
           else showToast("No valid history found.");
         } else {
           const v = inc.filter(validateSet);
-          if (v.length) { handleImport(v); showToast(`Imported ${v.length} set${v.length !== 1 ? "s" : ""}`); }
+          if (v.length) { handleImport(v); showToast(`Loaded ${v.length} set${v.length !== 1 ? "s" : ""}`); }
           else showToast("No valid sets found.");
         }
       } catch { showToast("Could not read file — invalid JSON."); }
@@ -6879,9 +6879,9 @@ function App() {
               <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
               <div style={{ padding: "0.25rem 0.5rem" }}>
                 <SidebarActionButton onClick={() => setSidebarSection("appearance")} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>} label="Appearance" right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>} />
-                <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>} label="Import" />
-                <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Export all sets" />
-                <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Export all history" />
+                <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>} label="Load" />
+                <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Save all sets as" />
+                <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Save all history as" />
                 <SidebarActionButton onClick={() => { setSidebarAppearanceOpen(false); setShowClearConfirm(true); }} icon={<TrashIcon size={14} />} label="Clear all data" danger />
               </div>
             </>
