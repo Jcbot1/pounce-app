@@ -5,6 +5,7 @@
 const { useState, useEffect, useLayoutEffect, useRef, Fragment, useMemo } = React;
 
 const APP_VERSION = "1.0.1";
+const KOFI_URL = "https://ko-fi.com/yourname";
 
 const FF_SANS  = "'DM Sans', sans-serif";
 const FF_SERIF = "'Fraunces', serif";
@@ -3380,6 +3381,41 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
 //  HOME — set list
 // ════════════════════════════════════════════════════════════════════════
 
+function SupportModal({ onClose }) {
+  return (
+    <Modal onClose={onClose}>
+      <ModalCard pad="2rem" maxWidth={340}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+          <div style={{
+            width: "64px", height: "64px", borderRadius: "99px",
+            background: "#FF5E5B22", border: "1px solid #FF5E5B44",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF5E5B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+        </div>
+        <p style={{ fontFamily: FF_SERIF, fontWeight: 300, fontSize: "1.15rem", color: T.text, textAlign: "center", marginBottom: "0.4rem" }}>
+          Enjoying Pounce?
+        </p>
+        <p style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: T.muted2, lineHeight: 1.6, textAlign: "center", marginBottom: "1.5rem" }}>
+          If Pounce has helped you study, consider buying me a coffee on Ko-fi. It keeps the app going.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <PrimaryButton onClick={() => window.open(KOFI_URL, "_blank", "noopener,noreferrer")}
+            style={{ width: "100%", justifyContent: "center" }}>
+            Support on Ko-fi
+          </PrimaryButton>
+          <GhostButton onClick={onClose} style={{ width: "100%", justifyContent: "center" }}>
+            Maybe later
+          </GhostButton>
+        </div>
+      </ModalCard>
+    </Modal>
+  );
+}
+
 function ProfileModal({ name, iconId, bg, iconColor, onSave, onClose }) {
   const [draftName,  setDraftName]  = useState(name);
   const [draftIconId, setDraftIconId] = useState(iconId);
@@ -3437,6 +3473,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
     : [];
   const hasMissed = resultsMissed.length > 0 && !isHist;
   const [showProfile, setShowProfile] = useState(false);
+  const [showSupport, setShowSupport] = useState(false);
   const [open,    setOpen]    = useState(false);
   const [section, setSection] = useState(null); // null | "appearance" | "color"
   const navRef = useRef(null);
@@ -3495,6 +3532,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
   return (
     <div ref={navRef} style={{ position: "relative" }}>
       {showProfile && <ProfileModal name={profileName} iconId={profileIconId} bg={profileBg} iconColor={profileIColor} onSave={onSaveProfile} onClose={() => setShowProfile(false)} />}
+      {showSupport && <SupportModal onClose={() => setShowSupport(false)} />}
 
       {iconPickerActiveSetOpen && activeSet && (
         <IconPickerModal
@@ -3655,6 +3693,13 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
                     <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
                   </svg>
                   <span>Appearance</span>
+                </span>
+              </HamburgerMenuItem>
+
+              <HamburgerMenuItem onClick={() => { close(); setShowSupport(true); }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" {...IC}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <span>Support Pounce</span>
                 </span>
               </HamburgerMenuItem>
 
@@ -6071,6 +6116,7 @@ function App() {
   const [showClearConfirm,  setShowClearConfirm]  = useState(false);
   const [showClearConfirm2, setShowClearConfirm2] = useState(false);
   const [resultsExportModal, setResultsExportModal] = useState(false);
+  const [showSidebarSupport, setShowSidebarSupport] = useState(false);
   const searchInputRef = useRef(null);
   const [resultsConfirmRetry, setResultsConfirmRetry] = useState(false);
   const [resultsDeleteConfirm, setResultsDeleteConfirm] = useState(false);
@@ -6337,6 +6383,7 @@ function App() {
           onEdit={() => { setPendingStudySet(null); handleEdit(pendingStudySet); }}
         />
       )}
+      {showSidebarSupport && <SupportModal onClose={() => setShowSidebarSupport(false)} />}
       {showClearConfirm && (
         <ConfirmDialog
           title="Clear all data?"
@@ -6879,6 +6926,7 @@ function App() {
               <input ref={sidebarImportRef} type="file" accept=".json" onChange={handleSidebarImport} style={{ display: "none" }} />
               <div style={{ padding: "0.25rem 0.5rem" }}>
                 <SidebarActionButton onClick={() => setSidebarSection("appearance")} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>} label="Appearance" right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>} />
+                <SidebarActionButton onClick={() => { setSidebarAppearanceOpen(false); setShowSidebarSupport(true); }} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>} label="Support Pounce" />
                 <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>} label="Load" />
                 <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Save all sets as" />
                 <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Save all history as" />
