@@ -1955,19 +1955,15 @@ function EditorFab({ onAddQuestion }) {
 
   return (
     <>
-      {/* Question-type popup menu — grouped in a single opaque card so busy content behind it doesn't hurt legibility */}
+      {/* Question-type popup menu — mirrors the Create/Load popup on the home bar */}
       {(fabOpen || fabClosing) && fabMenuPos && (
         <div style={{
-          ...menuPopupStyle({
-            position: "fixed",
-            bottom: fabMenuPos.bottom + "px",
-            right: fabMenuPos.right + "px",
-            zIndex: 110,
-            padding: "0.6rem",
-          }),
-          display: "flex", flexDirection: "column", gap: "0.4rem",
+          display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
-          pointerEvents: "all",
+          position: "fixed",
+          bottom: fabMenuPos.bottom + "px",
+          right: fabMenuPos.right + "px",
+          zIndex: 110, pointerEvents: "all",
         }} onPointerDown={e => e.stopPropagation()}>
           {types.map((t, idx) => {
             const n = types.length;
@@ -1979,16 +1975,23 @@ function EditorFab({ onAddQuestion }) {
             return (
               <div key={t.type} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
                 <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
-                  background: "transparent", border: "none", borderRadius: "8px",
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border, borderRadius: "8px",
                   padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
                   color: t.color, cursor: "pointer", whiteSpace: "nowrap",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
                 }}>{t.label}</button>
                 <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
-                  width: "40px", height: "40px", borderRadius: "50%", flexShrink: 0,
-                  background: T.mode === "light" ? T.surface2 : T.surface,
-                  border: "none",
+                  width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   color: t.color, cursor: "pointer",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
                 }}>
                   {t.icon}
                 </button>
@@ -2024,7 +2027,7 @@ function EditorFab({ onAddQuestion }) {
           <button onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 30, bottom: window.innerHeight - r.top + 14 });
+            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
             setFabOpen(true);
           }} style={{
             display: "flex", flexDirection: "column",
@@ -5272,19 +5275,15 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
         onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
 
-      {/* Create/Load popup menu — grouped in a single opaque card so busy content behind it doesn't hurt legibility */}
+      {/* Create/Load popup menu */}
       {(fabOpen || fabClosing) && fabMenuPos && (
         <div style={{
-          ...menuPopupStyle({
-            position: "fixed",
-            bottom: fabMenuPos.bottom + "px",
-            right: fabMenuPos.right + "px",
-            zIndex: 110,
-            padding: "0.6rem",
-          }),
-          display: "flex", flexDirection: "column", gap: "0.4rem",
+          display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
-          pointerEvents: "all",
+          position: "fixed",
+          bottom: fabMenuPos.bottom + "px",
+          right: fabMenuPos.right + "px",
+          zIndex: 110, pointerEvents: "all",
         }} onPointerDown={e => e.stopPropagation()}>
           {fabItems.map(({ label, onClick, icon, gradient }, idx) => {
             const n = fabItems.length;
@@ -5296,13 +5295,17 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
             return (
               <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
                 <button onClick={onClick} {...surfacePress()} style={{
-                  background: "transparent", border: "none", borderRadius: "8px",
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border, borderRadius: "8px",
                   padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
                   color: T.text, cursor: "pointer", whiteSpace: "nowrap",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
                 }}>{label}</button>
                 {gradient
-                  ? <GradientBorderButton onClick={onClick} size="40px">{icon}</GradientBorderButton>
-                  : <GlassButton onClick={onClick} size={40}>{icon}</GlassButton>}
+                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
+                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
               </div>
             );
           })}
@@ -5383,7 +5386,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           <button onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 30, bottom: window.innerHeight - r.top + 14 });
+            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
             setFabOpen(true);
           }} style={{
             display: "flex", flexDirection: "column",
