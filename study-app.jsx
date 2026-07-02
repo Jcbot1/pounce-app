@@ -1592,7 +1592,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
   );
 }
 
-function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQuestionCountChange, editSearch = "", showSidebar = false, isDesktop = false, sidebarWidth = 0 }) {
+function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQuestionCountChange, editSearch = "" }) {
   const [draft, setDraft]         = useState(() => JSON.parse(JSON.stringify(set)));
   const [confirmBack, setConfirmBack] = useState(false);
   const [newTag, setNewTag]       = useState("");
@@ -1864,7 +1864,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
       )}
 
       {/* Editor FAB */}
-      <EditorFab onAddQuestion={addQ} sidebarWidth={showSidebar ? sidebarWidth : 0} />
+      <EditorFab onAddQuestion={addQ} />
     </div>
   );
 }
@@ -1924,7 +1924,7 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
   );
 }
 
-function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
+function EditorFab({ onAddQuestion }) {
   const [fabOpen, setFabOpen] = useState(false);
   const [fabClosing, setFabClosing] = useState(false);
   const [fabMenuPos, setFabMenuPos] = useState(null);
@@ -2001,12 +2001,10 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
         </div>
       )}
 
-      {/* Full-width frosted bar — matches FloatingHomeBar, single centered + */}
+      {/* Full-width frosted bar — matches FloatingHomeBar, right-anchored + */}
       <div style={{
         position: "fixed", bottom: 0, left: 0, right: 0,
         zIndex: 100, pointerEvents: "none",
-        transform: sidebarWidth ? `translateX(${sidebarWidth / 2}px)` : undefined,
-        transition: "transform 0.25s ease",
       }}>
         <div key={T.mode} style={{
           position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
@@ -6728,7 +6726,7 @@ function App() {
               />
             )}
             {screen === "edit" && activeSet && (
-              <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} showSidebar={showSidebar} isDesktop={!isMobile} sidebarWidth={sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH} />
+              <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} />
             )}
             {screen === "review" && activeSet && (
               <ReviewMode set={activeSet} questionLimit={questionLimit} examMode={examMode} timerMinutes={timerMinutes} onFinish={handleFinish} onBack={() => setScreen("home")} />
