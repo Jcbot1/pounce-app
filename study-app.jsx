@@ -5179,12 +5179,12 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
 
   const tabs = [
     { id: "home",    label: "Home",
-      svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> },
+      svg: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> },
     { id: "sets",    label: "Sets",
-      svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> },
+      svg: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> },
     { id: "history", label: "History",
       badge: (history?.length || 0) > 0 ? history.length : null,
-      svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> },
+      svg: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> },
   ];
 
   const fabItems = [
@@ -5264,7 +5264,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
         <div style={{
           position: "relative", zIndex: 1, pointerEvents: "all",
           display: "flex", alignItems: "center", justifyContent: "space-around",
-          height: "58px", paddingTop: "6px", paddingBottom: "calc(env(safe-area-inset-bottom) + 14px)",
+          paddingTop: "8px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
         }}>
           {tabs.map(t => {
             const active = homeTab === t.id;
@@ -5277,7 +5277,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
                 background: "transparent",
                 border: "none", cursor: "pointer",
                 position: "relative",
-                gap: "0.2rem",
+                gap: "0.3rem",
               }}>
                 <span style={{
                   display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
@@ -5287,12 +5287,12 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
                   {t.svg}
                   {t.badge && !active && (
                     <span style={{
-                      position: "absolute", top: "-10px", right: "-14px",
+                      position: "absolute", top: "-12px", right: "-16px",
                       background: T.accent,
                       color: "#fff",
-                      fontSize: "0.65rem", fontFamily: FF_SANS, fontWeight: 700,
+                      fontSize: "0.68rem", fontFamily: FF_SANS, fontWeight: 700,
                       borderRadius: "99px",
-                      minWidth: "18px", height: "18px",
+                      minWidth: "19px", height: "19px",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       padding: "0 4px",
                       boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
@@ -5301,7 +5301,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
                   )}
                 </span>
                 <span style={{
-                  fontSize: "0.68rem", fontFamily: FF_SANS, fontWeight: 500,
+                  fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
                   lineHeight: 1, textAlign: "center",
                   color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
                   transition: "color 0.2s",
@@ -5314,7 +5314,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
 
           {/* Create — inline at the end, matches EditorFab/HomeFAB visual style */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: "1 1 0", minWidth: 0 }}>
-            <GradientBorderButton size="34px" onClick={e => {
+            <GradientBorderButton size="40px" onClick={e => {
               if (fabOpen) { closeFabMenu(); return; }
               const r = e.currentTarget.getBoundingClientRect();
               setFabMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
@@ -5325,7 +5325,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
                 transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)",
                 transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}>
-                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
                   <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
                   <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
