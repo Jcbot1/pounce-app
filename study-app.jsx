@@ -1847,6 +1847,13 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
         ));
       })()}
 
+      {draft.questions.length > 0 && (
+        <div style={{ textAlign: "center", padding: "1.5rem 0 0.5rem", color: T.muted,
+          fontFamily: FF_SANS, fontSize: "0.78rem", letterSpacing: "0.05em" }}>
+          {draft.questions.length} {draft.questions.length === 1 ? "question" : "questions"}
+        </div>
+      )}
+
       {confirmDeleteQ && (
         <ConfirmDialog
           title="Delete this question?"
@@ -1857,7 +1864,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
       )}
 
       {/* Editor FAB */}
-      <EditorFab onAddQuestion={addQ} draft={draft} onAddGenerated={qs => setDraft(d => ({ ...d, questions: [...d.questions, ...qs] }))} showSidebar={isDesktop} isDesktop={isDesktop} questionCount={draft.questions.length} sidebarWidth={showSidebar ? sidebarWidth : 0} />
+      <EditorFab onAddQuestion={addQ} sidebarWidth={showSidebar ? sidebarWidth : 0} />
     </div>
   );
 }
@@ -1917,72 +1924,121 @@ function BottomPill({ left, children, sidebarOffset = 0 }) {
   );
 }
 
-function EditorFab({ onAddQuestion, draft, onAddGenerated, showSidebar = false, isDesktop = false, questionCount = 0, sidebarWidth = 0 }) {
-  const [open, setOpen] = useState(false);
-  const [menuClosing, setMenuClosing] = useState(false);
-  const [menuCenter, setMenuCenter] = useState(null);
+function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
+  const [fabOpen, setFabOpen] = useState(false);
+  const [fabClosing, setFabClosing] = useState(false);
+  const [fabMenuPos, setFabMenuPos] = useState(null);
 
   const types = [
-    { type: "single",    label: "Single answer",  color: TYPE_META.single.color    },
-    { type: "multi",     label: "Multi-select",    color: TYPE_META.multi.color     },
-    { type: "dropdown",  label: "Dropdown",          color: TYPE_META.dropdown.color  },
-    { type: "matching",  label: "Matching",        color: "#0ea5e9"                 },
-    { type: "flashcard", label: "Flashcard",       color: TYPE_META.flashcard.color },
+    { type: "single",    label: "Single answer", color: TYPE_META.single.color    },
+    { type: "multi",     label: "Multi-select",  color: TYPE_META.multi.color     },
+    { type: "dropdown",  label: "Dropdown",      color: TYPE_META.dropdown.color  },
+    { type: "matching",  label: "Matching",      color: "#0ea5e9"                 },
+    { type: "flashcard", label: "Flashcard",     color: TYPE_META.flashcard.color },
   ];
 
-  function closeMenu() {
-    setMenuClosing(true);
-    setTimeout(() => { setOpen(false); setMenuClosing(false); }, 260);
+  function closeFabMenu() {
+    setFabClosing(true);
+    setTimeout(() => { setFabOpen(false); setFabClosing(false); }, 260);
   }
+  useEffect(() => {
+    if (!fabOpen) return;
+    const close = () => closeFabMenu();
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [fabOpen]);
 
   return (
     <>
-      {/* Overlay to close */}
-      {(open || menuClosing) && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 109 }} onPointerDown={closeMenu} />
+      {/* Question-type popup menu — mirrors the Create/Load popup on the home bar */}
+      {(fabOpen || fabClosing) && fabMenuPos && (
+        <div style={{
+          display: "flex", flexDirection: "column", gap: "0.5rem",
+          alignItems: "flex-end",
+          position: "fixed",
+          bottom: fabMenuPos.bottom + "px",
+          right: fabMenuPos.right + "px",
+          zIndex: 110, pointerEvents: "all",
+        }} onPointerDown={e => e.stopPropagation()}>
+          {types.map((t, idx) => {
+            const n = types.length;
+            const openDelay  = (n - 1 - idx) * 45;
+            const closeDelay = idx * 35;
+            const anim = fabClosing
+              ? `fabItemOut 0.15s ease-in ${closeDelay}ms both`
+              : `fabItemIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
+            return (
+              <div key={t.type} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
+                <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border, borderRadius: "8px",
+                  padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
+                  color: t.color, cursor: "pointer", whiteSpace: "nowrap",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                }}>{t.label}</button>
+                <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
+                  width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
+                  background: t.color + "1e", border: "1.5px solid " + t.color + "55",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: t.color, cursor: "pointer",
+                }}>
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                    <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                    <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            );
+          })}
+        </div>
       )}
 
-        {/* Menu items */}
-        {(open || menuClosing) && (
-          <div style={{
-            display: "flex", flexDirection: "column", gap: "0.4rem",
-            alignItems: "center",
-            position: "fixed", bottom: "calc(1.5rem + 70px)", left: menuCenter !== null ? menuCenter + "px" : "50%", transform: "translateX(-50%)", zIndex: 110, width: 0, overflow: "visible",
-          }}>
-            {types.map((t, idx) => {
-              const n = types.length;
-              const openDelay  = (n - 1 - idx) * 35;
-              const closeDelay = idx * 28;
-              const anim = menuClosing
-                ? `fabItemOut 0.13s ease-in ${closeDelay}ms both`
-                : `fabItemIn 0.20s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
-              return (
-                <div key={t.type} style={{ animation: anim }}>
-                  <FabMenuButton onClick={() => { onAddQuestion(t.type); closeMenu(); }} color={t.color}>
-                    + {t.label}
-                  </FabMenuButton>
-                </div>
-              );
-            })}
-          </div>
-        )}
+      {/* Full-width frosted bar — matches FloatingHomeBar, single centered + */}
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        zIndex: 100, pointerEvents: "none",
+        transform: sidebarWidth ? `translateX(${sidebarWidth / 2}px)` : undefined,
+        transition: "transform 0.25s ease",
+      }}>
+        <div key={T.mode} style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          background: T.mode === "light"
+            ? `linear-gradient(to top, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(247,245,242,0.9) 60%, rgba(247,245,242,0) 100%)`
+            : `linear-gradient(to top, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(15,9,5,0.9) 60%, rgba(15,9,5,0) 100%)`,
+        }} />
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          WebkitMaskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+        }} />
 
-        {/* FAB pill */}
-        <BottomPill left={`${questionCount} ${questionCount === 1 ? "question" : "questions"}`} sidebarOffset={sidebarWidth}>
-          <GradientBorderButton onClick={e => { if (open) { closeMenu(); return; } const r = e.currentTarget.getBoundingClientRect(); setMenuCenter(r.left + r.width / 2); setOpen(true); }} style={{ height: "46px", padding: "0 1.7rem" }}>
+        <div style={{
+          position: "relative", zIndex: 1, pointerEvents: "all",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          paddingTop: "8px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+        }}>
+          <GradientBorderButton size="46px" onClick={e => {
+            if (fabOpen) { closeFabMenu(); return; }
+            const r = e.currentTarget.getBoundingClientRect();
+            setFabMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
+            setFabOpen(true);
+          }}>
             <span style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center",
-              transform: open ? "rotate(45deg)" : "rotate(0deg)",
+              transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)",
               transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}>
-              <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
                 <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
                 <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
               </svg>
             </span>
-            Add Question
           </GradientBorderButton>
-        </BottomPill>
+        </div>
+      </div>
     </>
   );
 }
