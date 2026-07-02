@@ -5306,18 +5306,12 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           : "opacity 0.2s ease, transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1)",
         opacity: disabled ? 0.4 : 1,
       }}>
-        {/* Frosted glass fade — mirrors the top header's blur/gradient */}
-        <div key={T.mode} style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-          background: T.mode === "light"
-            ? `linear-gradient(to top, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(247,245,242,0.9) 60%, rgba(247,245,242,0) 100%)`
-            : `linear-gradient(to top, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(15,9,5,0.9) 60%, rgba(15,9,5,0) 100%)`,
-        }} />
+        {/* Solid frosted glass — uniform blur/tint across the whole bar */}
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-          WebkitMaskImage: "linear-gradient(to top, black 55%, transparent 100%)",
-          maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+          borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
         }} />
 
         <div style={{
@@ -5371,26 +5365,40 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
             );
           })}
 
-          {/* Create — inline at the end, matches EditorFab/HomeFAB visual style */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: "1 1 0", minWidth: 0 }}>
-            <GradientBorderButton size="40px" onClick={e => {
-              if (fabOpen) { closeFabMenu(); return; }
-              const r = e.currentTarget.getBoundingClientRect();
-              setFabMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
-              setFabOpen(true);
+          {/* Create — inline at the end, styled like the other tab items */}
+          <button onClick={e => {
+            if (fabOpen) { closeFabMenu(); return; }
+            const r = e.currentTarget.getBoundingClientRect();
+            setFabMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
+            setFabOpen(true);
+          }} style={{
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            flex: "1 1 0", minWidth: 0,
+            padding: 0,
+            background: "transparent",
+            border: "none", cursor: "pointer",
+            gap: "0.3rem",
+          }}>
+            <span style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+              transition: "color 0.2s",
             }}>
-              <span style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)",
-                transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}>
-                <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
-                  <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
-                  <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
-                </svg>
-              </span>
-            </GradientBorderButton>
-          </div>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </span>
+            <span style={{
+              fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
+              lineHeight: 1, textAlign: "center",
+              color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+              transition: "color 0.2s",
+            }}>
+              Add
+            </span>
+          </button>
         </div>
       </div>
     </>
