@@ -3670,7 +3670,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
       )}
 
       {(open || sidebarMode) && (
-        <div style={sidebarMode ? { paddingBottom: "1rem" } : { ...menuPopupStyle({ position: "absolute", right: 0, top: "calc(100% + 8px)", zIndex: 500, minWidth: "200px" }) }} className={sidebarMode ? "" : "menu-open"}>
+        <div style={sidebarMode ? { paddingBottom: "1rem" } : { ...menuPopupStyle({ position: "absolute", right: 0, top: "calc(100% + 8px)", zIndex: 500, minWidth: "240px" }) }} className={sidebarMode ? "" : "menu-open"}>
 
           {/* ── Profile row ── */}
           {section === null && !inEdit && !inResults && (
