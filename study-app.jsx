@@ -5160,124 +5160,180 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
   );
 }
 
-function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, fabSlot }) {
-  const [lastRealTab, setLastRealTab] = React.useState(homeTab !== "search" ? homeTab : "home");
-  React.useEffect(() => { if (homeTab !== "search") setLastRealTab(homeTab); }, [homeTab]);
+function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, onCreate, onImport }) {
+  const [fabOpen, setFabOpen] = useState(false);
+  const [fabClosing, setFabClosing] = useState(false);
+  const [fabMenuPos, setFabMenuPos] = useState(null);
+  const fileRef = useRef(null);
 
-  const pillBg     = T.mode === "light" ? "#e2e8f0" : "#1e1630";
+  function closeFabMenu() {
+    setFabClosing(true);
+    setTimeout(() => { setFabOpen(false); setFabClosing(false); }, 290);
+  }
+  useEffect(() => {
+    if (!fabOpen) return;
+    const close = () => closeFabMenu();
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [fabOpen]);
 
-  const pillShadow = T.mode === "light"
-    ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
-    : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)";
+  const tabs = [
+    { id: "home",    label: "Home",
+      svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> },
+    { id: "sets",    label: "Sets",
+      svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> },
+    { id: "history", label: "History",
+      badge: (history?.length || 0) > 0 ? history.length : null,
+      svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> },
+  ];
+
+  const fabItems = [
+    { label: "Create", onClick: () => { onCreate(); closeFabMenu(); }, gradient: true,
+      icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
+    { label: "Load", onClick: () => { fileRef.current?.click(); closeFabMenu(); }, gradient: false,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
+  ];
 
   return (
     <>
+      <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
+        onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
+
+      {/* Create/Load popup menu */}
+      {(fabOpen || fabClosing) && fabMenuPos && (
+        <div style={{
+          display: "flex", flexDirection: "column", gap: "0.5rem",
+          alignItems: "flex-end",
+          position: "fixed",
+          bottom: fabMenuPos.bottom + "px",
+          right: fabMenuPos.right + "px",
+          zIndex: 110, pointerEvents: "all",
+        }} onPointerDown={e => e.stopPropagation()}>
+          {fabItems.map(({ label, onClick, icon, gradient }, idx) => {
+            const n = fabItems.length;
+            const openDelay  = (n - 1 - idx) * 65;
+            const closeDelay = idx * 55;
+            const anim = fabClosing
+              ? `fabItemOut 0.18s ease-in ${closeDelay}ms both`
+              : `fabItemIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
+            return (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
+                <button onClick={onClick} {...surfacePress()} style={{
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border, borderRadius: "8px",
+                  padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
+                  color: T.text, cursor: "pointer", whiteSpace: "nowrap",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                }}>{label}</button>
+                {gradient
+                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
+                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Full-width frosted bar */}
       <div style={{
-        position: "fixed", bottom: "21px", left: 0, right: 0,
+        position: "fixed", bottom: 0, left: 0, right: 0,
         zIndex: disabled ? 90 : 100,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         pointerEvents: "none",
-        padding: "0 1rem",
-        transform: homeTab === "search" ? "translateY(120px)" : "translateY(0)",
+        transform: homeTab === "search" ? "translateY(140px)" : "translateY(0)",
         transition: homeTab === "search"
           ? "opacity 0.2s ease, transform 0.28s ease-in"
           : "opacity 0.2s ease, transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1)",
         opacity: disabled ? 0.4 : 1,
       }}>
-      {/* Pill + FAB wrapper */}
-      <div style={{ width: "100%", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      {/* Tab pill */}
-      <div style={{
-        flex: 1,
-        display: "flex", alignItems: "center",
-        background: T.mode === "light" ? "rgba(255,255,255,0.68)" : "rgba(143,139,152,0.20)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderRadius: "99px",
-        padding: "0 0.25rem", gap: "0", height: "62px",
-        border: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.12)"),
-        boxShadow: pillShadow, pointerEvents: "all",
-        position: "relative",
-      }}>
-        {/* Sliding indicator */}
-        <div style={{
-          position: "absolute",
-          top: "0.25rem", bottom: "0.25rem",
-          left: homeTab === "home" ? "0.25rem" : homeTab === "sets" ? "calc(33.33% + 0.06rem)" : homeTab === "history" ? "calc(66.67% - 0.06rem)" :
-            lastRealTab === "home" ? "0.25rem" : lastRealTab === "sets" ? "calc(33.33% + 0.06rem)" : "calc(66.67% - 0.06rem)",
-          width: "calc(33.33% - 0.17rem)",
-          opacity: homeTab === "search" ? 0 : 1,
-          borderRadius: "99px",
-          background: T.mode === "light" ? "rgba(140,150,165,0.45)" : "rgba(0,0,0,0.55)",
-          boxShadow: T.mode === "light"
-            ? "inset 0 1px 2px rgba(0,0,0,0.08)"
-            : "inset 0 1px 2px rgba(0,0,0,0.2)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          transition: "left 0.3s cubic-bezier(0.34, 1.2, 0.64, 1)",
-          pointerEvents: "none",
+        {/* Frosted glass fade — mirrors the top header's blur/gradient */}
+        <div key={T.mode} style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          background: T.mode === "light"
+            ? `linear-gradient(to top, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(247,245,242,0.9) 60%, rgba(247,245,242,0) 100%)`
+            : `linear-gradient(to top, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(15,9,5,0.9) 60%, rgba(15,9,5,0) 100%)`,
         }} />
-        {[
-          { id: "home",    label: "Home",
-            svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> },
-          { id: "sets",    label: "Sets",
-            svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> },
-          { id: "history", label: "History",
-            badge: (history?.length || 0) > 0 ? history.length : null,
-            svg: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> },
-        ].map(t => {
-          const active = homeTab === t.id;
-          return (
-            <button key={t.id} onClick={() => { setHomeTab(t.id); if (t.id === "sets" && onSetsTab) onSetsTab(); }} style={{
-              display: "flex", flexDirection: "column",
-              alignItems: "center", justifyContent: "center",
-              flex: "1 1 0", minWidth: 0, alignSelf: "stretch",
-              padding: 0,
-              borderRadius: "99px",
-              background: "transparent",
-              border: "none", cursor: "pointer",
-              position: "relative",
-              zIndex: 1,
-              gap: "0.2rem",
+        <div style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+          WebkitMaskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+          maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+        }} />
+
+        <div style={{
+          position: "relative", zIndex: 1, pointerEvents: "all",
+          display: "flex", alignItems: "center", justifyContent: "space-around",
+          height: "58px", paddingTop: "6px", paddingBottom: "env(safe-area-inset-bottom)",
+        }}>
+          {tabs.map(t => {
+            const active = homeTab === t.id;
+            return (
+              <button key={t.id} onClick={() => { setHomeTab(t.id); if (t.id === "sets" && onSetsTab) onSetsTab(); }} style={{
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                flex: "1 1 0", minWidth: 0,
+                padding: 0,
+                background: "transparent",
+                border: "none", cursor: "pointer",
+                position: "relative",
+                gap: "0.2rem",
+              }}>
+                <span style={{
+                  display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
+                  color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+                  transition: "color 0.2s",
+                }}>
+                  {t.svg}
+                  {t.badge && !active && (
+                    <span style={{
+                      position: "absolute", top: "-10px", right: "-14px",
+                      background: T.accent,
+                      color: "#fff",
+                      fontSize: "0.65rem", fontFamily: FF_SANS, fontWeight: 700,
+                      borderRadius: "99px",
+                      minWidth: "18px", height: "18px",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      padding: "0 4px",
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
+                      lineHeight: 1,
+                    }}>{t.badge}</span>
+                  )}
+                </span>
+                <span style={{
+                  fontSize: "0.68rem", fontFamily: FF_SANS, fontWeight: 500,
+                  lineHeight: 1, textAlign: "center",
+                  color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+                  transition: "color 0.2s",
+                }}>
+                  {t.label}
+                </span>
+              </button>
+            );
+          })}
+
+          {/* Create — inline at the end, matches EditorFab/HomeFAB visual style */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: "1 1 0", minWidth: 0 }}>
+            <GradientBorderButton size="34px" onClick={e => {
+              if (fabOpen) { closeFabMenu(); return; }
+              const r = e.currentTarget.getBoundingClientRect();
+              setFabMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
+              setFabOpen(true);
             }}>
               <span style={{
-                display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
-                color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
-                transition: "color 0.2s",
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)",
+                transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}>
-                {t.svg}
-                {t.badge && !active && (
-                  <span style={{
-                    position: "absolute", top: "-10px", right: "-14px",
-                    background: T.accent,
-                    color: "#fff",
-                    fontSize: "0.65rem", fontFamily: FF_SANS, fontWeight: 700,
-                    borderRadius: "99px",
-                    minWidth: "18px", height: "18px",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    padding: "0 4px",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
-                    lineHeight: 1,
-                  }}>{t.badge}</span>
-                )}
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                  <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
+                  <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
+                </svg>
               </span>
-              <span style={{
-                fontSize: "0.72rem", fontFamily: FF_SANS, fontWeight: 500,
-                lineHeight: 1, textAlign: "center",
-                color: active ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
-                transition: "color 0.2s",
-              }}>
-                {t.label}
-              </span>
-            </button>
-          );
-        })}
+            </GradientBorderButton>
+          </div>
+        </div>
       </div>
-      {fabSlot}
-      </div>
-    </div>
     </>
   );
 }
@@ -5639,90 +5695,6 @@ function WelcomeModal({ onImportSets, onImportHistory, onDismiss, theme, accent,
 // ════════════════════════════════════════════════════════════════════════
 // NAVIGATION & FAB
 // ════════════════════════════════════════════════════════════════════════
-
-function HomeFAB({ onCreate, onImport, disabled }) {
-  const [open, setOpen] = useState(false);
-  const [menuClosing, setMenuClosing] = useState(false);
-  const [menuPos, setMenuPos] = useState(null);
-  const fileRef = useRef(null);
-  function closeMenu() {
-    setMenuClosing(true);
-    setTimeout(() => { setOpen(false); setMenuClosing(false); }, 290);
-  }
-  useEffect(() => {
-    if (!open) return;
-    const close = () => closeMenu();
-    document.addEventListener('pointerdown', close);
-    return () => document.removeEventListener('pointerdown', close);
-  }, [open]);
-  if (disabled) return null;
-  const fabItems = [
-    { label: "Create", onClick: () => { onCreate(); setOpen(false); }, gradient: true,
-      icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
-    { label: "Load", onClick: () => { fileRef.current?.click(); setOpen(false); }, gradient: false,
-      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
-  ];
-  return (
-    <>
-      <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
-        onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
-      {open && menuPos && (
-        <div style={{
-          display: "flex", flexDirection: "column", gap: "0.5rem",
-          alignItems: "flex-end",
-          position: "fixed",
-          bottom: menuPos.bottom + "px",
-          right: menuPos.right + "px",
-          zIndex: 110, pointerEvents: "all",
-        }} onPointerDown={e => e.stopPropagation()}>
-          {fabItems.map(({ label, onClick, icon, gradient }, idx) => {
-            const n = fabItems.length;
-            const openDelay  = (n - 1 - idx) * 65;
-            const closeDelay = idx * 55;
-            const anim = menuClosing
-              ? `fabItemOut 0.18s ease-in ${closeDelay}ms both`
-              : `fabItemIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
-            return (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
-                <button onClick={onClick} {...surfacePress()} style={{
-                  background: T.mode === "light" ? T.surface : T.surface2,
-                  border: "1px solid " + T.border, borderRadius: "8px",
-                  padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
-                  color: T.text, cursor: "pointer", whiteSpace: "nowrap",
-                  boxShadow: T.mode === "light"
-                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
-                }}>{label}</button>
-                {gradient
-                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
-                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
-              </div>
-            );
-          })}
-        </div>
-      )}
-      <div style={{ flexShrink: 0, pointerEvents: "all" }} onPointerDown={e => e.stopPropagation()}>
-        <GradientBorderButton onClick={e => {
-          if (open) { closeMenu(); return; }
-          const r = e.currentTarget.getBoundingClientRect();
-          setMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 10 });
-          setOpen(true);
-        }} size="62px">
-          <span style={{
-            display: "inline-flex", alignItems: "center", justifyContent: "center",
-            transform: open ? "rotate(45deg)" : "rotate(0deg)",
-            transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          }}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-              <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-            </svg>
-          </span>
-        </GradientBorderButton>
-      </div>
-    </>
-  );
-}
 
 function ResultsFAB({ isHist, hasMissed, onRetry, onRetryMissed, onExport, onExportJson }) {
   const [open, setOpen] = useState(false);
@@ -6709,13 +6681,8 @@ function App() {
               history={history}
               disabled={modalOpen}
               onSetsTab={() => setSetsSearch("")}
-              fabSlot={
-                <HomeFAB
-                  onCreate={handleCreate}
-                  onImport={handleSmartImport}
-                  disabled={modalOpen}
-                />
-              }
+              onCreate={handleCreate}
+              onImport={handleSmartImport}
             />
           </>
         )}
