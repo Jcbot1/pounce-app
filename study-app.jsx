@@ -1930,11 +1930,16 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
   const [fabMenuPos, setFabMenuPos] = useState(null);
 
   const types = [
-    { type: "single",    label: "Single answer", color: TYPE_META.single.color    },
-    { type: "multi",     label: "Multi-select",  color: TYPE_META.multi.color     },
-    { type: "dropdown",  label: "Dropdown",      color: TYPE_META.dropdown.color  },
-    { type: "matching",  label: "Matching",      color: "#0ea5e9"                 },
-    { type: "flashcard", label: "Flashcard",     color: TYPE_META.flashcard.color },
+    { type: "single",    label: "Single answer", color: TYPE_META.single.color,
+      icon: <svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/></svg> },
+    { type: "multi",     label: "Multi-select",  color: TYPE_META.multi.color,
+      icon: <svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="6" r="2.2" fill="currentColor"/><circle cx="10" cy="14" r="2.2" fill="currentColor"/></svg> },
+    { type: "dropdown",  label: "Dropdown",      color: TYPE_META.dropdown.color,
+      icon: <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><line x1="7" y1="4" x2="7" y2="16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/><line x1="13" y1="4" x2="13" y2="16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg> },
+    { type: "matching",  label: "Matching",      color: "#0ea5e9",
+      icon: <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg> },
+    { type: "flashcard", label: "Flashcard",     color: TYPE_META.flashcard.color,
+      icon: <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="1.5" stroke="currentColor" strokeWidth="2"/></svg> },
   ];
 
   function closeFabMenu() {
@@ -1987,10 +1992,7 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
                     ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
                     : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
                 }}>
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-                    <line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-                  </svg>
+                  {t.icon}
                 </button>
               </div>
             );
