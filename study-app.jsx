@@ -1955,6 +1955,17 @@ function EditorFab({ onAddQuestion }) {
 
   return (
     <>
+      {/* Scrim — dims busy content behind the popup so it stays legible */}
+      {(fabOpen || fabClosing) && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 105, pointerEvents: "none",
+          background: T.mode === "light" ? "rgba(20,15,10,0.25)" : "rgba(0,0,0,0.45)",
+          backdropFilter: "blur(2px)", WebkitBackdropFilter: "blur(2px)",
+          opacity: fabClosing ? 0 : 1,
+          transition: "opacity 0.2s ease",
+        }} />
+      )}
+
       {/* Question-type popup menu — mirrors the Create/Load popup on the home bar */}
       {(fabOpen || fabClosing) && fabMenuPos && (
         <div style={{
@@ -5274,6 +5285,17 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
     <>
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
         onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
+
+      {/* Scrim — dims busy content behind the popup so it stays legible */}
+      {(fabOpen || fabClosing) && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 105, pointerEvents: "none",
+          background: T.mode === "light" ? "rgba(20,15,10,0.25)" : "rgba(0,0,0,0.45)",
+          backdropFilter: "blur(2px)", WebkitBackdropFilter: "blur(2px)",
+          opacity: fabClosing ? 0 : 1,
+          transition: "opacity 0.2s ease",
+        }} />
+      )}
 
       {/* Create/Load popup menu */}
       {(fabOpen || fabClosing) && fabMenuPos && (
