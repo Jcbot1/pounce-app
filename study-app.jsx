@@ -1935,7 +1935,7 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
     { type: "multi",     label: "Multi-select",  color: TYPE_META.multi.color,
       icon: <svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="6" r="2.2" fill="currentColor"/><circle cx="10" cy="14" r="2.2" fill="currentColor"/></svg> },
     { type: "dropdown",  label: "Dropdown",      color: TYPE_META.dropdown.color,
-      icon: <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><line x1="7" y1="4" x2="7" y2="16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/><line x1="13" y1="4" x2="13" y2="16" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg> },
+      icon: <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><line x1="4" y1="7" x2="16" y2="7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/><line x1="4" y1="13" x2="16" y2="13" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/></svg> },
     { type: "matching",  label: "Matching",      color: "#0ea5e9",
       icon: <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/></svg> },
     { type: "flashcard", label: "Flashcard",     color: TYPE_META.flashcard.color,
@@ -1985,9 +1985,10 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
                 }}>{t.label}</button>
                 <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
                   width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
-                  background: t.color, border: "none",
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "#fff", cursor: "pointer",
+                  color: t.color, cursor: "pointer",
                   boxShadow: T.mode === "light"
                     ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
                     : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
