@@ -2021,25 +2021,41 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
         <div style={{
           position: "relative", zIndex: 1, pointerEvents: "all",
           display: "flex", alignItems: "center", justifyContent: "flex-end",
-          paddingTop: "8px", paddingRight: "1.25rem", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+          paddingTop: "8px", paddingRight: "36px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
         }}>
-          <GradientBorderButton size="46px" onClick={e => {
+          <button onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
             setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
             setFabOpen(true);
+          }} style={{
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            width: "auto", flexShrink: 0,
+            padding: 0,
+            background: "transparent",
+            border: "none", cursor: "pointer",
+            gap: "0.3rem",
           }}>
             <span style={{
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
-              transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)",
-              transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+              transition: "color 0.2s",
             }}>
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
-                <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
               </svg>
             </span>
-          </GradientBorderButton>
+            <span style={{
+              fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
+              lineHeight: 1, textAlign: "center",
+              color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+              transition: "color 0.2s",
+            }}>
+              Add
+            </span>
+          </button>
         </div>
       </div>
     </>
