@@ -2026,7 +2026,7 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
           <GradientBorderButton size="46px" onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: window.innerWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
+            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
             setFabOpen(true);
           }}>
             <span style={{
