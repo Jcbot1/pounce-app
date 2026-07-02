@@ -1980,9 +1980,12 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
                 }}>{t.label}</button>
                 <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
                   width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
-                  background: t.color + "1e", border: "1.5px solid " + t.color + "55",
+                  background: t.color, border: "none",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  color: t.color, cursor: "pointer",
+                  color: "#fff", cursor: "pointer",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
                 }}>
                   <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
                     <line x1="10" y1="2" x2="10" y2="18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
@@ -2017,8 +2020,8 @@ function EditorFab({ onAddQuestion, sidebarWidth = 0 }) {
 
         <div style={{
           position: "relative", zIndex: 1, pointerEvents: "all",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          paddingTop: "8px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+          display: "flex", alignItems: "center", justifyContent: "flex-end",
+          paddingTop: "8px", paddingRight: "1.25rem", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
         }}>
           <GradientBorderButton size="46px" onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
