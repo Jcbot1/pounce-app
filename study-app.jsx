@@ -1968,9 +1968,7 @@ function EditorFab({ onAddQuestion }) {
                   border: "1px solid " + T.border, borderRadius: "8px",
                   padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
                   color: t.color, cursor: "pointer", whiteSpace: "nowrap",
-                  boxShadow: T.mode === "light"
-                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                  boxShadow: fabItemGlow(),
                 }}>{t.label}</button>
                 <button onClick={() => { onAddQuestion(t.type); closeFabMenu(); }} {...surfacePress()} style={{
                   width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
@@ -1978,9 +1976,7 @@ function EditorFab({ onAddQuestion }) {
                   border: "1px solid " + T.border,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   color: t.color, cursor: "pointer",
-                  boxShadow: T.mode === "light"
-                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                  boxShadow: fabItemGlow(),
                 }}>
                   {t.icon}
                 </button>
