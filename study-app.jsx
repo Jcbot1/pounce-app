@@ -6030,38 +6030,98 @@ function SidebarActionButton({ onClick, icon, label, danger = false, right }) {
 
 
 // ── Desktop FAB — centered text button for large screens ───────────────────
-function DesktopFAB({ homeTab, onCreate, disabled }) {
-  if (homeTab !== "sets") return null;
-  return (
-    <div style={{
-      position: "fixed", bottom: 0, left: 0, right: 0,
-      zIndex: disabled ? 90 : 100, pointerEvents: "none",
-      opacity: disabled ? 0.4 : 1,
-    }}>
-      <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-        background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
-        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-        borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
-      }} />
+function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
+  const [fabOpen, setFabOpen] = useState(false);
+  const [fabClosing, setFabClosing] = useState(false);
+  const [fabMenuPos, setFabMenuPos] = useState(null);
+  const fileRef = useRef(null);
 
+  function closeFabMenu() {
+    setFabClosing(true);
+    setTimeout(() => { setFabOpen(false); setFabClosing(false); }, 290);
+  }
+  useEffect(() => {
+    if (!fabOpen) return;
+    const close = () => closeFabMenu();
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [fabOpen]);
+
+  if (homeTab !== "sets") return null;
+
+  const fabItems = [
+    { label: "Create", onClick: () => { onCreate(); closeFabMenu(); }, gradient: true,
+      icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
+    { label: "Load", onClick: () => { fileRef.current?.click(); closeFabMenu(); }, gradient: false,
+      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
+  ];
+
+  return (
+    <>
+      <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
+        onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
+
+      {/* Create/Load popup menu — mirrors the mobile Add button */}
+      {(fabOpen || fabClosing) && fabMenuPos && (
+        <div style={{
+          display: "flex", flexDirection: "column", gap: "0.5rem",
+          alignItems: "flex-end",
+          position: "fixed",
+          bottom: fabMenuPos.bottom + "px",
+          right: fabMenuPos.right + "px",
+          zIndex: 110, pointerEvents: "all",
+        }} onPointerDown={e => e.stopPropagation()}>
+          {fabItems.map(({ label, onClick, icon, gradient }, idx) => {
+            const n = fabItems.length;
+            const openDelay  = (n - 1 - idx) * 65;
+            const closeDelay = idx * 55;
+            const anim = fabClosing
+              ? `fabItemOut 0.18s ease-in ${closeDelay}ms both`
+              : `fabItemIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
+            return (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
+                <button onClick={onClick} {...surfacePress()} style={{
+                  background: T.mode === "light" ? T.surface : T.surface2,
+                  border: "1px solid " + T.border, borderRadius: "8px",
+                  padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
+                  color: T.text, cursor: "pointer", whiteSpace: "nowrap",
+                  boxShadow: T.mode === "light"
+                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                }}>{label}</button>
+                {gradient
+                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
+                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* No frosted bar on desktop — just the floating Add control */}
       <div style={{
-        position: "relative", zIndex: 1, pointerEvents: "all",
-        display: "flex", alignItems: "center", justifyContent: "flex-end",
-        paddingTop: "8px", paddingRight: "36px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+        position: "fixed", bottom: "1.5rem", right: "1.5rem",
+        zIndex: disabled ? 90 : 100,
+        opacity: disabled ? 0.4 : 1,
+        pointerEvents: disabled ? "none" : "all",
       }}>
-        <button onClick={() => !disabled && onCreate()} style={{
+        <button onClick={e => {
+          if (fabOpen) { closeFabMenu(); return; }
+          const r = e.currentTarget.getBoundingClientRect();
+          setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+          setFabOpen(true);
+        }} style={{
           display: "flex", flexDirection: "column",
           alignItems: "center", justifyContent: "center",
           width: "auto", flexShrink: 0,
           padding: 0,
           background: "transparent",
-          border: "none", cursor: disabled ? "default" : "pointer",
+          border: "none", cursor: "pointer",
           gap: "0.3rem",
         }}>
           <span style={{
             display: "flex", alignItems: "center", justifyContent: "center",
-            color: T.mode === "light" ? "#6b7280" : "#9c94b0",
+            color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
           }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -6070,13 +6130,13 @@ function DesktopFAB({ homeTab, onCreate, disabled }) {
           <span style={{
             fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
             lineHeight: 1, textAlign: "center",
-            color: T.mode === "light" ? "#6b7280" : "#9c94b0",
+            color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
           }}>
-            New Set
+            Add
           </span>
         </button>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -6814,6 +6874,7 @@ function App() {
           <DesktopFAB
             homeTab={homeTab}
             onCreate={handleCreate}
+            onImport={handleSmartImport}
             disabled={modalOpen}
           />
         )}
