@@ -425,10 +425,11 @@ function EditorTagChip({ tag, onRemove }) {
 
 // ── App Card ───────────────────────────────────────────────────────────────
 // Unified tappable card used across Sets, History, and Search screens.
-function AppCard({ onClick, onContextMenu, children, style: extraStyle }) {
+function AppCard({ onClick, onContextMenu, children, style: extraStyle, cardRef }) {
   const canHover = window.matchMedia("(hover: hover)").matches;
   return (
     <div
+      ref={cardRef}
       onClick={onClick}
       onContextMenu={onContextMenu}
       {...primaryPress()}
@@ -3898,9 +3899,24 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const iconStroke = masteryPair ? masteryPair.icon : T.accent;
 
   const [ctxMenu, setCtxMenu] = useState(null); // {top, left}
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const cardRef = useRef(null);
+
+  // Right-click doesn't fire a mousemove, so AppCard's onMouseEnter hover styles never
+  // get the onMouseLeave that would normally clear them — reset them by hand on close.
+  function closeCtxMenu() {
+    setCtxMenu(null);
+    if (cardRef.current) {
+      cardRef.current.style.transform = "translateY(0)";
+      cardRef.current.style.boxShadow = T.mode === "light"
+        ? "0 1px 4px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.08)"
+        : "0 1px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)";
+    }
+  }
 
   return (
-    <AppCard onClick={() => canStudy && onStudy(s)}
+    <>
+    <AppCard cardRef={cardRef} onClick={() => canStudy && onStudy(s)}
       onContextMenu={onTogglePin ? e => { e.preventDefault(); setCtxMenu({ top: e.clientY, left: e.clientX }); } : undefined}
       style={{ cursor: canStudy ? "pointer" : "default", opacity: canStudy ? 1 : 0.6, scrollSnapAlign: "start", position: "relative" }}>
       {pinned && (
@@ -3914,19 +3930,25 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         // (nested above in the React tree) and trigger onStudy underneath the menu.
         <div onClick={e => e.stopPropagation()}>
           <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
-            onClick={() => setCtxMenu(null)}
-            onContextMenu={e => { e.preventDefault(); setCtxMenu(null); }} />
+            onClick={closeCtxMenu}
+            onContextMenu={e => { e.preventDefault(); closeCtxMenu(); }} />
           <div className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
+            <KebabMenuItem onClick={() => { onTogglePin(s.id); closeCtxMenu(); }}>
+              <PinIcon filled={!pinned} />
+              {pinned ? "Remove from sidebar" : "Pin to sidebar"}
+            </KebabMenuItem>
             {onEdit && (
-              <KebabMenuItem onClick={() => { setCtxMenu(null); onEdit(s); }}>
+              <KebabMenuItem onClick={() => { closeCtxMenu(); onEdit(s); }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
                 Edit set
               </KebabMenuItem>
             )}
-            <KebabMenuItem onClick={() => { onTogglePin(s.id); setCtxMenu(null); }}>
-              <PinIcon filled={!pinned} />
-              {pinned ? "Remove from sidebar" : "Pin to sidebar"}
-            </KebabMenuItem>
+            {onDelete && (
+              <KebabMenuItem danger color={T.red} onClick={() => { closeCtxMenu(); setConfirmDelete(true); }}>
+                <TrashIcon size={15} />
+                Delete set
+              </KebabMenuItem>
+            )}
           </div>
         </div>,
         document.body
@@ -3978,6 +4000,15 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
 
       </div>
     </AppCard>
+    {confirmDelete && (
+      <ConfirmDialog
+        title="Delete this study set?"
+        message={`"${s.name}" and all its questions will be permanently removed.`}
+        onConfirm={() => { onDelete(s.id); setConfirmDelete(false); }}
+        onCancel={() => setConfirmDelete(false)}
+      />
+    )}
+    </>
   );
 }
 // ── Icon Picker Modal ──────────────────────────────────────────────────────
@@ -6151,7 +6182,13 @@ function App() {
   const [sidebarProfileOpen, setSidebarProfileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [recentTooltip, setRecentTooltip] = useState(null); // { name, y }
-  const [pinCtxMenu, setPinCtxMenu] = useState(null); // { top, left, setId }
+  const [pinCtxMenu, setPinCtxMenu] = useState(null); // { top, left, setId, el }
+  // Right-click doesn't fire a mousemove, so the row's onMouseEnter hover background never
+  // gets the onMouseLeave that would normally clear it — reset it by hand on close.
+  function closePinCtxMenu() {
+    if (pinCtxMenu?.el) pinCtxMenu.el.style.background = "transparent";
+    setPinCtxMenu(null);
+  }
   const sidebarPopupRef = useRef(null);
   const sidebarCogRef = useRef(null);
   useEffect(() => {
@@ -6960,7 +6997,7 @@ function App() {
                   const displayName = truncateMiddle(s.name);
                   return (
                     <button key={s.id} onClick={() => { setHomeTab("sets"); setScreen("home"); setSetsSearch(s.name); setSetsActiveTag(null); }}
-                      onContextMenu={e => { e.preventDefault(); setPinCtxMenu({ top: e.clientY, left: e.clientX, setId: s.id }); }}
+                      onContextMenu={e => { e.preventDefault(); setPinCtxMenu({ top: e.clientY, left: e.clientX, setId: s.id, el: e.currentTarget }); }}
                       style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
                       onMouseEnter={e => { e.currentTarget.style.background = ST.surface2; if (displayName !== s.name) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: s.name, y: r.top + r.height / 2 }); } }}
                       onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
@@ -6975,10 +7012,10 @@ function App() {
           {pinCtxMenu && ReactDOM.createPortal(
             <div onClick={e => e.stopPropagation()}>
               <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
-                onClick={() => setPinCtxMenu(null)}
-                onContextMenu={e => { e.preventDefault(); setPinCtxMenu(null); }} />
+                onClick={closePinCtxMenu}
+                onContextMenu={e => { e.preventDefault(); closePinCtxMenu(); }} />
               <div className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: pinCtxMenu.top, left: pinCtxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
-                <KebabMenuItem onClick={() => { handleTogglePin(pinCtxMenu.setId); setPinCtxMenu(null); }}>
+                <KebabMenuItem onClick={() => { handleTogglePin(pinCtxMenu.setId); closePinCtxMenu(); }}>
                   <PinIcon />
                   Remove from sidebar
                 </KebabMenuItem>
