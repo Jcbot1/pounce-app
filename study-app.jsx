@@ -3898,13 +3898,6 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const iconStroke = masteryPair ? masteryPair.icon : T.accent;
 
   const [ctxMenu, setCtxMenu] = useState(null); // {top, left}
-  const ctxMenuRef = useRef(null);
-  useEffect(() => {
-    if (!ctxMenu) return;
-    function close(e) { if (ctxMenuRef.current && !ctxMenuRef.current.contains(e.target)) setCtxMenu(null); }
-    document.addEventListener("pointerdown", close);
-    return () => document.removeEventListener("pointerdown", close);
-  }, [ctxMenu]);
 
   return (
     <AppCard onClick={() => canStudy && onStudy(s)}
@@ -3916,12 +3909,25 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
         </span>
       )}
       {ctxMenu && onTogglePin && ReactDOM.createPortal(
-        <div ref={ctxMenuRef} className="menu-open" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}
-          onClick={e => e.stopPropagation()} onContextMenu={e => e.preventDefault()}>
-          <KebabMenuItem onClick={() => { onTogglePin(s.id); setCtxMenu(null); }}>
-            <PinIcon filled={!pinned} />
-            {pinned ? "Remove from sidebar" : "Pin to sidebar"}
-          </KebabMenuItem>
+        // React portals still bubble synthetic events through the component tree, not the DOM
+        // tree — without this stopPropagation, clicks here would also reach AppCard's onClick
+        // (nested above in the React tree) and trigger onStudy underneath the menu.
+        <div onClick={e => e.stopPropagation()}>
+          <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
+            onClick={() => setCtxMenu(null)}
+            onContextMenu={e => { e.preventDefault(); setCtxMenu(null); }} />
+          <div className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
+            {onEdit && (
+              <KebabMenuItem onClick={() => { setCtxMenu(null); onEdit(s); }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                Edit set
+              </KebabMenuItem>
+            )}
+            <KebabMenuItem onClick={() => { onTogglePin(s.id); setCtxMenu(null); }}>
+              <PinIcon filled={!pinned} />
+              {pinned ? "Remove from sidebar" : "Pin to sidebar"}
+            </KebabMenuItem>
+          </div>
         </div>,
         document.body
       )}
@@ -6145,6 +6151,7 @@ function App() {
   const [sidebarProfileOpen, setSidebarProfileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [recentTooltip, setRecentTooltip] = useState(null); // { name, y }
+  const [pinCtxMenu, setPinCtxMenu] = useState(null); // { top, left, setId }
   const sidebarPopupRef = useRef(null);
   const sidebarCogRef = useRef(null);
   useEffect(() => {
@@ -6953,6 +6960,7 @@ function App() {
                   const displayName = truncateMiddle(s.name);
                   return (
                     <button key={s.id} onClick={() => { setHomeTab("sets"); setScreen("home"); setSetsSearch(s.name); setSetsActiveTag(null); }}
+                      onContextMenu={e => { e.preventDefault(); setPinCtxMenu({ top: e.clientY, left: e.clientX, setId: s.id }); }}
                       style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.45rem 0.5rem", borderRadius: "8px", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", minWidth: 0 }}
                       onMouseEnter={e => { e.currentTarget.style.background = ST.surface2; if (displayName !== s.name) { const r = e.currentTarget.getBoundingClientRect(); setRecentTooltip({ name: s.name, y: r.top + r.height / 2 }); } }}
                       onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setRecentTooltip(null); }}>
@@ -6963,6 +6971,20 @@ function App() {
                 })}
               </div>
             </div>
+          )}
+          {pinCtxMenu && ReactDOM.createPortal(
+            <div onClick={e => e.stopPropagation()}>
+              <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
+                onClick={() => setPinCtxMenu(null)}
+                onContextMenu={e => { e.preventDefault(); setPinCtxMenu(null); }} />
+              <div className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: pinCtxMenu.top, left: pinCtxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
+                <KebabMenuItem onClick={() => { handleTogglePin(pinCtxMenu.setId); setPinCtxMenu(null); }}>
+                  <PinIcon />
+                  Remove from sidebar
+                </KebabMenuItem>
+              </div>
+            </div>,
+            document.body
           )}
 
           {/* Recent — sets and history mixed, hidden when collapsed */}
