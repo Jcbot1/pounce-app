@@ -6999,7 +6999,7 @@ function App() {
               />
             )}
             {screen === "edit" && activeSet && (
-              <div style={{ overflow: "hidden" }}>
+              <div style={{ overflow: "hidden", margin: "0 -16px", padding: "0 16px" }}>
                 <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} isMobile={isMobile} />
               </div>
             )}
