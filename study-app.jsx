@@ -1636,15 +1636,17 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
     return () => document.removeEventListener("studi-back", handler);
   }, [draft, onBack]);
 
-  // Swipe left anywhere on the question builder triggers the same back action as the chevron.
+  // Edge swipe from the left, dragging right, triggers the same back action as the chevron.
   useEffect(() => {
     const el = document.documentElement;
+    const EDGE = 22;
     const swipe = { startX: 0, startY: 0, axis: null, active: false };
 
     function onTouchStart(e) {
       const target = e.target;
       if (target.closest && target.closest("input, textarea, [contenteditable=true]")) { swipe.active = false; return; }
       const t = e.touches[0];
+      if (t.clientX > EDGE) { swipe.active = false; return; }
       swipe.startX = t.clientX;
       swipe.startY = t.clientY;
       swipe.axis = null;
@@ -1666,7 +1668,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
       const dx = t.clientX - swipe.startX;
       swipe.active = false;
       swipe.axis = null;
-      if (dx < -60) document.dispatchEvent(new CustomEvent("studi-back"));
+      if (dx > 60) document.dispatchEvent(new CustomEvent("studi-back"));
     }
 
     el.addEventListener("touchstart", onTouchStart, { passive: true });
