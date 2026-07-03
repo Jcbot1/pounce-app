@@ -1891,30 +1891,28 @@ function GradientBorderButton({ onClick, children, size, style: extraStyle, disa
   );
 }
 
-// ── BottomPill — shared pill container for quiz submit and editor FAB ──────
-function BottomPill({ left, children, sidebarOffset = 0 }) {
+// ── BottomPill — full-width frosted bar for the quiz submit control ────────
+function BottomPill({ left, children }) {
   return (
     <div style={{
-      position: "fixed", bottom: "1.5rem", left: 0, right: 0, zIndex: 110,
-      display: "flex", justifyContent: "center", alignItems: "center",
-      padding: "0 1rem", pointerEvents: "none",
-      transform: sidebarOffset ? `translateX(${sidebarOffset / 2}px)` : undefined,
-      transition: "transform 0.25s ease",
+      position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
+      pointerEvents: "none",
     }}>
       <div style={{
-        display: "flex", alignItems: "center", gap: "0.75rem",
-        background: T.mode === "light" ? "#ede8e0" : "#181614",
-        borderRadius: "99px",
-        padding: "0 0.4rem 0 1.2rem",
-        minHeight: "60px",
-        boxShadow: T.mode === "light"
-          ? "0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.6)"
-          : "0 4px 24px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
-        pointerEvents: "all",
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+        background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
+        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+        borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
+      }} />
+      <div style={{
+        position: "relative", zIndex: 1, pointerEvents: "all",
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem",
+        padding: "0 1.25rem",
+        paddingTop: "12px", paddingBottom: "calc(env(safe-area-inset-bottom) + 12px)",
       }}>
         {left && (
-          <span style={{ color: T.mode === "light" ? T.muted2 : "#64748b", fontSize: "0.72rem",
-            fontFamily: FF_SANS, letterSpacing: "0.05em", flexShrink: 0 }}>
+          <span style={{ color: T.muted, fontSize: "0.78rem",
+            fontFamily: FF_SANS, letterSpacing: "0.03em", flexShrink: 0 }}>
             {left}
           </span>
         )}
@@ -4253,6 +4251,13 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
           )}
         </>
       )}
+
+      {sets.length > 0 && !isFiltered && (
+        <div style={{ textAlign: "center", padding: "1.5rem 0 0.5rem", color: T.muted,
+          fontFamily: FF_SANS, fontSize: "0.78rem", letterSpacing: "0.05em" }}>
+          {sets.length} {sets.length === 1 ? "set" : "sets"}
+        </div>
+      )}
     </div>
   );
 }
@@ -6025,18 +6030,53 @@ function SidebarActionButton({ onClick, icon, label, danger = false, right }) {
 
 
 // ── Desktop FAB — centered text button for large screens ───────────────────
-function DesktopFAB({ homeTab, onCreate, disabled, sidebarWidth, setCount = 0 }) {
+function DesktopFAB({ homeTab, onCreate, disabled }) {
   if (homeTab !== "sets") return null;
   return (
-    <BottomPill sidebarOffset={sidebarWidth} left={`${setCount} ${setCount === 1 ? "set" : "sets"}`}>
-      <GradientBorderButton onClick={() => onCreate()} disabled={disabled} style={{ height: "46px", padding: "0 1.7rem" }}>
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-          <line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-          <line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.2" strokeLinecap="round"/>
-        </svg>
-        New Set
-      </GradientBorderButton>
-    </BottomPill>
+    <div style={{
+      position: "fixed", bottom: 0, left: 0, right: 0,
+      zIndex: disabled ? 90 : 100, pointerEvents: "none",
+      opacity: disabled ? 0.4 : 1,
+    }}>
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+        background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
+        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+        borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
+      }} />
+
+      <div style={{
+        position: "relative", zIndex: 1, pointerEvents: "all",
+        display: "flex", alignItems: "center", justifyContent: "flex-end",
+        paddingTop: "8px", paddingRight: "36px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+      }}>
+        <button onClick={() => !disabled && onCreate()} style={{
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          width: "auto", flexShrink: 0,
+          padding: 0,
+          background: "transparent",
+          border: "none", cursor: disabled ? "default" : "pointer",
+          gap: "0.3rem",
+        }}>
+          <span style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: T.mode === "light" ? "#6b7280" : "#9c94b0",
+          }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+          <span style={{
+            fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
+            lineHeight: 1, textAlign: "center",
+            color: T.mode === "light" ? "#6b7280" : "#9c94b0",
+          }}>
+            New Set
+          </span>
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -6775,8 +6815,6 @@ function App() {
             homeTab={homeTab}
             onCreate={handleCreate}
             disabled={modalOpen}
-            sidebarWidth={sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH}
-            setCount={sets.length}
           />
         )}
       </div>
