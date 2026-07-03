@@ -112,6 +112,11 @@ const fabMenuBtn     = () => ({ background: "transparent", border: "none", heigh
 const fabMenuJsonBtn = () => ({ background: "transparent", border: "none", height: "44px", width: "44px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontFamily: FF_SANS, fontSize: "0.8rem", lineHeight: 1, textAlign: "center", color: T.muted, flexShrink: 0 });
 const fabMenuWrap    = () => ({ display: "flex", alignItems: "center", background: T.surface, border: "1px solid " + T.border, borderRadius: "99px", overflow: "hidden", boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)" });
 
+// Dark ambient glow for the FAB popup items — helps them read against whatever's behind them
+const fabItemGlow = () => T.mode === "light"
+  ? "0 0 20px rgba(0,0,0,0.18), 0 4px 14px rgba(0,0,0,0.14)"
+  : "0 0 24px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.45)";
+
 // ── Icon Button ────────────────────────────────────────────────────────────
 function IconButton({ onClick, onPointerDown, children, variant = "default", size = 28, style: extraStyle }) {
   const bg    = variant === "danger" ? T.red  + "18" : T.surface2;
@@ -5252,13 +5257,11 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
                   border: "1px solid " + T.border, borderRadius: "8px",
                   padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
                   color: T.text, cursor: "pointer", whiteSpace: "nowrap",
-                  boxShadow: T.mode === "light"
-                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                  boxShadow: fabItemGlow(),
                 }}>{label}</button>
                 {gradient
-                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
-                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
+                  ? <GradientBorderButton onClick={onClick} size="44px" style={{ boxShadow: `0 4px 20px ${T.accent}30, ${fabItemGlow()}` }}>{icon}</GradientBorderButton>
+                  : <GlassButton onClick={onClick} size={44} style={{ boxShadow: fabItemGlow() }}>{icon}</GlassButton>}
               </div>
             );
           })}
@@ -6033,13 +6036,11 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
                   border: "1px solid " + T.border, borderRadius: "8px",
                   padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
                   color: T.text, cursor: "pointer", whiteSpace: "nowrap",
-                  boxShadow: T.mode === "light"
-                    ? "0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
-                    : "0 4px 16px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2)",
+                  boxShadow: fabItemGlow(),
                 }}>{label}</button>
                 {gradient
-                  ? <GradientBorderButton onClick={onClick} size="44px">{icon}</GradientBorderButton>
-                  : <GlassButton onClick={onClick} size={44}>{icon}</GlassButton>}
+                  ? <GradientBorderButton onClick={onClick} size="44px" style={{ boxShadow: `0 4px 20px ${T.accent}30, ${fabItemGlow()}` }}>{icon}</GradientBorderButton>
+                  : <GlassButton onClick={onClick} size={44} style={{ boxShadow: fabItemGlow() }}>{icon}</GlassButton>}
               </div>
             );
           })}
