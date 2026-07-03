@@ -734,7 +734,7 @@ function blankQuestion(type = "single") {
 
 function blankSet() {
   const now = new Date().toISOString();
-  return { id: uid(), name: "New Study Set", tags: [], questions: [], createdAt: now, updatedAt: now };
+  return { id: uid(), name: "New Study Set", description: "", tags: [], questions: [], createdAt: now, updatedAt: now };
 }
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
@@ -1796,6 +1796,17 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
             + Add tag
           </button>
         ) : null}
+      </div>
+
+      {/* Description */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <EditorTextarea
+          value={draft.description || ""}
+          onChange={e => setDraft({ ...draft, description: e.target.value })}
+          placeholder="Add a description…"
+          maxLength={10000}
+          rows={2}
+        />
       </div>
 
       {draft.questions.length === 0 && (
@@ -3763,7 +3774,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           )}
           {section === "appearance" && (
             <>
-              <HamburgerSectionHeader label="Appearance" onBack={() => setSection(null)} noBorder />
+              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Theme</p>
@@ -3771,12 +3782,12 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Color</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
                 </div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Background</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}>
                   <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} large />
                 </div>
@@ -7103,14 +7114,14 @@ function App() {
 
           {sidebarSection === "appearance" && (
             <>
-              <HamburgerSectionHeader label="Appearance" onBack={() => setSidebarSection(null)} noBorder />
+              <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Theme</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Color</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Background</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
                 <div style={{ marginBottom: "0.25rem" }}><BackgroundPicker bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle} /></div>
               </div>
             </>
