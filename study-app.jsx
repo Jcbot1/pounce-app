@@ -2018,7 +2018,9 @@ function EditorFab({ onAddQuestion }) {
         <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
-          setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+          // Anchor off the right edge (fixed via CSS `right`), not the center — the center
+          // shifts left when the button is in its expanded "+ Add" state.
+          setFabMenuPos({ right: document.body.clientWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
         }} style={{
           width: fabExpanded ? "108px" : "52px",
@@ -3801,7 +3803,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Theme</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
                 <div style={{ marginBottom: "1rem" }}>
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
@@ -6175,7 +6177,9 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
-          setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+          // Anchor off the right edge (fixed via CSS `right`), not the center — the center
+          // shifts left when the button is in its expanded "+ Add" state.
+          setFabMenuPos({ right: document.body.clientWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
         }} style={{
           width: fabExpanded ? "108px" : "52px",
@@ -7209,7 +7213,7 @@ function App() {
             <>
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>Theme</p>
+                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
 
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
