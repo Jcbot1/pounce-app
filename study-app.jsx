@@ -580,6 +580,18 @@ function useWindowWidth() {
   return width;
 }
 
+// True once `active` has stayed false for `delay`ms straight — used to expand a FAB into a
+// labeled pill after it's been idle, collapsing immediately whenever `active` goes true.
+function useIdleExpand(active, delay = 5000) {
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => {
+    if (active) { setExpanded(false); return; }
+    const t = setTimeout(() => setExpanded(true), delay);
+    return () => clearTimeout(t);
+  }, [active, delay]);
+  return expanded;
+}
+
 
 const VALID_TYPES = new Set(['single', 'multi', 'dropdown', 'matching', 'flashcard']);
 
@@ -1931,6 +1943,7 @@ function EditorFab({ onAddQuestion }) {
   const [fabOpen, setFabOpen] = useState(false);
   const [fabClosing, setFabClosing] = useState(false);
   const [fabMenuPos, setFabMenuPos] = useState(null);
+  const fabExpanded = useIdleExpand(fabOpen || fabClosing);
 
   const types = [
     { type: "single",    label: "Single answer", color: TYPE_META.single.color,
@@ -2000,23 +2013,33 @@ function EditorFab({ onAddQuestion }) {
         </div>
       )}
 
-      {/* Glassy Add button — plain circle, matches the other glass buttons */}
+      {/* Glassy Add button — plain circle, expands into a "+ Add" pill when idle */}
       <div style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 100 }}>
         <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
           setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
+        }} style={{
+          width: fabExpanded ? "108px" : "52px",
+          transition: "width 0.35s cubic-bezier(0.34, 1.15, 0.64, 1)",
+          overflow: "hidden",
         }}>
           <span style={{
-            display: "flex", alignItems: "center", justifyContent: "center",
+            display: "flex", alignItems: "center", justifyContent: "flex-start",
+            width: "100%", paddingLeft: "15px", gap: "0.5rem",
             color: fabOpen ? T.accent : T.text,
             transition: "color 0.2s",
           }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-              style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
+              style={{ flexShrink: 0, transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
+            <span style={{
+              fontFamily: FF_SANS, fontSize: "0.92rem", fontWeight: 500, whiteSpace: "nowrap",
+              opacity: fabExpanded ? 1 : 0,
+              transition: "opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
+            }}>Add</span>
           </span>
         </GlassButton>
       </div>
@@ -6079,6 +6102,7 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
   const [fabOpen, setFabOpen] = useState(false);
   const [fabClosing, setFabClosing] = useState(false);
   const [fabMenuPos, setFabMenuPos] = useState(null);
+  const fabExpanded = useIdleExpand(fabOpen || fabClosing);
   const fileRef = useRef(null);
 
   function closeFabMenu() {
@@ -6141,7 +6165,7 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         </div>
       )}
 
-      {/* Glassy Add button — plain circle, matches the other glass buttons */}
+      {/* Glassy Add button — plain circle, expands into a "+ Add" pill when idle */}
       <div style={{
         position: "fixed", bottom: "1.5rem", right: "1.5rem",
         zIndex: disabled ? 90 : 100,
@@ -6153,16 +6177,26 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
           const r = e.currentTarget.getBoundingClientRect();
           setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
+        }} style={{
+          width: fabExpanded ? "108px" : "52px",
+          transition: "width 0.35s cubic-bezier(0.34, 1.15, 0.64, 1)",
+          overflow: "hidden",
         }}>
           <span style={{
-            display: "flex", alignItems: "center", justifyContent: "center",
+            display: "flex", alignItems: "center", justifyContent: "flex-start",
+            width: "100%", paddingLeft: "15px", gap: "0.5rem",
             color: fabOpen ? T.accent : T.text,
             transition: "color 0.2s",
           }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-              style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
+              style={{ flexShrink: 0, transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
+            <span style={{
+              fontFamily: FF_SANS, fontSize: "0.92rem", fontWeight: 500, whiteSpace: "nowrap",
+              opacity: fabExpanded ? 1 : 0,
+              transition: "opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
+            }}>Add</span>
           </span>
         </GlassButton>
       </div>
