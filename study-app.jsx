@@ -2028,8 +2028,8 @@ function EditorFab({ onAddQuestion }) {
           overflow: "hidden",
         }}>
           <span style={{
-            display: "flex", alignItems: "center", justifyContent: "flex-start",
-            width: "100%", paddingLeft: "15px", gap: "0.5rem",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: "100%",
             color: fabOpen ? T.accent : T.text,
             transition: "color 0.2s",
           }}>
@@ -2037,10 +2037,15 @@ function EditorFab({ onAddQuestion }) {
               style={{ flexShrink: 0, transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
+            {/* Fixed px width (not "auto") so it's transitionable; keeps the icon dead-center
+                when collapsed since a zero-width, zero-margin span contributes nothing to the row. */}
             <span style={{
               fontFamily: FF_SANS, fontSize: "0.92rem", fontWeight: 500, whiteSpace: "nowrap",
+              overflow: "hidden",
+              width: fabExpanded ? "34px" : "0px",
+              marginLeft: fabExpanded ? "0.5rem" : 0,
               opacity: fabExpanded ? 1 : 0,
-              transition: "opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
+              transition: "width 0.3s ease, margin-left 0.3s ease, opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
             }}>Add</span>
           </span>
         </GlassButton>
@@ -6187,8 +6192,8 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
           overflow: "hidden",
         }}>
           <span style={{
-            display: "flex", alignItems: "center", justifyContent: "flex-start",
-            width: "100%", paddingLeft: "15px", gap: "0.5rem",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: "100%",
             color: fabOpen ? T.accent : T.text,
             transition: "color 0.2s",
           }}>
@@ -6196,10 +6201,15 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
               style={{ flexShrink: 0, transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
+            {/* Fixed px width (not "auto") so it's transitionable; keeps the icon dead-center
+                when collapsed since a zero-width, zero-margin span contributes nothing to the row. */}
             <span style={{
               fontFamily: FF_SANS, fontSize: "0.92rem", fontWeight: 500, whiteSpace: "nowrap",
+              overflow: "hidden",
+              width: fabExpanded ? "34px" : "0px",
+              marginLeft: fabExpanded ? "0.5rem" : 0,
               opacity: fabExpanded ? 1 : 0,
-              transition: "opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
+              transition: "width 0.3s ease, margin-left 0.3s ease, opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
             }}>Add</span>
           </span>
         </GlassButton>
