@@ -1612,7 +1612,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
   );
 }
 
-function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQuestionCountChange, editSearch = "" }) {
+function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQuestionCountChange, editSearch = "", isMobile = true }) {
   const [draft, setDraft]         = useState(() => JSON.parse(JSON.stringify(set)));
   const [confirmBack, setConfirmBack] = useState(false);
   const [newTag, setNewTag]       = useState("");
@@ -1620,6 +1620,25 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   const [addingTag, setAddingTag] = useState(false);
 
   const savedDraftRef = useRef(JSON.stringify(set));
+
+  // Slide-in/out transition ───────────────────────────────────────────────
+  const TRANSITION_MS = 300;
+  const [entered, setEntered] = useState(false);
+  const [exiting, setExiting] = useState(false);
+
+  const rafRef = useRef(null);
+  useEffect(() => {
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = requestAnimationFrame(() => setEntered(true));
+    });
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  function goBack() {
+    setExiting(true);
+    setTimeout(onBack, TRANSITION_MS);
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     const handler = () => {
@@ -1629,7 +1648,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
         document.activeElement?.blur();
         setTimeout(() => setConfirmBack(true), 100);
       } else {
-        onBack();
+        goBack();
       }
     };
     document.addEventListener("studi-back", handler);
@@ -1637,7 +1656,9 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   }, [draft, onBack]);
 
   // Edge swipe from the left, dragging right, triggers the same back action as the chevron.
+  // Mobile-only: on tablet/desktop the sidebar is showing and swipe gestures don't apply.
   useEffect(() => {
+    if (!isMobile) return;
     const el = document.documentElement;
     const EDGE = 22;
     const swipe = { startX: 0, startY: 0, axis: null, active: false };
@@ -1679,7 +1700,7 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
       el.removeEventListener("touchmove",  onTouchMove);
       el.removeEventListener("touchend",   onTouchEnd);
     };
-  }, []);
+  }, [isMobile]);
 
   const [newestId, setNewestId] = useState(null);
   const [confirmDeleteQ, setConfirmDeleteQ] = useState(null); // { i, q }
@@ -1806,16 +1827,20 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
   const combinedTags = [...new Set([...allTags, ...(draft.tags || [])])];
 
   return (
-    <div>
+    <div style={{
+      transform: (entered && !exiting) ? "translateX(0)" : "translateX(100%)",
+      opacity: (entered && !exiting) ? 1 : 0,
+      transition: `transform ${TRANSITION_MS}ms cubic-bezier(0.25, 1, 0.5, 1), opacity ${TRANSITION_MS}ms ease`,
+    }}>
       {confirmBack && (
         <ConfirmDialog
           title="Leave without saving?"
           message="Any unsaved changes to this study set will be lost."
           confirmLabel="Leave"
-          onConfirm={() => { setConfirmBack(false); onBack(); }}
+          onConfirm={() => { setConfirmBack(false); goBack(); }}
           onCancel={() => setConfirmBack(false)}
           extraButton={canSave && (
-            <SuccessButton onClick={() => { onSave(draft); setConfirmBack(false); onBack(); }} style={{ width: "100%", justifyContent: "center" }}>
+            <SuccessButton onClick={() => { onSave(draft); setConfirmBack(false); goBack(); }} style={{ width: "100%", justifyContent: "center" }}>
               Save & Leave
             </SuccessButton>
           )}
@@ -4546,7 +4571,9 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
   // Touch event listeners on the root element so swipes work regardless of content height.
   // passive:false on touchmove is required to call preventDefault for horizontal swipes.
+  // Mobile-only: on tablet/desktop the sidebar is showing and swipe gestures don't apply.
   useEffect(() => {
+    if (showSidebar) return;
     const el = document.documentElement;
 
     function onTouchStart(e) {
@@ -4605,7 +4632,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       el.removeEventListener("touchmove",  onTouchMove);
       el.removeEventListener("touchend",   onTouchEnd);
     };
-  }, []);
+  }, [showSidebar]);
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
@@ -6971,7 +6998,9 @@ function App() {
               />
             )}
             {screen === "edit" && activeSet && (
-              <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} />
+              <div style={{ overflow: "hidden" }}>
+                <EditMode set={activeSet} allTags={allTags} onSave={handleSave} onBack={() => setScreen("home")} scrolled={scrolled} onCanSaveChange={setEditCanSave} onQuestionCountChange={setEditQuestionCount} editSearch={editSearch} isMobile={isMobile} />
+              </div>
             )}
             {screen === "review" && activeSet && (
               <ReviewMode set={activeSet} questionLimit={questionLimit} examMode={examMode} timerMinutes={timerMinutes} onFinish={handleFinish} onBack={() => setScreen("home")} />
