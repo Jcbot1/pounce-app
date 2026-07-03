@@ -2039,7 +2039,7 @@ function EditorFab({ onAddQuestion }) {
     return () => document.removeEventListener('pointerdown', close);
   }, [fabOpen]);
 
-  return (
+  return ReactDOM.createPortal(
     <>
       {/* Question-type popup menu — mirrors the Create/Load popup on the home bar */}
       {(fabOpen || fabClosing) && fabMenuPos && (
@@ -2120,7 +2120,8 @@ function EditorFab({ onAddQuestion }) {
           </span>
         </GlassButton>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
 
