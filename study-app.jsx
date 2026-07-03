@@ -2004,7 +2004,7 @@ function EditorFab({ onAddQuestion }) {
         <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
-          setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+          setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
         }}>
           <span style={{
@@ -5353,7 +5353,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           <button onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+            setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
             setFabOpen(true);
           }} style={{
             display: "flex", flexDirection: "column",
@@ -6070,7 +6070,7 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
-          setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+          setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
         }}>
           <span style={{
