@@ -1636,6 +1636,49 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
     return () => document.removeEventListener("studi-back", handler);
   }, [draft, onBack]);
 
+  // Swipe left anywhere on the question builder triggers the same back action as the chevron.
+  useEffect(() => {
+    const el = document.documentElement;
+    const swipe = { startX: 0, startY: 0, axis: null, active: false };
+
+    function onTouchStart(e) {
+      const target = e.target;
+      if (target.closest && target.closest("input, textarea, [contenteditable=true]")) { swipe.active = false; return; }
+      const t = e.touches[0];
+      swipe.startX = t.clientX;
+      swipe.startY = t.clientY;
+      swipe.axis = null;
+      swipe.active = true;
+    }
+    function onTouchMove(e) {
+      if (!swipe.active) return;
+      const t  = e.touches[0];
+      const dx = t.clientX - swipe.startX;
+      const dy = t.clientY - swipe.startY;
+      if (swipe.axis === null) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        swipe.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      }
+    }
+    function onTouchEnd(e) {
+      if (!swipe.active || swipe.axis !== "x") { swipe.active = false; swipe.axis = null; return; }
+      const t  = e.changedTouches[0];
+      const dx = t.clientX - swipe.startX;
+      swipe.active = false;
+      swipe.axis = null;
+      if (dx < -60) document.dispatchEvent(new CustomEvent("studi-back"));
+    }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove",  onTouchMove,  { passive: true });
+    el.addEventListener("touchend",   onTouchEnd,   { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove",  onTouchMove);
+      el.removeEventListener("touchend",   onTouchEnd);
+    };
+  }, []);
+
   const [newestId, setNewestId] = useState(null);
   const [confirmDeleteQ, setConfirmDeleteQ] = useState(null); // { i, q }
 
@@ -4538,12 +4581,18 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       const t      = e.changedTouches[0];
       const dx     = t.clientX - swipeRef.current.startX;
       const idx    = TAB_ORDER.indexOf(lastRealTabRef.current);
-      let newIdx   = idx;
+      swipeRef.current.axis = null;
+      // Swiping left past the last tab (History) opens a new set in the question builder.
+      if (dx < -50 && idx === TAB_ORDER.length - 1) {
+        setTrackX(idx, 0, true);
+        onCreate();
+        return;
+      }
+      let newIdx = idx;
       if (dx < -50 && idx < TAB_ORDER.length - 1) newIdx = idx + 1;
       else if (dx > 50 && idx > 0)                newIdx = idx - 1;
       setTrackX(newIdx, 0, true);
       if (newIdx !== idx) setTab(TAB_ORDER[newIdx]);
-      swipeRef.current.axis = null;
     }
 
     el.addEventListener("touchstart", onTouchStart, { passive: true });
