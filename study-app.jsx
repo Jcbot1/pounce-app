@@ -5301,7 +5301,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
         <div style={{
           position: "relative", zIndex: 1, pointerEvents: "all",
           display: "flex", alignItems: "center", justifyContent: "space-around",
-          paddingTop: "8px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+          paddingTop: "8px", paddingBottom: "calc(env(safe-area-inset-bottom) + 34px)",
         }}>
           {tabs.map(t => {
             const active = homeTab === t.id;
