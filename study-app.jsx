@@ -2004,17 +2004,11 @@ function EditorFab({ onAddQuestion }) {
         position: "fixed", bottom: 0, left: 0, right: 0,
         zIndex: 100, pointerEvents: "none",
       }}>
-        <div key={T.mode} style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-          background: T.mode === "light"
-            ? `linear-gradient(to top, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(247,245,242,0.9) 60%, rgba(247,245,242,0) 100%)`
-            : `linear-gradient(to top, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to top, rgba(15,9,5,0.9) 60%, rgba(15,9,5,0) 100%)`,
-        }} />
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-          WebkitMaskImage: "linear-gradient(to top, black 55%, transparent 100%)",
-          maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+          borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
         }} />
 
         <div style={{
