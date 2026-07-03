@@ -6098,11 +6098,16 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         </div>
       )}
 
-      {/* No frosted bar on desktop — just the floating Add control */}
+      {/* No frosted bar on desktop — just the floating Add control, same position as the question builder's + */}
       <div style={{
-        position: "fixed", bottom: "1.5rem", right: "1.5rem",
+        position: "fixed", bottom: 0, left: 0, right: 0,
         zIndex: disabled ? 90 : 100,
         opacity: disabled ? 0.4 : 1,
+        pointerEvents: "none",
+      }}>
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "flex-end",
+        paddingTop: "8px", paddingRight: "36px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
         pointerEvents: disabled ? "none" : "all",
       }}>
         <button onClick={e => {
@@ -6135,6 +6140,7 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
             Add
           </span>
         </button>
+      </div>
       </div>
     </>
   );
