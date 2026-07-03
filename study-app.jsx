@@ -1875,13 +1875,15 @@ function GradientBorderButton({ onClick, children, size, style: extraStyle, disa
     <button onClick={disabled ? undefined : onClick}
       className="button button-round"
       style={{
-        background: `linear-gradient(${T.surface}, ${T.surface}) padding-box, linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%) border-box`,
+        background: disabled
+          ? T.surface2
+          : `linear-gradient(${T.surface}, ${T.surface}) padding-box, linear-gradient(135deg, ${T.accent} 0%, ${T.gradient2} 100%) border-box`,
         border: "2px solid transparent",
-        color: T.muted2, fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem",
+        color: disabled ? T.muted : T.muted2, fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem",
         textTransform: "none",
         display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
-        cursor: disabled ? "default" : "pointer", opacity: disabled ? 0.5 : 1,
-        boxShadow: `0 4px 20px ${T.accent}30`,
+        cursor: disabled ? "default" : "pointer",
+        boxShadow: disabled ? "none" : `0 4px 20px ${T.accent}30`,
         WebkitTapHighlightColor: "transparent",
         ...(size ? { width: size, height: size, borderRadius: "50%", flexShrink: 0 } : {}),
         ...extraStyle,
