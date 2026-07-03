@@ -6703,13 +6703,13 @@ function App() {
         position: "relative",
         background: bgStyle === "gradient" || bgStyle === "dots" || bgStyle === "grid" ? "transparent" : T.bg,
         marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 + "px" : SIDEBAR_WIDTH + 16 + "px") : 0,
-        paddingTop: showSidebar ? "48px" : 0,
+        paddingTop: showSidebar ? "56px" : 0,
         borderTopLeftRadius: 0,
         boxShadow: "none",
         transition: "margin-left 0.25s ease" }}>
-        
+
         <div style={{
-          position: showSidebar ? "fixed" : "sticky", top: 0, zIndex: 99,
+          position: showSidebar ? "fixed" : "sticky", top: showSidebar ? "8px" : 0, zIndex: 99,
           ...(showSidebar ? {
             left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : SIDEBAR_WIDTH + 16) + "px", right: 0,
             height: "48px",
