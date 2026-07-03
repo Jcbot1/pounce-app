@@ -1891,31 +1891,15 @@ function GradientBorderButton({ onClick, children, size, style: extraStyle, disa
   );
 }
 
-// ── BottomPill — full-width frosted bar for the quiz submit control ────────
-function BottomPill({ left, children }) {
+// ── BottomPill — floating, no background, just centers the quiz submit control ──
+function BottomPill({ children }) {
   return (
     <div style={{
-      position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
+      position: "fixed", bottom: "1.5rem", left: 0, right: 0, zIndex: 100,
+      display: "flex", justifyContent: "center", alignItems: "center",
       pointerEvents: "none",
     }}>
-      <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-        background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
-        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-        borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
-      }} />
-      <div style={{
-        position: "relative", zIndex: 1, pointerEvents: "all",
-        display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem",
-        padding: "0 1.25rem",
-        paddingTop: "12px", paddingBottom: "calc(env(safe-area-inset-bottom) + 12px)",
-      }}>
-        {left && (
-          <span style={{ color: T.muted, fontSize: "0.78rem",
-            fontFamily: FF_SANS, letterSpacing: "0.03em", flexShrink: 0 }}>
-            {left}
-          </span>
-        )}
+      <div style={{ pointerEvents: "all" }}>
         {children}
       </div>
     </div>
@@ -2901,7 +2885,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       <div ref={bottomRef} style={{ height: "1px" }} />
 
       {/* Fixed bottom — submit pill only */}
-      <BottomPill left={`${Object.keys(results).length} / ${questions.length}`}>
+      <BottomPill>
         {q.type === "flashcard" && !isSubmitted ? (
           <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", color: T.muted, fontStyle: "italic" }}>Tap card to flip</span>
         ) : !examMode && !isSubmitted ? (
