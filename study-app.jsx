@@ -1999,50 +1999,25 @@ function EditorFab({ onAddQuestion }) {
         </div>
       )}
 
-      {/* Glassy Add button — self-contained, no frosted bar behind it */}
-      <div style={{
-        position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 100,
-        borderRadius: "16px",
-        background: T.surface,
-        border: "1px solid " + T.border,
-        boxShadow: T.mode === "light"
-          ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
-          : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
-      }}>
-        <button onClick={e => {
+      {/* Glassy Add button — plain circle, matches the other glass buttons */}
+      <div style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 100 }}>
+        <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
           setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
-        }} {...glassPress()} style={{
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          gap: "0.3rem",
-          padding: "0.7rem 1.1rem",
-          borderRadius: "16px",
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
         }}>
           <span style={{
             display: "flex", alignItems: "center", justifyContent: "center",
             color: fabOpen ? T.accent : T.text,
             transition: "color 0.2s",
           }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
               style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
           </span>
-          <span style={{
-            fontSize: "0.78rem", fontFamily: FF_SANS, fontWeight: 500,
-            lineHeight: 1, textAlign: "center",
-            color: fabOpen ? T.accent : T.text,
-            transition: "color 0.2s",
-          }}>
-            Add
-          </span>
-        </button>
+        </GlassButton>
       </div>
     </>
   );
@@ -6085,50 +6060,30 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         </div>
       )}
 
-      {/* Glassy Add button — self-contained, no frosted bar behind it */}
+      {/* Glassy Add button — plain circle, matches the other glass buttons */}
       <div style={{
         position: "fixed", bottom: "1.5rem", right: "1.5rem",
         zIndex: disabled ? 90 : 100,
         opacity: disabled ? 0.4 : 1,
         pointerEvents: disabled ? "none" : "all",
-        borderRadius: "16px",
-        background: T.surface,
-        border: "1px solid " + T.border,
-        boxShadow: T.mode === "light"
-          ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
-          : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
       }}>
-        <button onClick={e => {
+        <GlassButton size={52} onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
           setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
-        }} {...glassPress()} style={{
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          gap: "0.3rem",
-          padding: "0.7rem 1.1rem",
-          borderRadius: "16px",
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
         }}>
           <span style={{
             display: "flex", alignItems: "center", justifyContent: "center",
             color: fabOpen ? T.accent : T.text,
+            transition: "color 0.2s",
           }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+              style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
           </span>
-          <span style={{
-            fontSize: "0.78rem", fontFamily: FF_SANS, fontWeight: 500,
-            lineHeight: 1, textAlign: "center",
-            color: fabOpen ? T.accent : T.text,
-          }}>
-            Add
-          </span>
-        </button>
+        </GlassButton>
       </div>
     </>
   );
