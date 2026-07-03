@@ -2000,7 +2000,15 @@ function EditorFab({ onAddQuestion }) {
       )}
 
       {/* Glassy Add button — self-contained, no frosted bar behind it */}
-      <div style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 100 }}>
+      <div style={{
+        position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 100,
+        borderRadius: "16px",
+        background: T.surface,
+        border: "1px solid " + T.border,
+        boxShadow: T.mode === "light"
+          ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
+          : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
+      }}>
         <button onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
           const r = e.currentTarget.getBoundingClientRect();
@@ -2012,11 +2020,8 @@ function EditorFab({ onAddQuestion }) {
           gap: "0.3rem",
           padding: "0.7rem 1.1rem",
           borderRadius: "16px",
-          background: T.surface,
-          border: "1px solid " + T.border,
-          boxShadow: T.mode === "light"
-            ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
-            : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
+          background: "transparent",
+          border: "none",
           cursor: "pointer",
         }}>
           <span style={{
@@ -6086,6 +6091,12 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         zIndex: disabled ? 90 : 100,
         opacity: disabled ? 0.4 : 1,
         pointerEvents: disabled ? "none" : "all",
+        borderRadius: "16px",
+        background: T.surface,
+        border: "1px solid " + T.border,
+        boxShadow: T.mode === "light"
+          ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
+          : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
       }}>
         <button onClick={e => {
           if (fabOpen) { closeFabMenu(); return; }
@@ -6098,11 +6109,8 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
           gap: "0.3rem",
           padding: "0.7rem 1.1rem",
           borderRadius: "16px",
-          background: T.surface,
-          border: "1px solid " + T.border,
-          boxShadow: T.mode === "light"
-            ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
-            : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
+          background: "transparent",
+          border: "none",
           cursor: "pointer",
         }}>
           <span style={{
