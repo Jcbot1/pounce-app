@@ -164,7 +164,7 @@ function GlassButton({ onClick, onPointerDown, children, size = 44, style: extra
     <div ref={divRef} data-glass-btn="1" style={{
       width: size, height: size, borderRadius: "99px", flexShrink: 0,
       background: T.surface,
-      border: T.mode === "light" ? "1px solid " + T.border : "none",
+      border: "1px solid " + T.border,
       boxShadow: T.mode === "light"
         ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
         : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
