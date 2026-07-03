@@ -2093,7 +2093,7 @@ function EditorFab({ onAddQuestion }) {
           setFabMenuPos({ right: document.body.clientWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
         }} style={{
-          width: fabExpanded ? "108px" : "52px",
+          width: fabExpanded ? "172px" : "52px",
           transition: "width 0.35s cubic-bezier(0.34, 1.15, 0.64, 1)",
           overflow: "hidden",
         }}>
@@ -2112,11 +2112,11 @@ function EditorFab({ onAddQuestion }) {
             <span style={{
               fontFamily: FF_SANS, fontSize: "0.92rem", fontWeight: 500, whiteSpace: "nowrap",
               overflow: "hidden",
-              width: fabExpanded ? "34px" : "0px",
+              width: fabExpanded ? "98px" : "0px",
               marginLeft: fabExpanded ? "0.5rem" : 0,
               opacity: fabExpanded ? 1 : 0,
               transition: "width 0.3s ease, margin-left 0.3s ease, opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
-            }}>Add</span>
+            }}>Add Question</span>
           </span>
         </GlassButton>
       </div>
@@ -6266,7 +6266,7 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
           setFabMenuPos({ right: document.body.clientWidth - r.right + 4, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
         }} style={{
-          width: fabExpanded ? "108px" : "52px",
+          width: fabExpanded ? "134px" : "52px",
           transition: "width 0.35s cubic-bezier(0.34, 1.15, 0.64, 1)",
           overflow: "hidden",
         }}>
@@ -6285,11 +6285,11 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
             <span style={{
               fontFamily: FF_SANS, fontSize: "0.92rem", fontWeight: 500, whiteSpace: "nowrap",
               overflow: "hidden",
-              width: fabExpanded ? "34px" : "0px",
+              width: fabExpanded ? "60px" : "0px",
               marginLeft: fabExpanded ? "0.5rem" : 0,
               opacity: fabExpanded ? 1 : 0,
               transition: "width 0.3s ease, margin-left 0.3s ease, opacity " + (fabExpanded ? "0.2s ease 0.15s" : "0.1s ease"),
-            }}>Add</span>
+            }}>Add Set</span>
           </span>
         </GlassButton>
       </div>
