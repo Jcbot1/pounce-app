@@ -1999,57 +1999,45 @@ function EditorFab({ onAddQuestion }) {
         </div>
       )}
 
-      {/* Full-width frosted bar — matches FloatingHomeBar, right-anchored + */}
-      <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0,
-        zIndex: 100, pointerEvents: "none",
-      }}>
-        <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-          background: T.mode === "light" ? "rgba(255,255,255,0.72)" : "rgba(30,22,48,0.62)",
-          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-          borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
-        }} />
-
-        <div style={{
-          position: "relative", zIndex: 1, pointerEvents: "all",
-          display: "flex", alignItems: "center", justifyContent: "flex-end",
-          paddingTop: "8px", paddingRight: "36px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
+      {/* Glassy Add button — self-contained, no frosted bar behind it */}
+      <div style={{ position: "fixed", bottom: "1.5rem", right: "1.5rem", zIndex: 100 }}>
+        <button onClick={e => {
+          if (fabOpen) { closeFabMenu(); return; }
+          const r = e.currentTarget.getBoundingClientRect();
+          setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+          setFabOpen(true);
+        }} {...glassPress()} style={{
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          gap: "0.3rem",
+          padding: "0.7rem 1.1rem",
+          borderRadius: "16px",
+          background: T.surface,
+          border: "1px solid " + T.border,
+          boxShadow: T.mode === "light"
+            ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
+            : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
+          cursor: "pointer",
         }}>
-          <button onClick={e => {
-            if (fabOpen) { closeFabMenu(); return; }
-            const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
-            setFabOpen(true);
-          }} style={{
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            width: "auto", flexShrink: 0,
-            padding: 0,
-            background: "transparent",
-            border: "none", cursor: "pointer",
-            gap: "0.3rem",
+          <span style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: fabOpen ? T.accent : T.text,
+            transition: "color 0.2s",
           }}>
-            <span style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
-              transition: "color 0.2s",
-            }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-                style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </span>
-            <span style={{
-              fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
-              lineHeight: 1, textAlign: "center",
-              color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
-              transition: "color 0.2s",
-            }}>
-              Add
-            </span>
-          </button>
-        </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+              style={{ transform: fabOpen ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </span>
+          <span style={{
+            fontSize: "0.78rem", fontFamily: FF_SANS, fontWeight: 500,
+            lineHeight: 1, textAlign: "center",
+            color: fabOpen ? T.accent : T.text,
+            transition: "color 0.2s",
+          }}>
+            Add
+          </span>
+        </button>
       </div>
     </>
   );
@@ -6092,16 +6080,11 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
         </div>
       )}
 
-      {/* No frosted bar on desktop — just the floating Add control, same position as the question builder's + */}
+      {/* Glassy Add button — self-contained, no frosted bar behind it */}
       <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0,
+        position: "fixed", bottom: "1.5rem", right: "1.5rem",
         zIndex: disabled ? 90 : 100,
         opacity: disabled ? 0.4 : 1,
-        pointerEvents: "none",
-      }}>
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "flex-end",
-        paddingTop: "8px", paddingRight: "36px", paddingBottom: "calc(env(safe-area-inset-bottom) + 44px)",
         pointerEvents: disabled ? "none" : "all",
       }}>
         <button onClick={e => {
@@ -6109,32 +6092,35 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
           const r = e.currentTarget.getBoundingClientRect();
           setFabMenuPos({ right: window.innerWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
           setFabOpen(true);
-        }} style={{
+        }} {...glassPress()} style={{
           display: "flex", flexDirection: "column",
           alignItems: "center", justifyContent: "center",
-          width: "auto", flexShrink: 0,
-          padding: 0,
-          background: "transparent",
-          border: "none", cursor: "pointer",
           gap: "0.3rem",
+          padding: "0.7rem 1.1rem",
+          borderRadius: "16px",
+          background: T.surface,
+          border: "1px solid " + T.border,
+          boxShadow: T.mode === "light"
+            ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05), inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(255,255,255,0.2)"
+            : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15), inset 1px 1px 0 rgba(255,255,255,0.09), inset -1px -1px 0 rgba(255,255,255,0.04)",
+          cursor: "pointer",
         }}>
           <span style={{
             display: "flex", alignItems: "center", justifyContent: "center",
-            color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+            color: fabOpen ? T.accent : T.text,
           }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
           </span>
           <span style={{
-            fontSize: "0.82rem", fontFamily: FF_SANS, fontWeight: 500,
+            fontSize: "0.78rem", fontFamily: FF_SANS, fontWeight: 500,
             lineHeight: 1, textAlign: "center",
-            color: fabOpen ? T.accent : T.mode === "light" ? "#6b7280" : "#9c94b0",
+            color: fabOpen ? T.accent : T.text,
           }}>
             Add
           </span>
         </button>
-      </div>
       </div>
     </>
   );
