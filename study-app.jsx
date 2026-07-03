@@ -6800,7 +6800,7 @@ function App() {
             {sidebarCollapsed ? (
               <MascotMonoIcon width={36} height={36} color={ST.accent} />
             ) : (
-              <PounceLogo height={24} />
+              <PounceLogo height={33} />
             )}
           </div>
           
