@@ -655,6 +655,12 @@ const HISTORY_SORT_OPTIONS = [
   { id: "score-asc",  label: "Score: low → high" },
 ];
 
+const RESULTS_SORT_OPTIONS = [
+  { id: "default",            label: "Default", shortLabel: "Default" },
+  { id: "correct-incorrect",  label: "Incorrect first", shortLabel: "Incorrect first" },
+  { id: "topic",              label: "Topic", shortLabel: "Topic" },
+];
+
 // ── Utility: export JSON file ──────────────────────────────────────────────
 function exportAll(data, filename) {
   const json = JSON.stringify(data, null, 2);
@@ -3139,9 +3145,9 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
   const passed = pct >= 70;
   const [expanded,     setExpanded]     = useState(null);
   const [saved,        setSaved]        = useState(false);
-  const [resultsFilter, setResultsFilter] = useState("all");
-  const [filterOpen,   setFilterOpen]   = useState(false);
-  const [filterPos,    setFilterPos]    = useState({ top: 0, right: 0 });
+  const [resultsSort,  setResultsSort]  = useState("default");
+  const [sortOpen,     setSortOpen]     = useState(false);
+  const [sortPos,      setSortPos]      = useState({ top: 0, right: 0 });
   const autoSavedIdRef = useRef(null);
 
   useEffect(() => {
@@ -3211,42 +3217,38 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         <div style={{ position: "relative", flexShrink: 0 }}>
           <button {...glassPress()} onClick={e => {
             const rect = e.currentTarget.parentElement.getBoundingClientRect();
-            setFilterPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
-            setFilterOpen(o => !o);
-          }} className={`button button-round ${(filterOpen || resultsFilter !== "all") ? 'button-tonal' : 'button-raised'}`}
+            setSortPos({ top: rect.bottom + 6, right: window.innerWidth - rect.right });
+            setSortOpen(o => !o);
+          }} className={`button button-round ${(sortOpen || resultsSort !== "default") ? 'button-tonal' : 'button-raised'}`}
           style={{ gap: "0.4rem", height: "36px", paddingLeft: "1rem", paddingRight: "1rem", flexShrink: 0, fontFamily: FF_SANS, fontWeight: 500, fontSize: "0.9rem", WebkitTapHighlightColor: "transparent", textTransform: "none", transition: "background 0.2s, box-shadow 0.2s",
-            ...((filterOpen || resultsFilter !== "all") ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
-            <FilterIcon size={13} />
-            <span style={{ fontSize: "0.85rem" }}>{resultsFilter === "correct" ? "Correct" : resultsFilter === "incorrect" ? "Incorrect" : "All"}</span>
+            ...((sortOpen || resultsSort !== "default") ? { background: T.accent + "25", color: T.accent } : { background: T.surface, color: T.text }) }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" {...IC}><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
+            <span style={{ fontSize: "0.85rem" }}>{RESULTS_SORT_OPTIONS.find(o => o.id === resultsSort)?.shortLabel}</span>
           </button>
-          {filterOpen && (
+          {sortOpen && (
             <>
-              <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setFilterOpen(false)} />
+              <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setSortOpen(false)} />
               <div className="menu-open" style={{
-                position: "fixed", top: filterPos.top, right: filterPos.right, zIndex: 9999,
+                position: "fixed", top: sortPos.top, right: sortPos.right, zIndex: 9999,
                 background: T.mode === "light" ? "#ffffff" : "#1e1630",
                 border: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)"),
                 borderRadius: "16px", overflow: "hidden",
                 boxShadow: T.mode === "light" ? "0 8px 40px rgba(0,0,0,0.12)" : "0 8px 40px rgba(0,0,0,0.4)",
                 minWidth: "160px",
               }}>
-                {[
-                  { id: "all", label: "All" },
-                  { id: "incorrect", label: "Incorrect only" },
-                  { id: "correct", label: "Correct only" },
-                ].map(opt => (
-                  <button key={opt.id} {...surfacePress()} onClick={() => { setResultsFilter(opt.id); setFilterOpen(false); }}
+                {RESULTS_SORT_OPTIONS.map(opt => (
+                  <button key={opt.id} {...surfacePress()} onClick={() => { setResultsSort(opt.id); setSortOpen(false); }}
                     style={{
                       display: "block", width: "100%", textAlign: "left",
-                      background: resultsFilter === opt.id ? T.accent + "18" : "transparent",
+                      background: resultsSort === opt.id ? T.accent + "18" : "transparent",
                       border: "none", padding: "0.85rem 1.1rem",
                       fontFamily: FF_SANS, fontSize: "0.92rem",
-                      color: resultsFilter === opt.id ? T.accent : T.text, cursor: "pointer",
+                      color: resultsSort === opt.id ? T.accent : T.text, cursor: "pointer",
                     }}
                     onMouseEnter={e => { e.currentTarget.style.background = T.mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.06)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = resultsFilter === opt.id ? T.accent + "18" : "transparent"; }}>
+                    onMouseLeave={e => { e.currentTarget.style.background = resultsSort === opt.id ? T.accent + "18" : "transparent"; }}>
                     {opt.label}
-                    {resultsFilter === opt.id && <span style={{ float: "right" }}>&#10003;</span>}
+                    {resultsSort === opt.id && <span style={{ float: "right" }}>&#10003;</span>}
                   </button>
                 ))}
               </div>
@@ -3320,25 +3322,34 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
       </div>
 
       <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>Question Review</p>
-      {results.filter(r => {
-        if (resultsFilter === "correct") return r.correct;
-        if (resultsFilter === "incorrect") return !r.correct;
-        return true;
-      }).map((r, i) => {
-        const q = questions.find(q => q.id === r.qId);
+      {results
+        .map((r, origIdx) => ({ r, origIdx, q: questions.find(q => q.id === r.qId) }))
+        .sort((a, b) => {
+          if (resultsSort === "correct-incorrect") {
+            if (a.r.correct !== b.r.correct) return a.r.correct ? 1 : -1;
+            return a.origIdx - b.origIdx;
+          }
+          if (resultsSort === "topic") {
+            const ta = a.q?.topic || "", tb = b.q?.topic || "";
+            if (ta !== tb) return !ta ? 1 : !tb ? -1 : ta.localeCompare(tb);
+            return a.origIdx - b.origIdx;
+          }
+          return a.origIdx - b.origIdx;
+        })
+        .map(({ r, origIdx, q }) => {
         if (!q) return null;
-        const open = expanded === i;
+        const open = expanded === origIdx;
         const corBg = corBgCard(), wroBg = wroBgCard();
         return (
-          <div key={i} style={card({ marginBottom: "0.6rem", borderColor: r.correct ? T.green + "44" : T.red + "44" })}>
+          <div key={origIdx} style={card({ marginBottom: "0.6rem", borderColor: r.correct ? T.green + "44" : T.red + "44" })}>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", cursor: "pointer" }}
-              onClick={() => setExpanded(open ? null : i)}>
+              onClick={() => setExpanded(open ? null : origIdx)}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <span style={{ fontSize: "0.9rem", color: r.correct ? T.green : T.red, flexShrink: 0 }}>
                   {r.correct ? "✓" : "✗"}
                 </span>
                 <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", color: T.muted, flexShrink: 0 }}>
-                  Q{i + 1}
+                  Q{origIdx + 1}
                 </span>
                 {q.topic && <Tag label={q.topic.toUpperCase()} color={T.muted2} />}
                 <span style={{ flex: 1 }} />
