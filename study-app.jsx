@@ -4120,6 +4120,12 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
                 Edit set
               </KebabMenuItem>
             )}
+            {onExport && (
+              <KebabMenuItem onClick={() => { closeCtxMenu(); onExport(s); }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Save set as
+              </KebabMenuItem>
+            )}
             {onDelete && (
               <KebabMenuItem danger color={T.red} onClick={() => { closeCtxMenu(); setConfirmDelete(true); }}>
                 <TrashIcon size={15} />
@@ -4484,6 +4490,8 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
 // ════════════════════════════════════════════════════════════════════════
 
 function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, onDelete, onDeleteHistory, onSetTags, onSetIcon, onRename, onExport, inputRef: externalRef, query: externalQuery, cardColumns = 1, pinnedSetIds = [], onTogglePin, showSidebar = true }) {
+  const [exportSession, setExportSession] = useState(null);
+  const [confirmDel,    setConfirmDel]    = useState(null);
   const [internalQuery, setInternalQuery] = useState("");
   const localRef = useRef(null);
   const inputRef = externalRef || localRef;
@@ -4508,6 +4516,15 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
 
   return (
     <div>
+      {exportSession && <ExportResultsModal session={exportSession} onClose={() => setExportSession(null)} />}
+      {confirmDel && (
+        <ConfirmDialog
+          title="Delete this result?"
+          message={confirmDel.setName + " session from " + new Date(confirmDel.date).toLocaleDateString() + " will be removed."}
+          onConfirm={() => { onDeleteHistory(confirmDel.id); setConfirmDel(null); }}
+          onCancel={() => setConfirmDel(null)}
+        />
+      )}
 
       {/* Pre-populated recent content */}
       {!q && (
@@ -4528,7 +4545,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
                 Recent Sessions
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-                {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} />)}
+                {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onStudy={onStudy} matchedSet={sets.find(s => s.id === h.setId || s.name === h.setName)} onExport={setExportSession} onRequestDelete={setConfirmDel} />)}
               </div>
             </div>
           )}
@@ -4569,7 +4586,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
             History · {matchedHistory.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-            {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} />)}
+            {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onStudy={onStudy} matchedSet={sets.find(s => s.id === h.setId || s.name === h.setName)} onExport={setExportSession} onRequestDelete={setConfirmDel} />)}
           </div>
         </div>
       )}
@@ -4828,9 +4845,11 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
           )}
           <ResultsHistoryView
             history={history}
+            sets={sets}
             onImport={onImportHistory}
             onDelete={onDeleteHistory}
             onView={onViewHistory}
+            onStudy={s => setPickingSet(s)}
             externalSearch={externalHistorySearch}
             externalSortBy={externalHistorySortBy}
             cardColumns={cardColumns}
@@ -4987,12 +5006,59 @@ function ExportResultsModal({ session, onClose }) {
   );
 }
 
-function HistoryCard({ session, onView }) {
+function HistoryCard({ session, onView, onStudy, matchedSet, onExport, onRequestDelete }) {
   const pct    = Math.round((session.score / session.total) * 100);
   const passed = pct >= 70;
+  const canStudy = matchedSet && matchedSet.questions.length > 0;
+
+  const [ctxMenu, setCtxMenu] = useState(null); // {top, left}
+  const cardRef = useRef(null);
+  const ctxMenuRef = useRef(null);
+  useAnchoredMenu(ctxMenuRef, ctxMenu);
+
+  // Right-click doesn't fire a mousemove, so AppCard's onMouseEnter hover styles never
+  // get the onMouseLeave that would normally clear them — reset them by hand on close.
+  function closeCtxMenu() {
+    setCtxMenu(null);
+    if (cardRef.current) {
+      cardRef.current.style.transform = "translateY(0)";
+      cardRef.current.style.boxShadow = T.mode === "light"
+        ? "0 1px 4px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.08)"
+        : "0 1px 4px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)";
+    }
+  }
 
   return (
-    <AppCard onClick={() => onView(session)} style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
+    <AppCard cardRef={cardRef} onClick={() => onView(session)}
+      onContextMenu={e => { e.preventDefault(); setCtxMenu({ top: e.clientY, left: e.clientX }); }}
+      style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
+      {ctxMenu && ReactDOM.createPortal(
+        // React portals still bubble synthetic events through the component tree, not the DOM
+        // tree — without this stopPropagation, clicks here would also reach AppCard's onClick
+        // (nested above in the React tree) and trigger onView underneath the menu.
+        <div onClick={e => e.stopPropagation()}>
+          <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
+            onClick={closeCtxMenu}
+            onContextMenu={e => { e.preventDefault(); closeCtxMenu(); }} />
+          <div ref={ctxMenuRef} className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
+            {canStudy && (
+              <KebabMenuItem onClick={() => { closeCtxMenu(); onStudy(matchedSet); }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                Study set
+              </KebabMenuItem>
+            )}
+            <KebabMenuItem onClick={() => { closeCtxMenu(); onExport(session); }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Save as
+            </KebabMenuItem>
+            <KebabMenuItem danger color={T.red} onClick={() => { closeCtxMenu(); onRequestDelete(session); }}>
+              <TrashIcon size={15} />
+              Delete
+            </KebabMenuItem>
+          </div>
+        </div>,
+        document.body
+      )}
       <div style={{ display: "flex", flexDirection: "column" }}>
         <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
           overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, margin: 0 }}>
@@ -5026,7 +5092,7 @@ function HistoryCard({ session, onView }) {
 // HISTORY TAB
 // ════════════════════════════════════════════════════════════════════════
 
-function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearch, externalSortBy, cardColumns = 1 }) {
+function ResultsHistoryView({ history, sets = [], onImport, onDelete, onView, onStudy, externalSearch, externalSortBy, cardColumns = 1 }) {
   const [exportSession, setExportSession] = useState(null);
   const [confirmDel,    setConfirmDel]    = useState(null);
   const sortBy = externalSortBy || "date-desc";
@@ -5073,6 +5139,10 @@ function ResultsHistoryView({ history, onImport, onDelete, onView, externalSearc
             key={session.id}
             session={session}
             onView={onView}
+            onStudy={onStudy}
+            matchedSet={sets.find(s => s.id === session.setId || s.name === session.setName)}
+            onExport={setExportSession}
+            onRequestDelete={setConfirmDel}
           />
         ))}
       </div>
