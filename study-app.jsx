@@ -1202,24 +1202,33 @@ const menuPopupStyle = (extra = {}) => ({
   ...extra,
 });
 
-// Nudges a top-left-anchored, fixed-position popup back onto the viewport once its real
-// (content-dependent) size is known — top/left context menus opened near a screen edge
-// would otherwise render partially offscreen.
-function useClampToViewport(ref, pos, margin = 8) {
+// Picks which corner of a context menu sits at the tap/click point, so the menu always
+// grows outward from wherever the user pressed instead of always anchoring its top-left
+// corner there (which needs shifting away from the tap point once it nears a screen edge).
+const MENU_CORNER_CLASS = {
+  "top-left":     "menu-open-tl",
+  "top-right":    "menu-open",
+  "bottom-right": "menu-open-up",
+  "bottom-left":  "menu-open-up-left",
+};
+function useAnchoredMenu(ref, pos, margin = 8) {
   useLayoutEffect(() => {
     if (!pos || !ref.current) return;
     const el = ref.current;
     // offsetWidth/Height reflect the untransformed layout box, unlike getBoundingClientRect
-    // which would capture the popup mid-animation (menuIn scales up from 0.85 to 1) and
-    // undershoot the correction needed for its final, fully-scaled size.
+    // which would capture the popup mid-animation (menuIn/menuInUp scale up from 0.85 to 1)
+    // and undershoot the correction needed for its final, fully-scaled size.
     const w = el.offsetWidth;
     const h = el.offsetHeight;
-    let left = Math.min(pos.left, window.innerWidth - margin - w);
-    let top = Math.min(pos.top, window.innerHeight - margin - h);
-    left = Math.max(margin, left);
-    top = Math.max(margin, top);
-    el.style.left = left + "px";
-    el.style.top = top + "px";
+
+    const fitsRight = pos.left + w + margin <= window.innerWidth;
+    const fitsBelow = pos.top + h + margin <= window.innerHeight;
+    const left = fitsRight ? pos.left : pos.left - w;
+    const top  = fitsBelow ? pos.top  : pos.top - h;
+
+    el.style.left = Math.max(margin, Math.min(left, window.innerWidth - margin - w)) + "px";
+    el.style.top  = Math.max(margin, Math.min(top,  window.innerHeight - margin - h)) + "px";
+    el.className  = MENU_CORNER_CLASS[(fitsBelow ? "top" : "bottom") + "-" + (fitsRight ? "left" : "right")];
   }, [pos, margin]);
 }
 
@@ -4066,7 +4075,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const [confirmDelete, setConfirmDelete] = useState(false);
   const cardRef = useRef(null);
   const ctxMenuRef = useRef(null);
-  useClampToViewport(ctxMenuRef, ctxMenu);
+  useAnchoredMenu(ctxMenuRef, ctxMenu);
 
   // Right-click doesn't fire a mousemove, so AppCard's onMouseEnter hover styles never
   // get the onMouseLeave that would normally clear them — reset them by hand on close.
@@ -6380,7 +6389,7 @@ function App() {
   const [recentTooltip, setRecentTooltip] = useState(null); // { name, y }
   const [pinCtxMenu, setPinCtxMenu] = useState(null); // { top, left, setId, el }
   const pinCtxMenuRef = useRef(null);
-  useClampToViewport(pinCtxMenuRef, pinCtxMenu);
+  useAnchoredMenu(pinCtxMenuRef, pinCtxMenu);
   // Right-click doesn't fire a mousemove, so the row's onMouseEnter hover background never
   // gets the onMouseLeave that would normally clear it — reset it by hand on close.
   function closePinCtxMenu() {
