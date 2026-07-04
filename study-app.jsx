@@ -5688,8 +5688,11 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
       {(fabOpen || fabClosing) && fabMenuPos && (
         <>
         {/* Backdrop — a real element intercepts the closing tap so it can't also
-            activate whatever's underneath (cards, buttons, etc). */}
-        <div style={{ position: "fixed", inset: 0, zIndex: 105 }} onClick={closeFabMenu} />
+            activate whatever's underneath (cards, buttons, etc). touch-action: pan-y lets
+            vertical scroll of the page underneath still pass through — unlike the long-press
+            context menu (anchored to a specific card), this menu is anchored to a fixed nav
+            button that doesn't move when the page scrolls, so there's no need to lock scroll. */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 105, touchAction: "pan-y" }} onClick={closeFabMenu} />
         <div className={fabClosing ? "menu-close-up" : "menu-open-up"}
           style={{ ...menuPopupStyle({ position: "fixed", bottom: fabMenuPos.bottom + "px", right: fabMenuPos.right + "px", zIndex: 110, minWidth: "180px" }) }}
           onPointerDown={e => e.stopPropagation()}>
@@ -6360,8 +6363,11 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
       {(fabOpen || fabClosing) && fabMenuPos && (
         <>
         {/* Backdrop — a real element intercepts the closing tap so it can't also
-            activate whatever's underneath (cards, buttons, etc). */}
-        <div style={{ position: "fixed", inset: 0, zIndex: 105 }} onClick={closeFabMenu} />
+            activate whatever's underneath (cards, buttons, etc). touch-action: pan-y lets
+            vertical scroll of the page underneath still pass through — this menu is anchored
+            to a fixed nav button that doesn't move when the page scrolls, so there's no need
+            to lock scroll the way the card-anchored long-press context menu does. */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 105, touchAction: "pan-y" }} onClick={closeFabMenu} />
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
