@@ -5502,50 +5502,24 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
       svgFilled: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="currentColor" stroke="none"/><polyline points="12 7 12 12 15 15" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
   ];
 
-  const fabItems = [
-    { label: "Create", onClick: () => { onCreate(); closeFabMenu(); }, gradient: true,
-      icon: <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg> },
-    { label: "Load", onClick: () => { fileRef.current?.click(); closeFabMenu(); }, gradient: false,
-      icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.text} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> },
-  ];
-
   return (
     <>
       <input ref={fileRef} type="file" accept=".json" style={{ display: "none" }}
         onChange={e => { const f = e.target.files[0]; if (f) onImport(f); e.target.value = ""; }} />
 
-      {/* Create/Load popup menu */}
+      {/* Create/Load popup menu — same rectangular style as the long-press/right-click menus */}
       {(fabOpen || fabClosing) && fabMenuPos && (
-        <div style={{
-          display: "flex", flexDirection: "column", gap: "0.5rem",
-          alignItems: "flex-end",
-          position: "fixed",
-          bottom: fabMenuPos.bottom + "px",
-          right: fabMenuPos.right + "px",
-          zIndex: 110, pointerEvents: "all",
-        }} onPointerDown={e => e.stopPropagation()}>
-          {fabItems.map(({ label, onClick, icon, gradient }, idx) => {
-            const n = fabItems.length;
-            const openDelay  = (n - 1 - idx) * 65;
-            const closeDelay = idx * 55;
-            const anim = fabClosing
-              ? `fabItemOut 0.18s ease-in ${closeDelay}ms both`
-              : `fabItemIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) ${openDelay}ms both`;
-            return (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.6rem", animation: anim }}>
-                <button onClick={onClick} {...surfacePress()} style={{
-                  background: T.mode === "light" ? T.surface : T.surface2,
-                  border: "1px solid " + T.border, borderRadius: "8px",
-                  padding: "0.35rem 0.65rem", fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500,
-                  color: T.text, cursor: "pointer", whiteSpace: "nowrap",
-                  boxShadow: fabItemGlow(),
-                }}>{label}</button>
-                {gradient
-                  ? <GradientBorderButton onClick={onClick} size="44px" style={{ boxShadow: `0 4px 20px ${T.accent}30, ${fabItemGlow()}` }}>{icon}</GradientBorderButton>
-                  : <GlassButton onClick={onClick} size={44} style={{ boxShadow: fabItemGlow() }}>{icon}</GlassButton>}
-              </div>
-            );
-          })}
+        <div className={fabClosing ? "menu-close-up" : "menu-open-up"}
+          style={{ ...menuPopupStyle({ position: "fixed", bottom: fabMenuPos.bottom + "px", right: fabMenuPos.right + "px", zIndex: 110, minWidth: "180px" }) }}
+          onPointerDown={e => e.stopPropagation()}>
+          <KebabMenuItem onClick={() => { onCreate(); closeFabMenu(); }}>
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg>
+            Create
+          </KebabMenuItem>
+          <KebabMenuItem onClick={() => { fileRef.current?.click(); closeFabMenu(); }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Load
+          </KebabMenuItem>
         </div>
       )}
 
@@ -5623,7 +5597,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           <button onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: document.body.clientWidth - (r.left + r.width / 2) - 22, bottom: window.innerHeight - r.top + 14 });
+            setFabMenuPos({ right: document.body.clientWidth - r.right, bottom: window.innerHeight - r.top + 10 });
             setFabOpen(true);
           }} style={{
             display: "flex", flexDirection: "column",
