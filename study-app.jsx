@@ -2864,7 +2864,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         <Modal onClose={() => setPaused(false)} zIndex={1100}>
           <ModalCard style={{ maxWidth: "340px", width: "100%", textAlign: "center" }}>
             <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "1rem" }}>EXAM PAUSED</p>
-            <p style={{ fontFamily: FF_SERIF, fontSize: "1.5rem", fontWeight: 600, color: T.text, marginBottom: "0.25rem" }}>{formatTime(secsLeft)}</p>
+            <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, marginBottom: "0.25rem" }}>{formatTime(secsLeft)}</p>
             <p style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: T.muted, marginBottom: "1.5rem" }}>remaining</p>
             <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginBottom: "1.75rem" }}>
               {[
@@ -2873,7 +2873,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
                 { label: "Flagged",    value: flaggedCount, color: T.accent },
               ].map(({ label, value, color }) => (
                 <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
-                  <span style={{ fontFamily: FF_SERIF, fontSize: "1.75rem", fontWeight: 600, color }}>{value}</span>
+                  <span style={{ fontFamily: FF_SANS, fontSize: "1.75rem", fontWeight: 700, color }}>{value}</span>
                   <span style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>{label.toUpperCase()}</span>
                 </div>
               ))}
@@ -4449,7 +4449,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
             <div style={{ marginBottom: "1.25rem" }}>
               {allTags.length > 0 && (
                 <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
-                  <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Untagged</span>
+                  <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.accent, fontWeight: 600, flex: 1 }}>UNTAGGED</span>
                   <span style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS }}>{untaggedSets.length} set{untaggedSets.length !== 1 ? "s" : ""}</span>
                 </div>
               )}
