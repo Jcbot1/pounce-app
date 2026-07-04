@@ -321,7 +321,7 @@ function HamburgerSectionHeader({ label, onBack, right, noBorder }) {
         <button onClick={onBack} {...surfacePress()} style={{ background: "none", border: "none", borderRadius: "99px", color: T.muted2, cursor: "pointer", padding: 0, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", flexShrink: 0 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" {...IC5}><polyline points="15 18 9 12 15 6"/></svg>
         </button>
-        <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted2 }}>{label}</p>
+        <Label style={{ fontSize: "0.72rem", letterSpacing: "0.1em", color: T.muted2, marginBottom: 0 }}>{label}</Label>
       </div>
       {right && <div>{right}</div>}
     </div>
@@ -555,7 +555,7 @@ function HintButton({ hint, hintOpen, setHintOpen, examMode, renderText }) {
             width: "min(360px, calc(100vw - 2rem))", zIndex: 10,
             maxHeight: "60vh", overflowY: "auto", WebkitOverflowScrolling: "touch",
           }}>
-            <p style={{ color: T.muted, fontSize: "0.63rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HINT</p>
+            <Label style={{ fontSize: "0.63rem", letterSpacing: "0.1em" }}>HINT</Label>
             <p style={{ color: T.text, fontSize: "0.9rem", fontFamily: FF_SANS, lineHeight: 1.6 }}>{renderText(hint)}</p>
           </div>
         </>
@@ -2237,9 +2237,9 @@ function ReviewMulti({ q, selected, onToggle, submitted, examMode }) {
   const { sel: selBg, cor: corBg, wro: wroBg } = answerBgs();
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
-      <p style={{ color: T.muted, fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
+      <Label style={{ fontSize: "0.72rem", letterSpacing: "0.08em", marginBottom: "0.2rem" }}>
         CHOOSE {q.selectCount} · {selected.length}/{q.selectCount} selected
-      </p>
+      </Label>
       {q.options.map((opt, i) => {
         const isSel = selected.includes(i);
         const isCor = q.correct.includes(i);
@@ -2459,9 +2459,9 @@ function ReviewMatching({ q, userMatches, onMatch, submitted, examMode }) {
                 <div style={{ height: "1px", background: T.mode === "light" ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)", margin: "0.5rem 0 1rem" }} />
               )}
               <div style={{ background: T.surface2, border: "1px solid #0ea5e9", borderRadius: "12px", padding: "0.75rem 1rem", marginBottom: "0.5rem", animation: "matchCurrentIn 0.3s ease forwards" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: "#0ea5e9", marginBottom: "0.4rem" }}>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", color: "#0ea5e9" }}>
                   MATCH THIS TERM
-                </p>
+                </Label>
                 <p style={{ fontFamily: FF_SANS, fontSize: "1rem", fontWeight: 500, color: T.text, whiteSpace: "pre-wrap" }}>
                   {pair.term}
                 </p>
@@ -2845,7 +2845,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {/* Bubble navigator */}
       {timerMinutes ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.35rem" }}>
-          <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
+          <Label style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", marginBottom: 0 }}>QUESTIONS</Label>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <span style={{ fontFamily: FF_SANS, fontSize: "0.78rem", fontWeight: 600, color: timerColor, transition: "color 0.5s", letterSpacing: "0.05em" }}>{formatTime(secsLeft)}</span>
             <button onClick={() => setPaused(true)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", alignItems: "center", padding: "0.1rem" }}>
@@ -2855,7 +2855,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
         </div>
       ) : (
         <div style={{ marginBottom: "0.35rem" }}>
-          <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", fontWeight: 600, color: T.muted, letterSpacing: "0.08em" }}>QUESTIONS</span>
+          <Label style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", marginBottom: 0 }}>QUESTIONS</Label>
         </div>
       )}
 
@@ -2863,7 +2863,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       {paused && (
         <Modal onClose={() => setPaused(false)} zIndex={1100}>
           <ModalCard style={{ maxWidth: "340px", width: "100%", textAlign: "center" }}>
-            <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "1rem" }}>EXAM PAUSED</p>
+            <Label style={{ fontSize: "0.72rem", marginBottom: "1rem" }}>EXAM PAUSED</Label>
             <p style={{ fontFamily: FF_SANS, fontSize: "1.5rem", fontWeight: 700, color: T.text, marginBottom: "0.25rem" }}>{formatTime(secsLeft)}</p>
             <p style={{ fontFamily: FF_SANS, fontSize: "0.85rem", color: T.muted, marginBottom: "1.5rem" }}>remaining</p>
             <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", marginBottom: "1.75rem" }}>
@@ -2874,7 +2874,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               ].map(({ label, value, color }) => (
                 <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
                   <span style={{ fontFamily: FF_SANS, fontSize: "1.75rem", fontWeight: 700, color }}>{value}</span>
-                  <span style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.08em", color: T.muted }}>{label.toUpperCase()}</span>
+                  <Label style={{ fontSize: "0.65rem", letterSpacing: "0.08em", marginBottom: 0 }}>{label.toUpperCase()}</Label>
                 </div>
               ))}
             </div>
@@ -3054,7 +3054,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
           boxShadow: T.mode === "light" ? "0 2px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)" : "0 2px 12px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15)",
           padding: "0.9rem 1rem", scrollMarginTop: "80px",
         }}>
-          <p style={{ color: T.muted, fontSize: "0.67rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</p>
+          <Label style={{ letterSpacing: "0.1em", marginBottom: "0.35rem" }}>EXPLANATION</Label>
           <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.6 }}>{renderText(q.explanation)}</p>
         </div>
       )}
@@ -3386,9 +3386,9 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 {/* Explanation */}
                 {q.explanation && (
                   <div style={{ padding: "0.75rem 0.9rem", background: T.surface2, borderRadius: "12px" }}>
-                    <p style={{ color: T.muted, fontSize: "0.65rem", fontFamily: FF_SANS, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
+                    <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.25rem" }}>
                       EXPLANATION
-                    </p>
+                    </Label>
                     <p style={{ color: T.muted2, fontSize: "0.9rem", lineHeight: 1.55 }}>{renderText(q.explanation)}</p>
                   </div>
                 )}
@@ -3956,17 +3956,17 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSection(null)} noBorder />
 
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>THEME</Label>
                 <div style={{ marginBottom: "1rem" }}>
                   <ThemePicker theme={theme} onSetTheme={onSetTheme} />
                 </div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>COLOR</Label>
                 <div style={{ marginBottom: "1rem" }}>
                   <ColorPicker accent={accent} onSetAccent={onSetAccent} />
                 </div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>BACKGROUND</Label>
                 <div style={{ marginBottom: "0.25rem" }}>
                   <BackgroundPicker bgStyle={bgStyle} onSetBgStyle={onSetBgStyle} large />
                 </div>
@@ -4014,7 +4014,7 @@ function TagPicker({ set, allTags, onSetTags, onClose }) {
         onClick={e => e.stopPropagation()}>
         <div style={{ padding: "1.1rem 1.25rem 0.75rem",
            }}>
-          <p style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.12em", color: T.muted2, marginBottom: "0.25rem" }}>TAGS</p>
+          <Label style={{ fontSize: "0.72rem", color: T.muted2, marginBottom: "0.25rem" }}>TAGS</Label>
           <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.95rem", color: T.text,
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{set.name}</p>
         </div>
@@ -4228,7 +4228,7 @@ function IconPickerModal({ currentIcon, onSelect, onClose }) {
         {/* Categories */}
         {SET_ICONS.map(cat => (
           <div key={cat.category} style={{ marginBottom: "1.25rem" }}>
-            <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>{cat.category.toUpperCase()}</p>
+            <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>{cat.category.toUpperCase()}</Label>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.5rem" }}>
               {cat.icons.map(icon => {
                 const active = currentIcon === icon.id;
@@ -5405,9 +5405,9 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
 
   const statCard = (label, value, sub, color = T.accent) => (
     <div style={{ ...card({ flex: "1 1 0", textAlign: "center", padding: "1.25rem 1rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }) }}>
-      <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, margin: 0, marginBottom: "0.3rem" }}>
+      <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.3rem" }}>
         {label}
-      </p>
+      </Label>
       <p style={{ fontFamily: FF_SANS, fontSize: "2rem", fontWeight: 700, color, lineHeight: 1, margin: 0, marginBottom: sub ? "0.2rem" : 0 }}>
         {value !== undefined && value !== null ? value : "—"}
       </p>
@@ -7153,7 +7153,7 @@ function App() {
           {!sidebarCollapsed && pinnedSetIds.length > 0 && (
             <div style={{ flexShrink: 0, padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
               <div style={{ height: "1px", background: ST.border, margin: "0.4rem 0.5rem 0.75rem", flexShrink: 0 }} />
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0 0.5rem 0.35rem", flexShrink: 0 }}>Pinned</p>
+              <Label style={{ fontSize: "0.62rem", color: ST.muted, marginBottom: 0, padding: "0 0.5rem 0.35rem", flexShrink: 0 }}>Pinned</Label>
               <div style={{ maxHeight: "160px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {pinnedSetIds.map(id => sets.find(s => s.id === id)).filter(Boolean).map(s => {
                   const displayName = truncateMiddle(s.name);
@@ -7190,7 +7190,7 @@ function App() {
           {!sidebarCollapsed && (sets.length > 0 || history.length > 0) && (
             <div style={{ flex: 1, overflow: "hidden", padding: "0.5rem 0.75rem 0", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
               <div style={{ height: "1px", background: ST.border, margin: "0.4rem 0.5rem 0.75rem", flexShrink: 0 }} />
-              <p style={{ fontFamily: FF_SANS, fontSize: "0.62rem", letterSpacing: "0.1em", color: ST.muted, padding: "0 0.5rem 0.35rem", flexShrink: 0 }}>Recent</p>
+              <Label style={{ fontSize: "0.62rem", color: ST.muted, marginBottom: 0, padding: "0 0.5rem 0.35rem", flexShrink: 0 }}>Recent</Label>
               <div style={{ overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {[
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, count: s.questions?.length ?? 0 })),
@@ -7343,12 +7343,12 @@ function App() {
             <>
               <HamburgerSectionHeader label="APPEARANCE" onBack={() => setSidebarSection(null)} noBorder />
               <div style={{ padding: "0.25rem 1.25rem 0.75rem" }}>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>THEME</p>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>THEME</Label>
                 <div style={{ marginBottom: "1rem" }}><ThemePicker theme={theme} onSetTheme={handleSetTheme} /></div>
 
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>COLOR</p>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>COLOR</Label>
                 <div style={{ marginBottom: "1rem" }}><ColorPicker accent={accent} onSetAccent={handleSetAccent} /></div>
-                <p style={{ fontFamily: FF_SANS, fontSize: "0.65rem", letterSpacing: "0.1em", color: T.muted, marginBottom: "0.5rem" }}>BACKGROUND</p>
+                <Label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>BACKGROUND</Label>
                 <div style={{ marginBottom: "0.25rem" }}><BackgroundPicker bgStyle={bgStyle} onSetBgStyle={handleSetBgStyle} /></div>
               </div>
             </>
