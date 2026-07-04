@@ -1209,11 +1209,13 @@ function useClampToViewport(ref, pos, margin = 8) {
   useLayoutEffect(() => {
     if (!pos || !ref.current) return;
     const el = ref.current;
-    const r = el.getBoundingClientRect();
-    let left = pos.left;
-    let top = pos.top;
-    if (r.right > window.innerWidth - margin) left -= r.right - (window.innerWidth - margin);
-    if (r.bottom > window.innerHeight - margin) top -= r.bottom - (window.innerHeight - margin);
+    // offsetWidth/Height reflect the untransformed layout box, unlike getBoundingClientRect
+    // which would capture the popup mid-animation (menuIn scales up from 0.85 to 1) and
+    // undershoot the correction needed for its final, fully-scaled size.
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    let left = Math.min(pos.left, window.innerWidth - margin - w);
+    let top = Math.min(pos.top, window.innerHeight - margin - h);
     left = Math.max(margin, left);
     top = Math.max(margin, top);
     el.style.left = left + "px";
