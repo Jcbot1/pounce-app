@@ -5598,14 +5598,16 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           : "opacity 0.2s ease, transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1)",
         opacity: disabled ? 0.4 : 1,
       }}>
-        {/* Solid frosted glass — uniform blur/tint across the whole bar.
-            will-change keeps this permanently GPU-composited so the blur doesn't need to be
-            re-established (visible ~0.5s pop-in) whenever a full-screen Modal's own
-            backdrop-filter layer appears/disappears on top of it. */}
-        <div style={{
+        {/* Solid frosted glass — uniform blur/tint across the whole bar. Keyed on `disabled`
+            (true while any Modal is open) so it remounts the instant the modal closes,
+            forcing the browser to build a fresh backdrop-filter layer immediately (via the
+            sf-blur-fix trick) instead of slowly re-establishing the stale one underneath the
+            modal's own backdrop-filter — that re-establishment caused a visible ~0.5s pop-in. */}
+        <div key={String(disabled)} style={{
           position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
           background: T.mode === "light" ? "rgba(255,255,255,0.55)" : "rgba(30,22,48,0.45)",
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", willChange: "backdrop-filter",
+          animation: "sf-blur-fix 0.01s linear forwards",
           borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
         }} />
 
@@ -6915,12 +6917,15 @@ function App() {
                   ? `linear-gradient(to bottom, rgba(${T.accentRgb},0.04) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(247,245,242,0.72) 60%, rgba(247,245,242,0) 100%)`
                   : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,0.72) 60%, rgba(15,9,5,0) 100%)`,
           }} />
-          {/* will-change keeps this permanently GPU-composited so the blur doesn't need to be
-              re-established (visible ~0.5s pop-in) whenever a full-screen Modal's own
-              backdrop-filter layer appears/disappears on top of it. */}
-          <div style={{
+          {/* Keyed on modalOpen so it remounts the instant a full-screen Modal closes, forcing
+              the browser to build a fresh backdrop-filter layer immediately (via the
+              sf-blur-fix trick) instead of slowly re-establishing the stale one underneath
+              the modal's own backdrop-filter — that re-establishment is what caused the
+              visible ~0.5s pop-in delay. */}
+          <div key={String(modalOpen)} style={{
             position: "absolute", top: showSidebar ? "-8px" : 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", zIndex: 0,
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", willChange: "backdrop-filter",
+            animation: "sf-blur-fix 0.01s linear forwards",
             WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
             maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
           }} />
@@ -7172,8 +7177,6 @@ function App() {
           position: "fixed", left: "8px", top: "8px", bottom: "8px",
           width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
           transition: "width 0.25s ease",
-          background: ST.surface + "cc",
-          backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", willChange: "backdrop-filter",
           borderRadius: "16px",
           boxShadow: ST.mode === "light"
             ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
@@ -7181,6 +7184,18 @@ function App() {
           display: "flex", flexDirection: "column",
           zIndex: 200, overflowY: "auto", overflowX: "hidden",
         }}>
+          {/* Background/blur split into its own layer, keyed on modalOpen so it remounts the
+              instant a full-screen Modal closes — forces the browser to build a fresh
+              backdrop-filter layer immediately (via the sf-blur-fix trick) instead of slowly
+              re-establishing the stale one underneath the modal's own backdrop-filter, which
+              caused a visible ~0.5s pop-in delay. Split out (rather than keying the whole
+              sidebar) so remounting it doesn't reset scroll position or nested popup state. */}
+          <div key={String(modalOpen)} style={{
+            position: "absolute", inset: 0, zIndex: -1, pointerEvents: "none", borderRadius: "16px",
+            background: ST.surface + "cc",
+            backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", willChange: "backdrop-filter",
+            animation: "sf-blur-fix 0.01s linear forwards",
+          }} />
           {/* Logo */}
           <div style={{ padding: "0 1.25rem", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             {sidebarCollapsed ? (
