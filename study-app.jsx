@@ -2602,6 +2602,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
   const bubbleDragX    = useRef(null);
   const bubbleDragSL   = useRef(0);
   const bubbleDragDist = useRef(0);
+  const skipBubbleScrollRef = useRef(false);
 
   function checkBubbleScroll(el) {
     setBubbleAtStart(el.scrollLeft <= 4);
@@ -2708,8 +2709,10 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
     return () => document.removeEventListener("studi-back", handler);
   }, []);
 
-  // Scroll current bubble into view
+  // Scroll current bubble into view — skipped when the index changed because the user
+  // directly tapped a bubble (it's already visible; re-centering would just jump the row).
   useEffect(() => {
+    if (skipBubbleScrollRef.current) { skipBubbleScrollRef.current = false; return; }
     if (!bubbleRef.current) return;
     const active = bubbleRef.current.querySelector("[data-active='true']");
     if (active) active.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
@@ -2814,6 +2817,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
 
   function handleBubbleClick(i) {
     if (i === idx) return;
+    skipBubbleScrollRef.current = true;
     setIdx(i);
   }
 
