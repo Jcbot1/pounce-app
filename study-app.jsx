@@ -3142,7 +3142,7 @@ function AnimatedPct({ target, color }) {
   );
 }
 
-function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, history }) {
+function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, history, isMobile = true }) {
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
   const passed = pct >= 70;
@@ -3158,6 +3158,53 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
     document.addEventListener("studi-back", handler);
     return () => document.removeEventListener("studi-back", handler);
   }, [onBack]);
+
+  // Edge swipe from the left, dragging right, triggers the same back action as the chevron.
+  // Mobile-only: on tablet/desktop the sidebar is showing and swipe gestures don't apply.
+  useEffect(() => {
+    if (!isMobile) return;
+    const el = document.documentElement;
+    const EDGE = 22;
+    const swipe = { startX: 0, startY: 0, axis: null, active: false };
+
+    function onTouchStart(e) {
+      const target = e.target;
+      if (target.closest && target.closest("input, textarea, [contenteditable=true]")) { swipe.active = false; return; }
+      const t = e.touches[0];
+      if (t.clientX > EDGE) { swipe.active = false; return; }
+      swipe.startX = t.clientX;
+      swipe.startY = t.clientY;
+      swipe.axis = null;
+      swipe.active = true;
+    }
+    function onTouchMove(e) {
+      if (!swipe.active) return;
+      const t  = e.touches[0];
+      const dx = t.clientX - swipe.startX;
+      const dy = t.clientY - swipe.startY;
+      if (swipe.axis === null) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        swipe.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      }
+    }
+    function onTouchEnd(e) {
+      if (!swipe.active || swipe.axis !== "x") { swipe.active = false; swipe.axis = null; return; }
+      const t  = e.changedTouches[0];
+      const dx = t.clientX - swipe.startX;
+      swipe.active = false;
+      swipe.axis = null;
+      if (dx > 60) document.dispatchEvent(new CustomEvent("studi-back"));
+    }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove",  onTouchMove,  { passive: true });
+    el.addEventListener("touchend",   onTouchEnd,   { passive: true });
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove",  onTouchMove);
+      el.removeEventListener("touchend",   onTouchEnd);
+    };
+  }, [isMobile]);
 
   // Build a session object for export/history
   function buildSession() {
@@ -7097,7 +7144,7 @@ function App() {
                 onRetryMissed={handleRetryMissed}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
                 confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
-                history={history} />
+                history={history} isMobile={isMobile} />
             )}
             {screen === "historyResults" && historySession && (
               <ResultsScreen
@@ -7112,7 +7159,7 @@ function App() {
                 historyDate={historySession.date}
                 exportModal={resultsExportModal} onCloseExport={() => setResultsExportModal(false)}
                 confirmRetry={resultsConfirmRetry} onCloseConfirmRetry={() => setResultsConfirmRetry(false)}
-                history={history} />
+                history={history} isMobile={isMobile} />
             )}
           </div>
         </div>
