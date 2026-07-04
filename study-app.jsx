@@ -4617,6 +4617,29 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   const swipeRef       = useRef({ startX: 0, startY: 0, axis: null });
   const panelRefs      = [useRef(null), useRef(null), useRef(null)];
 
+  // Mobile-only: keep the Search panel mounted a beat longer on exit so it can play its
+  // slide-down-out animation instead of vanishing instantly. Desktop keeps the old instant swap.
+  // Set during render (not in an effect) so it takes effect on the very same render the tab
+  // changes, rather than one render later — otherwise the panel would unmount instantly on the
+  // first close and only "discover" it should have animated after the fact.
+  const [searchClosing, setSearchClosing] = useState(false);
+  const prevTabForSearchRef = useRef(tab);
+  if (!showSidebar && prevTabForSearchRef.current === "search" && tab !== "search" && !searchClosing) {
+    setSearchClosing(true);
+  } else if ((tab === "search" || showSidebar) && searchClosing) {
+    setSearchClosing(false);
+  }
+  prevTabForSearchRef.current = tab;
+  const showSearchPanel = tab === "search" || (!showSidebar && searchClosing);
+
+  useEffect(() => {
+    if (!searchClosing) return;
+    const t = setTimeout(() => setSearchClosing(false), 420);
+    return () => clearTimeout(t);
+  }, [searchClosing]);
+  const showSearchPanelRef = useRef(showSearchPanel);
+  showSearchPanelRef.current = showSearchPanel;
+
   function setTrackX(idx, extraPx, animated) {
     const el = trackRef.current;
     if (!el) return;
@@ -4642,7 +4665,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   // Keep page height = active panel height so off-screen panels don't add scroll space
   React.useLayoutEffect(() => {
     function sync() {
-      if (tabRef.current === "search") return;
+      if (showSearchPanelRef.current) return;
       const idx = TAB_ORDER.indexOf(lastRealTabRef.current);
       const panel = panelRefs[idx]?.current;
       if (panel && containerRef.current) containerRef.current.style.height = panel.scrollHeight + "px";
@@ -4658,7 +4681,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   React.useLayoutEffect(() => {
     const c = containerRef.current;
     if (!c) return;
-    if (tab === "search") { c.style.height = ""; return; }
+    if (showSearchPanel) { c.style.height = ""; return; }
     const panel = panelRefs[TAB_ORDER.indexOf(tab)]?.current;
     if (panel) c.style.height = panel.scrollHeight + "px";
     if (!isFirstTabRender.current) {
@@ -4750,7 +4773,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
       {/* ── Sliding track (home / sets / history) ── */}
       <div ref={trackRef} style={{
-        display: tab === "search" ? "none" : "flex",
+        display: showSearchPanel ? "none" : "flex",
         width: `${TAB_ORDER.length * 100}%`,
         alignItems: "flex-start",
       }}>
@@ -4864,8 +4887,8 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
       </div>
 
       {/* ── SEARCH TAB (not in slider) ── */}
-      {tab === "search" && (
-        <div style={{ padding: "0 1rem" }}>
+      {showSearchPanel && (
+        <div style={{ padding: "0 1rem" }} className={!showSidebar ? (tab === "search" ? "search-panel-in" : "search-panel-out") : undefined}>
           <SearchScreen
             sets={sets}
             history={history}
@@ -5753,6 +5776,19 @@ const STATIC_STYLES = `
   .menu-open-up-left { animation: menuInUp 0.22s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; transform-origin: bottom left; }
   .menu-open-tl  { animation: menuIn    0.22s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; transform-origin: top left; }
   .menu-close-up { animation: menuOutUp 0.12s ease-in forwards; transform-origin: bottom right; pointer-events: none; }
+
+  /* Mobile search panel — slides up from the bottom on entry, back down on exit,
+     timed to match the bottom nav bar's own slide-away transition. */
+  @keyframes searchPanelIn {
+    0%   { opacity: 0; transform: translateY(56px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes searchPanelOut {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(56px); }
+  }
+  .search-panel-in  { animation: searchPanelIn  0.28s ease-in forwards; }
+  .search-panel-out { animation: searchPanelOut 0.42s cubic-bezier(0.34, 1.2, 0.64, 1) forwards; pointer-events: none; }
 
   @keyframes stuBob {
     0%, 100% { transform: translateY(0px); }
