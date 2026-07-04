@@ -5597,7 +5597,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           <button onClick={e => {
             if (fabOpen) { closeFabMenu(); return; }
             const r = e.currentTarget.getBoundingClientRect();
-            setFabMenuPos({ right: document.body.clientWidth - r.right, bottom: window.innerHeight - r.top + 10 });
+            setFabMenuPos({ right: document.body.clientWidth - r.right + 16, bottom: window.innerHeight - r.top + 22 });
             setFabOpen(true);
           }} style={{
             display: "flex", flexDirection: "column",
