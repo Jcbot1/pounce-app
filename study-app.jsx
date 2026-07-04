@@ -4781,6 +4781,9 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
     function onTouchStart(e) {
       if (tabRef.current === "search") return;
+      // Modal component sets this while any modal (SessionPicker, ConfirmDialog, ExportModal,
+      // etc.) is open — don't let a swipe underneath it change tabs.
+      if (document.body.style.overflow === "hidden") return;
       const t = e.touches[0];
       const EDGE = 22;
       // All panels require an edge-start swipe so scroll gestures and card
@@ -4791,6 +4794,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
     function onTouchMove(e) {
       if (tabRef.current === "search") return;
+      if (document.body.style.overflow === "hidden") return;
       if (!swipeRef.current.fromEdge) return;
       const t  = e.touches[0];
       const dx = t.clientX - swipeRef.current.startX;
