@@ -6931,7 +6931,7 @@ function App() {
                   : `linear-gradient(to bottom, rgba(${T.accentRgb},0.07) 0%, rgba(${T.accentRgb},0) 100%), linear-gradient(to bottom, rgba(15,9,5,0.72) 60%, rgba(15,9,5,0) 100%)`,
           }} />
           <div style={{
-            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+            position: "absolute", top: showSidebar ? "-8px" : 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", zIndex: 0,
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
             WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
             maskImage: "linear-gradient(to bottom, black 55%, transparent 100%)",
