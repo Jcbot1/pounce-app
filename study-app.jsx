@@ -427,10 +427,63 @@ function EditorTagChip({ tag, onRemove }) {
 // Unified tappable card used across Sets, History, and Search screens.
 function AppCard({ onClick, onContextMenu, children, style: extraStyle, cardRef }) {
   const canHover = window.matchMedia("(hover: hover)").matches;
+
+  // Long-press (touch only) opens the same menu as onContextMenu, mirroring desktop right-click.
+  // Uses native touch listeners (like the edge-swipe gesture elsewhere in this file) rather than
+  // React's synthetic pointer events, which don't reliably report long holds on real devices.
+  const innerRef = useRef(null);
+  const longPressFired = useRef(false);
+  const onContextMenuRef = useRef(onContextMenu);
+  onContextMenuRef.current = onContextMenu;
+
+  function setRefs(el) {
+    innerRef.current = el;
+    if (cardRef) cardRef.current = el;
+  }
+
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onContextMenu) return;
+    let timer = null;
+    let start = { x: 0, y: 0 };
+
+    function clear() { if (timer) { clearTimeout(timer); timer = null; } }
+    function onTouchStart(e) {
+      const t = e.touches[0];
+      start = { x: t.clientX, y: t.clientY };
+      longPressFired.current = false;
+      clear();
+      timer = setTimeout(() => {
+        timer = null;
+        longPressFired.current = true;
+        if (navigator.vibrate) navigator.vibrate(10);
+        onContextMenuRef.current({ preventDefault: () => {}, clientX: start.x, clientY: start.y });
+      }, 500);
+    }
+    function onTouchMove(e) {
+      if (!timer) return;
+      const t = e.touches[0];
+      if (Math.hypot(t.clientX - start.x, t.clientY - start.y) > 10) clear();
+    }
+    function onTouchEnd() { clear(); }
+
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    return () => {
+      clear();
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [onContextMenu]);
+
   return (
     <div
-      ref={cardRef}
-      onClick={onClick}
+      ref={setRefs}
+      onClick={e => { if (longPressFired.current) { longPressFired.current = false; return; } onClick && onClick(e); }}
       onContextMenu={onContextMenu}
       {...primaryPress()}
       style={{
