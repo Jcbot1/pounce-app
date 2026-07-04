@@ -2898,7 +2898,11 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
       )}
       <div ref={bubbleRef} onScroll={e => checkBubbleScroll(e.currentTarget)}
         onPointerDown={e => {
-          if (e.button !== 0) return;
+          // Mouse-drag-to-scroll only — on touch, this ran alongside the browser's own native
+          // touch-scrolling of the same element, both fighting over scrollLeft every frame,
+          // which is what made the row feel jittery on mobile. Native touch scrolling alone
+          // already handles it fine there.
+          if (e.button !== 0 || e.pointerType !== "mouse") return;
           bubbleDragX.current = e.clientX;
           bubbleDragSL.current = bubbleRef.current.scrollLeft;
           bubbleDragDist.current = 0;
