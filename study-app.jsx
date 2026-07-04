@@ -7040,12 +7040,12 @@ function App() {
                   <input
                     ref={searchInputRef}
                     value={searchQuery}
-                    onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") setHomeTab("search"); }}
+                    onChange={e => { setSearchQuery(e.target.value); if (e.target.value && homeTab !== "search") { prevHomeTabRef.current = homeTab; setHomeTab("search"); } }}
                     placeholder="Search…"
                     style={{ flex: 1, minWidth: 0, background: "transparent", border: "none", outline: "none", color: ST.text, fontFamily: FF_SANS, fontSize: "16px", height: "38px", padding: 0, boxSizing: "border-box" }}
                   />
                   {searchQuery && (
-                    <span onClick={() => { setSearchQuery(""); setHomeTab("sets"); }} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
+                    <span onClick={() => { setSearchQuery(""); setHomeTab(prevHomeTabRef.current || "home"); }} style={{ flexShrink: 0, flexGrow: 0, cursor: "pointer", color: ST.muted, fontSize: "1rem", lineHeight: 1, padding: "0 0.15rem", display: "inline-flex", alignItems: "center" }}>✕</span>
                   )}
                 </div>
               </div>
