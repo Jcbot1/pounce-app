@@ -4616,6 +4616,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   const lastRealTabRef = useRef(tab !== "search" ? tab : "home");
   const swipeRef       = useRef({ startX: 0, startY: 0, axis: null });
   const panelRefs      = [useRef(null), useRef(null), useRef(null)];
+  const searchPanelRef = useRef(null);
 
   // Mobile-only: keep the Search panel mounted a beat longer on exit so it can play its
   // slide-down-out animation instead of vanishing instantly. Desktop keeps the old instant swap.
@@ -4639,6 +4640,21 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   }, [searchClosing]);
   const showSearchPanelRef = useRef(showSearchPanel);
   showSearchPanelRef.current = showSearchPanel;
+
+  // Keep the container's height matched to the search panel's real (variable, as results
+  // change) height while it's shown — including through its closing animation — so that when
+  // showSearchPanel finally flips off and the tab-height effect below takes over, the CSS
+  // height transition on the container has a real pixel value to animate FROM instead of
+  // snapping straight from the search panel's height to the destination tab's height.
+  React.useLayoutEffect(() => {
+    if (!showSearchPanel || !searchPanelRef.current || !containerRef.current) return;
+    const el = searchPanelRef.current;
+    function sync() { if (containerRef.current) containerRef.current.style.height = el.scrollHeight + "px"; }
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [showSearchPanel]);
 
   function setTrackX(idx, extraPx, animated) {
     const el = trackRef.current;
@@ -4681,7 +4697,9 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
   React.useLayoutEffect(() => {
     const c = containerRef.current;
     if (!c) return;
-    if (showSearchPanel) { c.style.height = ""; return; }
+    // While the search panel is showing (open or mid-close), its own height-sync effect owns
+    // the container's height — don't fight it.
+    if (showSearchPanel) return;
     const panel = panelRefs[TAB_ORDER.indexOf(tab)]?.current;
     if (panel) c.style.height = panel.scrollHeight + "px";
     if (!isFirstTabRender.current) {
@@ -4760,7 +4778,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
   return (
     <div style={{ margin: "0 -1.25rem", overflow: "hidden" }}>
-    <div ref={containerRef} style={{ width: "100%" }}>
+    <div ref={containerRef} style={{ width: "100%", transition: "height 0.3s ease" }}>
       {exportingSet && <ExportModal set={exportingSet} onClose={() => setExportingSet(null)} />}
       {pickingSet && (
         <SessionPicker
@@ -4888,7 +4906,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 
       {/* ── SEARCH TAB (not in slider) ── */}
       {showSearchPanel && (
-        <div style={{ padding: "0 1rem" }} className={!showSidebar ? (tab === "search" ? "search-panel-in" : "search-panel-out") : undefined}>
+        <div ref={searchPanelRef} style={{ padding: "0 1rem" }} className={!showSidebar ? (tab === "search" ? "search-panel-in" : "search-panel-out") : undefined}>
           <SearchScreen
             sets={sets}
             history={history}
