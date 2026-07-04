@@ -1202,6 +1202,25 @@ const menuPopupStyle = (extra = {}) => ({
   ...extra,
 });
 
+// Nudges a top-left-anchored, fixed-position popup back onto the viewport once its real
+// (content-dependent) size is known — top/left context menus opened near a screen edge
+// would otherwise render partially offscreen.
+function useClampToViewport(ref, pos, margin = 8) {
+  useLayoutEffect(() => {
+    if (!pos || !ref.current) return;
+    const el = ref.current;
+    const r = el.getBoundingClientRect();
+    let left = pos.left;
+    let top = pos.top;
+    if (r.right > window.innerWidth - margin) left -= r.right - (window.innerWidth - margin);
+    if (r.bottom > window.innerHeight - margin) top -= r.bottom - (window.innerHeight - margin);
+    left = Math.max(margin, left);
+    top = Math.max(margin, top);
+    el.style.left = left + "px";
+    el.style.top = top + "px";
+  }, [pos, margin]);
+}
+
 const answerBgs = () => ({
   sel: T.mode === "light" ? T.accent + "18" : T.accent + "45",
   cor: T.mode === "light" ? T.green  + "18" : T.green  + "45",
@@ -4055,6 +4074,8 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
   const [ctxMenu, setCtxMenu] = useState(null); // {top, left}
   const [confirmDelete, setConfirmDelete] = useState(false);
   const cardRef = useRef(null);
+  const ctxMenuRef = useRef(null);
+  useClampToViewport(ctxMenuRef, ctxMenu);
 
   // Right-click doesn't fire a mousemove, so AppCard's onMouseEnter hover styles never
   // get the onMouseLeave that would normally clear them — reset them by hand on close.
@@ -4086,7 +4107,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
             onClick={closeCtxMenu}
             onContextMenu={e => { e.preventDefault(); closeCtxMenu(); }} />
-          <div className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
+          <div ref={ctxMenuRef} className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
             <KebabMenuItem onClick={() => { onTogglePin(s.id); closeCtxMenu(); }}>
               <PinIcon filled={!pinned} />
               {pinned ? "Remove from sidebar" : "Pin to sidebar"}
@@ -6363,6 +6384,8 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [recentTooltip, setRecentTooltip] = useState(null); // { name, y }
   const [pinCtxMenu, setPinCtxMenu] = useState(null); // { top, left, setId, el }
+  const pinCtxMenuRef = useRef(null);
+  useClampToViewport(pinCtxMenuRef, pinCtxMenu);
   // Right-click doesn't fire a mousemove, so the row's onMouseEnter hover background never
   // gets the onMouseLeave that would normally clear it — reset it by hand on close.
   function closePinCtxMenu() {
@@ -7196,7 +7219,7 @@ function App() {
               <div style={{ position: "fixed", inset: 0, zIndex: 9998 }}
                 onClick={closePinCtxMenu}
                 onContextMenu={e => { e.preventDefault(); closePinCtxMenu(); }} />
-              <div className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: pinCtxMenu.top, left: pinCtxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
+              <div ref={pinCtxMenuRef} className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: pinCtxMenu.top, left: pinCtxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
                 <KebabMenuItem onClick={() => { handleTogglePin(pinCtxMenu.setId); closePinCtxMenu(); }}>
                   <PinIcon />
                   Remove from sidebar
