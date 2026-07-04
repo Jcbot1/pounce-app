@@ -4292,7 +4292,11 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
   const tagSets = sets.filter(s => (s.tags || []).includes(tag));
 
   useLayoutEffect(() => {
-    if (contentRef.current) {
+    // offsetParent is null while an ancestor is display:none (e.g. this tab hidden behind the
+    // search panel) — scrollHeight would read as 0 then, which would make the section "grow"
+    // from 0 via the height transition below once it's shown again. Skip measuring while
+    // hidden so the last real height sticks until it's actually visible again.
+    if (contentRef.current && contentRef.current.offsetParent !== null) {
       setContentHeight(contentRef.current.scrollHeight);
     }
   });
