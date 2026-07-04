@@ -3345,7 +3345,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 <span style={{ flex: 1 }} />
                 <span style={{ color: T.muted, display: "flex", flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}><svg width="14" height="14" viewBox="0 0 24 24" {...IC}><polyline points="6 9 12 15 18 9"/></svg></span>
               </div>
-              <span style={{ color: T.muted2, fontSize: "0.9rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: FF_SANS, paddingRight: "1.5rem" }}>
+              <span style={{ color: T.muted2, fontSize: "0.9rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.4, fontFamily: FF_SANS, paddingRight: "1.5rem" }}>
                 {q.question}
               </span>
             </div>
