@@ -800,7 +800,7 @@ function blankQuestion(type = "single") {
 
 function blankSet() {
   const now = new Date().toISOString();
-  return { id: uid(), name: "New Study Set", description: "", tags: [], questions: [], createdAt: now, updatedAt: now };
+  return { id: uid(), name: "New Study Set", tags: [], questions: [], createdAt: now, updatedAt: now };
 }
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
@@ -1953,17 +1953,6 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
             + Add tag
           </button>
         ) : null}
-      </div>
-
-      {/* Description */}
-      <div style={{ marginBottom: "1.5rem" }}>
-        <EditorTextarea
-          value={draft.description || ""}
-          onChange={e => setDraft({ ...draft, description: e.target.value })}
-          placeholder="Add a description…"
-          maxLength={10000}
-          rows={2}
-        />
       </div>
 
       {draft.questions.length === 0 && (
@@ -4061,7 +4050,7 @@ function PinIcon({ size = 15, filled = false }) {
     </svg>
   );
 }
-function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession, mastery, pinned = false, onTogglePin }) {
+function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession, mastery, pinned = false, onTogglePin, showSidebar = true }) {
   const canStudy = s.questions.length > 0;
   const iconDef = s.icon ? SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon) : null;
   // Same red/amber/green cutoffs used for the results % (T.red / "#f59e0b" / T.green),
@@ -4110,10 +4099,12 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
             onClick={closeCtxMenu}
             onContextMenu={e => { e.preventDefault(); closeCtxMenu(); }} />
           <div ref={ctxMenuRef} className="menu-open-tl" style={{ ...menuPopupStyle({ position: "fixed", top: ctxMenu.top, left: ctxMenu.left, zIndex: 9999, minWidth: "200px" }) }}>
-            <KebabMenuItem onClick={() => { onTogglePin(s.id); closeCtxMenu(); }}>
-              <PinIcon filled={!pinned} />
-              {pinned ? "Remove from sidebar" : "Pin to sidebar"}
-            </KebabMenuItem>
+            {showSidebar && (
+              <KebabMenuItem onClick={() => { onTogglePin(s.id); closeCtxMenu(); }}>
+                <PinIcon filled={!pinned} />
+                {pinned ? "Remove from sidebar" : "Pin to sidebar"}
+              </KebabMenuItem>
+            )}
             {onEdit && (
               <KebabMenuItem onClick={() => { closeCtxMenu(); onEdit(s); }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
@@ -4273,7 +4264,7 @@ function GhostCard({ onClick }) {
   );
 }
 
-function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, cardColumns = 1, onCreate, history = [], pinnedSetIds = [], onTogglePin }) {
+function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, cardColumns = 1, onCreate, history = [], pinnedSetIds = [], onTogglePin, showSidebar = true }) {
   const [collapsed, setCollapsed] = useState(false);
   const [contentHeight, setContentHeight] = useState(null);
   const contentRef = useRef(null);
@@ -4321,7 +4312,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
                   onStudy={onStudy} onDelete={onDelete}
                   onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
                   lastSession={info.lastSession} mastery={info.mastery}
-                  pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />
+                  pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />
               ); })}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
               <div style={{ gridRow: "1 / 3", width: "0.5rem", flexShrink: 0 }} />
@@ -4334,7 +4325,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
                   onStudy={onStudy} onDelete={onDelete}
                   onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
                   lastSession={info.lastSession} mastery={info.mastery}
-                  pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />
+                  pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />
               ); })}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
             </div>
@@ -4352,7 +4343,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
 
 // ════════════════════════════════════════════════════════════════════════
 
-function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, externalSearch, externalActiveTag, externalFilterOpen, onSetFilterOpen, onSetActiveTag, cardColumns = 1, onCreate, history = [], pinnedSetIds = [], onTogglePin }) {
+function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, externalSearch, externalActiveTag, externalFilterOpen, onSetFilterOpen, onSetActiveTag, cardColumns = 1, onCreate, history = [], pinnedSetIds = [], onTogglePin, showSidebar = true }) {
   const [search,     setSearch]     = useState("");
   const effectiveSearch = externalSearch !== undefined ? externalSearch : search;
   const activeTag  = externalActiveTag !== undefined ? externalActiveTag : null;
@@ -4421,7 +4412,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
             const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
             return <SetCard key={s.id} s={s} allTags={allTags}
               onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh)}
-              pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />;
+              pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />;
           })}
         </div>
       )}
@@ -4431,7 +4422,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
           {allTags.map(tag => (
             <TagSection key={tag} tag={tag} sets={sets} allTags={allTags}
               onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} cardColumns={cardColumns} onCreate={onCreate} history={history}
-              pinnedSetIds={pinnedSetIds} onTogglePin={onTogglePin} />
+              pinnedSetIds={pinnedSetIds} onTogglePin={onTogglePin} showSidebar={showSidebar} />
           ))}
           {untaggedSets.length > 0 && (
             <div style={{ marginBottom: "1.25rem" }}>
@@ -4448,7 +4439,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                     const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
                       onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh)}
-                      pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />;
+                      pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />;
                   })}
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
                 </div>
@@ -4459,7 +4450,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                     const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
                       onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh)}
-                      pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />;
+                      pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />;
                   })}
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
                 </div>
@@ -4483,7 +4474,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
 //  HOME — set list
 // ════════════════════════════════════════════════════════════════════════
 
-function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, onDelete, onDeleteHistory, onSetTags, onSetIcon, onRename, onExport, inputRef: externalRef, query: externalQuery, cardColumns = 1, pinnedSetIds = [], onTogglePin }) {
+function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, onDelete, onDeleteHistory, onSetTags, onSetIcon, onRename, onExport, inputRef: externalRef, query: externalQuery, cardColumns = 1, pinnedSetIds = [], onTogglePin, showSidebar = true }) {
   const [internalQuery, setInternalQuery] = useState("");
   const localRef = useRef(null);
   const inputRef = externalRef || localRef;
@@ -4518,7 +4509,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
                 Recent Sets
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-                {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />; })}
+                {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
               </div>
             </div>
           )}
@@ -4557,7 +4548,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
             Sets · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
-            {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} />; })}
+            {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
           </div>
         </div>
       )}
@@ -4791,6 +4782,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
             history={history}
             pinnedSetIds={pinnedSetIds}
             onTogglePin={onTogglePin}
+            showSidebar={showSidebar}
           />
         </div>
 
@@ -4858,6 +4850,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
             cardColumns={cardColumns}
             pinnedSetIds={pinnedSetIds}
             onTogglePin={onTogglePin}
+            showSidebar={showSidebar}
           />
         </div>
       )}
