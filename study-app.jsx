@@ -5594,20 +5594,18 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
         pointerEvents: "none",
         transform: homeTab === "search" ? "translateY(140px)" : "translateY(0)",
         transition: homeTab === "search"
-          ? "opacity 0.2s ease, transform 0.28s ease-in"
-          : "opacity 0.2s ease, transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1)",
-        opacity: disabled ? 0.4 : 1,
+          ? "transform 0.28s ease-in"
+          : "transform 0.42s cubic-bezier(0.34, 1.2, 0.64, 1)",
       }}>
-        {/* Solid frosted glass — uniform blur/tint across the whole bar. Keyed on `disabled`
-            (true while any Modal is open) so it remounts the instant the modal closes,
-            forcing the browser to build a fresh backdrop-filter layer immediately (via the
-            sf-blur-fix trick) instead of slowly re-establishing the stale one underneath the
-            modal's own backdrop-filter — that re-establishment caused a visible ~0.5s pop-in. */}
-        <div key={String(disabled)} style={{
+        {/* Solid frosted glass — uniform blur/tint across the whole bar. Kept at full, constant
+            opacity (the disabled dimming below only applies to the foreground tabs/icons) —
+            this used to sit on the same element as the opacity: disabled ? 0.4 : 1 dimming, so
+            the blur visibly faded out and back in across the ~0.2s transition whenever a modal
+            opened/closed, reading as the frosted effect "loading in" late. */}
+        <div style={{
           position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
           background: T.mode === "light" ? "rgba(255,255,255,0.55)" : "rgba(30,22,48,0.45)",
           backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", willChange: "backdrop-filter",
-          animation: "sf-blur-fix 0.01s linear forwards",
           borderTop: "1px solid " + (T.mode === "light" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.08)"),
         }} />
 
@@ -5615,6 +5613,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           position: "relative", zIndex: 1, pointerEvents: "all",
           display: "flex", alignItems: "center", justifyContent: "space-around",
           paddingTop: "8px", paddingBottom: "calc(env(safe-area-inset-bottom) + 40px)",
+          opacity: disabled ? 0.4 : 1, transition: "opacity 0.2s ease",
         }}>
           {tabs.map(t => {
             const active = homeTab === t.id;
