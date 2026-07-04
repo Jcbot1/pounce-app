@@ -1317,7 +1317,10 @@ const primaryPress = () => ({
   onPointerLeave:e => { _afterPress(e.currentTarget, '', 'press-primary'); },
 });
 const Label = ({ children, style, required }) => (
-  <p style={{ fontFamily: FF_SANS, fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, marginBottom: "0.4rem", ...style }}>
+  // margin: 0 guards against Framework7's CSS (loaded via CDN in index.html), which sets a
+  // ~14px top/bottom margin on bare <p> elements at higher specificity than this app's own
+  // universal `* { margin: 0 }` reset.
+  <p style={{ fontFamily: FF_SANS, fontSize: "0.67rem", letterSpacing: "0.12em", color: T.muted, margin: 0, marginBottom: "0.4rem", ...style }}>
     {required && <span style={{ color: T.red, marginRight: "0.2em" }}>*</span>}
     {children}
   </p>
