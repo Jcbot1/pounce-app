@@ -2104,17 +2104,15 @@ function EditorFab({ onAddQuestion }) {
     setFabClosing(true);
     setTimeout(() => { setFabOpen(false); setFabClosing(false); }, 260);
   }
-  useEffect(() => {
-    if (!fabOpen) return;
-    const close = () => closeFabMenu();
-    document.addEventListener('pointerdown', close);
-    return () => document.removeEventListener('pointerdown', close);
-  }, [fabOpen]);
 
   return ReactDOM.createPortal(
     <>
       {/* Question-type popup menu — mirrors the Create/Load popup on the home bar */}
       {(fabOpen || fabClosing) && fabMenuPos && (
+        <>
+        {/* Backdrop — a real element intercepts the closing tap so it can't also
+            activate whatever's underneath (cards, buttons, etc). */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 105 }} onClick={closeFabMenu} />
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
@@ -2153,6 +2151,7 @@ function EditorFab({ onAddQuestion }) {
             );
           })}
         </div>
+        </>
       )}
 
       {/* Glassy Add button — plain circle, expands into a "+ Add" pill when idle */}
@@ -3693,15 +3692,6 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
   const [savedFlash, setSavedFlash] = useState(false);
 
   useEffect(() => {
-    if (!open || sidebarMode) return;
-    function handleClick(e) {
-      if (navRef.current && !navRef.current.contains(e.target)) { setOpen(false); setSection(null); }
-    }
-    document.addEventListener("pointerdown", handleClick);
-    return () => document.removeEventListener("pointerdown", handleClick);
-  }, [open, sidebarMode]);
-
-  useEffect(() => {
     function handle() { setIconPickerActiveSetOpen(true); }
     document.addEventListener("studi-edit-icon", handle);
     return () => document.removeEventListener("studi-edit-icon", handle);
@@ -3805,6 +3795,10 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
       )}
 
       {(open || sidebarMode) && (
+        <>
+        {/* Backdrop — a real element intercepts the closing tap so it can't also
+            activate whatever's underneath (cards, buttons, etc). */}
+        {open && !sidebarMode && <div style={{ position: "fixed", inset: 0, zIndex: 499 }} onClick={close} />}
         <div style={sidebarMode ? { paddingBottom: "1rem" } : { ...menuPopupStyle({ position: "absolute", right: 0, top: "calc(100% + 8px)", zIndex: 500, minWidth: "240px" }) }} className={sidebarMode ? "" : "menu-open"}>
 
           {/* ── Profile row ── */}
@@ -3980,6 +3974,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
           )}
 
         </div>
+        </>
       )}
     </div>
   );
@@ -5552,12 +5547,6 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
     setFabClosing(true);
     setTimeout(() => { setFabOpen(false); setFabClosing(false); }, 290);
   }
-  useEffect(() => {
-    if (!fabOpen) return;
-    const close = () => closeFabMenu();
-    document.addEventListener('pointerdown', close);
-    return () => document.removeEventListener('pointerdown', close);
-  }, [fabOpen]);
 
   const tabs = [
     { id: "home",    label: "Home",
@@ -5579,6 +5568,10 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
 
       {/* Create/Load popup menu — same rectangular style as the long-press/right-click menus */}
       {(fabOpen || fabClosing) && fabMenuPos && (
+        <>
+        {/* Backdrop — a real element intercepts the closing tap so it can't also
+            activate whatever's underneath (cards, buttons, etc). */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 105 }} onClick={closeFabMenu} />
         <div className={fabClosing ? "menu-close-up" : "menu-open-up"}
           style={{ ...menuPopupStyle({ position: "fixed", bottom: fabMenuPos.bottom + "px", right: fabMenuPos.right + "px", zIndex: 110, minWidth: "180px" }) }}
           onPointerDown={e => e.stopPropagation()}>
@@ -5591,6 +5584,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
             Load
           </KebabMenuItem>
         </div>
+        </>
       )}
 
       {/* Full-width frosted bar */}
@@ -6317,12 +6311,6 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
     setFabClosing(true);
     setTimeout(() => { setFabOpen(false); setFabClosing(false); }, 290);
   }
-  useEffect(() => {
-    if (!fabOpen) return;
-    const close = () => closeFabMenu();
-    document.addEventListener('pointerdown', close);
-    return () => document.removeEventListener('pointerdown', close);
-  }, [fabOpen]);
 
   if (homeTab !== "sets") return null;
 
@@ -6340,6 +6328,10 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
 
       {/* Create/Load popup menu — mirrors the mobile Add button */}
       {(fabOpen || fabClosing) && fabMenuPos && (
+        <>
+        {/* Backdrop — a real element intercepts the closing tap so it can't also
+            activate whatever's underneath (cards, buttons, etc). */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 105 }} onClick={closeFabMenu} />
         <div style={{
           display: "flex", flexDirection: "column", gap: "0.5rem",
           alignItems: "flex-end",
@@ -6371,6 +6363,7 @@ function DesktopFAB({ homeTab, onCreate, onImport, disabled }) {
             );
           })}
         </div>
+        </>
       )}
 
       {/* Glassy Add button — plain circle, expands into a "+ Add" pill when idle */}
@@ -6442,17 +6435,6 @@ function App() {
   }
   const sidebarPopupRef = useRef(null);
   const sidebarCogRef = useRef(null);
-  useEffect(() => {
-    if (!sidebarAppearanceOpen) return;
-    function handleOutside(e) {
-      if (sidebarCogRef.current && sidebarCogRef.current.contains(e.target)) return;
-      if (sidebarPopupRef.current && !sidebarPopupRef.current.contains(e.target)) {
-        setSidebarAppearanceOpen(false);
-      }
-    }
-    setTimeout(() => document.addEventListener("pointerdown", handleOutside), 50);
-    return () => document.removeEventListener("pointerdown", handleOutside);
-  }, [sidebarAppearanceOpen]);
   useEffect(() => { if (!sidebarAppearanceOpen) setSidebarSection(null); }, [sidebarAppearanceOpen]);
   const sidebarImportRef = useRef(null);
 
@@ -7392,6 +7374,12 @@ function App() {
 
     </div>
       {sidebarAppearanceOpen ? (
+        <>
+        {/* Backdrop — a real element intercepts the closing tap so it can't also
+            activate whatever's underneath (cards, buttons, etc). Excludes the cog
+            button itself so its own onClick can still toggle the popup closed. */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 9999 }}
+          onClick={e => { if (sidebarCogRef.current && sidebarCogRef.current.contains(e.target)) return; setSidebarAppearanceOpen(false); }} />
         <div ref={sidebarPopupRef} className="menu-open-up-left" onClick={e => e.stopPropagation()} style={{ ...menuPopupStyle({ position: "fixed", bottom: "3.5rem", left: (sidebarCollapsed ? 12 : 16) + "px", zIndex: 10000, width: SIDEBAR_WIDTH - 16 + "px" }) }}>
 
           {sidebarSection === null && (
@@ -7440,6 +7428,7 @@ function App() {
           )}
 
         </div>
+        </>
       ) : null}
 
       {sidebarProfileOpen && <ProfileModal name={profileName} iconId={profileIconId} bg={profileBg} iconColor={profileIColor} onSave={handleSaveProfile} onClose={() => setSidebarProfileOpen(false)} />}
