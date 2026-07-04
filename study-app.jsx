@@ -1264,7 +1264,8 @@ const SET_CARD_SCROLL_GRID = {
   gridTemplateRows: "repeat(2, auto)",
   gridAutoFlow: "column",
   gridAutoColumns: "calc(100vw - 3.75rem)",
-  columnGap: "0.75rem",
+  columnGap: "1rem",
+  rowGap: "0.5rem",
   overflowX: "auto",
   scrollbarWidth: "none",
   paddingLeft: "1.25rem",
@@ -4401,7 +4402,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
               <div style={{ gridRow: "1 / 3", width: "0.5rem", flexShrink: 0 }} />
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem", paddingBottom: "0.5rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem", paddingBottom: "0.5rem" }}>
               {tagSets.map(s => { const info = setInfo(s); return (
                 <SetCard key={s.id} s={s} allTags={allTags}
                   onEdit={onEdit} onExport={onExport}
@@ -4489,7 +4490,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
       )}
 
       {isFiltered && (
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
           {filteredSets.map(s => {
             const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
             const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
@@ -4527,7 +4528,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
                 </div>
               ) : (
-                <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
                   {untaggedSets.map(s => {
                     const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
                     const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
