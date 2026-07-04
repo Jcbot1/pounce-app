@@ -5660,6 +5660,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
   const [fabClosing, setFabClosing] = useState(false);
   const [fabMenuPos, setFabMenuPos] = useState(null);
   const fileRef = useRef(null);
+  const backdropDrag = useRef({ startY: 0, startScrollY: 0, dist: 0 });
 
   function closeFabMenu() {
     setFabClosing(true);
@@ -5687,12 +5688,26 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
       {/* Create/Load popup menu — same rectangular style as the long-press/right-click menus */}
       {(fabOpen || fabClosing) && fabMenuPos && (
         <>
-        {/* Backdrop — a real element intercepts the closing tap so it can't also
-            activate whatever's underneath (cards, buttons, etc). touch-action: pan-y lets
-            vertical scroll of the page underneath still pass through — unlike the long-press
-            context menu (anchored to a specific card), this menu is anchored to a fixed nav
-            button that doesn't move when the page scrolls, so there's no need to lock scroll. */}
-        <div style={{ position: "fixed", inset: 0, zIndex: 105, touchAction: "pan-y" }} onClick={closeFabMenu} />
+        {/* Backdrop — a real element intercepts the closing tap so it can't also activate
+            whatever's underneath (cards, buttons, etc). Unlike the long-press context menu
+            (anchored to a specific card, which needs to keep blocking scroll), this menu is
+            anchored to a fixed nav button that doesn't move when the page scrolls — so instead
+            of locking scroll, a drag on the backdrop manually forwards to the page's scroll
+            position (touch-action alone wasn't enough to let real touch-scroll pass through a
+            non-scrollable fixed overlay). A tap (no meaningful drag) still closes the menu. */}
+        <div style={{ position: "fixed", inset: 0, zIndex: 105, touchAction: "none" }}
+          onClick={() => { if (backdropDrag.current.dist < 6) closeFabMenu(); }}
+          onTouchStart={e => {
+            const t = e.touches[0];
+            backdropDrag.current = { startY: t.clientY, startScrollY: window.scrollY, dist: 0 };
+          }}
+          onTouchMove={e => {
+            const t = e.touches[0];
+            const dy = t.clientY - backdropDrag.current.startY;
+            backdropDrag.current.dist = Math.abs(dy);
+            window.scrollTo(window.scrollX, backdropDrag.current.startScrollY - dy);
+          }}
+        />
         <div className={fabClosing ? "menu-close-up" : "menu-open-up"}
           style={{ ...menuPopupStyle({ position: "fixed", bottom: fabMenuPos.bottom + "px", right: fabMenuPos.right + "px", zIndex: 110, minWidth: "180px" }) }}
           onPointerDown={e => e.stopPropagation()}>
