@@ -1130,6 +1130,11 @@ const inp = (extra = {}) => ({
   ...extra,
 });
 
+// The question editor's floating "Add Question" FAB sits fixed at bottom:1.5rem, ~52px tall —
+// this is how much clearance to keep between it and whatever's being typed/deleted at the end of
+// a field, so the last question's fields never end up pinned under it.
+const EDITOR_FAB_CLEARANCE = 96;
+
 function SnapTextarea({ style, maxLength, ...props }) {
   const ref = useRef(null);
   const len = (props.value || "").length;
@@ -1149,18 +1154,16 @@ function SnapTextarea({ style, maxLength, ...props }) {
     const delta = newHeight - prevHeight;
     if (delta !== 0 && document.activeElement === el) {
       document.body.scrollTop += delta;
-      // Preserving position isn't enough when typing at the very end pushes the box's growing
-      // edge right up against (or past) the bottom of the viewport — pull it back into view with
-      // a little breathing room, same as a native input would.
-      if (delta > 0 && el.selectionStart === el.value.length) {
-        // Ancestor containers that size themselves to content (e.g. Collapsible) grow via
-        // ResizeObserver-driven re-renders, which can take several frames to fully settle after
-        // a big jump like a large paste — until they do, the scrollable area is still clamped to
-        // the old (smaller) size. Keep nudging into view each frame until nothing's left to do.
+      // Preserving position isn't enough when typing (or deleting) at the very end leaves the
+      // box's edge right up against — or under — the editor's floating "Add Question" FAB
+      // (fixed bottom-right, ~76px tall including its own offset). Keep a clearance margin big
+      // enough to clear it, in both directions: growth can push the edge past the viewport, and
+      // a big shrink can just as easily leave it pinned uncomfortably close to the bottom.
+      if (el.selectionStart === el.value.length) {
         let tries = 0;
         const ensureVisible = () => {
           if (document.activeElement !== el) return;
-          const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
+          const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - EDITOR_FAB_CLEARANCE);
           if (overflow > 0) document.body.scrollTop += overflow;
           if (overflow > 0.5 && ++tries < 30) requestAnimationFrame(ensureVisible);
         };
@@ -1202,11 +1205,11 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
     const delta = newHeight - prevHeight;
     if (delta !== 0 && document.activeElement === el) {
       document.body.scrollTop += delta;
-      if (delta > 0 && el.selectionStart === el.value.length) {
+      if (el.selectionStart === el.value.length) {
         let tries = 0;
         const ensureVisible = () => {
           if (document.activeElement !== el) return;
-          const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
+          const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - EDITOR_FAB_CLEARANCE);
           if (overflow > 0) document.body.scrollTop += overflow;
           if (overflow > 0.5 && ++tries < 30) requestAnimationFrame(ensureVisible);
         };
@@ -2134,6 +2137,10 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
           {draft.questions.length} {draft.questions.length === 1 ? "question" : "questions"}
         </div>
       )}
+
+      {/* Reserves room to scroll the last question's fields clear of the floating FAB below —
+          without this, a short set has no scrollable space left for that clearance to come from. */}
+      <div style={{ height: EDITOR_FAB_CLEARANCE + "px" }} />
 
       {confirmDeleteQ && (
         <ConfirmDialog
