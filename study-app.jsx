@@ -3980,16 +3980,10 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
                 <span>Load</span>
               </button>
 
-              <button onClick={() => { exportAll(sets, "studi-sets.json"); close(); }}
-                {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <span style={{ fontSize: "1rem" }}>⊞</span>
-                <span>Save all sets as</span>
-              </button>
-
               <button onClick={() => { exportAll(history, "studi-history.json"); close(); }}
                 {...surfacePress()} style={{ width: "100%", background: "transparent", border: "none", padding: "0.9rem 1.25rem", fontFamily: FF_SANS, fontSize: "0.95rem", color: T.text, cursor: "pointer", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <span style={{ fontSize: "1rem" }}>◷</span>
-                <span>Save all history as</span>
+                <span>Save all history</span>
               </button>
 
               <HamburgerMenuItem onClick={() => { close(); onRequestClear(); }} color={T.red} danger>
@@ -4603,7 +4597,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
               <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
                 Recent Sets
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
                 {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
               </div>
             </div>
@@ -4613,7 +4607,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
               <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
                 Recent Sessions
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
                 {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onStudy={onStudy} matchedSet={sets.find(s => s.id === h.setId || s.name === h.setName)} onExport={setExportSession} onRequestDelete={setConfirmDel} />)}
               </div>
             </div>
@@ -4642,7 +4636,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
             Sets · {matchedSets.length}
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
             {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
           </div>
         </div>
@@ -4654,7 +4648,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
             History · {matchedHistory.length}
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
             {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onStudy={onStudy} matchedSet={sets.find(s => s.id === h.setId || s.name === h.setName)} onExport={setExportSession} onRequestDelete={setConfirmDel} />)}
           </div>
         </div>
@@ -5247,7 +5241,7 @@ function ResultsHistoryView({ history, sets = [], onImport, onDelete, onView, on
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "0.75rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
         {sorted.map(session => (
           <HistoryCard
             key={session.id}
@@ -7472,8 +7466,7 @@ function App() {
               <div style={{ padding: "0.25rem 0.5rem" }}>
                 <SidebarActionButton onClick={() => setSidebarSection("appearance")} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>} label="Appearance" right={<span style={{ fontSize: "0.8rem", color: T.muted }}>›</span>} />
                 <SidebarActionButton onClick={() => sidebarImportRef.current?.click()} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>} label="Load" />
-                <SidebarActionButton onClick={() => exportAll(sets, "studi-sets.json")} icon={<span style={{ fontSize: "0.9rem" }}>⊞</span>} label="Save all sets as" />
-                <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Save all history as" />
+                <SidebarActionButton onClick={() => exportAll(history, "studi-history.json")} icon={<span style={{ fontSize: "0.9rem" }}>◷</span>} label="Save all history" />
                 <SidebarActionButton onClick={() => { setSidebarAppearanceOpen(false); setShowClearConfirm(true); }} icon={<TrashIcon size={14} />} label="Clear all data" danger />
                 <div style={{ height: "1px", background: ST.border, margin: "0.4rem 0.5rem" }} />
                 <SidebarActionButton onClick={() => { setSidebarAppearanceOpen(false); setShowSidebarSupport(true); }} icon={<svg width="14" height="14" viewBox="0 0 24 24" {...IC}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>} label="Support Pounce" />
