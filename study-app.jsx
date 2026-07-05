@@ -1153,8 +1153,18 @@ function SnapTextarea({ style, maxLength, ...props }) {
       // edge right up against (or past) the bottom of the viewport — pull it back into view with
       // a little breathing room, same as a native input would.
       if (delta > 0 && el.selectionStart === el.value.length) {
-        const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
-        if (overflow > 0) document.body.scrollTop += overflow;
+        // Ancestor containers that size themselves to content (e.g. Collapsible) grow via
+        // ResizeObserver-driven re-renders, which can take several frames to fully settle after
+        // a big jump like a large paste — until they do, the scrollable area is still clamped to
+        // the old (smaller) size. Keep nudging into view each frame until nothing's left to do.
+        let tries = 0;
+        const ensureVisible = () => {
+          if (document.activeElement !== el) return;
+          const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
+          if (overflow > 0) document.body.scrollTop += overflow;
+          if (overflow > 0.5 && ++tries < 30) requestAnimationFrame(ensureVisible);
+        };
+        ensureVisible();
       }
     }
   }, [props.value]);
@@ -1193,8 +1203,14 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
     if (delta !== 0 && document.activeElement === el) {
       document.body.scrollTop += delta;
       if (delta > 0 && el.selectionStart === el.value.length) {
-        const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
-        if (overflow > 0) document.body.scrollTop += overflow;
+        let tries = 0;
+        const ensureVisible = () => {
+          if (document.activeElement !== el) return;
+          const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
+          if (overflow > 0) document.body.scrollTop += overflow;
+          if (overflow > 0.5 && ++tries < 30) requestAnimationFrame(ensureVisible);
+        };
+        ensureVisible();
       }
     }
   }, [value]);
@@ -1396,13 +1412,24 @@ const TYPE_META = {
 function Collapsible({ open, children }) {
   const innerRef = useRef(null);
   const [h, setH] = useState(0);
+  // Only animate the height change when open/closed is actually toggling. Content inside
+  // (auto-growing textareas) can change size instantly at any time while already open — e.g. a
+  // large paste — and animating the container to catch up over up to 0.5s leaves it clipping the
+  // new content (and our scroll-follow math, which assumes final layout) for that whole stretch.
+  const prevOpenRef = useRef(open);
+  const isToggling = prevOpenRef.current !== open;
+  prevOpenRef.current = open;
+
   useEffect(() => {
-    if (innerRef.current) {
-      const sh = innerRef.current.scrollHeight;
-      if (sh !== h) setH(sh);
-    }
-  });
-  const duration = Math.min(0.5, Math.max(0.25, h * 0.0005)) + "s";
+    const el = innerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setH(el.scrollHeight));
+    ro.observe(el);
+    setH(el.scrollHeight);
+    return () => ro.disconnect();
+  }, []);
+
+  const duration = isToggling ? Math.min(0.5, Math.max(0.25, h * 0.0005)) + "s" : "0s";
   return (
     <div style={{ overflow: "hidden", height: open ? h + "px" : "0", transition: `height ${duration} ease`, margin: "0 -1.25rem", padding: "0 1.25rem" }}>
       <div ref={innerRef} style={{ display: "flow-root" }}>{children}</div>
@@ -1467,7 +1494,9 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
     <div style={card({
       marginBottom: "1rem",
       ...(invalid ? { border: "1.5px solid " + T.red + "66" } : {}),
-      ...(!open ? { padding: "0.85rem 1rem" } : {}),
+      // Top padding must stay constant across open/collapsed — varying it shifts the header
+      // row (type bubble, topic, delete) by the padding delta on every expand/collapse.
+      ...(!open ? { paddingBottom: "0.85rem" } : {}),
     })}>
       {/* collapsed header */}
       <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", cursor: "pointer" }} onClick={() => setOpen(o => !o)}>
