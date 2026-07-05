@@ -5543,7 +5543,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
       {/* Stats row */}
       <div className="card-fade-up" style={{ animationDelay: "0ms" }}>
         {sectionLabel("Overview")}
-        <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
           {statCard("Sessions",  totalSessions,  null, T.accent)}
           {statCard("Questions", totalQuestions, null, T.accent)}
           {statCard("Mastery", mastery != null ? mastery + "%" : "—", null,
