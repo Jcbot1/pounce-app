@@ -999,30 +999,30 @@ const ACCENT_SCHEMES = {
 function buildTheme(mode, accentKey) {
   const base = mode === "light" ? {
     mode:    "light",
-    bg:      "#f7f5f2",
-    surface: "#fefcf9",
-    surface2:"#f2efe9",
-    border:  "#e5e0d8",
-    border2: "#cec8be",
+    bg:      "#f4f5f6",
+    surface: "#fbfcfd",
+    surface2:"#eef0f2",
+    border:  "#dfe2e6",
+    border2: "#c5c9ce",
     green:   "#22c55e",
     red:     "#dc2626",
     yellow:  "#d97706",
-    text:    "#171512",
-    muted:   "#918e88",
-    muted2:  "#635f5a",
+    text:    "#14151a",
+    muted:   "#8a8d92",
+    muted2:  "#5b5d63",
   } : {
     mode:    "dark",
-    bg:      "#0f0905",
-    surface: "#181614",
-    surface2:"#201e1b",
-    border:  "#302c28",
-    border2: "#423e3a",
+    bg:      "#0b0d11",
+    surface: "#16181c",
+    surface2:"#1c1e23",
+    border:  "#2b2d33",
+    border2: "#3b3e45",
     green:   "#22c55e",
     red:     "#ef4444",
     yellow:  "#f59e0b",
-    text:    "#edeae6",
-    muted:   "#88868a",
-    muted2:  "#aeacb0",
+    text:    "#e7e9ed",
+    muted:   "#84868c",
+    muted2:  "#a9acb2",
   };
   const baseKey   = accentKey.replace(/_pastel$/, "");
   const pastelKey = baseKey + "_pastel";
@@ -6923,8 +6923,8 @@ function App() {
     <>
     <div style={{ background: bgStyle === "gradient"
       ? (T.mode === "light"
-        ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,191,36,0.06) 0%, transparent 45%), ${T.bg}`
-        : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(251,146,60,0.06) 0%, transparent 45%), ${T.bg}`)
+        ? `linear-gradient(135deg, ${T.accent}15 0%, ${T.gradient2}0a 30%, transparent 55%), radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.04) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(56,189,248,0.06) 0%, transparent 45%), ${T.bg}`
+        : `linear-gradient(135deg, ${T.accent}11 0%, ${T.gradient2}08 30%, transparent 55%), radial-gradient(ellipse at 15% 10%, rgba(${T.accentRgb},0.05) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(45,212,191,0.06) 0%, transparent 45%), ${T.bg}`)
       : T.bg,
       minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
       <style>{`
