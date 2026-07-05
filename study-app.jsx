@@ -1147,7 +1147,16 @@ function SnapTextarea({ style, maxLength, ...props }) {
     // in both directions. This app scrolls document.body (not window — body has a forced
     // overflow-y:scroll), so that's the element to adjust.
     const delta = newHeight - prevHeight;
-    if (delta !== 0 && document.activeElement === el) document.body.scrollTop += delta;
+    if (delta !== 0 && document.activeElement === el) {
+      document.body.scrollTop += delta;
+      // Preserving position isn't enough when typing at the very end pushes the box's growing
+      // edge right up against (or past) the bottom of the viewport — pull it back into view with
+      // a little breathing room, same as a native input would.
+      if (delta > 0 && el.selectionStart === el.value.length) {
+        const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
+        if (overflow > 0) document.body.scrollTop += overflow;
+      }
+    }
   }, [props.value]);
 
   return (
@@ -1181,7 +1190,13 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
     // See SnapTextarea — compensates for the native caret-follow scroll being imperfect on
     // growth and absent entirely on shrink.
     const delta = newHeight - prevHeight;
-    if (delta !== 0 && document.activeElement === el) document.body.scrollTop += delta;
+    if (delta !== 0 && document.activeElement === el) {
+      document.body.scrollTop += delta;
+      if (delta > 0 && el.selectionStart === el.value.length) {
+        const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 24);
+        if (overflow > 0) document.body.scrollTop += overflow;
+      }
+    }
   }, [value]);
 
   return (
@@ -1553,7 +1568,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                         display: "flex", alignItems: "center", gap: "0.35rem",
                         background: "none", border: "none", cursor: "pointer", padding: 0,
                         color: isCor ? T.green : T.muted, fontSize: "0.72rem",
-                        fontFamily: FF_SANS, height: "auto",
+                        fontFamily: FF_SANS, height: "auto", width: "auto",
                       }}>
                         <span style={{
                           width: "16px", height: "16px", flexShrink: 0,
@@ -1618,7 +1633,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
                           display: "flex", alignItems: "center", gap: "0.35rem",
                           background: "none", border: "none", cursor: "pointer", padding: 0,
                           color: dd.correct === oi ? T.green : T.muted, fontSize: "0.72rem",
-                          fontFamily: FF_SANS, height: "auto",
+                          fontFamily: FF_SANS, height: "auto", width: "auto",
                         }}>
                           <span style={{
                             width: "16px", height: "16px", flexShrink: 0,
