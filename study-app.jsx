@@ -3667,7 +3667,7 @@ function SessionPicker({ set, onStart, onClose, onEdit }) {
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <span style={{ fontFamily: FF_SANS, fontWeight: 700, color: T.text, fontSize: "1rem", lineHeight: 1 }}>Review Mode</span>
                   <span style={{ display: "block", fontFamily: FF_SANS, color: T.muted2, fontSize: "0.78rem", marginTop: "0.2rem", lineHeight: 1.3 }}>
-                    All {count} questions, answers as you go
+                    All {count} {count === 1 ? "question" : "questions"}, answers as you go
                   </span>
                 </div>
               </div>
@@ -4333,7 +4333,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
             {s.name}
           </p>
           <span style={{ fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
-            {s.questions.length} Questions
+            {s.questions.length} {s.questions.length === 1 ? "Question" : "Questions"}
           </span>
           <div style={{ flex: 1, minHeight: "0.4rem" }} />
           {(s.tags && s.tags.length > 0) && (
