@@ -22,14 +22,26 @@
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html, body, #root { height: 100%; }
-      body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+      body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; background: #f4f5f6; }
+      @media (prefers-color-scheme: dark) { body { background: #0b0d11; } }
       input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
       input::-ms-clear { display: none; }
       input:focus, input:focus-visible { outline: none !important; box-shadow: none !important; }
+
+      /* Shown only until the app mounts and replaces #root's content — matches the app's own
+         loading feel instead of a blank flash while the JSX is fetched and transformed. */
+      #boot-loader { height: 100%; display: flex; align-items: center; justify-content: center; }
+      #boot-loader .spinner {
+        width: 32px; height: 32px; border-radius: 50%;
+        border: 3px solid rgba(147, 51, 234, 0.2);
+        border-top-color: #9333ea;
+        animation: boot-spin 0.8s linear infinite;
+      }
+      @keyframes boot-spin { to { transform: rotate(360deg); } }
     </style>
   </head>
   <body class="ios">
-    <div id="root"></div>
+    <div id="root"><div id="boot-loader"><div class="spinner"></div></div></div>
 
     <script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -38,7 +50,7 @@
 
     <script type="text/babel" data-presets="react">
       // Inline fetch and eval of study-app.jsx
-      fetch('./study-app.jsx', { cache: 'no-store' })
+      fetch('./study-app.jsx')
         .then(r => r.text())
         .then(code => {
           const transformed = Babel.transform(code, { presets: [['react', { runtime: 'classic' }]] }).code;

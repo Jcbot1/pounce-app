@@ -853,7 +853,8 @@ function buildShuffledQuestion(q) {
 }
 
 // ── Confirm dialog ────────────────────────────────────────────────────────────
-function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onCancel, extraButton }) {
+function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onCancel, extraButton, danger = true }) {
+  const ConfirmBtn = danger ? DangerButton : PrimaryButton;
   return (
     <Modal onClose={onCancel}>
       <ModalCard pad="2.25rem" maxWidth={360}>
@@ -869,7 +870,7 @@ function ConfirmDialog({ title, message, confirmLabel = "Delete", onConfirm, onC
         </div>
         <div style={{ display: "flex", gap: "0.6rem", flexDirection: "column" }}>
           {extraButton}
-          <DangerButton onClick={onConfirm} style={{ width: "100%", justifyContent: "center" }}>{confirmLabel}</DangerButton>
+          <ConfirmBtn onClick={onConfirm} style={{ width: "100%", justifyContent: "center" }}>{confirmLabel}</ConfirmBtn>
           <GhostButton onClick={onCancel} style={{ width: "100%", justifyContent: "center" }}>Cancel</GhostButton>
         </div>
       </ModalCard>
@@ -3220,6 +3221,7 @@ function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBa
               : "Ready to see your results?"
           }
           confirmLabel="Submit"
+          danger={false}
           onConfirm={() => { setConfirmFinish(false); handleFinish(); }}
           onCancel={() => setConfirmFinish(false)}
         />
@@ -6031,17 +6033,11 @@ const STATIC_STYLES = `
     0%   { transform: translateX(-100%) skewX(-15deg); }
     100% { transform: translateX(250%) skewX(-15deg); }
   }
-  @keyframes checkPop {
-    0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
-    60%  { transform: scale(1.35) rotate(4deg); opacity: 1; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
-  }
   @keyframes savedTextIn {
     0%   { opacity: 0; transform: translateY(4px); }
     100% { opacity: 1; transform: translateY(0); }
   }
   .save-shimmer { animation: saveShimmer 0.6s ease forwards; }
-  .check-pop    { animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
   .saved-text   { animation: savedTextIn 0.2s ease 0.1s both; }
 
   /* Press feedback */
@@ -6928,7 +6924,6 @@ function App() {
       : T.bg,
       minHeight: "100vh", display: "flex", flexDirection: "column", position: "relative" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body, html { -webkit-font-smoothing: subpixel-antialiased; -moz-osx-font-smoothing: auto; text-rendering: optimizeLegibility; scrollbar-gutter: stable; }
         ul, ol { list-style-position: outside; }
