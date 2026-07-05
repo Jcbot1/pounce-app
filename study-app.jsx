@@ -1137,8 +1137,17 @@ function SnapTextarea({ style, maxLength, ...props }) {
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const prevHeight = el.offsetHeight;
     el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
+    const newHeight = el.scrollHeight;
+    el.style.height = newHeight + "px";
+    // Growing/shrinking the box shifts everything below it, which would otherwise leave the
+    // browser's native "keep caret in view" scroll to catch up imperfectly (or not at all when
+    // shrinking) — scrolling by the exact height delta keeps the caret's screen position stable
+    // in both directions. This app scrolls document.body (not window — body has a forced
+    // overflow-y:scroll), so that's the element to adjust.
+    const delta = newHeight - prevHeight;
+    if (delta !== 0 && document.activeElement === el) document.body.scrollTop += delta;
   }, [props.value]);
 
   return (
@@ -1165,8 +1174,14 @@ function EditorTextarea({ value, onChange, placeholder, maxLength, rows = 3, noB
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const prevHeight = el.offsetHeight;
     el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
+    const newHeight = el.scrollHeight;
+    el.style.height = newHeight + "px";
+    // See SnapTextarea — compensates for the native caret-follow scroll being imperfect on
+    // growth and absent entirely on shrink.
+    const delta = newHeight - prevHeight;
+    if (delta !== 0 && document.activeElement === el) document.body.scrollTop += delta;
   }, [value]);
 
   return (
@@ -1386,6 +1401,10 @@ function Collapsible({ open, children }) {
 
 function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
+  // Topic drives which group this question is sorted into in the list above, so committing it
+  // on every keystroke would re-group (and remount, losing focus) the card as you type each
+  // letter. Buffer edits locally and only commit — and let the regroup happen — on blur.
+  const [topicDraft, setTopicDraft] = useState(null);
 
   const set = (field, val) => onChange({ ...q, [field]: val });
 
@@ -1480,7 +1499,9 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
             </div>
             <div style={{ flex: "1 1 140px" }}>
               <Label>TOPIC / CATEGORY</Label>
-              <input value={q.topic} onChange={e => set("topic", e.target.value)}
+              <input value={topicDraft !== null ? topicDraft : q.topic}
+                onChange={e => setTopicDraft(e.target.value)}
+                onBlur={() => { if (topicDraft !== null) { set("topic", topicDraft); setTopicDraft(null); } }}
                 placeholder="e.g. Storage, Identity…" maxLength={1000} style={inp()} />
             </div>
           </div>
