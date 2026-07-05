@@ -2140,10 +2140,6 @@ function EditMode({ set, allTags, onSave, onBack, scrolled, onCanSaveChange, onQ
         </div>
       )}
 
-      {/* Reserves room to scroll the last question's fields clear of the floating FAB below —
-          without this, a short set has no scrollable space left for that clearance to come from. */}
-      <div style={{ height: EDITOR_FAB_CLEARANCE + "px" }} />
-
       {confirmDeleteQ && (
         <ConfirmDialog
           title="Delete this question?"
