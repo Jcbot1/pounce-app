@@ -4484,7 +4484,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
       )}
 
       {isFiltered && (
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
           {filteredSets.map(s => {
             const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
             const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
@@ -4597,7 +4597,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
               <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
                 Recent Sets
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
                 {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
               </div>
             </div>
@@ -4607,7 +4607,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
               <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
                 Recent Sessions
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
                 {recentHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onStudy={onStudy} matchedSet={sets.find(s => s.id === h.setId || s.name === h.setName)} onExport={setExportSession} onRequestDelete={setConfirmDel} />)}
               </div>
             </div>
@@ -4636,7 +4636,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
             Sets · {matchedSets.length}
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
             {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
           </div>
         </div>
@@ -4648,7 +4648,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
           <p style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text, marginBottom: "0.75rem" }}>
             History · {matchedHistory.length}
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
             {matchedHistory.map(h => <HistoryCard key={h.id} session={h} onView={onViewHistory} onStudy={onStudy} matchedSet={sets.find(s => s.id === h.setId || s.name === h.setName)} onExport={setExportSession} onRequestDelete={setConfirmDel} />)}
           </div>
         </div>
@@ -5241,7 +5241,7 @@ function ResultsHistoryView({ history, sets = [], onImport, onDelete, onView, on
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: "1rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
         {sorted.map(session => (
           <HistoryCard
             key={session.id}
