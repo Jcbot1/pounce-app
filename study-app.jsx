@@ -1420,12 +1420,21 @@ function Collapsible({ open, children }) {
   const isToggling = prevOpenRef.current !== open;
   prevOpenRef.current = open;
 
+  // Fast path: re-measure on every render, before paint. Covers the common case — content
+  // changing via a React state update (typing, pasting) already re-renders this component, so
+  // this lands in the very same commit, with no extra round trip.
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (el && el.scrollHeight !== h) setH(el.scrollHeight);
+  });
+
+  // Safety net for layout changes that don't originate from a React re-render at all (e.g. a
+  // window resize reflowing wrapped text) — ResizeObserver catches those too, just a frame later.
   useEffect(() => {
     const el = innerRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => setH(el.scrollHeight));
     ro.observe(el);
-    setH(el.scrollHeight);
     return () => ro.disconnect();
   }, []);
 
