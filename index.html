@@ -38,7 +38,7 @@
 
     <script type="text/babel" data-presets="react">
       // Inline fetch and eval of study-app.jsx
-      fetch('./study-app.jsx')
+      fetch('./study-app.jsx', { cache: 'no-store' })
         .then(r => r.text())
         .then(code => {
           const transformed = Babel.transform(code, { presets: [['react', { runtime: 'classic' }]] }).code;
