@@ -1130,10 +1130,12 @@ const inp = (extra = {}) => ({
   ...extra,
 });
 
-// The question editor's floating "Add Question" FAB sits fixed at bottom:1.5rem, ~52px tall —
-// this is how much clearance to keep between it and whatever's being typed/deleted at the end of
-// a field, so the last question's fields never end up pinned under it.
-const EDITOR_FAB_CLEARANCE = 96;
+// The question editor's floating "Add Question" FAB sits fixed at bottom:1.5rem, ~52px tall
+// (~76px including its own offset) — this is how much clearance to keep between it and whatever's
+// being typed/deleted at the end of a field, so the last question's fields never end up pinned
+// under it. Deliberately more than the FAB's own footprint, so the question count and some
+// breathing room stay visible too, not just barely-not-overlapping.
+const EDITOR_FAB_CLEARANCE = 180;
 
 function SnapTextarea({ style, maxLength, ...props }) {
   const ref = useRef(null);
