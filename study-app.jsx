@@ -1431,7 +1431,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
 
   return (
     <div style={card({
-      marginBottom: "0.75rem",
+      marginBottom: "1rem",
       ...(invalid ? { border: "1.5px solid " + T.red + "66" } : {}),
       ...(!open ? { padding: "0.85rem 1rem" } : {}),
     })}>
@@ -3400,7 +3400,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         const open = expanded === origIdx;
         const corBg = corBgCard(), wroBg = wroBgCard();
         return (
-          <div key={origIdx} style={card({ marginBottom: "0.6rem", borderColor: r.correct ? T.green + "44" : T.red + "44" })}>
+          <div key={origIdx} style={card({ marginBottom: "1rem", borderColor: r.correct ? T.green + "44" : T.red + "44" })}>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", cursor: "pointer" }}
               onClick={() => setExpanded(open ? null : origIdx)}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
