@@ -1411,36 +1411,60 @@ const TYPE_META = {
 // ── Collapsible — animates height to the measured content height ──────────
 function Collapsible({ open, children }) {
   const innerRef = useRef(null);
-  const [h, setH] = useState(0);
-  // Only animate the height change when open/closed is actually toggling. Content inside
-  // (auto-growing textareas) can change size instantly at any time while already open — e.g. a
-  // large paste — and animating the container to catch up over up to 0.5s leaves it clipping the
-  // new content (and our scroll-follow math, which assumes final layout) for that whole stretch.
+  const wrapRef = useRef(null);
+  const timeoutRef = useRef(null);
   const prevOpenRef = useRef(open);
-  const isToggling = prevOpenRef.current !== open;
-  prevOpenRef.current = open;
+  // "open"/"closed" are the two *resting* states — no JS-measured height involved at all, just
+  // plain CSS (height:auto or 0). Only the brief moment of actually toggling needs an explicit,
+  // JS-measured pixel height, since a CSS transition can't animate to/from "auto". Resting on
+  // "auto" means any later content change (typing, pasting, deleting — no matter how large)
+  // resizes the box exactly the way any ordinary block element would: instantly, with zero
+  // dependency on an effect or observer firing in time.
+  const [restState, setRestState] = useState(open ? "open" : "closed");
 
-  // Fast path: re-measure on every render, before paint. Covers the common case — content
-  // changing via a React state update (typing, pasting) already re-renders this component, so
-  // this lands in the very same commit, with no extra round trip.
   useLayoutEffect(() => {
-    const el = innerRef.current;
-    if (el && el.scrollHeight !== h) setH(el.scrollHeight);
-  });
+    if (prevOpenRef.current === open) return;
+    prevOpenRef.current = open;
+    const wrap = wrapRef.current, inner = innerRef.current;
+    if (!wrap || !inner) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-  // Safety net for layout changes that don't originate from a React re-render at all (e.g. a
-  // window resize reflowing wrapped text) — ResizeObserver catches those too, just a frame later.
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setH(el.scrollHeight));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+    if (open) {
+      // Opening: freeze at 0 (already there), force a reflow, then animate up to the content's
+      // natural height. Once the transition ends, release to "auto" for the resting state.
+      const target = inner.scrollHeight;
+      wrap.style.transition = "none";
+      wrap.style.overflow = "hidden";
+      wrap.style.height = "0px";
+      void wrap.offsetHeight;
+      const duration = Math.min(0.5, Math.max(0.25, target * 0.0005));
+      wrap.style.transition = `height ${duration}s ease`;
+      wrap.style.height = target + "px";
+      timeoutRef.current = setTimeout(() => setRestState("open"), duration * 1000 + 30);
+    } else {
+      // Closing: freeze the current (auto-sized) height as an explicit pixel value first — a
+      // transition can't start from "auto" — then animate down to 0.
+      const current = inner.scrollHeight;
+      wrap.style.transition = "none";
+      wrap.style.overflow = "hidden";
+      wrap.style.height = current + "px";
+      void wrap.offsetHeight;
+      const duration = Math.min(0.5, Math.max(0.25, current * 0.0005));
+      wrap.style.transition = `height ${duration}s ease`;
+      wrap.style.height = "0px";
+      timeoutRef.current = setTimeout(() => setRestState("closed"), duration * 1000 + 30);
+    }
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+  }, [open]);
 
-  const duration = isToggling ? Math.min(0.5, Math.max(0.25, h * 0.0005)) + "s" : "0s";
+  useEffect(() => () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); }, []);
+
   return (
-    <div style={{ overflow: "hidden", height: open ? h + "px" : "0", transition: `height ${duration} ease`, margin: "0 -1.25rem", padding: "0 1.25rem" }}>
+    <div ref={wrapRef} style={{
+      overflow: restState === "open" ? "visible" : "hidden",
+      height: restState === "open" ? "auto" : "0",
+      margin: "0 -1.25rem", padding: "0 1.25rem",
+    }}>
       <div ref={innerRef} style={{ display: "flow-root" }}>{children}</div>
     </div>
   );
