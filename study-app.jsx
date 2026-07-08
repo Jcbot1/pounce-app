@@ -5272,29 +5272,32 @@ function HistoryCard({ session, onView, onStudy, matchedSet, onExport, onRequest
         </div>,
         document.body
       )}
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
-          overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, margin: 0 }}>
-          {session.setName}
-        </p>
-        <span style={{ fontSize: "0.68rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.1rem" }}>
-          {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })}
-        </span>
-        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.4rem" }}>
-          {session.mode && (
-            <Tag
-              label={session.mode === "quick" ? "QUICK " + session.total : session.mode === "exam" ? "EXAM" : "REVIEW"}
-              color={session.mode === "quick" ? "#06b6d4" : session.mode === "exam" ? "#f59e0b" : "#8b5cf6"}
-            />
-          )}
-          <span style={{
-            display: "inline-flex", alignItems: "center", padding: "0.15rem 0.7rem", borderRadius: "99px",
-            fontSize: "0.63rem", fontFamily: FF_SANS, letterSpacing: "0.1em", fontWeight: 600,
-            background: (passed ? T.green : T.red) + "18", color: passed ? T.green : T.red,
-            border: "1px solid " + (passed ? T.green : T.red) + "44",
-          }}>
-            {pct}% · {session.score}/{session.total}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.9rem" }}>
+        <div style={{ width: "46px", height: "46px", borderRadius: "50%", flexShrink: 0,
+          border: "2px solid " + (passed ? T.green : T.red),
+          background: passed ? corBgCard() : wroBgCard(),
+          display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.72rem",
+            color: passed ? T.green : T.red }}>
+            {pct}%
           </span>
+        </div>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+          <p style={{ fontFamily: FF_SANS, fontWeight: 600, color: T.text, fontSize: "0.95rem",
+            overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4, margin: 0 }}>
+            {session.setName}
+          </p>
+          <span style={{ fontSize: "0.68rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.1rem" }}>
+            {new Date(session.date).toLocaleDateString(undefined, { dateStyle: "medium" })} · {session.score}/{session.total}
+          </span>
+          {session.mode && (
+            <div style={{ display: "flex", marginTop: "0.4rem" }}>
+              <Tag
+                label={session.mode === "quick" ? "QUICK " + session.total : session.mode === "exam" ? "EXAM" : "REVIEW"}
+                color={session.mode === "quick" ? "#06b6d4" : session.mode === "exam" ? "#f59e0b" : "#8b5cf6"}
+              />
+            </div>
+          )}
         </div>
       </div>
     </AppCard>
