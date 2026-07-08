@@ -5736,7 +5736,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
                   {lastPassed ? "Pass ✓" : "Not yet"}
                 </p>
                 <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.88rem", color: T.text,
-                  marginBottom: "0.15rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  marginBottom: "0.15rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", lineHeight: 1.4 }}>
                   {lastSession.setName}
                 </p>
                 <p style={{ fontFamily: FF_SANS, fontSize: "0.75rem", color: T.muted }}>
