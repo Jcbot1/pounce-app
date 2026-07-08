@@ -811,6 +811,52 @@ function blankSet() {
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
+// Weighted pick for partial-length sessions (Quick/Exam): questions answered in recent
+// sessions are less likely to be picked again, and among previously-answered questions,
+// ones the user tends to get wrong are more likely — but nothing is ever fully excluded,
+// so the set still feels random. Sessions are ranked by recency rather than wall-clock time
+// since back-to-back quick rounds can happen seconds apart.
+function pickWeightedQuestions(questions, sessions, setId, count) {
+  const RECENCY_WINDOW = 5;
+
+  const relevant = (sessions || [])
+    .filter(s => s.setId === setId && Array.isArray(s.results))
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const stats = {}; // qId -> { correct, total, sessionsAgo (of most recent appearance) }
+  relevant.forEach((s, sessionsAgo) => {
+    s.results.forEach(r => {
+      if (!stats[r.qId]) stats[r.qId] = { correct: 0, total: 0, sessionsAgo };
+      stats[r.qId].total++;
+      if (r.correct) stats[r.qId].correct++;
+    });
+  });
+
+  const pool = questions.map(q => {
+    const s = stats[q.id];
+    if (!s) return { q, weight: 1.6 }; // never answered — prioritize new questions
+    const recency = 0.15 + 0.85 * Math.min(s.sessionsAgo, RECENCY_WINDOW) / RECENCY_WINDOW;
+    const difficulty = 1 + (1 - s.correct / s.total); // 1 (mastered) .. 2 (always missed)
+    return { q, weight: recency * difficulty };
+  });
+
+  const picked = [];
+  const remaining = [...pool];
+  const n = Math.min(count, remaining.length);
+  for (let i = 0; i < n; i++) {
+    const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0);
+    let r = Math.random() * totalWeight;
+    let idx = remaining.length - 1;
+    for (let j = 0; j < remaining.length; j++) {
+      r -= remaining[j].weight;
+      if (r <= 0) { idx = j; break; }
+    }
+    picked.push(remaining[idx].q);
+    remaining.splice(idx, 1);
+  }
+  return shuffle(picked);
+}
+
 // Middle-ellipsis truncation — keeps the distinguishing tail of similarly-prefixed
 // names (e.g. "Review Mode Set 1 – AZ-305...") instead of chopping it off.
 function truncateMiddle(str, maxLen = 20, headLen = 12) {
@@ -2690,10 +2736,12 @@ function ReviewFlashcard({ q, onGrade, submitted, results }) {
   );
 }
 
-function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBack }) {
+function ReviewMode({ set, questionLimit, examMode, timerMinutes, onFinish, onBack, history = [] }) {
   const [questions] = useState(() => {
-    const shuffled = shuffle(set.questions).map(buildShuffledQuestion);
-    return questionLimit ? shuffled.slice(0, questionLimit) : shuffled;
+    if (questionLimit) {
+      return pickWeightedQuestions(set.questions, history, set.id, questionLimit).map(buildShuffledQuestion);
+    }
+    return shuffle(set.questions).map(buildShuffledQuestion);
   });
 
   const [idx, setIdx]     = useState(0);
@@ -7264,7 +7312,7 @@ function App() {
               </div>
             )}
             {screen === "review" && activeSet && (
-              <ReviewMode set={activeSet} questionLimit={questionLimit} examMode={examMode} timerMinutes={timerMinutes} onFinish={handleFinish} onBack={() => setScreen("home")} />
+              <ReviewMode set={activeSet} questionLimit={questionLimit} examMode={examMode} timerMinutes={timerMinutes} onFinish={handleFinish} onBack={() => setScreen("home")} history={history} />
             )}
             {screen === "results" && reviewResults && (
               <ResultsScreen results={reviewResults} questions={reviewQs}
