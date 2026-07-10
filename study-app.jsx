@@ -805,6 +805,17 @@ function computeMastery(sessions, questions) {
   return Math.round(attemptedAccuracy * coverage * 100);
 }
 
+// Count of the set's current questions that have never appeared in any session's results.
+function countUnanswered(sessions, questions) {
+  if (!questions || !questions.length) return 0;
+  const answered = new Set();
+  sessions.forEach(s => {
+    if (!s.results) return;
+    s.results.forEach(r => answered.add(r.qId));
+  });
+  return questions.filter(q => !answered.has(q.id)).length;
+}
+
 function blankQuestion(type = "single") {
   const base = { id: uid(), type, topic: "", question: "", hint: "", explanation: "" };
   if (type === "single")   return { ...base, options: ["", "", ""], correct: [] };
@@ -4293,7 +4304,7 @@ function PinIcon({ size = 15, filled = false }) {
     </svg>
   );
 }
-function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession, mastery, pinned = false, onTogglePin, showSidebar = true }) {
+function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onRename, onSetIcon, lastSession, mastery, unanswered, pinned = false, onTogglePin, showSidebar = true }) {
   const canStudy = s.questions.length > 0;
   const iconDef = s.icon ? SET_ICONS.flatMap(c => c.icons).find(i => i.id === s.icon) : null;
   // Same red/amber/green cutoffs used for the results % (T.red / "#f59e0b" / T.green),
@@ -4406,6 +4417,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           </p>
           <span style={{ fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
             {s.questions.length} {s.questions.length === 1 ? "Question" : "Questions"}
+            {mastery != null && unanswered > 0 && ` · ${unanswered} unanswered`}
           </span>
           <div style={{ flex: 1, minHeight: "0.4rem" }} />
           {(s.tags && s.tags.length > 0) && (
@@ -4534,6 +4546,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
     return {
       lastSession: sessions.length ? [...sessions].sort((a, b) => new Date(b.date) - new Date(a.date))[0] : null,
       mastery: computeMastery(sessions, s.questions),
+      unanswered: countUnanswered(sessions, s.questions),
     };
   }
   return (
@@ -4564,7 +4577,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
                   onEdit={onEdit} onExport={onExport}
                   onStudy={onStudy} onDelete={onDelete}
                   onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
-                  lastSession={info.lastSession} mastery={info.mastery}
+                  lastSession={info.lastSession} mastery={info.mastery} unanswered={info.unanswered}
                   pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />
               ); })}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
@@ -4577,7 +4590,7 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
                   onEdit={onEdit} onExport={onExport}
                   onStudy={onStudy} onDelete={onDelete}
                   onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename}
-                  lastSession={info.lastSession} mastery={info.mastery}
+                  lastSession={info.lastSession} mastery={info.mastery} unanswered={info.unanswered}
                   pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />
               ); })}
               {onCreate && <GhostCard onClick={() => onCreate(tag)} />}
@@ -4664,7 +4677,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
             const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
             const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
             return <SetCard key={s.id} s={s} allTags={allTags}
-              onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh, s.questions)}
+              onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh, s.questions)} unanswered={countUnanswered(sh, s.questions)}
               pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />;
           })}
         </div>
@@ -4691,7 +4704,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                     const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
                     const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
-                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh, s.questions)}
+                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh, s.questions)} unanswered={countUnanswered(sh, s.questions)}
                       pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />;
                   })}
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
@@ -4702,7 +4715,7 @@ function SetsTab({ sets, allTags, untaggedSets, onEdit, onExport, onStudy, onDel
                     const sh = history.filter(h => h.setId === s.id || h.setName === s.name);
                     const ls = sh.length ? [...sh].sort((a,b) => new Date(b.date)-new Date(a.date))[0] : null;
                     return <SetCard key={s.id} s={s} allTags={allTags}
-                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh, s.questions)}
+                      onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} lastSession={ls} mastery={computeMastery(sh, s.questions)} unanswered={countUnanswered(sh, s.questions)}
                       pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />;
                   })}
                   {onCreate && <GhostCard onClick={() => onCreate(null)} />}
@@ -4773,7 +4786,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
                 Recent Sets
               </p>
               <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
-                {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh, s.questions)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
+                {recentSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh, s.questions)} unanswered={countUnanswered(sh, s.questions)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
               </div>
             </div>
           )}
@@ -4812,7 +4825,7 @@ function SearchScreen({ sets, history, allTags, onEdit, onStudy, onViewHistory, 
             Sets · {matchedSets.length}
           </p>
           <div style={{ display: "grid", gridTemplateColumns: `repeat(${cardColumns}, 1fr)`, gap: cardColumns === 1 ? "0.5rem" : "1rem" }}>
-            {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh, s.questions)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
+            {matchedSets.map(s => { const sh = history.filter(h => h.setId === s.id || h.setName === s.name); return <SetCard key={s.id} s={s} allTags={allTags} onEdit={onEdit} onExport={onExport} onStudy={onStudy} onDelete={onDelete} onSetTags={onSetTags} onSetIcon={onSetIcon} onRename={onRename} mastery={computeMastery(sh, s.questions)} unanswered={countUnanswered(sh, s.questions)} pinned={pinnedSetIds.includes(s.id)} onTogglePin={onTogglePin} showSidebar={showSidebar} />; })}
           </div>
         </div>
       )}
