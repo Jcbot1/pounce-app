@@ -4417,7 +4417,7 @@ function SetCard({ s, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, o
           </p>
           <span style={{ fontSize: "0.72rem", fontFamily: FF_SANS, letterSpacing: "0.05em", color: T.muted, marginTop: "0.2rem" }}>
             {s.questions.length} {s.questions.length === 1 ? "Question" : "Questions"}
-            {` · ${unanswered} unanswered`}
+            {` · ${unanswered} Unanswered`}
           </span>
           <div style={{ flex: 1, minHeight: "0.4rem" }} />
           {(s.tags && s.tags.length > 0) && (
