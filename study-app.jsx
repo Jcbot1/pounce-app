@@ -3341,6 +3341,7 @@ function TrendArrow() {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
       <span style={{ width: "16px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center", color: T.muted, fontSize: "0.85rem" }}>→</span>
+      <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", visibility: "hidden" }}>&nbsp;</span>
     </div>
   );
 }
@@ -5253,29 +5254,29 @@ function TopicSummaryInline({ results, questions }) {
   const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
 
   return (
-    <div style={{ borderTop: "1px solid " + divider }}>
-      {topics.map(function(t, i) {
-        const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
-        return (
-          <div key={t.topic} style={{
-            padding: "0.85rem 1.25rem",
-            borderBottom: i < topics.length - 1 ? "1px solid " + divider : "none",
-          }}>
-            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.5rem" }}>
-              <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
-                {t.topic}
-              </span>
-              <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 700, color, flexShrink: 0 }}>
-                {t.pct}%
-              </span>
+    <div style={{ borderTop: "1px solid " + divider, padding: "1rem 1.25rem" }}>
+      <Label style={{ marginBottom: "0.65rem" }}>TOPICS / CATEGORIES</Label>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+        {topics.map(function(t) {
+          const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+          return (
+            <div key={t.topic}>
+              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.85rem", fontWeight: 500, color: T.text, lineHeight: 1.4 }}>
+                  {t.topic}
+                </span>
+                <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 700, color, flexShrink: 0 }}>
+                  {t.pct}%
+                </span>
+              </div>
+              <div style={{ height: "4px", borderRadius: "99px", background: trackBg, overflow: "hidden" }}>
+                <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "99px",
+                  transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
+              </div>
             </div>
-            <div style={{ height: "4px", borderRadius: "99px", background: trackBg, overflow: "hidden" }}>
-              <div style={{ height: "100%", width: t.pct + "%", background: color, borderRadius: "99px",
-                transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
