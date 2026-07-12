@@ -509,7 +509,6 @@ function AppCard({ onClick, onContextMenu, children, style: extraStyle, cardRef 
         onClick && onClick(e);
       }}
       onContextMenu={onContextMenu}
-      {...primaryPress()}
       style={{
         ...card({ marginBottom: "0.6rem" }),
         cursor: "pointer",
