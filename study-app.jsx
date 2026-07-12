@@ -816,6 +816,13 @@ function countUnanswered(sessions, questions) {
   return questions.filter(q => !answered.has(q.id)).length;
 }
 
+// Shared score-color tiering, used everywhere a percentage is color-coded
+// (trend bubbles, topic/set-card bars, results ring, history cards) so a
+// given score always reads the same color no matter where it's shown.
+function scoreColor(pct) {
+  return pct >= 75 ? T.green : pct >= 60 ? "#f59e0b" : T.red;
+}
+
 function blankQuestion(type = "single") {
   const base = { id: uid(), type, topic: "", question: "", hint: "", explanation: "" };
   if (type === "single")   return { ...base, options: ["", "", ""], correct: [] };
@@ -3350,6 +3357,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
   const passed = pct >= 70;
+  const sColor = scoreColor(pct);
   const [expanded,     setExpanded]     = useState(null);
   const [saved,        setSaved]        = useState(false);
   const [resultsSort,  setResultsSort]  = useState("default");
@@ -3511,18 +3519,18 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         </div>
       </div>
 
-      <div style={{ ...card({ marginBottom: "1.5rem", padding: 0, overflow: "hidden", borderColor: passed ? T.green + "55" : T.red + "55" }) }}>
+      <div style={{ ...card({ marginBottom: "1.5rem", padding: 0, overflow: "hidden", borderColor: sColor + "55" }) }}>
         {/* Score row */}
         <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", padding: "1.25rem 1.25rem 1rem" }}>
           <div style={{ width: "88px", height: "88px", borderRadius: "50%", flexShrink: 0,
-            border: "3px solid " + (passed ? T.green : T.red),
-            background: passed ? corBgCard() : wroBgCard(),
+            border: "3px solid " + sColor,
+            background: sColor + "1a",
             display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <AnimatedPct target={pct} color={passed ? T.green : T.red} />
+            <AnimatedPct target={pct} color={sColor} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1.15rem",
-              color: passed ? T.green : T.red, marginBottom: "0.25rem" }}>
+              color: sColor, marginBottom: "0.25rem" }}>
               {passed ? "Pass ✓" : "Not yet"}
             </p>
             <p style={{ fontFamily: FF_SANS, fontWeight: 600, fontSize: "0.9rem", color: T.text, marginBottom: "0.2rem" }}>
@@ -3547,7 +3555,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
             <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-end", overflowX: "auto" }}>
               {priorSessions.map((s, i) => {
                 const p = Math.round(s.score / s.total * 100);
-                const col = p >= 75 ? T.green : p >= 60 ? "#f59e0b" : T.red;
+                const col = scoreColor(p);
                 return (
                   <Fragment key={i}>
                     {i > 0 && <TrendArrow />}
@@ -3567,9 +3575,9 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
               <TrendArrow />
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
                 <div style={{ width: "38px", height: "38px", borderRadius: "50%",
-                  background: (passed ? T.green : T.red) + "1a", border: "2px solid " + (passed ? T.green : T.red),
+                  background: sColor + "1a", border: "2px solid " + sColor,
                   display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.63rem", color: passed ? T.green : T.red }}>{pct}%</span>
+                  <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.63rem", color: sColor }}>{pct}%</span>
                 </div>
                 <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", color: T.accent, fontWeight: 600 }}>
                   {isHistoryView ? new Date(historyDate).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "today"}
@@ -5203,7 +5211,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
 // ── Topic performance bar ──────────────────────────────────────────────────
 function TopicBar({ topic, correct, total }) {
   const pct = Math.round((correct / total) * 100);
-  const color = pct >= 75 ? T.green : pct >= 60 ? "#f59e0b" : T.red;
+  const color = scoreColor(pct);
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
     const t = setTimeout(() => setAnimPct(pct), 50);
@@ -5258,7 +5266,7 @@ function TopicSummaryInline({ results, questions }) {
       <Label style={{ marginBottom: "0.65rem" }}>TOPICS / CATEGORIES</Label>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
         {topics.map(function(t) {
-          const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+          const color = scoreColor(t.pct);
           return (
             <div key={t.topic}>
               <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.5rem" }}>
@@ -5321,7 +5329,7 @@ function ExportResultsModal({ session, onClose }) {
 
 function HistoryCard({ session, onView, onStudy, matchedSet, onExport, onRequestDelete }) {
   const pct    = Math.round((session.score / session.total) * 100);
-  const passed = pct >= 70;
+  const sColor = scoreColor(pct);
   const canStudy = matchedSet && matchedSet.questions.length > 0;
 
   const [ctxMenu, setCtxMenu] = useState(null); // {top, left}
@@ -5344,7 +5352,7 @@ function HistoryCard({ session, onView, onStudy, matchedSet, onExport, onRequest
   return (
     <AppCard cardRef={cardRef} onClick={() => onView(session)}
       onContextMenu={e => { e.preventDefault(); setCtxMenu({ top: e.clientY, left: e.clientX }); }}
-      style={{ borderColor: passed ? T.green + "44" : T.red + "44" }}>
+      style={{ borderColor: sColor + "44" }}>
       {ctxMenu && ReactDOM.createPortal(
         // React portals still bubble synthetic events through the component tree, not the DOM
         // tree — without this stopPropagation, clicks here would also reach AppCard's onClick
@@ -5374,11 +5382,11 @@ function HistoryCard({ session, onView, onStudy, matchedSet, onExport, onRequest
       )}
       <div style={{ display: "flex", alignItems: "center", gap: "0.9rem" }}>
         <div style={{ width: "46px", height: "46px", borderRadius: "50%", flexShrink: 0,
-          border: "2px solid " + (passed ? T.green : T.red),
-          background: passed ? corBgCard() : wroBgCard(),
+          border: "2px solid " + sColor,
+          background: sColor + "1a",
           display: "flex", alignItems: "center", justifyContent: "center" }}>
           <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.72rem",
-            color: passed ? T.green : T.red }}>
+            color: sColor }}>
             {pct}%
           </span>
         </div>
@@ -5755,7 +5763,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
           {statCard("Sessions",  totalSessions,  null, T.accent)}
           {statCard("Questions", totalQuestions, null, T.accent)}
           {statCard("Mastery", mastery != null ? mastery + "%" : "—", null,
-            mastery >= 75 ? T.green : mastery >= 60 ? "#f59e0b" : mastery != null ? T.red : T.muted)}
+            mastery != null ? scoreColor(mastery) : T.muted)}
           {statCard("Streak", streak > 0 ? streak + "🔥" : "0", streak > 0 ? "days in a row" : "Study today to start your streak!", T.purple)}
         </div>
       </div>
@@ -5807,7 +5815,7 @@ function Dashboard({ history, sets, onStudy, onViewHistory }) {
           {sectionLabel("Topics")}
           <div style={card({ padding: 0, overflow: "hidden" })}>
             {(topicsExpanded ? allTopics : allTopics.slice(0, 4)).map(function(t, i, arr) {
-              const color = t.pct >= 75 ? T.green : t.pct >= 60 ? "#f59e0b" : T.red;
+              const color = scoreColor(t.pct);
               const divider = T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
               const trackBg = T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)";
               return (
@@ -7547,7 +7555,7 @@ function App() {
                       <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", color: ST.muted, flexShrink: 0 }}>{item.count} Q</span>
                     ) : (
                       <span style={{ fontFamily: FF_SANS, fontSize: "0.62rem", fontWeight: 600, flexShrink: 0,
-                        color: item.pct >= 75 ? T.green : item.pct >= 60 ? "#f59e0b" : T.red }}>{item.pct}%</span>
+                        color: scoreColor(item.pct) }}>{item.pct}%</span>
                     )}
                   </button>
                   );
