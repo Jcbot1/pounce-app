@@ -899,7 +899,7 @@ function pickWeightedQuestions(questions, sessions, setId, count) {
 
 // Middle-ellipsis truncation — keeps the distinguishing tail of similarly-prefixed
 // names (e.g. "Review Mode Set 1 – AZ-305...") instead of chopping it off.
-function truncateMiddle(str, maxLen = 20, headLen = 12) {
+function truncateMiddle(str, maxLen = 26, headLen = 17) {
   if (!str || str.length <= maxLen) return str;
   const tailLen = maxLen - headLen - 1;
   return str.slice(0, headLen) + "…" + str.slice(str.length - tailLen);
