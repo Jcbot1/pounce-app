@@ -3549,16 +3549,16 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
         {/* Set mastery */}
         {mastery !== null && (
           <div style={{ borderTop: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)"), padding: "1rem 1.25rem" }}>
-            <Label style={{ marginBottom: "0.65rem" }}>SET MASTERY</Label>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1.15rem", color: masteryColor, flexShrink: 0, minWidth: "3ch" }}>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.5rem" }}>
+              <Label style={{ marginBottom: 0 }}>SET MASTERY</Label>
+              <span style={{ fontFamily: FF_SANS, fontSize: "0.88rem", fontWeight: 700, color: masteryColor, flexShrink: 0 }}>
                 {mastery}%
               </span>
-              <div style={{ flex: 1, height: "6px", borderRadius: "99px",
-                background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: mastery + "%", background: masteryColor, borderRadius: "99px",
-                  transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
-              </div>
+            </div>
+            <div style={{ height: "4px", borderRadius: "99px",
+              background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)", overflow: "hidden" }}>
+              <div style={{ height: "100%", width: mastery + "%", background: masteryColor, borderRadius: "99px",
+                transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
             </div>
           </div>
         )}
