@@ -1011,6 +1011,11 @@ const PROFILE_ICON_KEY  = "studyapp_profile_iconid";
 const PROFILE_BG_KEY    = "studyapp_profile_bg";
 const PROFILE_ICOLOR_KEY= "studyapp_profile_iconcolor";
 const PINNED_SETS_KEY   = "studyapp_pinned_sets";
+const COLLAPSED_TAGS_KEY = "studyapp_collapsed_tags";
+
+function loadCollapsedTags() {
+  try { return JSON.parse(localStorage.getItem(COLLAPSED_TAGS_KEY)) || []; } catch { return []; }
+}
 
 const PROFILE_ICON_DEFS = [
   { id: "book",    svg: (c) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> },
@@ -4585,7 +4590,7 @@ function GhostCard({ onClick }) {
 }
 
 function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, onSetTags, onSetIcon, onRename, cardColumns = 1, onCreate, history = [], pinnedSetIds = [], onTogglePin, showSidebar = true }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => loadCollapsedTags().includes(tag));
   const [contentHeight, setContentHeight] = useState(null);
   const contentRef = useRef(null);
   const tagSets = sets.filter(s => (s.tags || []).includes(tag));
@@ -4611,7 +4616,13 @@ function TagSection({ tag, sets, allTags, onEdit, onExport, onStudy, onDelete, o
   return (
     <div style={{ marginBottom: "1.25rem" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem", cursor: "pointer" }}
-        onClick={() => setCollapsed(c => !c)}>
+        onClick={() => setCollapsed(c => {
+          const next = !c;
+          const current = loadCollapsedTags();
+          const updated = next ? [...new Set([...current, tag])] : current.filter(t => t !== tag);
+          localStorage.setItem(COLLAPSED_TAGS_KEY, JSON.stringify(updated));
+          return next;
+        })}>
         <span style={{ fontFamily: FF_SANS, fontSize: "0.72rem", letterSpacing: "0.1em",
           color: T.accent, fontWeight: 600, flex: 1 }}>
           {tag.toUpperCase()}
