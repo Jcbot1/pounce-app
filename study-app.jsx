@@ -3337,6 +3337,14 @@ function AnimatedPct({ target, color }) {
   );
 }
 
+function TrendArrow() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
+      <span style={{ width: "16px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center", color: T.muted, fontSize: "0.85rem" }}>→</span>
+    </div>
+  );
+}
+
 function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHistory, questionLimit, examMode = false, isHistoryView, historyDate, onRetryMissed, exportModal, onCloseExport, confirmRetry, onCloseConfirmRetry, history, isMobile = true }) {
   const score  = results.filter(r => r.correct).length;
   const pct    = Math.round((score / results.length) * 100);
@@ -3540,18 +3548,22 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 const p = Math.round(s.score / s.total * 100);
                 const col = p >= 75 ? T.green : p >= 60 ? "#f59e0b" : T.red;
                 return (
-                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
-                    <div style={{ width: "38px", height: "38px", borderRadius: "50%",
-                      background: col + "1a", border: "2px solid " + col,
-                      display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.63rem", color: col }}>{p}%</span>
+                  <Fragment key={i}>
+                    {i > 0 && <TrendArrow />}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
+                      <div style={{ width: "38px", height: "38px", borderRadius: "50%",
+                        background: col + "1a", border: "2px solid " + col,
+                        display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.63rem", color: col }}>{p}%</span>
+                      </div>
+                      <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", color: T.muted, textAlign: "center", lineHeight: 1.2 }}>
+                        {new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      </span>
                     </div>
-                    <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", color: T.muted, textAlign: "center", lineHeight: 1.2 }}>
-                      {new Date(s.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
-                    </span>
-                  </div>
+                  </Fragment>
                 );
               })}
+              <TrendArrow />
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
                 <div style={{ width: "38px", height: "38px", borderRadius: "50%",
                   background: (passed ? T.green : T.red) + "1a", border: "2px solid " + (passed ? T.green : T.red),
