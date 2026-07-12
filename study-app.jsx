@@ -3448,6 +3448,12 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .slice(-5);
 
+  const matchingHistory = (history || []).filter(h => (set.id && h.setId === set.id) || h.setName === set.name);
+  const masterySessions = isHistoryView ? matchingHistory : [...matchingHistory.filter(h => h.id !== autoSavedIdRef.current), session];
+  const masteryQuestions = (set && set.questions && set.questions.length) ? set.questions : questions;
+  const mastery = computeMastery(masterySessions, masteryQuestions);
+  const masteryColor = mastery === null ? T.muted : mastery >= 75 ? T.green : mastery >= 60 ? "#f59e0b" : T.red;
+
   const missedQuestions = questions.filter((q, i) => {
     const r = results.find(r => r.qId === q.id);
     return r && !r.correct;
@@ -3539,6 +3545,23 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
             )}
           </div>
         </div>
+
+        {/* Set mastery */}
+        {mastery !== null && (
+          <div style={{ borderTop: "1px solid " + (T.mode === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)"), padding: "1rem 1.25rem" }}>
+            <Label style={{ marginBottom: "0.65rem" }}>SET MASTERY</Label>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "1.15rem", color: masteryColor, flexShrink: 0, minWidth: "3ch" }}>
+                {mastery}%
+              </span>
+              <div style={{ flex: 1, height: "6px", borderRadius: "99px",
+                background: T.mode === "light" ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.09)", overflow: "hidden" }}>
+                <div style={{ height: "100%", width: mastery + "%", background: masteryColor, borderRadius: "99px",
+                  transition: "width 0.7s cubic-bezier(0.34,1.2,0.64,1)" }} />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Prior attempts trend */}
         {priorSessions.length > 0 && (
