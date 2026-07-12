@@ -3553,7 +3553,11 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
                 );
               })}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", flexShrink: 0 }}>
-                <span style={{ color: T.muted, fontSize: "1rem", height: "38px", display: "flex", alignItems: "center", paddingBottom: "2px" }}>→</span>
+                <div style={{ width: "38px", height: "38px", borderRadius: "50%",
+                  background: (passed ? T.green : T.red) + "1a", border: "2px solid " + (passed ? T.green : T.red),
+                  display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontFamily: FF_SANS, fontWeight: 700, fontSize: "0.63rem", color: passed ? T.green : T.red }}>{pct}%</span>
+                </div>
                 <span style={{ fontFamily: FF_SANS, fontSize: "0.58rem", color: T.accent, fontWeight: 600 }}>
                   {isHistoryView ? new Date(historyDate).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "today"}
                 </span>
