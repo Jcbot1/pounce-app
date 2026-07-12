@@ -423,6 +423,12 @@ function EditorTagChip({ tag, onRemove }) {
 // STUDI MASCOT
 // ════════════════════════════════════════════════════════════════════════
 
+// Timestamp of the most recent scroll anywhere in the app. Capture phase means a single
+// document-level listener sees scroll events from any nested scroller (the horizontal set
+// card grid) as well as the body scroll, without needing to attach one per container.
+let lastScrollAt = 0;
+document.addEventListener("scroll", () => { lastScrollAt = Date.now(); }, { capture: true, passive: true });
+
 // ── App Card ───────────────────────────────────────────────────────────────
 // Unified tappable card used across Sets, History, and Search screens.
 function AppCard({ onClick, onContextMenu, children, style: extraStyle, cardRef }) {
@@ -440,6 +446,20 @@ function AppCard({ onClick, onContextMenu, children, style: extraStyle, cardRef 
     innerRef.current = el;
     if (cardRef) cardRef.current = el;
   }
+
+  // A tap that lands right after a swipe stops the list's momentum scroll rather than
+  // scrolling further — but to the browser it's indistinguishable from a genuine tap (near-zero
+  // movement, quick touchstart/touchend), so it fires a click same as any other tap. Treat a
+  // touchstart that lands within 150ms of the last scroll event anywhere in the app as a
+  // scroll-stop, not a real tap, and swallow the click it produces.
+  const scrollStopTap = useRef(false);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    function onTouchStart() { scrollStopTap.current = Date.now() - lastScrollAt < 150; }
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    return () => el.removeEventListener("touchstart", onTouchStart);
+  }, []);
 
   useEffect(() => {
     const el = innerRef.current;
@@ -483,7 +503,11 @@ function AppCard({ onClick, onContextMenu, children, style: extraStyle, cardRef 
   return (
     <div
       ref={setRefs}
-      onClick={e => { if (longPressFired.current) { longPressFired.current = false; return; } onClick && onClick(e); }}
+      onClick={e => {
+        if (longPressFired.current) { longPressFired.current = false; return; }
+        if (scrollStopTap.current) { scrollStopTap.current = false; return; }
+        onClick && onClick(e);
+      }}
       onContextMenu={onContextMenu}
       {...primaryPress()}
       style={{
