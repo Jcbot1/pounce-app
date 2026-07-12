@@ -907,6 +907,15 @@ function truncateMiddle(str, maxLen = 26, headLen = 17) {
   return str.slice(0, headLen) + "…" + str.slice(str.length - tailLen);
 }
 
+// Sidebar Recent/Pinned rows — scales the truncation length with the sidebar's
+// (resizable) width, so wider sidebars show more of the name. ~6.5px/char is
+// DM Sans 0.8rem's rough average advance width at this size.
+function sidebarTruncate(str, sidebarWidth) {
+  const maxLen = Math.round(26 + (sidebarWidth - SIDEBAR_WIDTH) / 6.5);
+  const headLen = Math.round(maxLen * 0.65);
+  return truncateMiddle(str, maxLen, headLen);
+}
+
 // Returns { options: string[], originalIndices: number[] }
 // originalIndices[i] = the original index of the option now at position i
 function shuffleOptions(options) {
@@ -7529,7 +7538,7 @@ function App() {
               <Label style={{ fontSize: "0.62rem", color: ST.muted, marginBottom: 0, padding: "0 0.5rem 0.35rem", flexShrink: 0 }}>Pinned</Label>
               <div style={{ maxHeight: "160px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "0.1rem" }}>
                 {pinnedSetIds.map(id => sets.find(s => s.id === id)).filter(Boolean).map(s => {
-                  const displayName = truncateMiddle(s.name);
+                  const displayName = sidebarTruncate(s.name, sidebarWidth);
                   return (
                     <button key={s.id} onClick={() => { setHomeTab("sets"); setScreen("home"); setSetsSearch(s.name); setSetsActiveTag(null); }}
                       onContextMenu={e => { e.preventDefault(); setPinCtxMenu({ top: e.clientY, left: e.clientX, setId: s.id, el: e.currentTarget }); }}
@@ -7569,7 +7578,7 @@ function App() {
                   ...[...sets].map(s => ({ type: "set", id: s.id, name: s.name, date: s.updatedAt || 0, count: s.questions?.length ?? 0 })),
                   ...[...history].map(h => ({ type: "history", id: h.id, name: h.setName, date: h.date || 0, pct: Math.round((h.score / h.total) * 100) })),
                 ].sort((a, b) => new Date(b.date) - new Date(a.date)).map(item => {
-                  const displayName = truncateMiddle(item.name);
+                  const displayName = sidebarTruncate(item.name, sidebarWidth);
                   return (
                   <button key={item.type + item.id} onClick={() => {
                     if (item.type === "set") { setHomeTab("sets"); setScreen("home"); setSetsSearch(item.name); setSetsActiveTag(null); }
@@ -7655,10 +7664,7 @@ function App() {
           style={{
             position: "fixed", left: (8 + sidebarWidth - 3) + "px", top: "8px", bottom: "8px", width: "6px",
             cursor: "ew-resize", zIndex: 201,
-            background: sidebarResizing ? ST.accent + "40" : "transparent",
           }}
-          onMouseEnter={e => { if (!sidebarResizing) e.currentTarget.style.background = ST.accent + "40"; }}
-          onMouseLeave={e => { if (!sidebarResizing) e.currentTarget.style.background = "transparent"; }}
         />
       )}
 
