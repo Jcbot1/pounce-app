@@ -621,7 +621,9 @@ function Mochi({ size = 100 }) {
 const BREAKPOINT_TABLET  = 768;
 const BREAKPOINT_DESKTOP = 1200;
 const SIDEBAR_WIDTH      = 240;
+const SIDEBAR_MAX_WIDTH  = 420;
 const SIDEBAR_COLLAPSED  = 64;
+const SIDEBAR_WIDTH_KEY  = "studyapp_sidebar_width";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(() => typeof window !== "undefined" ? window.innerWidth : 375);
@@ -6679,6 +6681,32 @@ function App() {
   const [sidebarSection, setSidebarSection] = useState(null);
   const [sidebarProfileOpen, setSidebarProfileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(() => {
+    const saved = parseInt(localStorage.getItem(SIDEBAR_WIDTH_KEY), 10);
+    return Number.isFinite(saved) ? Math.min(Math.max(saved, SIDEBAR_WIDTH), SIDEBAR_MAX_WIDTH) : SIDEBAR_WIDTH;
+  });
+  const [sidebarResizing, setSidebarResizing] = useState(false);
+  useEffect(() => { localStorage.setItem(SIDEBAR_WIDTH_KEY, String(sidebarWidth)); }, [sidebarWidth]);
+  function handleSidebarResizeStart(e) {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = sidebarWidth;
+    setSidebarResizing(true);
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "ew-resize";
+    function onMove(ev) {
+      setSidebarWidth(Math.min(Math.max(startWidth + (ev.clientX - startX), SIDEBAR_WIDTH), SIDEBAR_MAX_WIDTH));
+    }
+    function onUp() {
+      setSidebarResizing(false);
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    }
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  }
   const [recentTooltip, setRecentTooltip] = useState(null); // { name, y }
   const [pinCtxMenu, setPinCtxMenu] = useState(null); // { top, left, setId, el }
   const pinCtxMenuRef = useRef(null);
@@ -7143,18 +7171,18 @@ function App() {
       <div style={{ minHeight: "100vh", visibility: (showDeleteAnim || showWelcome) ? "hidden" : "visible",
         position: "relative",
         background: bgStyle === "gradient" ? "transparent" : T.bg,
-        marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 + "px" : SIDEBAR_WIDTH + 16 + "px") : 0,
+        marginLeft: showSidebar ? (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 + "px" : sidebarWidth + 16 + "px") : 0,
         paddingTop: showSidebar ? "56px" : 0,
         borderTopLeftRadius: 0,
         boxShadow: "none",
-        transition: "margin-left 0.25s ease" }}>
+        transition: sidebarResizing ? "none" : "margin-left 0.25s ease" }}>
 
         <div style={{
           position: showSidebar ? "fixed" : "sticky", top: showSidebar ? "8px" : 0, zIndex: 99,
           ...(showSidebar ? {
-            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : SIDEBAR_WIDTH + 16) + "px", right: 0,
+            left: (sidebarCollapsed ? SIDEBAR_COLLAPSED + 16 : sidebarWidth + 16) + "px", right: 0,
             height: "48px",
-            transition: "left 0.25s ease",
+            transition: sidebarResizing ? "none" : "left 0.25s ease",
           } : {}),
           display: "flex", flexDirection: "column",
         }}>
@@ -7426,8 +7454,8 @@ function App() {
       {showSidebar && (
         <div style={{
           position: "fixed", left: "8px", top: "8px", bottom: "8px",
-          width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH) + "px",
-          transition: "width 0.25s ease",
+          width: (sidebarCollapsed ? SIDEBAR_COLLAPSED : sidebarWidth) + "px",
+          transition: sidebarResizing ? "none" : "width 0.25s ease",
           borderRadius: "16px",
           boxShadow: ST.mode === "light"
             ? "0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23)"
@@ -7616,12 +7644,29 @@ function App() {
           </div>
         </div>
       )}
+      {/* Drag handle — right edge of sidebar, resizes down to SIDEBAR_WIDTH minimum.
+          Rendered as its own fixed element (not a sidebar child) so it isn't clipped
+          by the sidebar's overflow:hidden. */}
+      {showSidebar && !sidebarCollapsed && (
+        <div
+          onMouseDown={handleSidebarResizeStart}
+          onDoubleClick={() => setSidebarWidth(SIDEBAR_WIDTH)}
+          title="Drag to resize"
+          style={{
+            position: "fixed", left: (8 + sidebarWidth - 3) + "px", top: "8px", bottom: "8px", width: "6px",
+            cursor: "ew-resize", zIndex: 201,
+            background: sidebarResizing ? ST.accent + "40" : "transparent",
+          }}
+          onMouseEnter={e => { if (!sidebarResizing) e.currentTarget.style.background = ST.accent + "40"; }}
+          onMouseLeave={e => { if (!sidebarResizing) e.currentTarget.style.background = "transparent"; }}
+        />
+      )}
 
       {/* Recent item name tooltip */}
       {recentTooltip && (
         <div style={{
           position: "fixed",
-          left: SIDEBAR_WIDTH + 26 + "px",
+          left: sidebarWidth + 26 + "px",
           top: recentTooltip.y + "px",
           transform: "translateY(-50%)",
           background: T.mode === "light" ? T.surface : T.surface2,
