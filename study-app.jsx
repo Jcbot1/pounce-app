@@ -4119,7 +4119,7 @@ function GlobalNav({ theme, onSetTheme, accent, onSetAccent, bgStyle, onSetBgSty
         {/* Backdrop — a real element intercepts the closing tap so it can't also
             activate whatever's underneath (cards, buttons, etc). */}
         {open && !sidebarMode && <div style={{ position: "fixed", inset: 0, zIndex: 499 }} onClick={close} />}
-        <div style={sidebarMode ? { paddingBottom: "1rem" } : { ...menuPopupStyle({ position: "absolute", right: 0, top: "calc(100% + 8px)", zIndex: 500, minWidth: "240px" }) }} className={sidebarMode ? "" : "menu-open"}>
+        <div style={sidebarMode ? { paddingBottom: "1rem" } : { ...menuPopupStyle({ position: "absolute", right: 0, top: "calc(100% + 8px)", zIndex: 500, minWidth: (inEdit || inResults) ? "180px" : "240px" }) }} className={sidebarMode ? "" : "menu-open"}>
 
           {/* ── Profile row ── */}
           {section === null && !inEdit && !inResults && (
