@@ -5965,7 +5965,7 @@ function FloatingHomeBar({ homeTab, setHomeTab, history, disabled, onSetsTab, on
           }}
         />
         <div className={fabClosing ? "menu-close-up" : "menu-open-up"}
-          style={{ ...menuPopupStyle({ position: "fixed", bottom: fabMenuPos.bottom + "px", right: fabMenuPos.right + "px", zIndex: 110, minWidth: "180px" }) }}
+          style={{ ...menuPopupStyle({ position: "fixed", bottom: fabMenuPos.bottom + "px", right: fabMenuPos.right + "px", zIndex: 110, minWidth: "140px" }) }}
           onPointerDown={e => e.stopPropagation()}>
           <KebabMenuItem onClick={() => { onCreate(); closeFabMenu(); }}>
             <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><line x1="10" y1="2" x2="10" y2="18" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/><line x1="2" y1="10" x2="18" y2="10" stroke={T.accent} strokeWidth="2.5" strokeLinecap="round"/></svg>
