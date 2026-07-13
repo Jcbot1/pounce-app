@@ -275,8 +275,8 @@ function KebabMenuItem({ onClick, children, color, danger = false }) {
       style={{
         display: "flex", alignItems: "center", gap: "0.6rem",
         width: "100%", textAlign: "left", background: "transparent",
-        border: "none", padding: "0.95rem 1.1rem",
-        fontFamily: FF_SANS, fontSize: "0.9rem",
+        border: "none", padding: "1rem 1.25rem",
+        fontFamily: FF_SANS, fontSize: "0.95rem",
         color: color || T.text, cursor: "pointer",
       }}>
       {children}
