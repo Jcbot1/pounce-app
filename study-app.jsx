@@ -1720,7 +1720,7 @@ function QuestionEditor({ q, onChange, onDeleteRequest, invalid, defaultOpen = f
               <Label required>QUESTION TEXT</Label>
               <SnapTextarea value={q.question} onChange={e => set("question", e.target.value)}
                 rows={3} placeholder="Enter the question…" maxLength={10000}
-                style={{ ...inp(), lineHeight: 1.6 }} />
+                style={{ ...inp(), lineHeight: 1.65 }} />
             </div>
           )}
 
@@ -3672,7 +3672,7 @@ function ResultsScreen({ results, questions, set, onRestart, onBack, onSaveToHis
             <Collapsible open={open}>
               <div style={{ marginTop: "1rem" }}>
                 {/* Question text */}
-                <p style={{ color: T.text, fontFamily: FF_SANS, fontSize: "0.95rem", lineHeight: 1.65, marginBottom: "1rem", whiteSpace: "pre-wrap" }}>
+                <p style={{ color: T.text, fontFamily: FF_SANS, fontSize: "1rem", lineHeight: 1.65, marginBottom: "1rem", whiteSpace: "pre-wrap" }}>
                   {renderText(q.question)}
                 </p>
 
