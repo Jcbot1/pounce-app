@@ -5122,7 +5122,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         </div>
 
         {/* SETS panel */}
-        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1.25rem 1.5rem" }}>
+        <div ref={panelRefs[1]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "6px 1.25rem 1.5rem" }}>
           {sets.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Your Sets</span>
@@ -5179,7 +5179,7 @@ function Home({ sets, onCreate, onSetTags, onSetIcon, onRename, onEdit, onStudy,
         </div>
 
         {/* HISTORY panel */}
-        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "0 1.25rem 1.5rem" }}>
+        <div ref={panelRefs[2]} style={{ width: `${100 / TAB_ORDER.length}%`, flexShrink: 0, padding: "6px 1.25rem 1.5rem" }}>
           {(history?.length ?? 0) > 0 && (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <span style={{ fontFamily: FF_SANS, fontSize: "1.2rem", fontWeight: 700, color: T.text }}>Recent</span>
@@ -7392,7 +7392,7 @@ function App() {
 
         
         <div style={{ position: "relative", display: "flex", justifyContent: "center", flex: 1,
-          padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : (screen === "review" || screen === "edit") ? "1.5rem 0 7rem" : "1.5rem 0 4rem",
+          padding: screen === "home" ? (showSidebar ? "1.5rem 0 4rem" : "1.5rem 0 7rem") : (screen === "review" || screen === "edit") ? "1.5rem 0 7rem" : "calc(1.5rem + 6px) 0 4rem",
         }}>
           <div style={{ width: "100%", maxWidth: showSidebar ? "1200px" : (isDesktop || isTablet) ? "900px" : "720px", padding: "0 1.25rem" }}>
             {screen === "home" && homeTab === "home" && (
